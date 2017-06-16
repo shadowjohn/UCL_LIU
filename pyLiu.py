@@ -172,14 +172,17 @@ def show_search():
   c = my.strtolower(play_ucl_label)
   c = my.trim(c)
   print("ShowSearch2")
-  if uclcode["chardefs"][c] != None:
+  if c in uclcode["chardefs"]:
     ucl_find_data = uclcode["chardefs"][c]
-    word_label_set_text()  
+    word_label_set_text()
+    return True
+  else:
+    return False  
   
   #print(find)
   #print("ShowSearch3")
   #print("FIND: [%s] %s" % (play_ucl_label,find))
-  pass
+  #pass
 def play_ucl(thekey):
   global type_label
   global play_ucl_label
@@ -190,9 +193,9 @@ def play_ucl(thekey):
 def senddata(data):
   global play_ucl_label
   global ucl_find_data
-  win32clipboard.OpenClipboard()
-  orin_clip=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
-  win32clipboard.CloseClipboard()
+  #win32clipboard.OpenClipboard()
+  #orin_clip=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
+  #win32clipboard.CloseClipboard()
   
   win32clipboard.OpenClipboard() 
   win32clipboard.EmptyClipboard()#這一行特別重要，經過實驗如果不加這一行的話會做動不正常
@@ -213,10 +216,10 @@ def senddata(data):
   
 
   
-  win32clipboard.OpenClipboard()
-  win32clipboard.EmptyClipboard()
-  win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip)
-  win32clipboard.CloseClipboard()
+  #win32clipboard.OpenClipboard()
+  #win32clipboard.EmptyClipboard()
+  #win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip)
+  #win32clipboard.CloseClipboard()
 def OnKeyboardEvent(event):
   global flag_is_shift_down
   global flag_is_play_otherkey
@@ -224,21 +227,21 @@ def OnKeyboardEvent(event):
   global ucl_find_data  
   #try:  
   #print(event)
-  print 'MessageName:',event.MessageName
-  print 'Message:',event.Message
-  print 'Time:',event.Time
-  print 'Window:',event.Window
-  print 'WindowName:',event.WindowName
-  print 'Ascii:', event.Ascii, chr(event.Ascii)
-  print 'Key:', event.Key
-  print 'KeyID:', event.KeyID
-  print 'ScanCode:', event.ScanCode
-  print 'Extended:', event.Extended
-  print 'Injected:', event.Injected
-  print 'Alt', event.Alt
-  print 'Transition', event.Transition
-  print 'IS_UCL', is_ucl()
-  print '---'
+  #print 'MessageName:',event.MessageName
+  #print 'Message:',event.Message
+  #print 'Time:',event.Time
+  #print 'Window:',event.Window
+  #print 'WindowName:',event.WindowName
+  #print 'Ascii:', event.Ascii, chr(event.Ascii)
+  #print 'Key:', event.Key
+  #print 'KeyID:', event.KeyID
+  #print 'ScanCode:', event.ScanCode
+  #print 'Extended:', event.Extended
+  #print 'Injected:', event.Injected
+  #print 'Alt', event.Alt
+  #print 'Transition', event.Transition
+  #print 'IS_UCL', is_ucl()
+  #print '---'
   
   #thekey = chr(event.Ascii)
   if event.MessageName == "key down" and (event.Key == "Lshift" or event.Key == "Rshift"):
@@ -254,6 +257,8 @@ def OnKeyboardEvent(event):
     print("Press shift")
     if flag_is_play_otherkey==False:
       toggle_ucl()
+      print("Debug15")
+    print("Debug14")
     return True
   if event.MessageName == "key down" and event.Ascii==32 and flag_is_shift_down==True:
     # Press shift and space
@@ -261,6 +266,7 @@ def OnKeyboardEvent(event):
     hf_btn_click(hf_btn)
     flag_is_play_otherkey=True
     flag_is_shift_down=False
+    print("Debug13")
     return False            
   if is_ucl():
     if event.MessageName == "key down" and ( event.Ascii>=48 and event.Ascii <=57): #0~9
@@ -270,13 +276,16 @@ def OnKeyboardEvent(event):
         # send data
         data = ucl_find_data[int(chr(event.Ascii))]
         senddata(data)
+        print("Debug12")
         return False
       else:
         if len(event.Key) == 1 and is_hf(None)==False:
           k = widen(event.Key)
           print("event.Key to Full:%s %s" % (event.Key,k))
           senddata(k)
+          print("Debug11")
           return False
+        print("Debug10")
         return True
     if event.MessageName == "key down" and ( (event.Ascii>=65 and event.Ascii <=90) or (event.Ascii>=97 and event.Ascii <=122) or event.Ascii==44 or event.Ascii==46 or event.Ascii==39  ):
       flag_is_play_otherkey=True
@@ -285,26 +294,31 @@ def OnKeyboardEvent(event):
           k = widen(event.Key)
           print("285 event.Key to Full:%s %s" % (event.Key,k))
           senddata(k)
+          print("Debug9")
           return False
+        print("Debug8")
         return True
       else:
         # Play ucl
         #print("Play UCL")
         #print(thekey)
         play_ucl(chr(event.Ascii))
+        print("Debug7")
         return False    
     if event.MessageName == "key up" and ( event.Ascii == 8 ):
       # ←
       if my.strlen(play_ucl_label) <= 0:                    
         play_ucl_label=""
         play_ucl("")
+        print("Debug6")
         return True
       else:
         play_ucl_label = play_ucl_label[:-1]
-        type_label_set_text()        
+        type_label_set_text()
+        print("Debug5")        
         return False  
       pass    
-    if event.MessageName == "key down" and ( event.Ascii==32 ):
+    if event.MessageName == "key down" and event.Ascii==32 :
       # Space      
       if len(ucl_find_data)>=1:
         
@@ -324,13 +338,16 @@ def OnKeyboardEvent(event):
         senddata(text)
         
         
-
+        print("Debug4")
         return False 
       else:
+        print("Debug1")
         return True   
-    else:    
+    else:
+      print("Debug2")    
       return True
   else:
+    print("Debug3")
     #if event.MessageName == "key up" and len(event.Key) == 1 and is_hf(None)==False:
     #  k = widen(event.Key)
     #  print("335 event.Key to Full:%s %s" % (event.Key,k))
