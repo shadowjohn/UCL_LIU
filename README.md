@@ -4,6 +4,13 @@
 <center>
   <img src="http://3wa.tw/uploads/upload/ucl_0.png">
 </center>
+<center>
+<video>
+<source type="video/webm" src="http://3wa.tw/video/users/shadow/20170616_130016.webm" />
+<!-- MP4 source must come first for iOS -->
+<source type="video/mp4" src="http://3wa.tw/video/users/shadow/20170616_130016.mp4" />
+</video>
+</center>
 <br>
 版本： V0.1<br>
 <br>
@@ -30,5 +37,6 @@ ToDo：<br>
   <li>(Done)<s>3、py2exe包成一支exe</s>改用pyinstaller代替</li>
   <li>4、尚有些按鍵會讓「英/肥」切來切去，暫未處理</li>
   <li>(Done)<s>5、離開程式的按鈕</s></li>
-  <li>6、支援Linux、Mac的研究(下一次吃飽閒閒再說)</li>
+  <li>6、支援V鍵選第二個字</li>
+  <li>7、支援Linux、Mac的研究(下一次吃飽閒閒再說)</li>
 </ul>
