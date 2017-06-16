@@ -37,5 +37,6 @@ ToDo：<br>
   <li>(Done)<s>3、py2exe包成一支exe</s>改用pyinstaller代替</li>
   <li>4、尚有些按鍵會讓「英/肥」切來切去，暫未處理</li>
   <li>(Done)<s>5、離開程式的按鈕</s></li>
-  <li>6、支援Linux、Mac的研究(下一次吃飽閒閒再說)</li>
+  <li>6、支援V鍵選第二個字</li>
+  <li>7、支援Linux、Mac的研究(下一次吃飽閒閒再說)</li>
 </ul>
