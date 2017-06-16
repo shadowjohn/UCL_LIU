@@ -1,1 +1,1 @@
-python pyLiu.py &
+python27 pyLiu.py &
