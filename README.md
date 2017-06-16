@@ -41,5 +41,5 @@ ToDo：<br>
   <li>7、支援Linux、Mac的研究(下一次吃飽閒閒再說)</li>
 </ul>
 
-版權：
-　　MIT
+版權：<br>
+　MIT
