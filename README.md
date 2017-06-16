@@ -39,7 +39,8 @@ ToDo：<br>
   <li>(Done)<s>5、離開程式的按鈕</s></li>
   <li>6、支援V鍵選第二個字</li>
   <li>7、「」【】這種框框應該也要支援</li>
-  <li>8、支援Linux、Mac的研究(下一次吃飽閒閒再說)</li>
+  <li>8、sendkey時，判斷window id，如果該id是putty，改成shift+ins作文字貼上
+  <li>9、支援Linux、Mac的研究(下一次吃飽閒閒再說)</li>
 </ul>
 
 版權：<br>
