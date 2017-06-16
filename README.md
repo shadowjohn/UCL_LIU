@@ -18,12 +18,17 @@
   <li>pywin32</li>
   <li>字碼表參考PIME裡的liu.json</li>
 </ul>
+<br>
+Compiler：<br>
+　　pip install pyinstaller<br>
+    參考 build.bat 製作單一 exe 方法<br>
 <br>  
 ToDo：<br>
 <ul>
-  <li>１、(嚴重)「送出字元」的方法，試了很多send key一直無法解決 send unicode的問題，暫時使用「剪貼簿」的Ctrl+V來實作貼上文字的功能</li>
+  <li>1、(嚴重)「送出字元」的方法，試了很多send key一直無法解決 send unicode的問題，暫時使用「剪貼簿」的Ctrl+V來實作貼上文字的功能</li>
   <li>2、「英文全形」輸入時，有些組合鍵如 Alt+tab還尚未決定</li>
-  <li>3、py2exe包成一支exe</li>
+  <li>(Done)<s>3、py2exe包成一支exe</s>改用pyinstaller代替</li>
   <li>4、尚有些按鍵會讓「英/肥」切來切去，暫未處理</li>
-  <li>5、支援Linux、Mac的研究(下一次吃飽閒閒再說)</li>
+  <li>(Done)<s>5、離開程式的按鈕</s></li>
+  <li>6、支援Linux、Mac的研究(下一次吃飽閒閒再說)</li>
 </ul>
