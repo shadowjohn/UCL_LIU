@@ -4,18 +4,15 @@
 <center>
   <img src="http://3wa.tw/uploads/upload/ucl_2.png">
 </center>
-<center>
-<video>
-<source type="video/webm" src="http://3wa.tw/video/users/shadow/20170616_130016.webm" />
-<!-- MP4 source must come first for iOS -->
-<source type="video/mp4" src="http://3wa.tw/video/users/shadow/20170616_130016.mp4" />
-</video>
-</center>
 <br>
 版本： V0.1<br>
 <br>
 開發動機：<br>
 　　吃飽閒閒覺得人生就是該自己寫一套輸入法，然後就開始寫了。<br>
+字碼表；<br>
+   由於字碼表的版權問題，我就不放 liu.json 了，liu.json 的格式同PIME的架構。<br>
+   要好的字碼表的話，請買正版，將 tab->cin->json <br>
+   雖然很麻煩，但沒人想因為實作一套輸入法就被告翻。<br>
 <br>
 開發工具：<br>
   <ul>
