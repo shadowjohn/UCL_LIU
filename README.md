@@ -5,10 +5,7 @@
   <img src="http://3wa.tw/uploads/upload/ucl_0.png">
 </center>
 <center>
-<div class="video3wa_class" style="text-align:center;min-width:1px;margin-left:auto;margin-right:auto;">
-<script language="javascript" src="http://3wa.tw/inc/javascript/jquery/mediaelement/build/mediaelement-and-player.min.js"></script>
-<link rel="stylesheet" href="http://3wa.tw/inc/javascript/jquery/mediaelement/build/mediaelementplayer.min.css"/>
-<center>
+<video>
 <source type="video/webm" src="http://3wa.tw/video/users/shadow/20170616_130016.webm" />
 <!-- MP4 source must come first for iOS -->
 <source type="video/mp4" src="http://3wa.tw/video/users/shadow/20170616_130016.mp4" />
