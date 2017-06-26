@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
-from Tkinter import *
+#from Tkinter import *
 import pythoncom, pyHook
 from pyHook import HookManager
 from pyHook.HookManager import HookConstants 
 import portalocker
 import os
 import sys
-import ttk
+#import ttk
 import gtk
 from gtk import gdk
 import win32clipboard
 import pango
 
-import threading
+#import threading
 from functools import wraps
 #http://fredericiana.com/2014/11/14/settimeout-python-delay/
 
@@ -25,9 +25,18 @@ import win32con
 import win32com.client
 import win32clipboard
 
+#from win32api import GetSystemMetrics
+#screen_width=GetSystemMetrics(0)
+#screen_height=GetSystemMetrics(1)
+
+import ctypes
+user32 = ctypes.windll.user32
+screen_width=user32.GetSystemMetrics(0)
+screen_height=user32.GetSystemMetrics(1)
+
 #https://stackoverflow.com/questions/11063458/python-script-to-copy-text-to-clipboard
 #import xerox
-import pyperclip
+#import pyperclip
 import php
 my = php.kit()
 reload(sys)
@@ -438,10 +447,11 @@ print(dir(hm))
 hm.HookKeyboard()
 # wait forever
 
-root = Tk()
-screen_width = root.winfo_screenwidth()
-screen_height = root.winfo_screenheight()
-root=None
+#root = Tk()
+#screen_width = root.winfo_screenwidth()
+#screen_height = root.winfo_screenheight()
+#root=None
+
 
 win=gtk.Window()
 win.set_decorated(False)
