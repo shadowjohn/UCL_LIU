@@ -20,6 +20,9 @@ from functools import wraps
 #import pyautogui
 
 #http://wiki.alarmchang.com/index.php?title=Python_%E5%AD%98%E5%8F%96_Windows_%E7%9A%84%E5%89%AA%E8%B2%BC%E7%B0%BF_ClipBoard_%E7%AF%84%E4%BE%8B
+import win32gui
+import win32process
+import psutil
 import win32com
 import win32con
 import win32com.client
@@ -65,7 +68,20 @@ def widen(s):
   """
   return unicode(s).translate(WIDE_MAP)
 
+def pleave(self, event):
+  my.exit();
 
+if my.is_file("liu.json") == False:
+  message = gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)
+  message.set_markup("缺少liu.json")  
+  response = message.run()
+  #print(gtk.ResponseType.BUTTONS_OK)
+  if response == -5 or response == -4:
+    my.exit()
+  #message.show()
+  gtk.main()
+  #my.exit()
+  
 uclcode = my.json_decode(my.file_get_contents("liu.json"))
 #print(uclcode)
 def delay(delay=0.):
@@ -224,7 +240,25 @@ def senddata(data):
   ucl_find_data=[]
            
   shell = win32com.client.Dispatch("WScript.Shell")
-  shell.SendKeys("^v", 0)
+  
+  hwnd = win32gui.GetForegroundWindow()
+  pid = win32process.GetWindowThreadProcessId(hwnd)
+  pp="";
+  if len(pid) >=2:
+    pp=pid[1]
+  else:
+    pp=pid[0]
+  #print("PP:%s" % (pp))
+  p=psutil.Process(pp)
+  #print("PPPP:%s" % (p.exe()))
+  f_arr = [ "putty","pietty" ]
+  check=True
+  for k in f_arr:
+    if my.is_string_like(p.exe(),k):
+      check=False
+      shell.SendKeys("+{INSERT}", 0)  
+  if check==True:
+    shell.SendKeys("^v", 0)
   
 
   
@@ -236,7 +270,8 @@ def OnKeyboardEvent(event):
   global flag_is_shift_down
   global flag_is_play_otherkey
   global play_ucl_label
-  global ucl_find_data  
+  global ucl_find_data
+  #print(dir())  
   #try:  
   #print(event)
   #print 'MessageName:',event.MessageName
