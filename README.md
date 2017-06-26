@@ -36,8 +36,8 @@ ToDo：<br>
   <li>(Done)<s>5、離開程式的按鈕</s></li>
   <li>6、支援V鍵選第二個字</li>
   <li>7、「」【】這種框框應該也要支援</li>
-  <li>8、sendkey時，判斷window id，如果該id是putty、pcman，改成shift+ins作文字貼上</li>
-  <li>9、英/半 時，考慮加上調整opacity值，讓肥米變透明</li>
+  <li>(Done)<s>8、sendkey時，判斷window id，如果該id是putty、pcman，改成shift+ins作文字貼上</s></li>
+  <li>9、英/半 時，考慮加上調整opacity值，讓肥米變透明</li>  
   <li>10、支援Linux、Mac的研究(下一次吃飽閒閒再說)</li>
 </ul>
 

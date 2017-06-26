@@ -251,10 +251,10 @@ def senddata(data):
   #print("PP:%s" % (pp))
   p=psutil.Process(pp)
   #print("PPPP:%s" % (p.exe()))
-  f_arr = [ "putty","pietty" ]
+  f_arr = [ "putty","pietty","pcman" ]
   check=True
   for k in f_arr:
-    if my.is_string_like(p.exe(),k):
+    if my.is_string_like(my.strtolower(p.exe()),k):
       check=False
       shell.SendKeys("+{INSERT}", 0)  
   if check==True:
