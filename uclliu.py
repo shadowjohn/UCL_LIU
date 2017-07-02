@@ -279,9 +279,9 @@ def OnKeyboardEvent(event):
   #print 'Time:',event.Time
   #print 'Window:',event.Window
   #print 'WindowName:',event.WindowName
-  #print 'Ascii:', event.Ascii, chr(event.Ascii)
-  #print 'Key:', event.Key
-  #print 'KeyID:', event.KeyID
+  print 'Ascii:', event.Ascii, chr(event.Ascii)
+  print 'Key:', event.Key
+  print 'KeyID:', event.KeyID
   #print 'ScanCode:', event.ScanCode
   #print 'Extended:', event.Extended
   #print 'Injected:', event.Injected
@@ -334,7 +334,7 @@ def OnKeyboardEvent(event):
           return False
         print("Debug10")
         return True
-    if event.MessageName == "key down" and ( (event.Ascii>=65 and event.Ascii <=90) or (event.Ascii>=97 and event.Ascii <=122) or event.Ascii==44 or event.Ascii==46 or event.Ascii==39  ):
+    if event.MessageName == "key down" and ( (event.Ascii>=65 and event.Ascii <=90) or (event.Ascii>=97 and event.Ascii <=122) or event.Ascii==44 or event.Ascii==46 or event.Ascii==39 or event.Ascii==91 or event.Ascii==93 ):
       flag_is_play_otherkey=True
       if flag_is_shift_down==True:
         if len(event.Key) == 1 and is_hf(None)==False:

@@ -35,7 +35,7 @@ ToDo：<br>
   <li>4、尚有些按鍵會讓「英/肥」切來切去，暫未處理</li>
   <li>(Done)<s>5、離開程式的按鈕</s></li>
   <li>6、支援V鍵選第二個字</li>
-  <li>7、「」【】這種框框應該也要支援</li>
+  <li>(Done)<s>7、「」【】這種框框應該也要支援</s></li>
   <li>(Done)<s>8、sendkey時，判斷window id，如果該id是putty、pcman，改成shift+ins作文字貼上</s></li>
   <li>9、英/半 時，考慮加上調整opacity值，讓肥米變透明</li>
   <li>(Done)<s>10、增加提示沒有liu.json時的錯誤警告</s></li>
