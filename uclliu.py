@@ -199,8 +199,15 @@ def show_search():
   print("ShowSearch1")
   c = my.strtolower(play_ucl_label)
   c = my.trim(c)
-  print("ShowSearch2")
-  if c in uclcode["chardefs"]:
+  #print("ShowSearch2")
+  #print("C[-1]:%s" % c[-1])
+  #print("C[:-1]:%s" % c[:-1])  
+  # 此部分可以修正 V 可以出第二字，還不錯
+  if c[-1]=='v' and c[:-1] in uclcode["chardefs"] and len(uclcode["chardefs"][c[:-1]])>=2 :
+    ucl_find_data = uclcode["chardefs"][c[:-1]][1]  
+    word_label_set_text()
+    return True
+  elif c in uclcode["chardefs"]:
     ucl_find_data = uclcode["chardefs"][c]
     word_label_set_text()
     return True
@@ -315,10 +322,8 @@ def OnKeyboardEvent(event):
     flag_is_shift_down=False
     print("Debug13")
     return False            
-  if is_ucl():
-    if event.MessageName == "key down" and ( event.Ascii>=48 and event.Ascii <=57): #0~9
-      # play key
-      print("chr(event.Ascii): %s" % chr(event.Ascii))
+  if is_ucl():    
+    if event.MessageName == "key down" and ( event.Ascii>=48 and event.Ascii <=57) : #0~9 
       if len(ucl_find_data)>=1 and int(chr(event.Ascii)) < len(ucl_find_data):
         # send data
         data = ucl_find_data[int(chr(event.Ascii))]
@@ -335,6 +340,7 @@ def OnKeyboardEvent(event):
         print("Debug10")
         return True
     if event.MessageName == "key down" and ( (event.Ascii>=65 and event.Ascii <=90) or (event.Ascii>=97 and event.Ascii <=122) or event.Ascii==44 or event.Ascii==46 or event.Ascii==39 or event.Ascii==91 or event.Ascii==93 ):
+      # 這裡應該是同時按著SHIFT的部分
       flag_is_play_otherkey=True
       if flag_is_shift_down==True:
         if len(event.Key) == 1 and is_hf(None)==False:
@@ -363,8 +369,8 @@ def OnKeyboardEvent(event):
         play_ucl_label = play_ucl_label[:-1]
         type_label_set_text()
         print("Debug5")        
-        return False          
-    if event.MessageName == "key down" and event.Ascii==32 :
+        return False       
+    if event.MessageName == "key down" and event.Ascii==32 : #空白
       # Space      
       if len(ucl_find_data)>=1:
         
