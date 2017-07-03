@@ -11,7 +11,7 @@ import gtk
 from gtk import gdk
 import win32clipboard
 import pango
-
+import SendKeysCtypes
 #import threading
 from functools import wraps
 #http://fredericiana.com/2014/11/14/settimeout-python-delay/
@@ -43,8 +43,7 @@ screen_height=user32.GetSystemMetrics(1)
 import php
 my = php.kit()
 reload(sys)
-sys.setdefaultencoding('utf-8')
-
+sys.setdefaultencoding('UTF-8')
 flag_is_shift_down=False
 flag_is_play_otherkey=False
 play_ucl_label=""
@@ -226,6 +225,64 @@ def play_ucl(thekey):
   type_label_set_text()
   return True
 def senddata(data):
+  global play_ucl_label
+  global ucl_find_data
+  play_ucl_label=""
+  ucl_find_data=[]  
+  type_label_set_text()  
+  
+  shell = win32com.client.Dispatch("WScript.Shell")
+  
+  hwnd = win32gui.GetForegroundWindow()
+  pid = win32process.GetWindowThreadProcessId(hwnd)
+  pp="";
+  if len(pid) >=2:
+    pp=pid[1]
+  else:
+    pp=pid[0]
+  #print("PP:%s" % (pp))
+  print(pp)
+  p=psutil.Process(pp)
+  f_arr = [ "putty","pietty","pcman" ]
+  check=True
+  for k in f_arr:
+    if my.is_string_like(my.strtolower(p.exe()),k):
+      check=False
+      win32clipboard.OpenClipboard()
+      orin_clip=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
+      win32clipboard.CloseClipboard()
+            
+      win32clipboard.OpenClipboard() 
+      win32clipboard.EmptyClipboard()#這一行特別重要，經過實驗如果不加這一行的話會做動不正常
+      win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, data)
+      win32clipboard.CloseClipboard()
+      shell.SendKeys("+{INSERT}", 0)  
+      win32clipboard.OpenClipboard()
+      win32clipboard.EmptyClipboard()
+      win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip)
+      win32clipboard.CloseClipboard()
+            
+      #reload(sys)                                    
+      #sys.setdefaultencoding('UTF-8')
+      #print("ascii")
+      #SendKeysCtypes.SendKeys(data.decode("big"),0)
+      #reload(sys)
+      #sys.setdefaultencoding('UTF-8')
+      break
+  if check==True:
+    reload(sys)                                    
+    sys.setdefaultencoding('CP950')
+    #print("CP950")
+    SendKeysCtypes.SendKeys(data.decode("CP950"),0)
+    reload(sys)
+    sys.setdefaultencoding('UTF-8')
+  
+  #reload(sys)                                    
+  #sys.setdefaultencoding('auto')
+  #SendKeysCtypes.SendKeys(data.decode("auto"),0)
+  
+      
+def senddata_old(data):
   global play_ucl_label
   global ucl_find_data
   #win32clipboard.OpenClipboard()
