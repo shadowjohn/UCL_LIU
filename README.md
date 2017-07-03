@@ -41,8 +41,10 @@ ToDo：<br>
   <li>(Done)<s>10、增加提示沒有liu.json時的錯誤警告</s></li>
   <li>11、輸出字後，可以[提示簡根字]，以便提升打字速度</li>
   <li>12、同音字查詢</li>
-  <li>13、缺碼查詢，如lom[、lom]</li>
-  <li>14、支援Linux、Mac的研究(下一次吃飽閒閒再說)</li>    
+  <li>13、寫一篇如何把tab->cin->json的教學</li>
+  <li>14、支援把tab跟UCLLIU放一起就可以自動使用、轉檔的功能</li>
+  <li>15、缺碼查詢，如lom[、lom]</li>
+  <li>16、支援Linux、Mac的研究(下一次吃飽閒閒再說)</li>    
 </ul>
 
 版權：<br>
