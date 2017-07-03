@@ -37,14 +37,15 @@ ToDo：<br>
   <li>(Done)<s>6、支援V鍵選第二個字</s></li>
   <li>(Done)<s>7、「」【】這種框框應該也要支援</s></li>
   <li>(Done)<s>8、sendkey時，判斷window id，如果該id是putty、pcman，改成shift+ins作文字貼上</s></li>
-  <li>9、英/半 時，考慮加上調整opacity值，讓肥米變透明</li>
+  <li>9、「英/半」時，加上調整opacity值，讓肥米變透明</li>
   <li>(Done)<s>10、增加提示沒有liu.json時的錯誤警告</s></li>
   <li>11、輸出字後，可以[提示簡根字]，以便提升打字速度</li>
   <li>12、同音字查詢</li>
   <li>13、寫一篇如何把tab->cin->json的教學</li>
   <li>14、支援把tab跟UCLLIU放一起就可以自動使用、轉檔的功能</li>
   <li>15、缺碼查詢，如lom[、lom]</li>
-  <li>16、支援Linux、Mac的研究(下一次吃飽閒閒再說)</li>    
+  <li>16、在「英/全」的模式時，無法按 Shift 切換回「肥/全」</li>
+  <li>17、支援Linux、Mac的研究(下一次吃飽閒閒再說)</li>    
 </ul>
 <br>
 版權：<br>
