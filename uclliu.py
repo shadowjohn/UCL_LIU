@@ -257,7 +257,12 @@ def senddata(data):
       win32clipboard.EmptyClipboard()#這一行特別重要，經過實驗如果不加這一行的話會做動不正常
       win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, data)
       win32clipboard.CloseClipboard()
-      shell.SendKeys("+{INSERT}", 0)  
+      shell.SendKeys("+{INSERT}", 0) 
+      #reload(sys)                                    
+      #sys.setdefaultencoding('UNICODE') 
+      #SendKeysCtypes.SendKeys("肥".encode("UTF-8",0))
+      #reload(sys)                                    
+      #sys.setdefaultencoding('UTF-8')
       win32clipboard.OpenClipboard()    
       win32clipboard.EmptyClipboard()
       win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip)
