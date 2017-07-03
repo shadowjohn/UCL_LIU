@@ -246,6 +246,7 @@ def senddata(data):
   f_arr = [ "putty","pietty","pcman" ]
   check=True
   for k in f_arr:
+    #break;
     if my.is_string_like(my.strtolower(p.exe()),k):
       check=False
       win32clipboard.OpenClipboard()
@@ -257,7 +258,7 @@ def senddata(data):
       win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, data)
       win32clipboard.CloseClipboard()
       shell.SendKeys("+{INSERT}", 0)  
-      win32clipboard.OpenClipboard()
+      win32clipboard.OpenClipboard()    
       win32clipboard.EmptyClipboard()
       win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip)
       win32clipboard.CloseClipboard()
@@ -270,12 +271,12 @@ def senddata(data):
       #sys.setdefaultencoding('UTF-8')
       break
   if check==True:
-    reload(sys)                                    
-    sys.setdefaultencoding('CP950')
+    #reload(sys)                                    
+    #sys.setdefaultencoding('UTF-8')
     #print("CP950")
-    SendKeysCtypes.SendKeys(data.decode("CP950"),0)
-    reload(sys)
-    sys.setdefaultencoding('UTF-8')
+    SendKeysCtypes.SendKeys(data.decode("UTF-8"),0)
+    #reload(sys)
+    #sys.setdefaultencoding('UTF-8')
   
   #reload(sys)                                    
   #sys.setdefaultencoding('auto')
@@ -343,9 +344,9 @@ def OnKeyboardEvent(event):
   #print 'Time:',event.Time
   #print 'Window:',event.Window
   #print 'WindowName:',event.WindowName
-  print 'Ascii:', event.Ascii, chr(event.Ascii)
-  print 'Key:', event.Key
-  print 'KeyID:', event.KeyID
+  #print 'Ascii:', event.Ascii, chr(event.Ascii)
+  #print 'Key:', event.Key
+  #print 'KeyID:', event.KeyID
   #print 'ScanCode:', event.ScanCode
   #print 'Extended:', event.Extended
   #print 'Injected:', event.Injected
