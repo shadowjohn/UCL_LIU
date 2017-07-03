@@ -44,11 +44,30 @@ import php
 my = php.kit()
 reload(sys)
 sys.setdefaultencoding('UTF-8')
+
+#此是防止重覆執行
+if os.path.isdir("C:\\temp") == False:
+  os.mkdir("c:\\temp")
+check_file_run = open('c:\\temp\\UCLLIU.lock', "a+")
+try:  
+  portalocker.lock(check_file_run, portalocker.LOCK_EX | portalocker.LOCK_NB)
+except:
+  md = gtk.MessageDialog(None, 
+          gtk.DIALOG_DESTROY_WITH_PARENT, 
+          gtk.MESSAGE_QUESTION, 
+          gtk.BUTTONS_OK, "【肥米輸入法】已執行...")          
+  md.set_position(gtk.WIN_POS_CENTER)
+  response = md.run()            
+  if response == gtk.RESPONSE_OK or response == gtk.RESPONSE_DELETE_EVENT:
+    md.destroy()
+    sys.exit(0)     
+
 flag_is_shift_down=False
 flag_is_play_otherkey=False
 play_ucl_label=""
 ucl_find_data=[]
 
+# 用來出半型字的
 # https://stackoverflow.com/questions/2422177/python-how-can-i-replace-full-width-characters-with-half-width-characters
 HALF2FULL = dict((i, i + 0xFEE0) for i in range(0x21, 0x7F))
 HALF2FULL[0x20] = 0x3000
@@ -67,8 +86,8 @@ def widen(s):
   """
   return unicode(s).translate(WIDE_MAP)
 
-def pleave(self, event):
-  my.exit();
+#def pleave(self, event):
+#  my.exit();
 
 if my.is_file("liu.json") == False:
   message = gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)
@@ -100,7 +119,16 @@ def my_gtk_refresh():
   global win
   #win.gtk_main_iteration();
   dir(win)      
-
+def toAlphaOrNonAlpha():
+  global uclen_btn
+  global hf_btn
+  global win  
+  c = hf_btn.get_child()
+  hf_kind = c.get_label()
+  if uclen_btn.get_label()=="英" and hf_kind=="半":
+    win.set_opacity(0.2)
+  else:
+    win.set_opacity(1)
 def toggle_ucl():
   global uclen_btn
   global play_ucl_label
@@ -111,7 +139,8 @@ def toggle_ucl():
   else:
     uclen_btn.set_label("肥")
   uclen_label=uclen_btn.get_child()
-  uclen_label.modify_font(pango.FontDescription('微軟正黑體 bold 22'))    
+  uclen_label.modify_font(pango.FontDescription('微軟正黑體 bold 22'))
+  toAlphaOrNonAlpha()    
 def is_ucl():
   global uclen_btn  
   #print("WTF: %s" % uclen_btn.get_label())
@@ -135,7 +164,8 @@ def uclen_btn_click(self):
     self.set_label("肥")
   uclen_label=self.get_child()
   uclen_label.modify_font(pango.FontDescription('微軟正黑體 bold 22'))
-  pass
+  toAlphaOrNonAlpha()
+  #pass
 def hf_btn_click(self):
   kind=self.get_label()
   if kind=="半":
@@ -491,15 +521,7 @@ def OnKeyboardEvent(event):
       
 #程式主流程
 #功能說明
-#此是防止重覆執行
-if os.path.isdir("C:\\temp") == False:
-  os.mkdir("c:\\temp")
-check_file_run = open('c:\\temp\\pyLiu.txt', "a+")
-try:  
-  portalocker.lock(check_file_run, portalocker.LOCK_EX | portalocker.LOCK_NB)
-
-except:
-  sys.exit(0)                      
+                 
    
    
 

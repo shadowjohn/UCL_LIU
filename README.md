@@ -5,7 +5,9 @@
   <img src="http://3wa.tw/uploads/upload/ucl_2.png">
 </center>
 <br>
-版本： V0.1<br>
+作者：羽山秋人 (<a target="_blank" href="http://3wa.tw">http://3wa.tw</a>)<br>
+<br>
+版本：V 0.1<br>
 <br>
 開發動機：<br>
 　　吃飽閒閒覺得人生就是該自己寫一套輸入法，然後就開始寫了。<br>
@@ -16,14 +18,17 @@
 <br>
 開發工具：<br>
   <ul>
-  <li>Python 27 (32BIT)</li>
-  <li>pyhook</li>
-  <li>pygtk</li>
-  <li>pywin32</li>
-  <li>字碼表參考PIME裡的liu.json</li>
+    <li>Python 27 (32BIT)</li>
+    <li>pyhook</li>
+    <li>pygtk</li>
+    <li>pywin32</li>
+    <li>pyinstaller 可搭配build.bat製作dist/uclliu.exe檔</li>
+    <li>(Third party) portalocker.py 防重複執行，會Lock C:\tmp\</li>
+    <li>(Third party) SendKeysCtypes.py 可以送出Unicode的SendKeys</li>
+    <li>字碼表參考PIME裡的liu.json</li>
 </ul>
 <br>
-Compiler：<br>
+編譯：<br>
 　　pip install pyinstaller<br>
     參考 build.bat 製作單一 exe 方法<br>
 <br>  
@@ -37,7 +42,7 @@ ToDo：<br>
   <li>(Done)<s>6、支援V鍵選第二個字</s></li>
   <li>(Done)<s>7、「」【】這種框框應該也要支援</s></li>
   <li>(Done)<s>8、sendkey時，判斷window id，如果該id是putty、pcman，改成shift+ins作文字貼上</s></li>
-  <li>9、「英/半」時，加上調整opacity值，讓肥米變透明</li>
+  <li>(Done)<s>9、「英/半」時，加上調整opacity值，讓肥米變透明(Opacity 0.2)</s></li>
   <li>(Done)<s>10、增加提示沒有liu.json時的錯誤警告</s></li>
   <li>11、輸出字後，可以[提示簡根字]，以便提升打字速度</li>
   <li>12、同音字查詢</li>
@@ -45,7 +50,8 @@ ToDo：<br>
   <li>14、支援把tab跟UCLLIU放一起就可以自動使用、轉檔的功能</li>
   <li>15、缺碼查詢，如lom[、lom]</li>
   <li>16、在「英/全」的模式時，無法按 Shift 切換回「肥/全」</li>
-  <li>17、支援Linux、Mac的研究(下一次吃飽閒閒再說)</li>    
+  <li>17、在「肥/全」的「冒號」應該是要出全形字，「分號」要出全型字
+  <li>18、支援Linux、Mac的研究(下一次吃飽閒閒再說)</li>    
 </ul>
 <br>
 版權：<br>

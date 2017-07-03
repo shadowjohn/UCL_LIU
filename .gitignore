@@ -1,3 +1,4 @@
 build
 liu.json
 screenshot/liu_license.jpg
+*.pyc
