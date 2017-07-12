@@ -28,7 +28,7 @@
     <li>pygtk</li>
     <li>pywin32</li>
     <li>pyinstaller 可搭配build.bat製作dist/uclliu.exe檔</li>
-    <li>(Third party) portalocker.py 防重複執行，會Lock C:\tmp\</li>
+    <li>(Third party) portalocker.py 防重複執行，會Lock c:\temp\UCLLIU.lock</li>
     <li>(Third party) SendKeysCtypes.py 可以送出Unicode的SendKeys</li>
     <li>(Third party) liu_unitab2cin.py 可以將tab轉成cin的檔案，改成支援python2.7的寫法</li>
     <li>(Third party) cintojson.py 可以將cin轉成json的檔案，改成支援python2.7的寫法</li>
