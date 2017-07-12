@@ -43,9 +43,9 @@
 　　1、您可以只下載dist/uclliu.exe<br>
 　　2、將 「liu-uni.tab 或 liu.cin 或 liu.json」任一種檔案 與 uclliu.exe 放一起<br>
 　　3、執行 uclliu.exe 即可開始使用<br>
-　　4、首次執行，系統會自動將tab轉成liu.json，需要花大概30秒~1分鐘的時間，之後有liu.json就可以快速開啟。<br>
-    (還是要再強調一次，不要用義守大學FTP裡的那個liu-uni.tab，建議可以安裝正版嘸蝦米後在C:\windows\Syswow64裡找到)<br>
-    5、未來使用的話，就把uclliu.exe、作好的字根檔liu.json帶著走，四處都能打肥米輸入法了A_A
+　　4、首次執行，系統會自動將tab轉成liu.json，需要花大概30秒~1分鐘的時間，之後有liu.json就可以快速開啟。<br>    
+　　5、未來使用的話，就把uclliu.exe、作好的字根檔liu.json帶著走，四處都能打肥米輸入法了A_A
+　　(還是要再強調一次，不要用義守大學FTP裡的那個liu-uni.tab，建議可以安裝正版嘸蝦米後在C:\windows\Syswow64裡找到)<br>
 <br>       
 ToDo：<br>
 <ul>
@@ -67,7 +67,8 @@ ToDo：<br>
   <li>16、在「英/全」的模式時，無法按 Shift 切換回「肥/全」</li>
   <li>17、在「肥/全」的「冒號」應該是要出全形字，「分號」要出全型字
   <li>18、tab->cin->json有點久，所以預計再加一個字根檔轉換中的進度畫面</li>
-  <li>19、支援Linux、Mac的研究(下一次吃飽閒閒再說)</li>    
+  <li>19、V鍵出字，有些字如果V是尾根，會有打不出來的問題，如「截」jaqv，會變成「戟」，「截」會完全打不出來。回(oov)，變成要打「ooo2」</li>
+  <li>20、支援Linux、Mac的研究(下一次吃飽閒閒再說)</li>    
 </ul>
 <br>
 版權：<br>
