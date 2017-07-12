@@ -1,4 +1,8 @@
 build
+dist/liu.json
 liu.json
+liu.cin
+liu-uni.tab
 screenshot/liu_license.jpg
 *.pyc
+liuwords

@@ -15,6 +15,11 @@
 　　由於字碼表的版權問題，我就不放 liu.json 了，liu.json 的格式同PIME的架構。<br>
    要好的字碼表的話，請買正版，將 tab->cin->json <br>
    雖然很麻煩，但沒人想因為實作一套輸入法就被告翻。<br>
+   <br>
+   P.S: 請不要使用守義大學FTP裡的那個 liu-uni.tab ，太古早了，而且有些字根都錯的!
+   <br>
+   首次使用如果沒有liu.json，會自動進行 tab->cin->json的轉換，tab會自動查找C:\windows\Syswow64\liu-uni.tab<br>
+   或同目錄下的tab檔。
 <br>
 開發工具：<br>
   <ul>
@@ -25,6 +30,8 @@
     <li>pyinstaller 可搭配build.bat製作dist/uclliu.exe檔</li>
     <li>(Third party) portalocker.py 防重複執行，會Lock C:\tmp\</li>
     <li>(Third party) SendKeysCtypes.py 可以送出Unicode的SendKeys</li>
+    <li>(Third party) liu_unitab2cin.py 可以將tab轉成cin的檔案，改成支援python2.7的寫法</li>
+    <li>(Third party) cintojson.py 可以將cin轉成json的檔案，改成支援python2.7的寫法</li>
     <li>字碼表參考PIME裡的liu.json</li>
 </ul>
 <br>
@@ -47,11 +54,12 @@ ToDo：<br>
   <li>11、輸出字後，可以[提示簡根字]，以便提升打字速度</li>
   <li>12、同音字查詢</li>
   <li>13、寫一篇如何把tab->cin->json的教學</li>
-  <li>14、支援把tab跟UCLLIU放一起就可以自動使用、轉檔的功能</li>
+  <li>(Done)<s>14、支援把tab跟UCLLIU放一起就可以自動使用、轉檔的功能</s></li>
   <li>15、缺碼查詢，如lom[、lom]</li>
   <li>16、在「英/全」的模式時，無法按 Shift 切換回「肥/全」</li>
   <li>17、在「肥/全」的「冒號」應該是要出全形字，「分號」要出全型字
-  <li>18、支援Linux、Mac的研究(下一次吃飽閒閒再說)</li>    
+  <li>18、tab->cin->json有點久，所以預計再加一個字根檔轉換中的進度畫面</li>
+  <li>19、支援Linux、Mac的研究(下一次吃飽閒閒再說)</li>    
 </ul>
 <br>
 版權：<br>

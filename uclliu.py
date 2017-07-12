@@ -45,6 +45,10 @@ my = php.kit()
 reload(sys)
 sys.setdefaultencoding('UTF-8')
 
+
+PWD=my.pwd()   
+
+
 #此是防止重覆執行
 if os.path.isdir("C:\\temp") == False:
   os.mkdir("c:\\temp")
@@ -62,6 +66,50 @@ except:
     md.destroy()
     sys.exit(0)     
 
+#check if exists tab cin json
+is_need_trans_tab = False
+is_need_trans_cin = False
+is_all_fault = False
+#my.unlink("liu.json")
+#my.unlink("liu.cin")
+if my.is_file("liu.json") == False:
+  if my.is_file("liu.cin") == False:
+    if my.is_file("liu-uni.tab") == False:
+      is_all_fault=True
+    else:
+      is_need_trans_tab=True
+      is_need_trans_cin=True   
+  else:
+    is_need_trans_cin=True  
+
+if is_all_fault==True and my.is_file("C:\\windows\\SysWOW64\\liu-uni.tab")==True:
+  my.copy("C:\\windows\\SysWOW64\\liu-uni.tab",PWD+"\\liu-uni.tab")
+  is_all_fault=False
+  is_need_trans_tab=True
+  is_need_trans_cin=True
+  
+
+if is_all_fault == True:
+  message = gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)
+  message.set_markup("無字根檔，請購買正版無蝦米，將「C:\\windows\\SysWOW64\\liu-uni.tab」與uclliu.exe放在一起執行")  
+  response = message.run()
+  #print(gtk.ResponseType.BUTTONS_OK)
+  if response == -5 or response == -4:
+    my.exit()
+  #message.show()
+  gtk.main()
+
+if is_need_trans_tab==True:
+  #需要轉tab檔
+  import liu_unitab2cin
+  #print(PWD)  
+  liu_unitab2cin.convert_liu_unitab( ("%s\\liu-uni.tab" % (PWD)), ("%s\\liu.cin" % (PWD) ))
+
+if is_need_trans_cin==True:
+  import cintojson
+  cinapp = cintojson.CinToJson()
+  cinapp.run(PWD+"\\liu",PWD+"\\liu.cin",False)
+  
 flag_is_shift_down=False
 flag_is_play_otherkey=False
 play_ucl_label=""
