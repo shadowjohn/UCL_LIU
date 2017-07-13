@@ -12,6 +12,7 @@ from gtk import gdk
 import win32clipboard
 import pango
 import SendKeysCtypes
+import time
 #import threading
 #from functools import wraps
 #http://fredericiana.com/2014/11/14/settimeout-python-delay/
@@ -343,6 +344,8 @@ def senddata(data):
         orin_clip=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
       except:
         pass
+      win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, "")
+      win32clipboard.EmptyClipboard()
       win32clipboard.CloseClipboard()
             
       win32clipboard.OpenClipboard() 
@@ -355,6 +358,8 @@ def senddata(data):
       #SendKeysCtypes.SendKeys("肥".encode("UTF-8",0))
       #reload(sys)                                    
       #sys.setdefaultencoding('UTF-8')
+      #也許要設delay...
+      time.sleep(0.05)
       win32clipboard.OpenClipboard()    
       win32clipboard.EmptyClipboard()
       win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip)
