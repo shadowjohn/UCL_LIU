@@ -287,15 +287,24 @@ def show_search():
   #print("C[:-1]:%s" % c[:-1])  
   # 此部分可以修正 V 可以出第二字，還不錯
   # 2017-07-13 Fix when V is last code
-  if (uclcode["chardefs"])==0 and c[-1]=='v' and c[:-1] in uclcode["chardefs"] and len(uclcode["chardefs"][c[:-1]])>=2 :
+  #print("LAST V : %s" % (c[-1]))
+  findword = ""
+  try:
+    findword = uclcode["chardefs"][c]
+  except:
+    pass 
+  if len(findword)==0 and c[-1]=='v' and c[:-1] in uclcode["chardefs"] and len(uclcode["chardefs"][c[:-1]])>=2 :
+    #print("Debug V1")
     ucl_find_data = uclcode["chardefs"][c[:-1]][1]   
     word_label_set_text()
     return True
   elif c in uclcode["chardefs"]:
+    #print("Debug V2")
     ucl_find_data = uclcode["chardefs"][c]
     word_label_set_text()
     return True
   else:
+    #print("Debug V3")
     ucl_find_data=[]  
     #play_ucl_label=""  
     ucl_find_data=[]
@@ -446,9 +455,9 @@ def OnKeyboardEvent(event):
   #print 'Time:',event.Time
   #print 'Window:',event.Window
   #print 'WindowName:',event.WindowName
-  print 'Ascii:', event.Ascii, chr(event.Ascii)
-  print 'Key:', event.Key
-  print 'KeyID:', event.KeyID
+  #print 'Ascii:', event.Ascii, chr(event.Ascii)
+  #print 'Key:', event.Key
+  #print 'KeyID:', event.KeyID
   #print 'ScanCode:', event.ScanCode
   #print 'Extended:', event.Extended
   #print 'Injected:', event.Injected
