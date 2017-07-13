@@ -338,7 +338,11 @@ def senddata(data):
     if my.is_string_like(my.strtolower(p.exe()),k):
       check=False
       win32clipboard.OpenClipboard()
-      orin_clip=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
+      orin_clip=""
+      try:
+        orin_clip=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
+      except:
+        pass
       win32clipboard.CloseClipboard()
             
       win32clipboard.OpenClipboard() 
