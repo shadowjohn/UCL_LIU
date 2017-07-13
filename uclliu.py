@@ -13,7 +13,7 @@ import win32clipboard
 import pango
 import SendKeysCtypes
 #import threading
-from functools import wraps
+#from functools import wraps
 #http://fredericiana.com/2014/11/14/settimeout-python-delay/
 
 #用來送key的 https://stackoverflow.com/questions/136734/key-presses-in-python
@@ -150,23 +150,26 @@ if my.is_file("liu.json") == False:
   
 uclcode = my.json_decode(my.file_get_contents("liu.json"))
 #print(uclcode)
-def delay(delay=0.):
-    """
-    Decorator delaying the execution of a function for a while.
-    """
-    def wrap(f):
-        @wraps(f)
-        def delayed(*args, **kwargs):
-            timer = threading.Timer(delay, f, args=args, kwargs=kwargs)
-            timer.start()
-        return delayed
-    return wrap
-@delay(0.1)
-def my_gtk_refresh():
+
+#def delay(delay=0.):
+#    """
+#    Decorator delaying the execution of a function for a while.
+#    """
+#    def wrap(f):
+#        @wraps(f)
+#        def delayed(*args, **kwargs):
+#            timer = threading.Timer(delay, f, args=args, kwargs=kwargs)
+#            timer.start()
+#        return delayed
+#    return wrap
+#@delay(0.1)
+#def my_gtk_refresh():
   #global OnMotion
-  global win
+#  global win
   #win.gtk_main_iteration();
-  dir(win)      
+#  dir(win)
+
+      
 def toAlphaOrNonAlpha():
   global uclen_btn
   global hf_btn
@@ -201,18 +204,20 @@ def x_btn_click(self):
   sys.exit()
 # draggable
 def winclicked(self, event):
+  # make UCLLIU can draggable
   self.window.begin_move_drag(event.button, int(event.x_root), int(event.y_root), event.time)
   pass
 def uclen_btn_click(self):
   #print(dir(self))
-  kind=self.get_label()
-  if kind=="肥":
-    self.set_label("英")
-  else:
-    self.set_label("肥")
-  uclen_label=self.get_child()
-  uclen_label.modify_font(pango.FontDescription('微軟正黑體 bold 22'))
-  toAlphaOrNonAlpha()
+  #kind=self.get_label()
+  #if kind=="肥":
+  #  self.set_label("英")
+  #else:
+  #  self.set_label("肥")
+  #uclen_label=self.get_child()
+  #uclen_label.modify_font(pango.FontDescription('微軟正黑體 bold 22'))
+  #toAlphaOrNonAlpha()
+  toggle_ucl()
   #pass
 def hf_btn_click(self):
   kind=self.get_label()
@@ -280,8 +285,9 @@ def show_search():
   #print("C[-1]:%s" % c[-1])
   #print("C[:-1]:%s" % c[:-1])  
   # 此部分可以修正 V 可以出第二字，還不錯
-  if c[-1]=='v' and c[:-1] in uclcode["chardefs"] and len(uclcode["chardefs"][c[:-1]])>=2 :
-    ucl_find_data = uclcode["chardefs"][c[:-1]][1]  
+  # 2017-07-13 Fix when V is last code
+  if (uclcode["chardefs"])==0 and c[-1]=='v' and c[:-1] in uclcode["chardefs"] and len(uclcode["chardefs"][c[:-1]])>=2 :
+    ucl_find_data = uclcode["chardefs"][c[:-1]][1]   
     word_label_set_text()
     return True
   elif c in uclcode["chardefs"]:
@@ -289,6 +295,10 @@ def show_search():
     word_label_set_text()
     return True
   else:
+    ucl_find_data=[]  
+    #play_ucl_label=""  
+    ucl_find_data=[]
+    word_label_set_text()
     return False  
   
   #print(find)
@@ -427,9 +437,9 @@ def OnKeyboardEvent(event):
   #print 'Time:',event.Time
   #print 'Window:',event.Window
   #print 'WindowName:',event.WindowName
-  #print 'Ascii:', event.Ascii, chr(event.Ascii)
-  #print 'Key:', event.Key
-  #print 'KeyID:', event.KeyID
+  print 'Ascii:', event.Ascii, chr(event.Ascii)
+  print 'Key:', event.Key
+  print 'KeyID:', event.KeyID
   #print 'ScanCode:', event.ScanCode
   #print 'Extended:', event.Extended
   #print 'Injected:', event.Injected
@@ -516,8 +526,8 @@ def OnKeyboardEvent(event):
       if len(ucl_find_data)>=1:
         
         #丟出第一個字
-        print("Ggggggg")
-        #pyautogui.typewrite(my.utf8tobig5("幹"))
+        #print("Ggggggg")
+        #pyautogui.typewrite(my.utf8tobig5("肥"))
         #shell = win32com.client.Dispatch("WScript.Shell")
         #shell.SendKeys("{ASC " + ucl_find_data[0] + "}", 0)
         #xerox.copy(u'some string')
