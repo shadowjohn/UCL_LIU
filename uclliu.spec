@@ -3,7 +3,7 @@
 block_cipher = None
 
 
-a = Analysis(['uclliu.py'],
+a = Analysis(['uclliu.pyw'],
              pathex=['C:\\Users\\john.GIS\\Desktop\\ucl\\UCL_LIU'],
              binaries=[],
              datas=[],

@@ -1,1 +1,1 @@
-pyinstaller uclliu.py --onefile -w
+pyinstaller uclliu.pyw -w -F
