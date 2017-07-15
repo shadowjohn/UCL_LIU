@@ -50,7 +50,7 @@
 ToDo：<br>
 <ul>
   <li>(Done)<s>1、(嚴重)「送出字元」的方法，試了很多send key一直無法解決 send unicode的問題，暫時使用「剪貼簿」的Ctrl+V來實作貼上文字的功能</s></li>
-  <li>2、「英文全形」輸入時，有些組合鍵如 Alt+tab還尚未決定</li>
+  <li>(Done 2017-07-16)<s>2、「英文全形」輸入時，有些組合鍵如 Alt+tab還尚未決定</s></li>
   <li>(Done)<s>3、py2exe包成一支exe</s>改用pyinstaller代替</li>
   <li>4、尚有些按鍵會讓「英/肥」切來切去，暫未處理</li>
   <li>(Done)<s>5、離開程式的按鈕</s></li>

@@ -465,21 +465,18 @@ def OnKeyboardEvent(event):
   #print '---'
   
   #thekey = chr(event.Ascii)
-  if event.MessageName == "key down" and (event.Key == "Lshift" or event.Key == "Rshift"):
+  if event.MessageName == "key down" and (event.Key == "Lshift" or event.Key == "Rshift" ):
     flag_is_shift_down=True
     flag_is_play_otherkey=False
   if event.MessageName == "key down" and event.Key != "Lshift" and event.Key != "Rshift":
-    flag_is_play_otherkey=True
-    flag_is_play_otherkey=False        
-  if event.MessageName == "key up" and (event.Key == "Lshift" or event.Key == "Rshift"):
-    flag_is_shift_down=False
+    flag_is_play_otherkey=True          
   if event.MessageName == "key up" and (event.Key == "Lshift" or event.Key == "Rshift"):
     #shift
     flag_is_shift_down=False
     print("Press shift")
     if flag_is_play_otherkey==False:
       toggle_ucl()
-      print("Debug15")
+      print("Debug15")    
     print("Debug14")
     return True
   if event.MessageName == "key down" and event.Ascii==32 and flag_is_shift_down==True:
@@ -493,14 +490,16 @@ def OnKeyboardEvent(event):
   if is_ucl():    
     if event.MessageName == "key down" and ( event.Ascii>=48 and event.Ascii <=57) : #0~9 
       if len(ucl_find_data)>=1 and int(chr(event.Ascii)) < len(ucl_find_data):
-        # send data
+        # send data        
         data = ucl_find_data[int(chr(event.Ascii))]
         senddata(data)
         print("Debug12")
         return False
       else:
         if len(event.Key) == 1 and is_hf(None)==False:
-          k = widen(event.Key)
+          #k = widen(event.Key)
+          kac = event.Ascii          
+          k = widen(chr(kac))
           print("event.Key to Full:%s %s" % (event.Key,k))
           senddata(k)
           print("Debug11")
@@ -512,7 +511,13 @@ def OnKeyboardEvent(event):
       flag_is_play_otherkey=True
       if flag_is_shift_down==True:
         if len(event.Key) == 1 and is_hf(None)==False:
-          k = widen(event.Key)
+          #k = widen(event.Key)
+          kac = event.Ascii
+          if kac>=65 and kac<=90:
+            kac=kac+32
+          else:
+            kac=kac-32
+          k = widen(chr(kac))
           print("285 event.Key to Full:%s %s" % (event.Key,k))
           senddata(k)
           print("Debug9")
@@ -564,10 +569,25 @@ def OnKeyboardEvent(event):
         print("Debug1")
         return True   
     else:
-      print("Debug2")    
+      print("Debug2")            
       return True
   else:
     print("Debug3")
+    if event.MessageName == "key down" and (event.Key == "Lshift" or event.Key == "Rshift" ):
+      flag_is_shift_down=True
+      flag_is_play_otherkey=False
+    if event.MessageName == "key down" and event.Key != "Lshift" and event.Key != "Rshift":
+      flag_is_play_otherkey=True          
+    if event.MessageName == "key up" and (event.Key == "Lshift" or event.Key == "Rshift"):
+      #shift
+      flag_is_shift_down=False
+      print("Press shift")
+      if flag_is_play_otherkey==False:
+        toggle_ucl()
+        print("Debug315")    
+      print("Debug314")
+      return True
+    
     #if event.MessageName == "key up" and len(event.Key) == 1 and is_hf(None)==False:
     #  k = widen(event.Key)
     #  print("335 event.Key to Full:%s %s" % (event.Key,k))
@@ -575,9 +595,11 @@ def OnKeyboardEvent(event):
     #  return False
     #if len(event.Key) == 1 and is_hf(None)==False and event.KeyID !=0 and event.KeyID !=145 and event.KeyID !=162:
     #  k = widen(event.Key)      
-    #  senddata(k)
+    #  senddata(k) 
     print("Debug3: %s" % (event.Transition))
-    if event.MessageName == "key down" and len( str(chr(event.Ascii)) ) == 1 and is_hf(None)==False and event.Injected == 0:
+    if event.KeyID==20 or event.KeyID==45 or event.KeyID==46 or event.KeyID==36 or event.KeyID==33 or event.KeyID==34 or event.KeyID==35 or event.KeyID==160 or event.KeyID==161 or event.KeyID==9 or event.KeyID == 37 or event.KeyID == 38 or event.KeyID == 39 or event.KeyID == 40: #↑←→↓
+      return True
+    if event.MessageName == "key down" and len( str(chr(event.Ascii)) ) == 1 and is_hf(None)==False and event.Injected == 0 :
       k = widen( str(chr(event.Ascii)) )
       #print("ｋｋｋｋｋｋｋｋｋｋｋｋｋｋｋK:%s" % k)
       senddata(k)
