@@ -689,7 +689,7 @@ win.set_skip_pager_hint(False)
 win.set_decorated(False)
 win.set_accept_focus(False)
 win.set_icon_name(None)
-win.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_TOOLBAR | gtk.gdk.WINDOW_TYPE_HINT_DESKTOP | gtk.gdk.WINDOW_TYPE_HINT_DOCK | gtk.gdk.WINDOW_TYPE_HINT_UTILITY)
+#win.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_TOOLBAR | gtk.gdk.WINDOW_TYPE_HINT_DESKTOP | gtk.gdk.WINDOW_TYPE_HINT_DOCK | gtk.gdk.WINDOW_TYPE_HINT_UTILITY)
 
 #win.show_in_taskbar(False)
 #from pywinauto import win32functions
