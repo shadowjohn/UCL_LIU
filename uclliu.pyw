@@ -453,9 +453,9 @@ def OnKeyboardEvent(event):
   #print 'Time:',event.Time
   #print 'Window:',event.Window
   #print 'WindowName:',event.WindowName
-  #print 'Ascii:', event.Ascii, chr(event.Ascii)
-  #print 'Key:', event.Key
-  #print 'KeyID:', event.KeyID
+  print 'Ascii:', event.Ascii, chr(event.Ascii)
+  print 'Key:', event.Key
+  print 'KeyID:', event.KeyID
   #print 'ScanCode:', event.ScanCode
   #print 'Extended:', event.Extended
   #print 'Injected:', event.Injected
@@ -469,7 +469,8 @@ def OnKeyboardEvent(event):
     flag_is_shift_down=True
     flag_is_play_otherkey=False
   if event.MessageName == "key down" and event.Key != "Lshift" and event.Key != "Rshift":
-    flag_is_play_otherkey=True        
+    flag_is_play_otherkey=True
+    flag_is_play_otherkey=False        
   if event.MessageName == "key up" and (event.Key == "Lshift" or event.Key == "Rshift"):
     flag_is_shift_down=False
   if event.MessageName == "key up" and (event.Key == "Lshift" or event.Key == "Rshift"):
@@ -575,7 +576,7 @@ def OnKeyboardEvent(event):
     #if len(event.Key) == 1 and is_hf(None)==False and event.KeyID !=0 and event.KeyID !=145 and event.KeyID !=162:
     #  k = widen(event.Key)      
     #  senddata(k)
-    print(event.Transition)
+    print("Debug3: %s" % (event.Transition))
     if event.MessageName == "key down" and len( str(chr(event.Ascii)) ) == 1 and is_hf(None)==False and event.Injected == 0:
       k = widen( str(chr(event.Ascii)) )
       #print("ｋｋｋｋｋｋｋｋｋｋｋｋｋｋｋK:%s" % k)
