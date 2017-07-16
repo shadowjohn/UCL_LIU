@@ -680,6 +680,7 @@ hm.HookKeyboard()
                
 
 win=gtk.Window(type=gtk.WINDOW_POPUP)
+win.set_modal(True)
 win.set_resizable(False)
 win.move(screen_width-600,screen_height-150)
 #always on top
