@@ -187,16 +187,19 @@ def toAlphaOrNonAlpha():
 def toggle_ucl():
   global uclen_btn
   global play_ucl_label
+  global win
   if uclen_btn.get_label()=="肥":
     uclen_btn.set_label("英")
     play_ucl_label=""
     type_label_set_text()
+    win.set_keep_above(False)
   else:
     uclen_btn.set_label("肥")
+    win.set_keep_above(True)
   uclen_label=uclen_btn.get_child()
   uclen_label.modify_font(pango.FontDescription('微軟正黑體 bold 22'))
                                               
-  window_state_event_cb(None,None)
+  #window_state_event_cb(None,None)
   print("window_state_event_cb(toggle_ucl)")
   toAlphaOrNonAlpha()    
 def is_ucl():
@@ -691,25 +694,27 @@ hm.HookKeyboard()
 #screen_height = root.winfo_screenheight()
 #root=None
 
-def window_state_event_cb(window, event):
-  global win
-  win.set_keep_above(True)
-  print("Try window_popup always on top(event)")  
+#def window_state_event_cb(window, event):
+#  global win  
+#  win.set_keep_above(True)  
+#  print("Try window_popup always on top(event)")  
                  
 
+#win=gtk.Window(type=gtk.WINDOW_POPUP)
 win=gtk.Window(type=gtk.WINDOW_POPUP)
 win.set_modal(True)
 win.set_resizable(False)
 win.move(screen_width-600,screen_height-150)
 #always on top
 win.set_keep_above(True)
-win.set_transient_for(win)
+win.set_keep_below(False)
+#win.set_transient_for(win)
 win.set_skip_taskbar_hint(False)  
 win.set_skip_pager_hint(False)
 win.set_decorated(False)
 win.set_accept_focus(False)
 win.set_icon_name(None)
-win.connect('window-state-event', window_state_event_cb)
+#win.connect('window-state-event', window_state_event_cb)
 #win.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_TOOLBAR | gtk.gdk.WINDOW_TYPE_HINT_DESKTOP | gtk.gdk.WINDOW_TYPE_HINT_DOCK | gtk.gdk.WINDOW_TYPE_HINT_UTILITY)
 
 #win.show_in_taskbar(False)
@@ -783,9 +788,15 @@ win.add(vbox)
 #  time.sleep(1);
 #  pass
 #win.deiconify()
+
+
+
 win.show_all()
 #win.show()
 win.set_focus(None)
+
+#win.set_transient_for(win)
+
 
 gtk.main()
 
