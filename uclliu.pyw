@@ -317,8 +317,10 @@ def play_ucl(thekey):
   global type_label
   global play_ucl_label
   play_ucl_label = type_label.get_label();
-  play_ucl_label = "%s%s" % (play_ucl_label,thekey)
-  type_label_set_text()
+  # 不可以超過5個字
+  if len(play_ucl_label) < 5:
+    play_ucl_label = "%s%s" % (play_ucl_label,thekey)
+    type_label_set_text()
   return True
 def senddata(data):
   global play_ucl_label
@@ -544,7 +546,7 @@ def OnKeyboardEvent(event):
         print("Debug5")        
         return False       
     if event.MessageName == "key down" and event.Ascii==32 : #空白
-      # Space      
+      # Space                          
       if len(ucl_find_data)>=1:
         
         #丟出第一個字
@@ -565,7 +567,15 @@ def OnKeyboardEvent(event):
         
         print("Debug4")
         return False 
+      elif len(ucl_find_data)==0 and len(play_ucl_label)!=0:
+        #無此字根時，按到空白鍵
+        print("Debug11")
+        play_ucl_label=""
+        ucl_find_data=[]
+        type_label_set_text()
+        return False 
       else:
+        #沒字時直接出空白
         print("Debug1")
         return True   
     else:
