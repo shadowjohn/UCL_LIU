@@ -195,6 +195,9 @@ def toggle_ucl():
     uclen_btn.set_label("肥")
   uclen_label=uclen_btn.get_child()
   uclen_label.modify_font(pango.FontDescription('微軟正黑體 bold 22'))
+                                              
+  window_state_event_cb(None,None)
+  print("window_state_event_cb(toggle_ucl)")
   toAlphaOrNonAlpha()    
 def is_ucl():
   global uclen_btn  
@@ -687,7 +690,12 @@ hm.HookKeyboard()
 #screen_width = root.winfo_screenwidth()
 #screen_height = root.winfo_screenheight()
 #root=None
-               
+
+def window_state_event_cb(window, event):
+  global win
+  win.set_keep_above(True)
+  print("Try window_popup always on top(event)")  
+                 
 
 win=gtk.Window(type=gtk.WINDOW_POPUP)
 win.set_modal(True)
@@ -695,11 +703,13 @@ win.set_resizable(False)
 win.move(screen_width-600,screen_height-150)
 #always on top
 win.set_keep_above(True)
+win.set_transient_for(win)
 win.set_skip_taskbar_hint(False)  
 win.set_skip_pager_hint(False)
 win.set_decorated(False)
 win.set_accept_focus(False)
 win.set_icon_name(None)
+win.connect('window-state-event', window_state_event_cb)
 #win.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_TOOLBAR | gtk.gdk.WINDOW_TYPE_HINT_DESKTOP | gtk.gdk.WINDOW_TYPE_HINT_DOCK | gtk.gdk.WINDOW_TYPE_HINT_UTILITY)
 
 #win.show_in_taskbar(False)
