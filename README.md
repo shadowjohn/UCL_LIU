@@ -28,6 +28,8 @@
     <li>pygtk</li>
     <li>pywin32</li>
     <li>pyinstaller 可搭配build.bat製作dist/uclliu.exe檔</li>
+    <li>psutil 用來判斷目前視窗跑什麼，如果是putty、pietty、pcman出字方式要調整</li>
+    <li>(Third party) php.py 羽山比較熟php，所以在python裡實作很多php的函式</li>
     <li>(Third party) portalocker.py 防重複執行，會Lock c:\temp\UCLLIU.lock</li>
     <li>(Third party) SendKeysCtypes.py 可以送出Unicode的SendKeys</li>
     <li>(Third party) liu_unitab2cin.py 可以將tab轉成cin的檔案，改成支援python2.7的寫法</li>
