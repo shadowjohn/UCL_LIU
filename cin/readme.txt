@@ -1,0 +1,1 @@
+同音字表，來源:https://raw.githubusercontent.com/google/jscin/master/src/tables/phone.cin

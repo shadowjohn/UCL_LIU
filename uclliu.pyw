@@ -122,7 +122,7 @@ same_sound_data=[] #同音字表
 same_sound_index=0 #預設第零頁
 same_sound_max_word=6 #一頁最多五字
 is_has_more_page=False #是否還有下頁
-
+same_sound_last_word="" #lastword
 # 用來出半型字的
 # https://stackoverflow.com/questions/2422177/python-how-can-i-replace-full-width-characters-with-half-width-characters
 HALF2FULL = dict((i, i + 0xFEE0) for i in range(0x21, 0x7F))
@@ -203,7 +203,7 @@ def toggle_ucl():
     uclen_btn.set_label("肥")
     win.set_keep_above(True)
   uclen_label=uclen_btn.get_child()
-  uclen_label.modify_font(pango.FontDescription('微軟正黑體 bold 22'))
+  uclen_label.modify_font(pango.FontDescription('標楷體 bold 22'))
                                               
   #window_state_event_cb(None,None)
   print("window_state_event_cb(toggle_ucl)")
@@ -231,7 +231,7 @@ def uclen_btn_click(self):
   #else:
   #  self.set_label("肥")
   #uclen_label=self.get_child()
-  #uclen_label.modify_font(pango.FontDescription('微軟正黑體 bold 22'))
+  #uclen_label.modify_font(pango.FontDescription('標楷體 bold 22'))
   #toAlphaOrNonAlpha()
   toggle_ucl()
   #pass
@@ -242,7 +242,7 @@ def hf_btn_click(self):
   else:
     self.set_label("半")
   hf_label=self.get_child()
-  hf_label.modify_font(pango.FontDescription('微軟正黑體 bold 22'))
+  hf_label.modify_font(pango.FontDescription('標楷體 bold 22'))
   pass
 def is_hf(self):
   global hf_btn
@@ -256,14 +256,14 @@ def type_label_set_text():
   global type_label
   global play_ucl_label
   type_label.set_label(play_ucl_label)
-  type_label.modify_font(pango.FontDescription('微軟正黑體 bold 22'))
+  type_label.modify_font(pango.FontDescription('標楷體 bold 22'))
   if my.strlen(play_ucl_label) > 0:
     print("ShowSearch")
     show_search()
     pass
   else:    
     word_label.set_label("")
-    word_label.modify_font(pango.FontDescription('微軟正黑體 bold 20'))
+    word_label.modify_font(pango.FontDescription('標楷體 bold 20'))
     pass 
   return True
 def word_label_set_text():
@@ -273,7 +273,7 @@ def word_label_set_text():
   global is_has_more_page
   if play_ucl_label == "":
     word_label.set_label("")
-    word_label.modify_font(pango.FontDescription('微軟正黑體 bold 20'))
+    word_label.modify_font(pango.FontDescription('標楷體 bold 20'))
     return
   step=0
   m = []
@@ -285,13 +285,13 @@ def word_label_set_text():
     if is_has_more_page == True:
       tmp = "%s ..." % (tmp)
     word_label.set_label(tmp)
-    word_label.modify_font(pango.FontDescription('微軟正黑體 bold 20'))
+    word_label.modify_font(pango.FontDescription('標楷體 bold 20'))
     return True
   except:
     play_ucl_label=""
     play_ucl("")
     word_label.set_label("")
-    word_label.modify_font(pango.FontDescription('微軟正黑體 bold 20'))  
+    word_label.modify_font(pango.FontDescription('標楷體 bold 20'))  
     return True
 def show_search():
   #真的要顯示了
@@ -299,7 +299,11 @@ def show_search():
   global ucl_find_data
   global is_need_use_pinyi
   global is_has_more_page
+  global same_sound_index
+  global same_sound_last_word
+  same_sound_index = 0
   is_has_more_page=False
+  same_sound_last_word=""
   print("ShowSearch1")
   c = my.strtolower(play_ucl_label)
   c = my.trim(c)
@@ -349,8 +353,10 @@ def senddata(data):
   global ucl_find_data
   global same_sound_index
   global is_has_more_page
+  global same_sound_last_word
   same_sound_index=0 #回到第零頁
   is_has_more_page=False #回到沒有分頁
+  same_sound_last_word=""
   play_ucl_label=""
   ucl_find_data=[]  
   type_label_set_text()  
@@ -487,15 +493,21 @@ def use_pinyi(data):
   #finds=finds[:] 
   #for k in finds:
   #  print(k.encode("UTF-8"))
-  finds = my.array_unique(finds)  
+  finds = my.array_unique(finds)
+  #print("Debug data: %s " % data.encode("UTF-8"))
+  print("Debug Finds: %d " % len(finds))
+  print("Debug same_sound_index: %d " % same_sound_index)
+  print("Debug same_sound_max_word: %d " % same_sound_max_word)  
   maxword = same_sound_index+same_sound_max_word
-  if maxword > len(finds):
-    maxword = len(finds)
+  if maxword >= len(finds)-1:
+    maxword = len(finds)-1
     is_has_more_page = False
   else:
     is_has_more_page = True
   ucl_find_data=finds[same_sound_index:maxword]
+  print("DEBUG same_sound_index: %d " % same_sound_index)
   same_sound_index=same_sound_index+same_sound_max_word
+   
   if same_sound_index>=len(finds):
     same_sound_index=0
   word_label_set_text()
@@ -508,6 +520,7 @@ def OnKeyboardEvent(event):
   global play_ucl_label
   global ucl_find_data
   global is_need_use_pinyi
+  global same_sound_last_word
   #print(dir())  
   #try:  
   #print(event)
@@ -622,12 +635,14 @@ def OnKeyboardEvent(event):
         # ctrl + c
         #將一段文字Copy 到剪貼簿裡面等於按下 Control + C
         text = ucl_find_data[0]
+        if same_sound_last_word=="":
+          same_sound_last_word=text
         #] my.utf8tobig5("好的")
         
         if is_need_use_pinyi==True:
           #使用同音字
           print("Debug use pinyi")
-          use_pinyi(text)
+          use_pinyi(same_sound_last_word)
         else:
           senddata(text)
         
@@ -804,7 +819,7 @@ vbox.pack_start(hbox, False)
 #win.add(button)
 uclen_btn=gtk.Button("肥")
 uclen_label=uclen_btn.get_child()
-uclen_label.modify_font(pango.FontDescription('微軟正黑體 bold 22'))
+uclen_label.modify_font(pango.FontDescription('標楷體 bold 22'))
 uclen_btn.connect("clicked",uclen_btn_click)
 uclen_btn.set_size_request(40,40)
 hbox.add(uclen_btn)
@@ -813,13 +828,13 @@ hbox.add(uclen_btn)
 
 hf_btn=gtk.Button("半")
 hf_label=hf_btn.get_child()
-hf_label.modify_font(pango.FontDescription('微軟正黑體 bold 22'))
+hf_label.modify_font(pango.FontDescription('標楷體 bold 22'))
 hf_btn.connect("clicked",hf_btn_click)
 hf_btn.set_size_request(40,40)
 hbox.add(hf_btn)
 
 type_label=gtk.Label("")
-type_label.modify_font(pango.FontDescription('微軟正黑體 bold 22'))
+type_label.modify_font(pango.FontDescription('標楷體 bold 22'))
 type_label.modify_bg(gtk.STATE_NORMAL, gtk.gdk.Color(6400, 6400, 6440))
 type_label.set_size_request(100,40)
 type_label.set_alignment(xalign=0.1, yalign=0.5) 
@@ -828,7 +843,7 @@ f_type.add(type_label)
 hbox.add(f_type)
 
 word_label=gtk.Label("")
-word_label.modify_font(pango.FontDescription('微軟正黑體 bold 20'))
+word_label.modify_font(pango.FontDescription('標楷體 bold 20'))
 word_label.modify_bg(gtk.STATE_NORMAL, gtk.gdk.Color(6400, 6400, 6440))
 word_label.set_size_request(350,40)
 word_label.set_alignment(xalign=0.05, yalign=0.5)
@@ -839,7 +854,7 @@ hbox.add(f_word)
 
 x_btn=gtk.Button("╳")
 x_label=uclen_btn.get_child()
-x_label.modify_font(pango.FontDescription('微軟正黑體 bold 22'))
+x_label.modify_font(pango.FontDescription('標楷體 bold 22'))
 x_btn.connect("clicked",x_btn_click)
 x_btn.set_size_request(40,40)
 hbox.add(x_btn)
