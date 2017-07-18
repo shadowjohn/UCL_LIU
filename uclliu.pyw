@@ -119,6 +119,9 @@ flag_is_play_otherkey=False
 play_ucl_label=""
 ucl_find_data=[]
 same_sound_data=[] #同音字表
+same_sound_index=0 #預設第零頁
+same_sound_max_word=6 #一頁最多五字
+is_has_more_page=False #是否還有下頁
 
 # 用來出半型字的
 # https://stackoverflow.com/questions/2422177/python-how-can-i-replace-full-width-characters-with-half-width-characters
@@ -267,6 +270,7 @@ def word_label_set_text():
   global word_label
   global ucl_find_data 
   global play_ucl_label
+  global is_has_more_page
   if play_ucl_label == "":
     word_label.set_label("")
     word_label.modify_font(pango.FontDescription('微軟正黑體 bold 22'))
@@ -278,6 +282,8 @@ def word_label_set_text():
       m.append("%d%s" % (step,k))
       step=step+1
     tmp = my.implode(" ",m)
+    if is_has_more_page == True:
+      tmp = "%s ..." % (tmp)
     word_label.set_label(tmp)
     word_label.modify_font(pango.FontDescription('微軟正黑體 bold 22'))
     return True
@@ -292,6 +298,8 @@ def show_search():
   global play_ucl_label
   global ucl_find_data
   global is_need_use_pinyi
+  global is_has_more_page
+  is_has_more_page=False
   print("ShowSearch1")
   c = my.strtolower(play_ucl_label)
   c = my.trim(c)
@@ -339,6 +347,10 @@ def play_ucl(thekey):
 def senddata(data):
   global play_ucl_label
   global ucl_find_data
+  global same_sound_index
+  global is_has_more_page
+  same_sound_index=0 #回到第零頁
+  is_has_more_page=False #回到沒有分頁
   play_ucl_label=""
   ucl_find_data=[]  
   type_label_set_text()  
@@ -459,6 +471,9 @@ def senddata_old(data):
 def use_pinyi(data):
   global same_sound_data
   global ucl_find_data
+  global same_sound_index
+  global same_sound_max_word
+  global is_has_more_page
   finds=""
   for k in same_sound_data:
     if my.is_string_like(k,data):
@@ -469,11 +484,20 @@ def use_pinyi(data):
   finds=my.trim(finds);
   finds=my.explode(" ",finds)
   #print(finds)
-  #finds=finds[:]
+  #finds=finds[:] 
   #for k in finds:
   #  print(k.encode("UTF-8"))
   finds = my.array_unique(finds)  
-  ucl_find_data=finds
+  maxword = same_sound_index+same_sound_max_word
+  if maxword > len(finds):
+    maxword = len(finds)
+    is_has_more_page = False
+  else:
+    is_has_more_page = True
+  ucl_find_data=finds[same_sound_index:maxword]
+  same_sound_index=same_sound_index+same_sound_max_word
+  if same_sound_index>=len(finds):
+    same_sound_index=0
   word_label_set_text()
   #finds=my.str_replace(data," ",finds)
   #finds=my.str_replace("  "," ",finds)
