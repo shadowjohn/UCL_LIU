@@ -371,7 +371,12 @@ class kit:
     def sort(self,arr):
         return sorted(arr)
     def array_unique(self,arr):
-        return list(set(array))
+        #return list(set(arr))
+        out_list = []
+        for val in arr:
+          if not val in out_list:
+            out_list.append(val)
+        return out_list
     def array_values(self,dictarr):
         return dictarr.values()
     def is_string_like(self,data,find_string):

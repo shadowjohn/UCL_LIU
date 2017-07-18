@@ -118,6 +118,7 @@ flag_is_shift_down=False
 flag_is_play_otherkey=False
 play_ucl_label=""
 ucl_find_data=[]
+same_sound_data=[] #同音字表
 
 # 用來出半型字的
 # https://stackoverflow.com/questions/2422177/python-how-can-i-replace-full-width-characters-with-half-width-characters
@@ -151,6 +152,8 @@ if my.is_file("liu.json") == False:
   #message.show()
   gtk.main()
   #my.exit()
+if my.is_file("pinyi.txt")==True:
+  same_sound_data = my.explode("\n",my.trim(my.file_get_contents("pinyi.txt")))  
   
 uclcode = my.json_decode(my.file_get_contents("liu.json"))
 #print(uclcode)
@@ -288,6 +291,7 @@ def show_search():
   #真的要顯示了
   global play_ucl_label
   global ucl_find_data
+  global is_need_use_pinyi
   print("ShowSearch1")
   c = my.strtolower(play_ucl_label)
   c = my.trim(c)
@@ -296,7 +300,11 @@ def show_search():
   #print("C[:-1]:%s" % c[:-1])  
   # 此部分可以修正 V 可以出第二字，還不錯
   # 2017-07-13 Fix when V is last code
-  #print("LAST V : %s" % (c[-1]))  
+  #print("LAST V : %s" % (c[-1]))
+  is_need_use_pinyi=False  
+  if c[0] == "'" and len(c)>1:
+    c=c[1:]
+    is_need_use_pinyi=True
   if c not in uclcode["chardefs"] and c[-1]=='v' and c[:-1] in uclcode["chardefs"] and len(uclcode["chardefs"][c[:-1]])>=2 :
     #print("Debug V1")
     ucl_find_data = uclcode["chardefs"][c[:-1]][1]   
@@ -448,11 +456,34 @@ def senddata_old(data):
   #win32clipboard.EmptyClipboard()
   #win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip)
   #win32clipboard.CloseClipboard()
+def use_pinyi(data):
+  global same_sound_data
+  global ucl_find_data
+  finds=""
+  for k in same_sound_data:
+    if my.is_string_like(k,data):
+      #if k.startswith(u'\xe7\x9a\x84'):
+      #  k = u[1:]
+      finds="%s%s " % (finds,my.trim(k))
+      #print(k)
+  finds=my.trim(finds);
+  finds=my.explode(" ",finds)
+  #print(finds)
+  #finds=finds[:]
+  #for k in finds:
+  #  print(k.encode("UTF-8"))
+  finds = my.array_unique(finds)  
+  ucl_find_data=finds
+  word_label_set_text()
+  #finds=my.str_replace(data," ",finds)
+  #finds=my.str_replace("  "," ",finds)
+  
 def OnKeyboardEvent(event):
   global flag_is_shift_down
   global flag_is_play_otherkey
   global play_ucl_label
   global ucl_find_data
+  global is_need_use_pinyi
   #print(dir())  
   #try:  
   #print(event)
@@ -568,7 +599,13 @@ def OnKeyboardEvent(event):
         #將一段文字Copy 到剪貼簿裡面等於按下 Control + C
         text = ucl_find_data[0]
         #] my.utf8tobig5("好的")
-        senddata(text)
+        
+        if is_need_use_pinyi==True:
+          #使用同音字
+          print("Debug use pinyi")
+          use_pinyi(text)
+        else:
+          senddata(text)
         
         
         print("Debug4")
