@@ -263,7 +263,7 @@ def type_label_set_text():
     pass
   else:    
     word_label.set_label("")
-    word_label.modify_font(pango.FontDescription('微軟正黑體 bold 22'))
+    word_label.modify_font(pango.FontDescription('微軟正黑體 bold 20'))
     pass 
   return True
 def word_label_set_text():
@@ -273,7 +273,7 @@ def word_label_set_text():
   global is_has_more_page
   if play_ucl_label == "":
     word_label.set_label("")
-    word_label.modify_font(pango.FontDescription('微軟正黑體 bold 22'))
+    word_label.modify_font(pango.FontDescription('微軟正黑體 bold 20'))
     return
   step=0
   m = []
@@ -285,13 +285,13 @@ def word_label_set_text():
     if is_has_more_page == True:
       tmp = "%s ..." % (tmp)
     word_label.set_label(tmp)
-    word_label.modify_font(pango.FontDescription('微軟正黑體 bold 22'))
+    word_label.modify_font(pango.FontDescription('微軟正黑體 bold 20'))
     return True
   except:
     play_ucl_label=""
     play_ucl("")
     word_label.set_label("")
-    word_label.modify_font(pango.FontDescription('微軟正黑體 bold 22'))  
+    word_label.modify_font(pango.FontDescription('微軟正黑體 bold 20'))  
     return True
 def show_search():
   #真的要顯示了
@@ -828,7 +828,7 @@ f_type.add(type_label)
 hbox.add(f_type)
 
 word_label=gtk.Label("")
-word_label.modify_font(pango.FontDescription('微軟正黑體 bold 22'))
+word_label.modify_font(pango.FontDescription('微軟正黑體 bold 20'))
 word_label.modify_bg(gtk.STATE_NORMAL, gtk.gdk.Color(6400, 6400, 6440))
 word_label.set_size_request(350,40)
 word_label.set_alignment(xalign=0.05, yalign=0.5)
