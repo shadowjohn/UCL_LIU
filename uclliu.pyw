@@ -93,7 +93,7 @@ if is_need_trans_tab==True:
 if is_need_trans_cin==True:
   import cintojson
   cinapp = cintojson.CinToJson()
-  cinapp.run(PWD+"\\liu",PWD+"\\liu.cin",False)
+  cinapp.run( "liu" , "liu.cin",False)
   
 flag_is_shift_down=False
 flag_is_play_otherkey=False
