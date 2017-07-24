@@ -1,49 +1,10 @@
 # -*- coding: utf-8 -*-
-#from Tkinter import *
-import pythoncom, pyHook
-from pyHook import HookManager
-from pyHook.HookManager import HookConstants 
 import portalocker
 import os
 import sys
-#import ttk
 import gtk
 from gtk import gdk
-import win32clipboard
-import pango
-import SendKeysCtypes
-import time
-#import threading
-#from functools import wraps
-#http://fredericiana.com/2014/11/14/settimeout-python-delay/
 
-#用來送key的 https://stackoverflow.com/questions/136734/key-presses-in-python
-#import pyautogui
-
-#http://wiki.alarmchang.com/index.php?title=Python_%E5%AD%98%E5%8F%96_Windows_%E7%9A%84%E5%89%AA%E8%B2%BC%E7%B0%BF_ClipBoard_%E7%AF%84%E4%BE%8B
-import win32gui
-import win32process
-import psutil
-import win32com
-import win32con
-import win32com.client
-import win32clipboard
-
-#from win32api import GetSystemMetrics
-#screen_width=GetSystemMetrics(0)
-#screen_height=GetSystemMetrics(1)
-
-import ctypes
-user32 = ctypes.windll.user32
-screen_width=user32.GetSystemMetrics(0)
-screen_height=user32.GetSystemMetrics(1)
-
-#myappid = 'mycompany.myproduct.subproduct.version' # arbitrary string
-#ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
-
-#https://stackoverflow.com/questions/11063458/python-script-to-copy-text-to-clipboard
-#import xerox
-#import pyperclip
 import php
 my = php.kit()
 reload(sys)
@@ -55,7 +16,7 @@ PWD=my.pwd()
 
 #此是防止重覆執行
 if os.path.isdir("C:\\temp") == False:
-  os.mkdir("c:\\temp")
+  os.mkdir("C:\\temp")
 check_file_run = open('c:\\temp\\UCLLIU.lock', "a+")
 try:  
   portalocker.lock(check_file_run, portalocker.LOCK_EX | portalocker.LOCK_NB)
@@ -69,6 +30,26 @@ except:
   if response == gtk.RESPONSE_OK or response == gtk.RESPONSE_DELETE_EVENT:
     md.destroy()
     sys.exit(0)     
+
+import pythoncom, pyHook
+from pyHook import HookManager
+from pyHook.HookManager import HookConstants 
+
+import win32clipboard
+import pango
+import SendKeysCtypes
+import time
+
+#http://wiki.alarmchang.com/index.php?title=Python_%E5%AD%98%E5%8F%96_Windows_%E7%9A%84%E5%89%AA%E8%B2%BC%E7%B0%BF_ClipBoard_%E7%AF%84%E4%BE%8B
+import win32gui
+import win32process
+import psutil
+import win32com
+import win32con
+import win32com.client
+import win32clipboard
+
+import ctypes
 
 #check if exists tab cin json
 is_need_trans_tab = False
@@ -159,26 +140,6 @@ if my.is_file("pinyi.txt")==True:
   same_sound_data = my.explode("\n",my.trim(my.file_get_contents("pinyi.txt")))  
   
 uclcode = my.json_decode(my.file_get_contents("liu.json"))
-#print(uclcode)
-
-#def delay(delay=0.):
-#    """
-#    Decorator delaying the execution of a function for a while.
-#    """
-#    def wrap(f):
-#        @wraps(f)
-#        def delayed(*args, **kwargs):
-#            timer = threading.Timer(delay, f, args=args, kwargs=kwargs)
-#            timer.start()
-#        return delayed
-#    return wrap
-#@delay(0.1)
-#def my_gtk_refresh():
-  #global OnMotion
-#  global win
-  #win.gtk_main_iteration();
-#  dir(win)
-
       
 def toAlphaOrNonAlpha():
   global uclen_btn
@@ -224,15 +185,6 @@ def winclicked(self, event):
   self.window.begin_move_drag(event.button, int(event.x_root), int(event.y_root), event.time)
   pass
 def uclen_btn_click(self):
-  #print(dir(self))
-  #kind=self.get_label()
-  #if kind=="肥":
-  #  self.set_label("英")
-  #else:
-  #  self.set_label("肥")
-  #uclen_label=self.get_child()
-  #uclen_label.modify_font(pango.FontDescription('標楷體 bold 22'))
-  #toAlphaOrNonAlpha()
   toggle_ucl()
   #pass
 def hf_btn_click(self):
@@ -248,9 +200,8 @@ def is_hf(self):
   global hf_btn
   c = hf_btn.get_child()
   kind = c.get_label()
-  return (kind=="半")  
-def mybtn_click(self):
-  print("DIe")    
+  return (kind=="半")
+   
 # http://stackoverflow.com/questions/7050448/write-image-to-windows-clipboard-in-python-with-pil-and-win32clipboard
 def type_label_set_text():
   global type_label
@@ -406,12 +357,6 @@ def senddata(data):
       win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip)
       win32clipboard.CloseClipboard()
             
-      #reload(sys)                                    
-      #sys.setdefaultencoding('UTF-8')
-      #print("ascii")
-      #SendKeysCtypes.SendKeys(data.decode("big"),0)
-      #reload(sys)
-      #sys.setdefaultencoding('UTF-8')
       break
   if check==True:
     #reload(sys)                                    
@@ -425,55 +370,6 @@ def senddata(data):
   #sys.setdefaultencoding('auto')
   #SendKeysCtypes.SendKeys(data.decode("auto"),0)
   
-      
-def senddata_old(data):
-  global play_ucl_label
-  global ucl_find_data
-  #win32clipboard.OpenClipboard()
-  #orin_clip=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
-  #win32clipboard.CloseClipboard()
-  
-  win32clipboard.OpenClipboard() 
-  win32clipboard.EmptyClipboard()#這一行特別重要，經過實驗如果不加這一行的話會做動不正常
-  win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, data)
-  win32clipboard.CloseClipboard()
-  
-  # ctrl + v
-  #win32clipboard.OpenClipboard() 
-  #win32clipboard.GetClipboardData(win32con.CF_TEXT) 
-  #win32clipboard.CloseClipboard()
-   
-  play_ucl_label=""
-  type_label_set_text()
-  ucl_find_data=[]
-           
-  shell = win32com.client.Dispatch("WScript.Shell")
-  
-  hwnd = win32gui.GetForegroundWindow()
-  pid = win32process.GetWindowThreadProcessId(hwnd)
-  pp="";
-  if len(pid) >=2:
-    pp=pid[1]
-  else:
-    pp=pid[0]
-  #print("PP:%s" % (pp))
-  p=psutil.Process(pp)
-  #print("PPPP:%s" % (p.exe()))
-  f_arr = [ "putty","pietty","pcman" ]
-  check=True
-  for k in f_arr:
-    if my.is_string_like(my.strtolower(p.exe()),k):
-      check=False
-      shell.SendKeys("+{INSERT}", 0)  
-  if check==True:
-    shell.SendKeys("^v", 0)
-  
-
-  
-  #win32clipboard.OpenClipboard()
-  #win32clipboard.EmptyClipboard()
-  #win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip)
-  #win32clipboard.CloseClipboard()
 def use_pinyi(data):
   global same_sound_data
   global ucl_find_data
@@ -621,19 +517,8 @@ def OnKeyboardEvent(event):
         return False       
     if event.MessageName == "key down" and event.Ascii==32 : #空白
       # Space                          
-      if len(ucl_find_data)>=1:
-        
-        #丟出第一個字
-        #print("Ggggggg")
-        #pyautogui.typewrite(my.utf8tobig5("肥"))
-        #shell = win32com.client.Dispatch("WScript.Shell")
-        #shell.SendKeys("{ASC " + ucl_find_data[0] + "}", 0)
-        #xerox.copy(u'some string')
-        #xerox.paste(xsel=True)
-        #pyperclip.copy("here we go")
-        #pyperclip.paste()
-        # ctrl + c
-        #將一段文字Copy 到剪貼簿裡面等於按下 Control + C
+      if len(ucl_find_data)>=1:        
+        #丟出第一個字                
         text = ucl_find_data[0]
         if same_sound_last_word=="":
           same_sound_last_word=text
@@ -645,8 +530,6 @@ def OnKeyboardEvent(event):
           use_pinyi(same_sound_last_word)
         else:
           senddata(text)
-        
-        
         print("Debug4")
         return False 
       elif len(ucl_find_data)==0 and len(play_ucl_label)!=0:
@@ -696,65 +579,11 @@ def OnKeyboardEvent(event):
       #print("ｋｋｋｋｋｋｋｋｋｋｋｋｋｋｋK:%s" % k)
       senddata(k)
       return False
-    return True
-    
-      
-  #except:
-    #play_ucl_label=""
-    #play_ucl("")
-  #  print sys.exc_info()
-  #  return False       
-    
-
-        
-#while True:
-#  time.sleep(1);
-#  pass
+    return True    
       
 #程式主流程
 #功能說明
-                 
-   
-   
 
-
-
-#my_gtk_refresh()
-#win.connect("destroy",lambda wid:gtk.main_quit())
-
-
-#r = Tk()
-#r.overrideredirect(True)
-#r.wm_geometry("400x400+100+100")
-#r.overrideredirect(True)
-#r.wm_geometry("400x400+100+100")
-#root.geometry("450x50+%d+%d" % (screen_width-450-300, screen_height - 50 - 300)) #550x250+%d+%d" % (screen_width/2-275, screen_height/2-125))
-#root.call('wm', 'attributes', '.', '-topmost', True)
-#root.after_idle(root.call, 'wm', 'attributes', '.', '-topmost', False) 
-#root.title("app")
-#listbox=Listbox(Toplevel(root.master,width=150).overrideredirect(True),width=150).pack
-#new_top = Toplevel(root.master,width=150)
-#new_top.overrideredirect(True)
-#root.listbox = Listbox(new_top,width=150)
-#root.listbox.pack()
-
-
-
-#label = Label(root, text="Grab the lower-right corner to resize")
-#label.pack(side="top", fill="both", expand=True)
-#screen_width = root.winfo_screenwidth()
-#screen_height = root.winfo_screenheight()
-#grip = ttk.Sizegrip(root)
-#grip.place(relx=1.0, rely=1.0, anchor="se")
-#grip.lift(label)
-#grip.bind("<B1-Motion>", OnMotion)
-
-
-    
-
-
-
-#root.lift () 
 
 # create a hook manager
 hm = pyHook.HookManager()
@@ -765,45 +594,25 @@ print(dir(hm))
 hm.HookKeyboard()
 # wait forever
 
-#root = Tk()
-#screen_width = root.winfo_screenwidth()
-#screen_height = root.winfo_screenheight()
-#root=None
-
-#def window_state_event_cb(window, event):
-#  global win  
-#  win.set_keep_above(True)  
-#  print("Try window_popup always on top(event)")  
-                 
-
 #win=gtk.Window(type=gtk.WINDOW_POPUP)
 win=gtk.Window(type=gtk.WINDOW_POPUP)
 win.set_modal(True)
 win.set_resizable(False)
+
+#取螢幕大小
+user32 = ctypes.windll.user32
+screen_width=user32.GetSystemMetrics(0)
+screen_height=user32.GetSystemMetrics(1)
+
 win.move(screen_width-600,screen_height-150)
 #always on top
 win.set_keep_above(True)
 win.set_keep_below(False)
-#win.set_transient_for(win)
 win.set_skip_taskbar_hint(False)  
 win.set_skip_pager_hint(False)
 win.set_decorated(False)
 win.set_accept_focus(False)
 win.set_icon_name(None)
-#win.connect('window-state-event', window_state_event_cb)
-#win.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_TOOLBAR | gtk.gdk.WINDOW_TYPE_HINT_DESKTOP | gtk.gdk.WINDOW_TYPE_HINT_DOCK | gtk.gdk.WINDOW_TYPE_HINT_UTILITY)
-
-#win.show_in_taskbar(False)
-#from pywinauto import win32functions
-#from pywinauto import win32defines
-
-#taskbar.TaskBar.Button.ClickInput()
-#popup_dlg = taskbar.explorer_app.Window_(class_name='NotifyIconOverflowWindow')
-#popup_toolbar = popup_dlg.Overflow_Notification_Area
-#print(popup_toolbar.Texts()[1:])
-#win32functions.ShowWindow( None,win32defines.SW_HIDE)
-#win32functions.SetWindowLongPtr( None, win32defines.GWL_EXSTYLE,  win32defines.WS_EX_TOOLWINDOW)
-#win32functions.ShowWindow( None,win32defines.SW_SHOW)
 
 win.add_events( gdk.BUTTON_PRESS_MASK)
 win.connect ('button-press-event', winclicked)
@@ -814,17 +623,12 @@ vbox = gtk.VBox(False)
 hbox=gtk.HBox()
 vbox.pack_start(hbox, False)
 
-#button=gtk.Button("TEST")
-#button.connect("clicked",mybtn_click)
-#win.add(button)
 uclen_btn=gtk.Button("肥")
 uclen_label=uclen_btn.get_child()
 uclen_label.modify_font(pango.FontDescription('標楷體 bold 22'))
 uclen_btn.connect("clicked",uclen_btn_click)
 uclen_btn.set_size_request(40,40)
 hbox.add(uclen_btn)
-
-
 
 hf_btn=gtk.Button("半")
 hf_label=hf_btn.get_child()
@@ -860,27 +664,13 @@ x_btn.set_size_request(40,40)
 hbox.add(x_btn)
 
 win.add(vbox)
-#while True:
-#  time.sleep(1);
-#  pass
-#win.deiconify()
-
-
 
 win.show_all()
-#win.show()
 win.set_focus(None)
-
-#win.set_transient_for(win)
-
 
 gtk.main()
 
 pythoncom.PumpMessages()  
 
-
-
 mainloop()  
-
-
-    
+ 
