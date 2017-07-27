@@ -48,7 +48,8 @@
 　　3、執行 uclliu.exe 即可開始使用<br>
 　　4、首次執行，系統會自動將tab轉成liu.json，需要花大概30秒~1分鐘的時間，之後有liu.json就可以快速開啟。<br>    
 　　5、未來使用的話，就把uclliu.exe、作好的字根檔liu.json帶著走，四處都能打肥米輸入法了A_A<br> 
-　　(還是要再強調一次，不要用義守大學FTP裡的那個liu-uni.tab，建議可以安裝正版嘸蝦米後在C:\windows\Syswow64裡找到)<br>
+　　(還是要再強調一次，不要用義守大學FTP裡的那個liu-uni.tab，建議可以安裝正版嘸蝦米後在C:\windows\Syswow64裡找到)
+　　(新版的嘸蝦米，liu-uni.tab可能會放在 C:\Program Files\BoshiamyTIP 這裡面)<br>
 　　6、如果需要使用如「'ucl」這種同音字查詢，請將 dist\pinyi.txt 也與uclliu.exe 放一起<br>
 <br>       
 ToDo：<br>
@@ -82,9 +83,10 @@ ToDo：<br>
   <li>(Done 2017-07-17)27、在錯誤的字碼按下空白鍵，會刪掉已輸入的字碼，且游標不會前進</li>
   <li>28、切到「肥」模式時，系統應自動強制切換輸入法為「Eng」</li>
   <li>(Done 2017-07-18)<s>29、同音字過多分頁的問題，要支援按空白鍵下頁</s></li>
-  <li>30、首次執行uclliu.exe時，如果連續執行uclliu.exe，會造成在轉換cin、json發生異常</li>  
-  <li>31、支援Linux、Mac的研究(下一次吃飽閒閒再說)</li>    
+  <li>30、首次執行uclliu.exe時，如果連續執行uclliu.exe，會造成在轉換cin、json發生異常</li>
+  <li>31、支援新版嘸蝦米liu-uni.tab放置位置 C:\Program Files\BoshiamyTIP</li>  
+  <li>32、支援Linux、Mac的研究(下一次吃飽閒閒再說)</li>    
 </ul>
 <br>
 版權：<br>
-　MIT-License
+　免錢的 MIT-License
