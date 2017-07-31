@@ -84,8 +84,9 @@ ToDo：<br>
   <li>28、切到「肥」模式時，系統應自動強制切換輸入法為「Eng」</li>
   <li>(Done 2017-07-18)<s>29、同音字過多分頁的問題，要支援按空白鍵下頁</s></li>
   <li>(Done 2017-07-31)<s>30、首次執行uclliu.exe時，如果連續執行uclliu.exe，會造成在轉換cin、json發生異常</s></li>
-  <li>(Done 2017-07-31)<s>31、支援新版嘸蝦米liu-uni.tab放置位置 C:\Program Files\BoshiamyTIP\liu-uni.tab</s></li>  
-  <li>32、支援Linux、Mac的研究(下一次吃飽閒閒再說)</li>    
+  <li>(Done 2017-07-31)<s>31、支援新版嘸蝦米liu-uni.tab放置位置 C:\Program Files\BoshiamyTIP\liu-uni.tab</s></li>
+  <li>32、「肥」模式時，當按著win鍵+英文，應該要允許出字，不然無法按如 win+r 這種功能</li>  
+  <li>33、支援Linux、Mac的研究(下一次吃飽閒閒再說)</li>    
 </ul>
 <br>
 版權：<br>
