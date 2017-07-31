@@ -73,10 +73,15 @@ if is_all_fault==True and my.is_file("C:\\windows\\SysWOW64\\liu-uni.tab")==True
   is_need_trans_tab=True
   is_need_trans_cin=True
   
+if is_all_fault==True and my.is_file("C:\\Program Files\\BoshiamyTIP\\liu-uni.tab")==True:
+  my.copy("C:\\Program Files\\BoshiamyTIP\\liu-uni.tab",PWD+"\\liu-uni.tab")
+  is_all_fault=False
+  is_need_trans_tab=True
+  is_need_trans_cin=True
 
 if is_all_fault == True:
   message = gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)
-  message.set_markup("無字根檔，請購買正版無蝦米，將「C:\\windows\\SysWOW64\\liu-uni.tab」與uclliu.exe放在一起執行")  
+  message.set_markup("無字根檔，請購買正版無蝦米，將「C:\\windows\\SysWOW64\\liu-uni.tab」或「C:\\Program Files\\BoshiamyTIP\\liu-uni.tab」與uclliu.exe放在一起執行")  
   response = message.run()
   #print(gtk.ResponseType.BUTTONS_OK)
   if response == -5 or response == -4:

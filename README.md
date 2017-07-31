@@ -80,11 +80,11 @@ ToDo：<br>
   <li>(Done 2017-07-14)<s>24、修正全螢幕下，如看影片，下排工作列佔著畫面的問題，去除肥米執行時下方多一個taskbar</s></li>
   <li>(Done 2017-07-17)<s>25、字根不可超過五碼</s></li>
   <li>(Done 2017-07-16)<s>26、英/全時，修正刪除鍵可以正常使用</s></li>
-  <li>(Done 2017-07-17)27、在錯誤的字碼按下空白鍵，會刪掉已輸入的字碼，且游標不會前進</li>
+  <li>(Done 2017-07-17)<s>27、在錯誤的字碼按下空白鍵，會刪掉已輸入的字碼，且游標不會前進</s></li>
   <li>28、切到「肥」模式時，系統應自動強制切換輸入法為「Eng」</li>
   <li>(Done 2017-07-18)<s>29、同音字過多分頁的問題，要支援按空白鍵下頁</s></li>
-  <li>30、首次執行uclliu.exe時，如果連續執行uclliu.exe，會造成在轉換cin、json發生異常</li>
-  <li>31、支援新版嘸蝦米liu-uni.tab放置位置 C:\Program Files\BoshiamyTIP</li>  
+  <li>(Done 2017-07-31)<s>30、首次執行uclliu.exe時，如果連續執行uclliu.exe，會造成在轉換cin、json發生異常</s></li>
+  <li>(Done 2017-07-31)<s>31、支援新版嘸蝦米liu-uni.tab放置位置 C:\Program Files\BoshiamyTIP\liu-uni.tab</s></li>  
   <li>32、支援Linux、Mac的研究(下一次吃飽閒閒再說)</li>    
 </ul>
 <br>
