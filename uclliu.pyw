@@ -334,7 +334,8 @@ def senddata(data):
   for k in f_arr:
     #break;
     if my.is_string_like(my.strtolower(p.exe()),k):
-      check=False
+      check=False      
+      
       win32clipboard.OpenClipboard()
       orin_clip=""
       try:
@@ -508,8 +509,7 @@ def OnKeyboardEvent(event):
         play_ucl(chr(event.Ascii))
         print("Debug7")
         return False    
-    if event.MessageName == "key down" and ( event.Ascii == 8 ):
-      # ←
+    if event.MessageName == "key down" and ( event.Ascii == 8 ): # ←      
       if my.strlen(play_ucl_label) <= 0:                    
         play_ucl_label=""
         play_ucl("")
@@ -547,10 +547,21 @@ def OnKeyboardEvent(event):
       else:
         #沒字時直接出空白
         print("Debug1")
-        return True   
+        return True
+    elif event.MessageName == "key down" and ( event.Ascii==58 or event.Ascii==59) : # : ;
+      #修正 肥/全 時，按分號、冒號只出半型的問題
+      if is_hf(None)==False:        
+        kac = event.Ascii        
+        k = widen(chr(kac))
+        senddata(k)
+        print("Debug22")
+        return False
+      else:
+        return True     
     else:
-      print("Debug2")            
-      return True
+      print("Debug2")      
+      return True            
+      
   else:
     print("Debug3")
     if event.MessageName == "key down" and (event.Key == "Lshift" or event.Key == "Rshift" ):
