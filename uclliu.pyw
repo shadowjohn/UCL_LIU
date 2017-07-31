@@ -431,9 +431,9 @@ def OnKeyboardEvent(event):
   #print 'Time:',event.Time
   #print 'Window:',event.Window
   #print 'WindowName:',event.WindowName
-  #print 'Ascii:', event.Ascii, chr(event.Ascii)
-  #print 'Key:', event.Key
-  #print 'KeyID:', event.KeyID
+  print 'Ascii:', event.Ascii, chr(event.Ascii)
+  print 'Key:', event.Key
+  print 'KeyID:', event.KeyID
   #print 'ScanCode:', event.ScanCode
   #print 'Extended:', event.Extended
   #print 'Injected:', event.Injected
@@ -547,7 +547,14 @@ def OnKeyboardEvent(event):
       else:
         #沒字時直接出空白
         print("Debug1")
-        return True
+        if is_hf(None)==False:        
+          kac = event.Ascii        
+          k = widen(chr(kac))
+          senddata(k)
+          print("Debug23")
+          return False
+        else:
+          return True
     elif event.MessageName == "key down" and ( event.Ascii==58 or event.Ascii==59) : # : ;
       #修正 肥/全 時，按分號、冒號只出半型的問題
       if is_hf(None)==False:        
