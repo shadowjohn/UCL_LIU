@@ -7,6 +7,8 @@
 <br>
 作者：羽山秋人 (<a target="_blank" href="http://3wa.tw">http://3wa.tw</a>)<br>
 <br>
+最後更新日期：2017-07-31 23:00:00
+<br>
 版本：V 0.1<br>
 <br>
 開發動機：<br>
