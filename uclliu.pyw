@@ -81,7 +81,7 @@ if is_all_fault==True and my.is_file("C:\\Program Files\\BoshiamyTIP\\liu-uni.ta
 
 if is_all_fault == True:
   message = gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)
-  message.set_markup("無字根檔，請購買正版無蝦米，將「C:\\windows\\SysWOW64\\liu-uni.tab」或「C:\\Program Files\\BoshiamyTIP\\liu-uni.tab」與uclliu.exe放在一起執行")  
+  message.set_markup("無字根檔，請購買正版嘸蝦米，將「C:\\windows\\SysWOW64\\liu-uni.tab」或「C:\\Program Files\\BoshiamyTIP\\liu-uni.tab」與uclliu.exe放在一起執行")  
   response = message.run()
   #print(gtk.ResponseType.BUTTONS_OK)
   if response == -5 or response == -4:
@@ -99,7 +99,8 @@ if is_need_trans_cin==True:
   import cintojson
   cinapp = cintojson.CinToJson()
   cinapp.run( "liu" , "liu.cin",False)
-  
+
+flag_is_win_down=False
 flag_is_shift_down=False
 flag_is_play_otherkey=False
 play_ucl_label=""
@@ -417,6 +418,7 @@ def use_pinyi(data):
   #finds=my.str_replace("  "," ",finds)
   
 def OnKeyboardEvent(event):
+  global flag_is_win_down
   global flag_is_shift_down
   global flag_is_play_otherkey
   global play_ucl_label
@@ -431,9 +433,9 @@ def OnKeyboardEvent(event):
   #print 'Time:',event.Time
   #print 'Window:',event.Window
   #print 'WindowName:',event.WindowName
-  print 'Ascii:', event.Ascii, chr(event.Ascii)
-  print 'Key:', event.Key
-  print 'KeyID:', event.KeyID
+  #print 'Ascii:', event.Ascii, chr(event.Ascii)
+  #print 'Key:', event.Key
+  #print 'KeyID:', event.KeyID
   #print 'ScanCode:', event.ScanCode
   #print 'Extended:', event.Extended
   #print 'Injected:', event.Injected
@@ -443,10 +445,15 @@ def OnKeyboardEvent(event):
   #print '---'
   
   #thekey = chr(event.Ascii)
-  if event.MessageName == "key down" and (event.Key == "Lshift" or event.Key == "Rshift" ):
+  # KeyID = 91 = Lwinkey
+  if event.MessageName == "key down" and (event.KeyID == 91 or event.KeyID == 92):
+    flag_is_win_down = True
+  if event.MessageName == "key up" and (event.KeyID == 91 or event.KeyID == 92):
+    flag_is_win_down = False 
+  if event.MessageName == "key down" and (event.Key == "Lshift" or event.Key == "Rshift"):
     flag_is_shift_down=True
     flag_is_play_otherkey=False
-  if event.MessageName == "key down" and event.Key != "Lshift" and event.Key != "Rshift":
+  if event.MessageName == "key down" and (event.Key != "Lshift" and event.Key != "Rshift"):
     flag_is_play_otherkey=True          
   if event.MessageName == "key up" and (event.Key == "Lshift" or event.Key == "Rshift"):
     #shift
@@ -466,6 +473,8 @@ def OnKeyboardEvent(event):
     print("Debug13")
     return False            
   if is_ucl():    
+    if event.MessageName == "key down" and flag_is_win_down == True : # win key
+      return True 
     if event.MessageName == "key down" and ( event.Ascii>=48 and event.Ascii <=57) : #0~9 
       if len(ucl_find_data)>=1 and int(chr(event.Ascii)) < len(ucl_find_data):
         # send data        
