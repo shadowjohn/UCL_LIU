@@ -2,7 +2,7 @@
 利用python+pyhook開發的仿蝦米，肥米輸入法<br>
 <br>
 <center>
-  <img src="http://3wa.tw/uploads/upload/ucl_2.png">
+  <img src="screenshot/ucl_2.png">
   <img src="screenshot/demo.gif">
 </center>
 <br>
