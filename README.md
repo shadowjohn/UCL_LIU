@@ -13,6 +13,11 @@
 <br>
 版本：V 0.1<br>
 <br>
+下載位置：
+　　主程式：<a target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
+　　同音字庫：<a target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt</a><br>　　
+<br>
+<br>
 開發動機：<br>
 　　吃飽閒閒覺得人生就是該自己寫一套輸入法，然後就開始寫了。<br>
 字碼表說明：<br>
