@@ -6,7 +6,7 @@ import os
 import re
 import sys
 import json
-import copy
+#import copy
 import codecs
 #reload(sys)
 #sys.setdefaultencoding('UTF-8')

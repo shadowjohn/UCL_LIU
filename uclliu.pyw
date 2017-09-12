@@ -47,7 +47,7 @@ import psutil
 import win32com
 import win32con
 import win32com.client
-import win32clipboard
+
 
 import ctypes
 

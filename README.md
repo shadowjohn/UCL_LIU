@@ -9,7 +9,7 @@
 作者：羽山秋人 (<a target="_blank" href="http://3wa.tw">http://3wa.tw</a>)<br>
 <br>
 最初開發日期：2017-06-16 11:24<br>
-最後更新日期：2017-08-02 10:10
+最後更新日期：2017-09-13 01:53
 <br>
 版本：V 0.1<br>
 <br>
@@ -95,7 +95,8 @@ ToDo：<br>
   <li>(Done 2017-07-31)<s>30、首次執行uclliu.exe時，如果連續執行uclliu.exe，會造成在轉換cin、json發生異常</s></li>
   <li>(Done 2017-07-31)<s>31、支援新版嘸蝦米liu-uni.tab放置位置 C:\Program Files\BoshiamyTIP\liu-uni.tab</s></li>
   <li>(Done 2017-08-02)<s>32、「肥」模式時，當按著win鍵+英文，應該要允許出字，不然無法按如 win+r 這種功能</s></li>  
-  <li>33、支援Linux、Mac的研究(下一次吃飽閒閒再說)</li>    
+  <li>(Done 2017-09-13)<s>33、刪掉一些php.py裡用不到的函式，可以讓uclliu.exe檔變小一些</s></li>
+  <li>34、支援Linux、Mac的研究(下一次吃飽閒閒再說)</li>    
 </ul>
 <br>
 版權：<br>
