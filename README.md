@@ -97,9 +97,9 @@ ToDo：<br>
   <li>(Done 2017-07-31)<s>31、支援新版嘸蝦米liu-uni.tab放置位置 C:\Program Files\BoshiamyTIP\liu-uni.tab</s></li>
   <li>(Done 2017-08-02)<s>32、「肥」模式時，當按著win鍵+英文，應該要允許出字，不然無法按如 win+r 這種功能</s></li>  
   <li>(Done 2017-09-13)<s>33、刪掉一些php.py裡用不到的函式，可以讓uclliu.exe檔變小一些</s></li>
-  <li>34、支援Linux、Mac的研究(下一次吃飽閒閒再說)</li>
-  <li>35、「英/半」模式時，切換「英/全」應該要從半透明顯示</li>
-  <li>36、增加遊戲模式使用情景，按,lock變成遊戲模式，按,unlock回到正常模式</li>
+  <li>34、支援Linux、Mac的研究(下一次吃飽閒閒再說)</li>                                           
+  <li>(Done 2017-09-24)<s>35、「英/半」模式時，切換「英/全」應該要從半透明變顯示</s></li>
+  <li>(Done 2017-09-24)<s>36、增加遊戲模式使用情景，按,lock變成遊戲模式，按,unlock回到正常模式</s></li>
 </ul>
 <br>
 版權：<br>

@@ -100,6 +100,8 @@ if is_need_trans_cin==True:
   cinapp = cintojson.CinToJson()
   cinapp.run( "liu" , "liu.cin",False)
 
+
+last_key = "" #to save last 7 word for game mode 
 flag_is_win_down=False
 flag_is_shift_down=False
 flag_is_play_otherkey=False
@@ -151,8 +153,9 @@ def toAlphaOrNonAlpha():
   global uclen_btn
   global hf_btn
   global win  
-  c = hf_btn.get_child()
-  hf_kind = c.get_label()
+  #c = hf_btn.get_child()
+  #hf_kind = c.get_label()
+  hf_kind = hf_btn.get_label()
   if uclen_btn.get_label()=="英" and hf_kind=="半":
     win.set_opacity(0.2)
   else:
@@ -182,6 +185,14 @@ def is_ucl():
     return True
   else:
     return False
+def gamemode_btn_click(self):
+  global gamemode_btn 
+  if gamemode_btn.get_label()=="正常模式":
+    gamemode_btn.set_label("遊戲模式")
+    if uclen_btn.get_label() == "肥":
+      uclen_btn_click(uclen_btn)    
+  else:
+    gamemode_btn.set_label("正常模式")
 def x_btn_click(self):
   print("Bye Bye");
   sys.exit()
@@ -201,6 +212,7 @@ def hf_btn_click(self):
     self.set_label("半")
   hf_label=self.get_child()
   hf_label.modify_font(pango.FontDescription('標楷體 bold 22'))
+  toAlphaOrNonAlpha()
   pass
 def is_hf(self):
   global hf_btn
@@ -418,6 +430,7 @@ def use_pinyi(data):
   #finds=my.str_replace("  "," ",finds)
   
 def OnKeyboardEvent(event):
+  global last_key
   global flag_is_win_down
   global flag_is_shift_down
   global flag_is_play_otherkey
@@ -425,6 +438,7 @@ def OnKeyboardEvent(event):
   global ucl_find_data
   global is_need_use_pinyi
   global same_sound_last_word
+  global gamemode_btn
   #print(dir())  
   #try:  
   #print(event)
@@ -443,6 +457,20 @@ def OnKeyboardEvent(event):
   #print 'Transition', event.Transition
   #print 'IS_UCL', is_ucl()
   #print '---'
+  if event.MessageName == "key down":
+    last_key = last_key + chr(event.Ascii)
+    last_key = last_key[-7:]
+    if my.strtolower(last_key[-5:])==",lock":
+      last_key = ""
+      if gamemode_btn.get_label()=="正常模式":
+        gamemode_btn_click(gamemode_btn)
+    if my.strtolower(last_key[-7:])==",unlock":          
+      last_key = ""               
+      if gamemode_btn.get_label()=="遊戲模式":
+        gamemode_btn_click(gamemode_btn)
+  #print("LAST_KEY:" + last_key)
+  if gamemode_btn.get_label()=="遊戲模式":      
+    return True    
   
   #thekey = chr(event.Ascii)
   # KeyID = 91 = Lwinkey
@@ -463,13 +491,14 @@ def OnKeyboardEvent(event):
       toggle_ucl()
       print("Debug15")    
     print("Debug14")
+    #toAlphaOrNonAlpha()
     return True
   if event.MessageName == "key down" and event.Ascii==32 and flag_is_shift_down==True:
     # Press shift and space
     # switch 半/全
     hf_btn_click(hf_btn)
     flag_is_play_otherkey=True
-    flag_is_shift_down=False
+    flag_is_shift_down=False    
     print("Debug13")
     return False            
   if is_ucl():    
@@ -582,10 +611,13 @@ def OnKeyboardEvent(event):
     print("Debug3")
     if event.MessageName == "key down" and (event.Key == "Lshift" or event.Key == "Rshift" ):
       flag_is_shift_down=True
-      flag_is_play_otherkey=False
+      flag_is_play_otherkey=False      
+      print("Debug331")
     if event.MessageName == "key down" and event.Key != "Lshift" and event.Key != "Rshift":
-      flag_is_play_otherkey=True          
+      flag_is_play_otherkey=True
+      print("Debug332")          
     if event.MessageName == "key up" and (event.Key == "Lshift" or event.Key == "Rshift"):
+      print("Debug333")
       #shift
       flag_is_shift_down=False
       print("Press shift")
@@ -636,7 +668,7 @@ user32 = ctypes.windll.user32
 screen_width=user32.GetSystemMetrics(0)
 screen_height=user32.GetSystemMetrics(1)
 
-win.move(screen_width-600,screen_height-150)
+win.move(screen_width-700,screen_height-150)
 #always on top
 win.set_keep_above(True)
 win.set_keep_below(False)
@@ -687,6 +719,12 @@ f_word = gtk.Frame()
 f_word.add(word_label)
 hbox.add(f_word)
 
+gamemode_btn=gtk.Button("正常模式")
+gamemode_label=uclen_btn.get_child()
+gamemode_label.modify_font(pango.FontDescription('標楷體 bold 26'))
+gamemode_btn.connect("clicked",gamemode_btn_click)
+gamemode_btn.set_size_request(80,40)
+hbox.add(gamemode_btn)
 
 x_btn=gtk.Button("╳")
 x_label=uclen_btn.get_child()
@@ -694,6 +732,9 @@ x_label.modify_font(pango.FontDescription('標楷體 bold 22'))
 x_btn.connect("clicked",x_btn_click)
 x_btn.set_size_request(40,40)
 hbox.add(x_btn)
+
+
+
 
 win.add(vbox)
 
