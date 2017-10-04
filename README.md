@@ -61,6 +61,7 @@
 　　(還是要再強調一次，不要用義守大學FTP裡的那個liu-uni.tab，建議可以安裝正版嘸蝦米後在C:\windows\Syswow64裡找到)
 　　(新版的嘸蝦米，liu-uni.tab可能會放在 C:\Program Files\BoshiamyTIP 這裡面)<br>
 　　6、如果需要使用如「'ucl」這種同音字查詢，請將 dist\pinyi.txt 也與uclliu.exe 放一起<br>
+　　7、增加一個遊戲模式的按鈕，只要按「,lock」就會變成遊戲模式，再按「,unlock」回到正常模式，這樣玩CS殺人時就可以消音走路了<br>
 <br>       
 ToDo：<br>
 <ul>
