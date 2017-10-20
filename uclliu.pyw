@@ -343,11 +343,12 @@ def senddata(data):
   print(pp)
   p=psutil.Process(pp)
   f_arr = [ "putty","pietty","pcman" ]
-  check=True
+  f_big5_arr = [ "zip32w" ]
+  check_kind="0"
   for k in f_arr:
     #break;
     if my.is_string_like(my.strtolower(p.exe()),k):
-      check=False      
+      check_kind="1"      
       
       win32clipboard.OpenClipboard()
       orin_clip=""
@@ -374,10 +375,32 @@ def senddata(data):
       win32clipboard.OpenClipboard()    
       win32clipboard.EmptyClipboard()
       win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip)
-      win32clipboard.CloseClipboard()
-            
+      win32clipboard.CloseClipboard()            
       break
-  if check==True:
+  for k in f_big5_arr:
+    if my.is_string_like(my.strtolower(p.exe()),k):
+      print("Debug_f_big5_arr")
+      #SendKeysCtypes.SendKeys(my.utf8tobig5(data))
+      check_kind="2"
+      win32clipboard.OpenClipboard()
+      orin_clip=""
+      try:
+        orin_clip=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
+      except:
+        pass      
+      win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, "")
+      win32clipboard.EmptyClipboard()
+      win32clipboard.SetClipboardData(win32con.CF_TEXT, my.utf8tobig5(data))
+      win32clipboard.CloseClipboard()
+      shell.SendKeys("^v", 0)
+      time.sleep(0.05)
+      win32clipboard.OpenClipboard()    
+      win32clipboard.EmptyClipboard()
+      win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip)
+      win32clipboard.CloseClipboard()         
+      break
+            
+  if check_kind=="0":
     #reload(sys)                                    
     #sys.setdefaultencoding('UTF-8')
     #print("CP950")
