@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+is_DEBUG_mode = True
+
+def debug_print(data):
+  global is_DEBUG_mode
+  if is_DEBUG_mode==True:
+    print(data)
 import portalocker
 import os
 import sys
@@ -164,6 +170,7 @@ def toggle_ucl():
   global uclen_btn
   global play_ucl_label
   global win
+  global debug_print
   if uclen_btn.get_label()=="肥":
     uclen_btn.set_label("英")
     play_ucl_label=""
@@ -176,7 +183,7 @@ def toggle_ucl():
   uclen_label.modify_font(pango.FontDescription('標楷體 bold 22'))
                                               
   #window_state_event_cb(None,None)
-  print("window_state_event_cb(toggle_ucl)")
+  debug_print("window_state_event_cb(toggle_ucl)")
   toAlphaOrNonAlpha()    
 def is_ucl():
   global uclen_btn  
@@ -224,10 +231,11 @@ def is_hf(self):
 def type_label_set_text():
   global type_label
   global play_ucl_label
+  global debug_print
   type_label.set_label(play_ucl_label)
   type_label.modify_font(pango.FontDescription('標楷體 bold 22'))
   if my.strlen(play_ucl_label) > 0:
-    print("ShowSearch")
+    debug_print("ShowSearch")
     show_search()
     pass
   else:    
@@ -270,10 +278,11 @@ def show_search():
   global is_has_more_page
   global same_sound_index
   global same_sound_last_word
+  global debug_print
   same_sound_index = 0
   is_has_more_page=False
   same_sound_last_word=""
-  print("ShowSearch1")
+  debug_print("ShowSearch1")
   c = my.strtolower(play_ucl_label)
   c = my.trim(c)
   #print("ShowSearch2")
@@ -323,6 +332,8 @@ def senddata(data):
   global same_sound_index
   global is_has_more_page
   global same_sound_last_word
+  global debug_print
+  
   same_sound_index=0 #回到第零頁
   is_has_more_page=False #回到沒有分頁
   same_sound_last_word=""
@@ -340,7 +351,7 @@ def senddata(data):
   else:
     pp=pid[0]
   #print("PP:%s" % (pp))
-  print(pp)
+  debug_print("PP:%s" % (pp))
   p=psutil.Process(pp)
   f_arr = [ "putty","pietty","pcman" ]
   f_big5_arr = [ "zip32w" ]
@@ -379,7 +390,7 @@ def senddata(data):
       break
   for k in f_big5_arr:
     if my.is_string_like(my.strtolower(p.exe()),k):
-      print("Debug_f_big5_arr")
+      debug_print("Debug_f_big5_arr")
       #SendKeysCtypes.SendKeys(my.utf8tobig5(data))
       check_kind="2"
       win32clipboard.OpenClipboard()
@@ -418,6 +429,7 @@ def use_pinyi(data):
   global same_sound_index
   global same_sound_max_word
   global is_has_more_page
+  global debug_print
   finds=""
   for k in same_sound_data:
     if my.is_string_like(k,data):
@@ -433,9 +445,9 @@ def use_pinyi(data):
   #  print(k.encode("UTF-8"))
   finds = my.array_unique(finds)
   #print("Debug data: %s " % data.encode("UTF-8"))
-  print("Debug Finds: %d " % len(finds))
-  print("Debug same_sound_index: %d " % same_sound_index)
-  print("Debug same_sound_max_word: %d " % same_sound_max_word)  
+  debug_print("Debug Finds: %d " % len(finds))
+  debug_print("Debug same_sound_index: %d " % same_sound_index)
+  debug_print("Debug same_sound_max_word: %d " % same_sound_max_word)  
   maxword = same_sound_index+same_sound_max_word
   if maxword >= len(finds)-1:
     maxword = len(finds)-1
@@ -443,7 +455,7 @@ def use_pinyi(data):
   else:
     is_has_more_page = True
   ucl_find_data=finds[same_sound_index:maxword]
-  print("DEBUG same_sound_index: %d " % same_sound_index)
+  debug_print("DEBUG same_sound_index: %d " % same_sound_index)
   same_sound_index=same_sound_index+same_sound_max_word
    
   if same_sound_index>=len(finds):
@@ -462,6 +474,7 @@ def OnKeyboardEvent(event):
   global is_need_use_pinyi
   global same_sound_last_word
   global gamemode_btn
+  global debug_print
   #print(dir())  
   #try:  
   #print(event)
@@ -499,27 +512,27 @@ def OnKeyboardEvent(event):
   # KeyID = 91 = Lwinkey
   if event.MessageName == "key down" and (event.KeyID == 91 or event.KeyID == 92):
     flag_is_win_down = True
-    print("Debug event A")
+    debug_print("Debug event A")
   if event.MessageName == "key up" and (event.KeyID == 91 or event.KeyID == 92):
     flag_is_win_down = False
-    print("Debug event B") 
+    debug_print("Debug event B") 
   if event.MessageName == "key down" and (event.Key == "Lshift" or event.Key == "Rshift"):
     flag_is_shift_down=True
-    print("Debug event C")    
+    debug_print("Debug event C")    
     flag_is_play_otherkey=False
   if event.MessageName == "key down" and (event.Key != "Lshift" and event.Key != "Rshift"):
-    print("Debug event D")
+    debug_print("Debug event D")
     flag_is_play_otherkey=True          
   if event.MessageName == "key up" and (event.Key == "Lshift" or event.Key == "Rshift"):
-    print("Debug event E")
+    debug_print("Debug event E")
     #shift
     flag_is_shift_down=False
-    print("Press shift")
+    debug_print("Press shift")
     # 不可是右邊的2、4、6、8 
     if flag_is_play_otherkey==False and (event.Ascii > 40 or event.Ascii < 37) :
       toggle_ucl()
-      print("Debug15")    
-    print("Debug14")
+      debug_print("Debug15")    
+    debug_print("Debug14")
     #toAlphaOrNonAlpha()
     return True
   if event.MessageName == "key down" and event.Ascii==32 and flag_is_shift_down==True:
@@ -528,7 +541,7 @@ def OnKeyboardEvent(event):
     hf_btn_click(hf_btn)
     flag_is_play_otherkey=True
     flag_is_shift_down=False    
-    print("Debug13")
+    debug_print("Debug13")
     return False            
   if is_ucl():    
     if event.MessageName == "key down" and flag_is_win_down == True : # win key
@@ -538,25 +551,25 @@ def OnKeyboardEvent(event):
         # send data        
         data = ucl_find_data[int(chr(event.Ascii))]
         senddata(data)
-        print("Debug12")
+        debug_print("Debug12")
         return False
       else:
         if len(event.Key) == 1 and is_hf(None)==False:
           #k = widen(event.Key)
           kac = event.Ascii          
           k = widen(chr(kac))
-          print("event.Key to Full:%s %s" % (event.Key,k))
+          debug_print("event.Key to Full:%s %s" % (event.Key,k))
           senddata(k)
-          print("Debug11")
+          debug_print("Debug11")
           return False
         
-        print("Debug10")
+        debug_print("Debug10")
         #2017-10-24要考慮右邊數字鍵的狀況
         if is_hf(None)==False and ( event.Ascii==49 or event.Ascii==50 or event.Ascii==51 or event.Ascii==52 or event.Ascii==53 or event.Ascii==54 or event.Ascii==55 or event.Ascii==56 or event.Ascii==57 or event.Ascii==47 or event.Ascii==42 or event.Ascii==45 or event.Ascii==43 or event.Ascii==48 or event.Ascii==46):
           kac = event.Ascii        
           k = widen(chr(kac))
           senddata(k)
-          print("Debug100")
+          debug_print("Debug100")
           return False
         else:  
           return True                    
@@ -572,29 +585,29 @@ def OnKeyboardEvent(event):
           else:
             kac=kac-32
           k = widen(chr(kac))
-          print("285 event.Key to Full:%s %s" % (event.Key,k))
+          debug_print("285 event.Key to Full:%s %s" % (event.Key,k))
           senddata(k)
-          print("Debug9")
+          debug_print("Debug9")
           return False
-        print("Debug8")
+        debug_print("Debug8")
         return True
       else:
         # Play ucl
         #print("Play UCL")
         #print(thekey)
         play_ucl(chr(event.Ascii))
-        print("Debug7")
+        debug_print("Debug7")
         return False    
     if event.MessageName == "key down" and ( event.Ascii == 8 ): # ←      
       if my.strlen(play_ucl_label) <= 0:                    
         play_ucl_label=""
         play_ucl("")
-        print("Debug6")
+        debug_print("Debug6")
         return True
       else:
         play_ucl_label = play_ucl_label[:-1]
         type_label_set_text()
-        print("Debug5")        
+        debug_print("Debug5")        
         return False       
     if event.MessageName == "key down" and event.Ascii==32 : #空白
       # Space                          
@@ -607,27 +620,27 @@ def OnKeyboardEvent(event):
         
         if is_need_use_pinyi==True:
           #使用同音字
-          print("Debug use pinyi")
+          debug_print("Debug use pinyi")
           use_pinyi(same_sound_last_word)
         else:
           senddata(text)
-        print("Debug4")
+        debug_print("Debug4")
         return False 
       elif len(ucl_find_data)==0 and len(play_ucl_label)!=0:
         #無此字根時，按到空白鍵
-        print("Debug11")
+        debug_print("Debug11")
         play_ucl_label=""
         ucl_find_data=[]
         type_label_set_text()
         return False 
       else:
         #沒字時直接出空白
-        print("Debug1")
+        debug_print("Debug1")
         if is_hf(None)==False:        
           kac = event.Ascii        
           k = widen(chr(kac))
           senddata(k)
-          print("Debug23")
+          debug_print("Debug23")
           return False
         else:
           return True
@@ -637,32 +650,32 @@ def OnKeyboardEvent(event):
         kac = event.Ascii        
         k = widen(chr(kac))
         senddata(k)
-        print("Debug22")
+        debug_print("Debug22")
         return False
       else:
-        print("Debug22OK")
+        debug_print("Debug22OK")
         return True     
     else:                  
       return True            
       
   else:
-    print("Debug3")    
+    debug_print("Debug3")    
     if event.MessageName == "key down" and (event.Key == "Lshift" or event.Key == "Rshift"):      
       flag_is_shift_down=True
       flag_is_play_otherkey=False      
-      print("Debug331")
+      debug_print("Debug331")
     if event.MessageName == "key down" and event.Key != "Lshift" and event.Key != "Rshift":
       flag_is_play_otherkey=True
-      print("Debug332")          
+      debug_print("Debug332")          
     if event.MessageName == "key up" and (event.Key == "Lshift" or event.Key == "Rshift"):
-      print("Debug333")
+      debug_print("Debug333")
       #shift
       flag_is_shift_down=False
-      print("Press shift")
+      debug_print("Press shift")
       if flag_is_play_otherkey==False:
         toggle_ucl()
-        print("Debug315")    
-      print("Debug314")
+        debug_print("Debug315")    
+      debug_print("Debug314")
       return True
     
     #if event.MessageName == "key up" and len(event.Key) == 1 and is_hf(None)==False:
@@ -673,12 +686,12 @@ def OnKeyboardEvent(event):
     #if len(event.Key) == 1 and is_hf(None)==False and event.KeyID !=0 and event.KeyID !=145 and event.KeyID !=162:
     #  k = widen(event.Key)      
     #  senddata(k) 
-    print("Debug3: %s" % (event.Transition))
+    debug_print("Debug3: %s" % (event.Transition))
     if event.KeyID==8 or event.KeyID==20 or event.KeyID==45 or event.KeyID==46 or event.KeyID==36 or event.KeyID==33 or event.KeyID==34 or event.KeyID==35 or event.KeyID==160 or event.KeyID==161 or event.KeyID==9 or event.KeyID == 37 or event.KeyID == 38 or event.KeyID == 39 or event.KeyID == 40: #↑←→↓
       return True
     if event.MessageName == "key down" and len( str(chr(event.Ascii)) ) == 1 and is_hf(None)==False and event.Injected == 0 :
       k = widen( str(chr(event.Ascii)) )
-      print("ｋｋｋｋｋｋｋｋｋｋｋｋｋｋｋK:%s" % k)
+      #print("ｋｋｋｋｋｋｋｋｋｋｋｋｋｋｋK:%s" % k)
       senddata(k)
       return False
     return True    
