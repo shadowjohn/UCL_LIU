@@ -499,18 +499,24 @@ def OnKeyboardEvent(event):
   # KeyID = 91 = Lwinkey
   if event.MessageName == "key down" and (event.KeyID == 91 or event.KeyID == 92):
     flag_is_win_down = True
+    print("Debug event A")
   if event.MessageName == "key up" and (event.KeyID == 91 or event.KeyID == 92):
-    flag_is_win_down = False 
+    flag_is_win_down = False
+    print("Debug event B") 
   if event.MessageName == "key down" and (event.Key == "Lshift" or event.Key == "Rshift"):
     flag_is_shift_down=True
+    print("Debug event C")    
     flag_is_play_otherkey=False
   if event.MessageName == "key down" and (event.Key != "Lshift" and event.Key != "Rshift"):
+    print("Debug event D")
     flag_is_play_otherkey=True          
   if event.MessageName == "key up" and (event.Key == "Lshift" or event.Key == "Rshift"):
+    print("Debug event E")
     #shift
     flag_is_shift_down=False
     print("Press shift")
-    if flag_is_play_otherkey==False:
+    # 不可是右邊的2、4、6、8 
+    if flag_is_play_otherkey==False and (event.Ascii > 40 or event.Ascii < 37) :
       toggle_ucl()
       print("Debug15")    
     print("Debug14")
@@ -543,8 +549,17 @@ def OnKeyboardEvent(event):
           senddata(k)
           print("Debug11")
           return False
+        
         print("Debug10")
-        return True
+        #2017-10-24要考慮右邊數字鍵的狀況
+        if is_hf(None)==False and ( event.Ascii==49 or event.Ascii==50 or event.Ascii==51 or event.Ascii==52 or event.Ascii==53 or event.Ascii==54 or event.Ascii==55 or event.Ascii==56 or event.Ascii==57 or event.Ascii==47 or event.Ascii==42 or event.Ascii==45 or event.Ascii==43 or event.Ascii==48 or event.Ascii==46):
+          kac = event.Ascii        
+          k = widen(chr(kac))
+          senddata(k)
+          print("Debug100")
+          return False
+        else:  
+          return True                    
     if event.MessageName == "key down" and ( (event.Ascii>=65 and event.Ascii <=90) or (event.Ascii>=97 and event.Ascii <=122) or event.Ascii==44 or event.Ascii==46 or event.Ascii==39 or event.Ascii==91 or event.Ascii==93 ):
       # 這裡應該是同時按著SHIFT的部分
       flag_is_play_otherkey=True
@@ -616,7 +631,7 @@ def OnKeyboardEvent(event):
           return False
         else:
           return True
-    elif event.MessageName == "key down" and ( event.Ascii==58 or event.Ascii==59) : # : ;
+    elif event.MessageName == "key down" and ( event.Ascii==58 or event.Ascii==59 or event.Ascii==123 or event.Ascii==125 or event.Ascii==40 or event.Ascii==41 or event.Ascii==43 or event.Ascii==126 or event.Ascii==33 or event.Ascii==64 or event.Ascii==35 or event.Ascii==36 or event.Ascii==37 or event.Ascii==94 or event.Ascii==38 or event.Ascii==42 or event.Ascii==95 or event.Ascii==60 or event.Ascii==62 or event.Ascii==63 or event.Ascii==34 or event.Ascii==124 or event.Ascii==47 or event.Ascii==45) : # : ;｛｝（）＋～！＠＃＄％＾＆＊＿＜＞？＂｜／－
       #修正 肥/全 時，按分號、冒號只出半型的問題
       if is_hf(None)==False:        
         kac = event.Ascii        
@@ -625,14 +640,14 @@ def OnKeyboardEvent(event):
         print("Debug22")
         return False
       else:
+        print("Debug22OK")
         return True     
-    else:
-      print("Debug2")      
+    else:                  
       return True            
       
   else:
-    print("Debug3")
-    if event.MessageName == "key down" and (event.Key == "Lshift" or event.Key == "Rshift" ):
+    print("Debug3")    
+    if event.MessageName == "key down" and (event.Key == "Lshift" or event.Key == "Rshift"):      
       flag_is_shift_down=True
       flag_is_play_otherkey=False      
       print("Debug331")
@@ -663,7 +678,7 @@ def OnKeyboardEvent(event):
       return True
     if event.MessageName == "key down" and len( str(chr(event.Ascii)) ) == 1 and is_hf(None)==False and event.Injected == 0 :
       k = widen( str(chr(event.Ascii)) )
-      #print("ｋｋｋｋｋｋｋｋｋｋｋｋｋｋｋK:%s" % k)
+      print("ｋｋｋｋｋｋｋｋｋｋｋｋｋｋｋK:%s" % k)
       senddata(k)
       return False
     return True    
