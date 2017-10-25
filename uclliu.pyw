@@ -353,7 +353,7 @@ def senddata(data):
   #print("PP:%s" % (pp))
   debug_print("PP:%s" % (pp))
   p=psutil.Process(pp)
-  f_arr = [ "putty","pietty","pcman" ]
+  f_arr = [ "putty","pietty","pcman","xyplorer" ]
   f_big5_arr = [ "zip32w" ]
   check_kind="0"
   for k in f_arr:
