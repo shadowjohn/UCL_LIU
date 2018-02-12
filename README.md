@@ -9,9 +9,9 @@
 作者：羽山秋人 (<a target="_blank" href="http://3wa.tw">http://3wa.tw</a>)<br>
 <br>
 最初開發日期：2017-06-16 11:24<br>
-最後更新日期：2017-10-24 09:43
+最後更新日期：2018-02-12 17:55
 <br>
-版本：V 0.1<br>
+版本：V 1.0<br>
 <br>
 下載位置：<br>
 　　1.主程式：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
@@ -61,7 +61,8 @@
 　　(還是要再強調一次，不要用義守大學FTP裡的那個liu-uni.tab，建議可以安裝正版嘸蝦米後在C:\windows\Syswow64裡找到)
 　　(新版的嘸蝦米，liu-uni.tab可能會放在 C:\Program Files\BoshiamyTIP 這裡面)<br>
 　　6、如果需要使用如「'ucl」這種同音字查詢，請將 dist\pinyi.txt 也與uclliu.exe 放一起<br>
-　　7、增加一個遊戲模式的按鈕，只要按「,lock」就會變成遊戲模式，再按「,unlock」回到正常模式，這樣玩CS殺人時就可以消音走路了<br>
+　　7、增加一個遊戲模式的按鈕，只要按「,,,lock」就會變成遊戲模式，再按「,,,unlock」回到正常模式，這樣玩CS殺人時就可以消音走路了<br>
+　　8、增加版本查詢功能，只要按「,,,version」
 <br>       
 ToDo：<br>
 <ul>
@@ -111,6 +112,9 @@ ToDo：<br>
   <li>(Done 2017-10-24)<s>44、增加Debug參數，減少背景無意義print浪費CPU</s></li>
   <li>(Done 2017-10-25)<s>45、修正XYplorer.exe程式無法輸入的問題</s></li>
   <li>46、出字後的「選詞功能」，如: 我，會出現「們、的、…」</li>
+  <li>47、點到輸入框，最後focus會在「輸入框」導致輸入文字沒指定到原本的輸入視窗，放開輸入框後，「焦點」要回到最後離開的視窗。</li>
+  <li>(Done 2018-02-12)<s>48、偵測到不能用的liu-uni.tab，會提示無法使用，如義守大學ftp那個版本，版友傳來的</s></li>
+  <li>(Done 2018-02-12)<s>49、增加版本提示功能</s></li>  
 </ul>
 <br>
 版權：<br>

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+VERSION=1.0
 is_DEBUG_mode = True
 
 def debug_print(data):
@@ -10,11 +11,23 @@ import os
 import sys
 import gtk
 from gtk import gdk
-
-import php
+import hashlib
+import php             
 my = php.kit()
 reload(sys)
 sys.setdefaultencoding('UTF-8')
+def md5_file(fileName):
+    """Compute md5 hash of the specified file"""
+    m = hashlib.md5()
+    try:
+        fd = open(fileName,"rb")
+    except IOError:
+        print "Reading file has problem:", filename
+        return
+    x = fd.read()
+    fd.close()
+    m.update(x)
+    return m.hexdigest()
 
 
 PWD=my.pwd()   
@@ -94,9 +107,28 @@ if is_all_fault == True:
     my.exit()
   #message.show()
   gtk.main()
-
+           
 if is_need_trans_tab==True:
-  #需要轉tab檔
+  #需要轉tab檔                                                                             
+  #Check liu-uni.tab md5 is fuck up
+  if md5_file( ("%s\\liu-uni.tab" % (PWD)) )== "4e89501681ba0405b4c0e03fae740d8c":
+    message = gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)
+    message.set_markup("請不要使用義守大學的字根檔，這組 liu-uni.tab 太舊不支援...");
+    response = message.run()
+    #print(gtk.ResponseType.BUTTONS_OK)
+    if response == -5 or response == -4:
+      my.exit()
+    #message.show()
+    gtk.main()
+  if md5_file( ("%s\\liu-uni.tab" % (PWD)) )== "260312958775300438497e366b277cb4":
+    message = gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)
+    message.set_markup("此組字根檔並非正常的 liu-uni.tab，這個不支援...");
+    response = message.run()
+    #print(gtk.ResponseType.BUTTONS_OK)
+    if response == -5 or response == -4:
+      my.exit()
+    #message.show()
+    gtk.main()
   import liu_unitab2cin
   #print(PWD)  
   liu_unitab2cin.convert_liu_unitab( ("%s\\liu-uni.tab" % (PWD)), ("%s\\liu.cin" % (PWD) ))
@@ -125,7 +157,7 @@ HALF2FULL[0x20] = 0x3000
 
 WIDE_MAP = dict((i, i + 0xFEE0) for i in xrange(0x21, 0x7F))
 WIDE_MAP[0x20] = 0x3000
-
+                  
 def widen(s):
   #https://gist.github.com/jcayzac/1485005
   """
@@ -475,6 +507,7 @@ def OnKeyboardEvent(event):
   global same_sound_last_word
   global gamemode_btn
   global debug_print
+  global VERSION
   #print(dir())  
   #try:  
   #print(event)
@@ -493,17 +526,33 @@ def OnKeyboardEvent(event):
   #print 'Transition', event.Transition
   #print 'IS_UCL', is_ucl()
   #print '---'
+  #print 'last_key:', last_key[-8:]
   if event.MessageName == "key down":
     last_key = last_key + chr(event.Ascii)
-    last_key = last_key[-7:]
-    if my.strtolower(last_key[-5:])==",lock":
+    last_key = last_key[-10:]
+    if my.strtolower(last_key[-7:])==",,,lock":
       last_key = ""
       if gamemode_btn.get_label()=="正常模式":
         gamemode_btn_click(gamemode_btn)
-    if my.strtolower(last_key[-7:])==",unlock":          
+    if my.strtolower(last_key[-9:])==",,,unlock":          
       last_key = ""               
       if gamemode_btn.get_label()=="遊戲模式":
         gamemode_btn_click(gamemode_btn)
+    if my.strtolower(last_key[-10:])==",,,version":
+      last_key= ""   
+      message = gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)      
+      message.set_markup( ("肥米輸入法版本：%s" % VERSION) )
+      message.show()  
+      response = message.run()
+      debug_print("Show Version")
+      #print(gtk.ResponseType.BUTTONS_OK)
+      if response == -5 or response == -4:
+        #message.hide()  
+        message.destroy()            
+        play_ucl_label=""
+        ucl_find_data=[]
+        type_label_set_text()
+        return False      
   #print("LAST_KEY:" + last_key)
   if gamemode_btn.get_label()=="遊戲模式":      
     return True    
@@ -702,13 +751,14 @@ def OnKeyboardEvent(event):
 
 # create a hook manager
 hm = pyHook.HookManager()
+hm.UnhookMouse();
 # watch for all mouse events
 hm.KeyAll = OnKeyboardEvent
 print(dir(hm))
 # set the hook
 hm.HookKeyboard()
 # wait forever
-
+        
 #win=gtk.Window(type=gtk.WINDOW_POPUP)
 win=gtk.Window(type=gtk.WINDOW_POPUP)
 win.set_modal(True)
@@ -794,7 +844,7 @@ win.set_focus(None)
 
 gtk.main()
 
-pythoncom.PumpMessages()  
+pythoncom.PumpMessages()     
 
 mainloop()  
  
