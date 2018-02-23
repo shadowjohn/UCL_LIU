@@ -6,3 +6,5 @@ liu-uni.tab
 screenshot/liu_license.jpg
 *.pyc
 liuwords
+dist/old
+dist/old/*

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.0
+VERSION=1.1
 is_DEBUG_mode = True
 
 def debug_print(data):
@@ -330,6 +330,21 @@ def show_search():
   if c not in uclcode["chardefs"] and c[-1]=='v' and c[:-1] in uclcode["chardefs"] and len(uclcode["chardefs"][c[:-1]])>=2 :
     #print("Debug V1")
     ucl_find_data = uclcode["chardefs"][c[:-1]][1]   
+    word_label_set_text()
+    return True
+  elif c not in uclcode["chardefs"] and c[-1]=='r' and c[:-1] in uclcode["chardefs"] and len(uclcode["chardefs"][c[:-1]])>=3 :
+    #print("Debug V1")
+    ucl_find_data = uclcode["chardefs"][c[:-1]][2]   
+    word_label_set_text()
+    return True
+  elif c not in uclcode["chardefs"] and c[-1]=='s' and c[:-1] in uclcode["chardefs"] and len(uclcode["chardefs"][c[:-1]])>=4 :
+    #print("Debug V1")
+    ucl_find_data = uclcode["chardefs"][c[:-1]][3]   
+    word_label_set_text()
+    return True
+  elif c not in uclcode["chardefs"] and c[-1]=='f' and c[:-1] in uclcode["chardefs"] and len(uclcode["chardefs"][c[:-1]])>=5 :
+    #print("Debug V1")
+    ucl_find_data = uclcode["chardefs"][c[:-1]][4]   
     word_label_set_text()
     return True
   elif c in uclcode["chardefs"]:

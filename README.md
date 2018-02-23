@@ -9,9 +9,9 @@
 作者：羽山秋人 (<a target="_blank" href="http://3wa.tw">http://3wa.tw</a>)<br>
 <br>
 最初開發日期：2017-06-16 11:24<br>
-最後更新日期：2018-02-12 17:55
+最後更新日期：2018-02-23 17:32
 <br>
-版本：V 1.0<br>
+版本：V 1.1<br>
 <br>
 下載位置：<br>
 　　1.主程式：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
@@ -114,7 +114,8 @@ ToDo：<br>
   <li>46、出字後的「選詞功能」，如: 我，會出現「們、的、…」</li>
   <li>47、點到輸入框，最後focus會在「輸入框」導致輸入文字沒指定到原本的輸入視窗，放開輸入框後，「焦點」要回到最後離開的視窗。</li>
   <li>(Done 2018-02-12)<s>48、偵測到不能用的liu-uni.tab，會提示無法使用，如義守大學ftp那個版本，版友傳來的</s></li>
-  <li>(Done 2018-02-12)<s>49、增加版本提示功能</s></li>  
+  <li>(Done 2018-02-12)<s>49、增加版本提示功能</s></li>
+  <li>(Done 2018-02-23)<s>50、同修正6，支援 VRSF 對應 1234 字功能</s></li>  
 </ul>
 <br>
 版權：<br>
