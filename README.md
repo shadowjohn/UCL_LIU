@@ -48,9 +48,38 @@
     <li>字碼表亦可參考PIME裡的liu.json</li>
 </ul>
 <br>
-編譯：<br>
-　　pip install pyinstaller<br>
-    可參考 build.bat 製作單檔 exe<br>
+檔案說明：<br>
+  <ul>
+    <li>Python 27 (x86版本):【https://www.python.org/ftp/python/2.7.13/python-2.7.13.msi】</li>
+    <li>請設定windows環境變數，在path裡加上 【;c:\Python27;c:\Python27\Scripts】
+    <li>pyhook【放在p27目錄，點了安裝即可 p27/pyHook-1.5.1.win32-py2.7.exe】</li>
+    <li>pygtk 【放在p27目錄，點了安裝即可 p27/pygtk-all-in-one-2.24.1.win32-py2.7.msi】</li>
+    <li>pywin32 【放在p27目錄，點了安裝即可 p27/pywin32-221.win32-py2.7.exe】</li>    
+    <li>pyinstaller 可搭配build.bat製作dist/uclliu.exe檔【pip install pyinstaller】</li>
+    <li>psutil 用來判斷目前視窗跑什麼，如果是putty、pietty、pcman出字方式是貼上，【pip install psutil】</li>
+    <li>(Third party) php.py 羽山比較熟php，所以在python裡實作很多php的函式</li>
+    <li>(Third party) portalocker.py 防重複執行，會Lock c:\temp\UCLLIU.lock</li>
+    <li>(Third party) SendKeysCtypes.py 可以送出Unicode的SendKeys</li>
+    <li>(Third party) liu_unitab2cin.py 可以將tab轉成cin的檔案，改成支援python2.7的寫法</li>
+    <li>(Third party) cintojson.py 可以將cin轉成json的檔案，改成支援python2.7的寫法</li>
+    <li>(Third party) cin\phone.cin 同音字表參考新酷音的傳統注音表:https://raw.githubusercontent.com/google/jscin/master/src/tables/phone.cin</li>
+    <li>字碼表亦可參考PIME裡的liu.json</li>
+  </ul>
+<br>
+自行編譯：<br>
+  <ul>
+    <li>1、請下載並python 27 (x86版) 【https://www.python.org/ftp/python/2.7.13/python-2.7.13.msi】</li>
+　　<li>2、請設定windows環境變數，在path裡加上 【;c:\Python27;c:\Python27\Scripts】</li>
+    <li>3、安裝【p27/pyHook-1.5.1.win32-py2.7.exe】</li>
+    <li>4、安裝【p27/pygtk-all-in-one-2.24.1.win32-py2.7.msi】</li>
+    <li>5、安裝【p27/pywin32-221.win32-py2.7.exe】</li>
+    <li>6、至windows cmd，下指令【pip install psutil】</li>
+    <li>7、至windows cmd，下指令【pip install pyinstaller】</li>
+    <li>8、將買來的嘸蝦米，找到 liu-uni.tab，dist裡提供的pinyi.txt 與主檔 uclliu.pyw 放在一起</li>
+    <li>9、執行【python uclliu.pyw】可以跑出程式</li>
+    <li>10、編成exe的方法，執行【build.bat】，即可將 uclliu.exe 編到 dist 目錄下</li>
+    <li>11、build_debug.bat 是方便debug用的版本，運行時還會保留command介面</li>
+  </ul>
 <br>
 使用方法：<br>
 　　1、您可以只下載dist/uclliu.exe<br>
