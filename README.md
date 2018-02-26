@@ -69,7 +69,7 @@
 自行編譯：<br>
   <ul>
     <li>1、請下載並python 27 (x86版) 【https://www.python.org/ftp/python/2.7.13/python-2.7.13.msi】</li>
-　　<li>2、請設定windows環境變數，在path裡加上 【;c:\Python27;c:\Python27\Scripts】</li>
+    <li>2、請設定windows環境變數，在path裡加上 【;c:\Python27;c:\Python27\Scripts】</li>
     <li>3、安裝【p27/pyHook-1.5.1.win32-py2.7.exe】</li>
     <li>4、安裝【p27/pygtk-all-in-one-2.24.1.win32-py2.7.msi】</li>
     <li>5、安裝【p27/pywin32-221.win32-py2.7.exe】</li>
