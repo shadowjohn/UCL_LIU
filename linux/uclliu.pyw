@@ -6,6 +6,7 @@ def debug_print(data):
   global is_DEBUG_mode
   if is_DEBUG_mode==True:
     print(data)
+import threading
 import portalocker
 import os
 import sys
@@ -364,6 +365,8 @@ def senddata(data):
   ucl_find_data=[]  
   type_label_set_text()  
   
+  #SendKeysCtypes.SendKeys(data.decode("UTF-8"),0)
+  return
   shell = win32com.client.Dispatch("WScript.Shell")
   
   hwnd = win32gui.GetForegroundWindow()
@@ -501,23 +504,21 @@ def OnKeyboardEvent(event):
   global VERSION
   #print(dir())  
   #try:  
-  #print(event)
-  #print 'MessageName:',event.MessageName
-  #print 'Message:',event.Message
-  #print 'Time:',event.Time
-  #print 'Window:',event.Window
-  #print 'WindowName:',event.WindowName
-  #print 'Ascii:', event.Ascii, chr(event.Ascii)
-  #print 'Key:', event.Key
-  #print 'KeyID:', event.KeyID
-  #print 'ScanCode:', event.ScanCode
-  #print 'Extended:', event.Extended
-  #print 'Injected:', event.Injected
-  #print 'Alt', event.Alt
-  #print 'Transition', event.Transition
-  #print 'IS_UCL', is_ucl()
-  #print '---'
+  print(event.Key)
+  print(event)
+  print 'MessageName:',event.MessageName
+  print 'Window:',event.Window
+  print 'WindowName:',event.WindowName
+  print 'Ascii:', event.Ascii, chr(event.Ascii)
+  print 'Key:', event.Key
+  print 'KeyID:', event.KeyID
+  print 'ScanCode:', event.ScanCode
+  print 'IS_UCL', is_ucl()
+  print '---'
   #print 'last_key:', last_key[-8:]
+  global hm
+  print dir(hm)
+  return False
   if event.MessageName == "key down":
     last_key = last_key + chr(event.Ascii)
     last_key = last_key[-10:]
@@ -556,14 +557,14 @@ def OnKeyboardEvent(event):
   if event.MessageName == "key up" and (event.KeyID == 91 or event.KeyID == 92):
     flag_is_win_down = False
     debug_print("Debug event B") 
-  if event.MessageName == "key down" and (event.Key == "Lshift" or event.Key == "Rshift"):
+  if event.MessageName == "key down" and (event.Key == "Lshift" or event.Key == "Shift_L" or event.Key == "Rshift" or event.Key == "Shift_R"):
     flag_is_shift_down=True
     debug_print("Debug event C")    
     flag_is_play_otherkey=False
-  if event.MessageName == "key down" and (event.Key != "Lshift" and event.Key != "Rshift"):
+  if event.MessageName == "key down" and (event.Key != "Lshift" and event.Key != "Rshift" and event.Key != "Shift_L" and event.Key != "Shift_R"):
     debug_print("Debug event D")
     flag_is_play_otherkey=True          
-  if event.MessageName == "key up" and (event.Key == "Lshift" or event.Key == "Rshift"):
+  if event.MessageName == "key up" and (event.Key == "Lshift" or event.Key == "Shift_L" or event.Key == "Rshift" or event.Key == "Shift_R"):
     debug_print("Debug event E")
     #shift
     flag_is_shift_down=False
@@ -700,14 +701,14 @@ def OnKeyboardEvent(event):
       
   else:
     debug_print("Debug3")    
-    if event.MessageName == "key down" and (event.Key == "Lshift" or event.Key == "Rshift"):      
+    if event.MessageName == "key down" and (event.Key == "Lshift" or event.Key == "Rshift" or event.Key == "Shift_L" or event.Key == "Shift_R"):      
       flag_is_shift_down=True
       flag_is_play_otherkey=False      
       debug_print("Debug331")
-    if event.MessageName == "key down" and event.Key != "Lshift" and event.Key != "Rshift":
+    if event.MessageName == "key down" and event.Key != "Lshift" and event.Key != "Shift_L" and event.Key !="Shift_R" and event.Key != "Rshift":
       flag_is_play_otherkey=True
       debug_print("Debug332")          
-    if event.MessageName == "key up" and (event.Key == "Lshift" or event.Key == "Rshift"):
+    if event.MessageName == "key up" and (event.Key == "Lshift" or event.Key =="Shift_L" or event.Key =="Shift_R" or event.Key == "Rshift"):
       debug_print("Debug333")
       #shift
       flag_is_shift_down=False
@@ -726,7 +727,7 @@ def OnKeyboardEvent(event):
     #if len(event.Key) == 1 and is_hf(None)==False and event.KeyID !=0 and event.KeyID !=145 and event.KeyID !=162:
     #  k = widen(event.Key)      
     #  senddata(k) 
-    debug_print("Debug3: %s" % (event.Transition))
+    #debug_print("Debug3: %s" % (event.Transition))
     if event.KeyID==8 or event.KeyID==20 or event.KeyID==45 or event.KeyID==46 or event.KeyID==36 or event.KeyID==33 or event.KeyID==34 or event.KeyID==35 or event.KeyID==160 or event.KeyID==161 or event.KeyID==9 or event.KeyID == 37 or event.KeyID == 38 or event.KeyID == 39 or event.KeyID == 40: #↑←→↓
       return True
     if event.MessageName == "key down" and len( str(chr(event.Ascii)) ) == 1 and is_hf(None)==False and event.Injected == 0 :
@@ -742,13 +743,23 @@ def OnKeyboardEvent(event):
 
 # create a hook manager
 hm = pyxhook.HookManager()
-hm.UnhookMouse();
+#hm.UnhookMouse();
 # watch for all mouse events
-hm.KeyAll = OnKeyboardEvent
+hm.KeyDown = OnKeyboardEvent
+hm.KeyUp = OnKeyboardEvent
 print(dir(hm))
 # set the hook
 hm.HookKeyboard()
+#hm.start()
 # wait forever
+hm_ready=threading.Event()
+def run_hm_thread():
+    #global hm
+    #hm.start()
+    pass
+hm_thread = threading.Thread(target=run_hm_thread)
+hm_thread.start()
+#hm_ready.wait()
         
 #win=gtk.Window(type=gtk.WINDOW_POPUP)
 win=gtk.Window(type=gtk.WINDOW_POPUP)
@@ -756,9 +767,11 @@ win.set_modal(True)
 win.set_resizable(False)
 
 #取螢幕大小
-user32 = ctypes.windll.user32
-screen_width=user32.GetSystemMetrics(0)
-screen_height=user32.GetSystemMetrics(1)
+#user32 = ctypes.windll.user32
+screen_width=gtk.gdk.screen_width() 
+#user32.GetSystemMetrics(0)
+screen_height=gtk.gdk.screen_height()
+#user32.GetSystemMetrics(1)
 
 win.move(screen_width-700,screen_height-150)
 #always on top
@@ -832,10 +845,17 @@ win.add(vbox)
 
 win.show_all()
 win.set_focus(None)
-
-gtk.main()
-
+hm.start()
+def updateGUI():
+    while gtk.events_pending():
+        gtk.main_iteration(False)
+while True:
+    time.sleep(0.001)
+    updateGUI()
+#worker=threading.Thread(target=countdown,args(5,))
+#worker.start()
 #pythoncom.PumpMessages()     
 
-mainloop()  
+
+#mainloop()  
  
