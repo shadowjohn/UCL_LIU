@@ -29,9 +29,10 @@
 　　P.S: 請不要使用守義大學FTP裡的那個 liu-uni.tab ，太古早了，而且有些字根都錯的!
 　　<br>
 　　首次使用如果沒有liu.json，會自動進行 tab->cin->json的轉換，tab會自動查找C:\windows\Syswow64\liu-uni.tab<br>
-　　或同目錄下的tab檔。
-    Version : 1.2 版，可支援 fcitx 裡的嘸蝦米表格：fcitx-table-boshiamy，<p style='color:red'>如要使用fcitx-table-boshiamy，下載 boshiamy.txt 改名成 fcitx_boshiamy.txt 跟主程式放一起，
-    就可以把fctix_boshiamy.txt 轉成 liu.cin，再轉 liu.json 來使用。</p>
+　　或同目錄下的tab檔。<br>
+
+    Version : 1.2 版，可支援 fcitx 裡的嘸蝦米表格：fcitx-table-boshiamy，如要使用fcitx-table-boshiamy，下載 boshiamy.txt 改名成 fcitx_boshiamy.txt 跟主程式放一起，
+    就可以把fctix_boshiamy.txt 轉成 liu.cin，再轉 liu.json 來使用。<br>
     我加了點程式碼，順手把日文的部分修正，原本打 a, = あ，但在 fcitx 要打 ja, 才會出 あ，如果只有打 a, 好像有些亂碼~_~<br>
     反正就修正了~<br>
     
