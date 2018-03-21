@@ -9,9 +9,9 @@
 作者：羽山秋人 (<a target="_blank" href="http://3wa.tw">http://3wa.tw</a>)<br>
 <br>
 最初開發日期：2017-06-16 11:24<br>
-最後更新日期：2018-02-23 17:32
+最後更新日期：2018-03-22 01:24
 <br>
-版本：V 1.1<br>
+版本：V 1.2<br>
 <br>
 下載位置：<br>
 　　1.主程式：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
@@ -30,6 +30,11 @@
 　　<br>
 　　首次使用如果沒有liu.json，會自動進行 tab->cin->json的轉換，tab會自動查找C:\windows\Syswow64\liu-uni.tab<br>
 　　或同目錄下的tab檔。
+    Version : 1.2 版，可支援 fcitx 裡的嘸蝦米表格：fcitx-table-boshiamy，<span style="color:red;">如要使用fcitx-table-boshiamy，下載 boshiamy.txt 改名成 fcitx_boshiamy.txt 跟主程式放一起，
+    就可以把fctix_boshiamy.txt 轉成 liu.cin，再轉 liu.json 來使用。</span>
+    我加了點程式碼，順手把日文的部分修正，原本打 a, = あ，但在 fcitx 要打 ja, 才會出 あ，如果只有打 a, 好像有些亂碼~_~<br>
+    反正就修正了~<br>
+    
 <br>
 開發工具：<br>
   <ul>
@@ -132,7 +137,7 @@ ToDo：<br>
   <li>(Done 2017-09-24)<s>35、「英/半」模式時，切換「英/全」應該要從半透明變顯示</s></li>
   <li>(Done 2017-09-24)<s>36、增加遊戲模式使用情景，按,lock變成遊戲模式，按,unlock回到正常模式</s></li>
   <li>37、支援「瑲珩版嘸蝦米表格」</li>
-  <li>38、支援「fcitx裡的嘸蝦米表格」</li>
+  <li>(Done 2018-03-22)<s>38、支援「fcitx裡的嘸蝦米表格」</s></li>
   <li>39、支援「泰瑞版小小輸入法」</li>
   <li>40、支援「簡體模式」</li>
   <li>(Done 2017-10-20)<s>41、修正郵局三加二程式無法輸入的問題</s></li>

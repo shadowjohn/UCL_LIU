@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.1
+VERSION=1.2
 is_DEBUG_mode = True
 
 def debug_print(data):
@@ -12,7 +12,8 @@ import sys
 import gtk
 from gtk import gdk
 import hashlib
-import php             
+import php
+import re             
 my = php.kit()
 reload(sys)
 sys.setdefaultencoding('UTF-8')
@@ -98,6 +99,80 @@ if is_all_fault==True and my.is_file("C:\\Program Files\\BoshiamyTIP\\liu-uni.ta
   is_need_trans_tab=True
   is_need_trans_cin=True
 
+# 2018-03-22 加入 fcitx 輸入法支援
+if is_all_fault==True and my.is_file(PWD + "\\fcitx_boshiamy.txt")==True:
+  #將 fcitx_boshiamy.txt 轉成 正常的 liu.cin、然後轉成 liu.json
+  debug_print("Run fcitx ...")
+  my.copy(PWD+"\\fcitx_boshiamy.txt",PWD+"\\liu.cin");
+  data = my.file_get_contents(PWD+"\\liu.cin");
+  data = my.str_replace("键码=,.'abcdefghijklmnopqrstuvwxyz[]\n","",data);
+  data = my.str_replace("码长=5\n","",data);
+  data = my.str_replace("[数据]",'''%gen_inp
+%ename liu
+%cname 肥米
+%encoding UTF-8
+%selkey 0123456789
+%keyname begin
+a Ａ
+b Ｂ
+c Ｃ
+d Ｄ
+e Ｅ
+f Ｆ
+g Ｇ
+h Ｈ
+i Ｉ
+j Ｊ
+k Ｋ
+l Ｌ
+m Ｍ
+n Ｎ
+o Ｏ
+p Ｐ
+q Ｑ
+r Ｒ
+s Ｓ
+t Ｔ
+u Ｕ
+v Ｖ
+w Ｗ
+x Ｘ
+y Ｙ
+z Ｚ
+, ，
+. ．
+' ’
+[ 〔
+] 〔
+%keyname end
+%chardef begin
+''',data);
+  #這版的日文很怪，正常的 a, 、 s, 都有怪字，我看全拿掉，用 j開頭的版本
+  bad_words = [];
+  res = re.findall('^(?!j)(\w+[,\.]\w*) (.*)\n',data,re.M);
+  for k in res:
+    d=" ".join(k);
+    bad_words.append(d);
+  #然後修正看不到的奇怪字
+  #bad_words = ['','','','']
+  mdata = my.explode("\n",data);
+  new_mdata = [];
+  for line in mdata:
+    if not any(bad_word in line for bad_word in bad_words):
+      new_mdata.append(line);
+  data = my.implode("\n",new_mdata);
+  #然後修正日文 ja, = あ 也相容 a, = あ
+  res = re.findall('j(\w*[,\.]) (.*)\n',data,re.M);
+  #print(res) 
+  for k in res:
+    d=" ".join(k);
+    data = data + d +"\n";  
+  data = data + "%chardef end";
+  my.file_put_contents(PWD+"\\liu.cin",data);
+  is_need_trans_tab = False;
+  is_need_trans_cin = True;
+  is_all_fault = False;  
+  
 if is_all_fault == True:
   message = gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)
   message.set_markup("無字根檔，請購買正版嘸蝦米，將「C:\\windows\\SysWOW64\\liu-uni.tab」或「C:\\Program Files\\BoshiamyTIP\\liu-uni.tab」與uclliu.exe放在一起執行")  
