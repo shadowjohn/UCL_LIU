@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-VERSION=1.3
-is_DEBUG_mode = True
+VERSION=1.2
+is_DEBUG_mode = False
 
 def debug_print(data):
   global is_DEBUG_mode
