@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.2
+VERSION=1.3
 is_DEBUG_mode = True
 
 def debug_print(data):
@@ -217,6 +217,7 @@ if is_need_trans_cin==True:
 last_key = "" #to save last 7 word for game mode 
 flag_is_win_down=False
 flag_is_shift_down=False
+flag_is_ctrl_down=False
 flag_is_play_otherkey=False
 play_ucl_label=""
 ucl_find_data=[]
@@ -590,6 +591,7 @@ def OnKeyboardEvent(event):
   global last_key
   global flag_is_win_down
   global flag_is_shift_down
+  global flag_is_ctrl_down    
   global flag_is_play_otherkey
   global play_ucl_label
   global ucl_find_data
@@ -798,14 +800,33 @@ def OnKeyboardEvent(event):
       return True            
       
   else:
-    debug_print("Debug3")    
+    debug_print("DDDDDDDDD: " + event.Key + "," + str(event.KeyID) + "," +  event.MessageName)
+    debug_print("Debug3")  
+    debug_print(event.KeyID)
+    # 2018-03-27 此部分修正「英/全」時，按Ctrl A 無效的問題，或ctrl+esc等問題
+    # 修正enter、winkey 在「英/全」的狀況
+    if event.MessageName == "key down" and event.KeyID == 13:
+      return True
+    if event.MessageName == "key down" and ( event.KeyID == 91 or event.KeyID == 92): #winkey
+      flag_is_win_down=True
+      return True
+    if event.MessageName == "key down" and flag_is_win_down == True : # win key
+      flag_is_win_down=False
+      return True    
+    if event.MessageName == "key down" and ( event.KeyID == 231 or event.KeyID == 162 or event.KeyID == 163):
+      flag_is_ctrl_down=True
+      debug_print("Ctrl key")
+      return True
+    if flag_is_ctrl_down == True:
+      flag_is_ctrl_down=False
+      return True       
     if event.MessageName == "key down" and (event.Key == "Lshift" or event.Key == "Rshift"):      
       flag_is_shift_down=True
       flag_is_play_otherkey=False      
-      debug_print("Debug331")
-    if event.MessageName == "key down" and event.Key != "Lshift" and event.Key != "Rshift":
-      flag_is_play_otherkey=True
-      debug_print("Debug332")          
+      debug_print("Debug331")                
+    if event.MessageName == "key down" and (event.Key != "Lshift" and event.Key != "Rshift"): 
+      flag_is_play_otherkey=True                                                                               
+      debug_print("Debug332")                
     if event.MessageName == "key up" and (event.Key == "Lshift" or event.Key == "Rshift"):
       debug_print("Debug333")
       #shift
@@ -816,7 +837,6 @@ def OnKeyboardEvent(event):
         debug_print("Debug315")    
       debug_print("Debug314")
       return True
-    
     #if event.MessageName == "key up" and len(event.Key) == 1 and is_hf(None)==False:
     #  k = widen(event.Key)
     #  print("335 event.Key to Full:%s %s" % (event.Key,k))
@@ -826,7 +846,7 @@ def OnKeyboardEvent(event):
     #  k = widen(event.Key)      
     #  senddata(k) 
     debug_print("Debug3: %s" % (event.Transition))
-    if event.KeyID==8 or event.KeyID==20 or event.KeyID==45 or event.KeyID==46 or event.KeyID==36 or event.KeyID==33 or event.KeyID==34 or event.KeyID==35 or event.KeyID==160 or event.KeyID==161 or event.KeyID==9 or event.KeyID == 37 or event.KeyID == 38 or event.KeyID == 39 or event.KeyID == 40: #↑←→↓
+    if event.KeyID==8 or event.KeyID==20 or event.KeyID==45 or event.KeyID==46 or event.KeyID==36 or event.KeyID==33 or event.KeyID==34 or event.KeyID==35 or event.KeyID==160 or event.KeyID==161 or event.KeyID==9 or event.KeyID == 37 or event.KeyID == 38 or event.KeyID == 39 or event.KeyID == 40 or event.KeyID == 231 or event.KeyID == 162 or event.KeyID == 163: #↑←→↓
       return True
     if event.MessageName == "key down" and len( str(chr(event.Ascii)) ) == 1 and is_hf(None)==False and event.Injected == 0 :
       k = widen( str(chr(event.Ascii)) )
