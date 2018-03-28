@@ -25,4 +25,5 @@ exe = EXE(pyz,
           debug=True,
           strip=False,
           upx=True,
+          runtime_tmpdir=None,
           console=True )
