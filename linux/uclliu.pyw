@@ -1,7 +1,8 @@
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 VERSION=1.1
 is_DEBUG_mode = True
-
+is_shutdown = False
 def debug_print(data):
   global is_DEBUG_mode
   if is_DEBUG_mode==True:
@@ -9,6 +10,7 @@ def debug_print(data):
 import threading
 import portalocker
 import os
+import re
 import sys
 import gtk
 from gtk import gdk
@@ -194,6 +196,7 @@ if is_need_trans_cin==True:
 last_key = "" #to save last 7 word for game mode 
 flag_is_win_down=False
 flag_is_shift_down=False
+flag_is_ctrl_down=False
 flag_is_play_otherkey=False
 play_ucl_label=""
 ucl_find_data=[]
@@ -286,7 +289,9 @@ def gamemode_btn_click(self):
     gamemode_btn.set_label("正常模式")
 def x_btn_click(self):
   print("Bye Bye");
-  sys.exit()
+  global is_shutdown
+  is_shutdown = True
+  #sys.exit(1)
 # draggable
 def winclicked(self, event):
   # make UCLLIU can draggable
@@ -569,6 +574,7 @@ def OnKeyboardEvent(event):
   global last_key
   global flag_is_win_down
   global flag_is_shift_down
+  global flag_is_ctrl_down
   global flag_is_play_otherkey
   global play_ucl_label
   global ucl_find_data
@@ -941,13 +947,14 @@ win.show_all()
 win.set_focus(None)
 hm.start()
 def updateGUI():
+    global is_shutdown
     while gtk.events_pending():
         gtk.main_iteration(False)
+#worker=threading.Thread(target=countdown,args(5,))
+#worker.start()
 while True:
     time.sleep(0.001)
     updateGUI()
-#worker=threading.Thread(target=countdown,args(5,))
-#worker.start()
 #pythoncom.PumpMessages()     
 
 
