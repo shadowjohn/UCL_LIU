@@ -75,6 +75,81 @@ if my.is_file("liu.json") == False:
   else:
     is_need_trans_cin=True  
 
+# 2018-04-02 加入 fcitx 輸入法支援
+if is_all_fault==True and my.is_file(PWD + "/fcitx_boshiamy.txt")==True:
+  #將 fcitx_boshiamy.txt 轉成 正常的 liu.cin、然後轉成 liu.json
+  debug_print("Run fcitx ...")
+  my.copy(PWD+"/fcitx_boshiamy.txt",PWD+"/liu.cin");
+  data = my.file_get_contents(PWD+"/liu.cin");
+  data = my.str_replace("键码=,.'abcdefghijklmnopqrstuvwxyz[]\n","",data);
+  data = my.str_replace("码长=5\n","",data);
+  data = my.str_replace("[数据]",'''%gen_inp
+%ename liu
+%cname 肥米
+%encoding UTF-8
+%selkey 0123456789
+%keyname begin
+a Ａ
+b Ｂ
+c Ｃ
+d Ｄ
+e Ｅ
+f Ｆ
+g Ｇ
+h Ｈ
+i Ｉ
+j Ｊ
+k Ｋ
+l Ｌ
+m Ｍ
+n Ｎ
+o Ｏ
+p Ｐ
+q Ｑ
+r Ｒ
+s Ｓ
+t Ｔ
+u Ｕ
+v Ｖ
+w Ｗ
+x Ｘ
+y Ｙ
+z Ｚ
+, ，
+. ．
+' ’
+[ 〔
+] 〔
+%keyname end
+%chardef begin
+''',data);
+  #這版的日文很怪，正常的 a, 、 s, 都有怪字，我看全拿掉，用 j開頭的版本
+  bad_words = [];
+  res = re.findall('^(?!j)(\w+[,\.]\w*) (.*)\n',data,re.M);
+  for k in res:
+    d=" ".join(k);
+    bad_words.append(d);
+  #然後修正看不到的奇怪字
+  #bad_words = ['','','','']
+  mdata = my.explode("\n",data);
+  new_mdata = [];
+  for line in mdata:
+    if not any(bad_word in line for bad_word in bad_words):
+      new_mdata.append(line);
+  data = my.implode("\n",new_mdata);
+  #然後修正日文 ja, = あ 也相容 a, = あ
+  res = re.findall('j(\w*[,\.]) (.*)\n',data,re.M);
+  #print(res) 
+  for k in res:
+    d=" ".join(k);
+    data = data + d +"\n";  
+  data = data + "%chardef end";
+  my.file_put_contents(PWD+"/liu.cin",data);
+  is_need_trans_tab = False;
+  is_need_trans_cin = True;
+  is_all_fault = False;  
+  
+
 if is_all_fault == True:
   message = gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)
   message.set_markup("無字根檔，請購買正版嘸蝦米，將「C:\\windows\\SysWOW64\\liu-uni.tab」或「C:\\Program Files\\BoshiamyTIP\\liu-uni.tab」與uclliu放在一起執行")  
@@ -700,15 +775,34 @@ def OnKeyboardEvent(event):
       return True            
       
   else:
-    debug_print("Debug3")    
-    if event.MessageName == "key down" and (event.Key == "Lshift" or event.Key == "Rshift" or event.Key == "Shift_L" or event.Key == "Shift_R"):      
+    debug_print("DDDDDDDDD: " + event.Key + "," + str(event.KeyID) + "," +  event.MessageName)
+    debug_print("Debug3")  
+    debug_print(event.KeyID)
+    # 2018-03-27 此部分修正「英/全」時，按Ctrl A 無效的問題，或ctrl+esc等問題
+    # 修正enter、winkey 在「英/全」的狀況
+    if event.MessageName == "key down" and event.KeyID == 13:
+      return True
+    if event.MessageName == "key down" and ( event.KeyID == 91 or event.KeyID == 92): #winkey
+      flag_is_win_down=True
+      return True
+    if event.MessageName == "key down" and flag_is_win_down == True : # win key
+      flag_is_win_down=False
+      return True    
+    if event.MessageName == "key down" and ( event.KeyID == 231 or event.KeyID == 162 or event.KeyID == 163):
+      flag_is_ctrl_down=True
+      debug_print("Ctrl key")
+      return True
+    if flag_is_ctrl_down == True:
+      flag_is_ctrl_down=False
+      return True       
+    if event.MessageName == "key down" and (event.Key == "Lshift" or event.Key == "Rshift"):      
       flag_is_shift_down=True
       flag_is_play_otherkey=False      
-      debug_print("Debug331")
-    if event.MessageName == "key down" and event.Key != "Lshift" and event.Key != "Shift_L" and event.Key !="Shift_R" and event.Key != "Rshift":
-      flag_is_play_otherkey=True
-      debug_print("Debug332")          
-    if event.MessageName == "key up" and (event.Key == "Lshift" or event.Key =="Shift_L" or event.Key =="Shift_R" or event.Key == "Rshift"):
+      debug_print("Debug331")                
+    if event.MessageName == "key down" and (event.Key != "Lshift" and event.Key != "Rshift"): 
+      flag_is_play_otherkey=True                                                                               
+      debug_print("Debug332")                
+    if event.MessageName == "key up" and (event.Key == "Lshift" or event.Key == "Rshift"):
       debug_print("Debug333")
       #shift
       flag_is_shift_down=False
