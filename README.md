@@ -161,6 +161,7 @@ ToDo：<br>
   <li>(Done 2018-03-27)<s>51、自己重寫cin->json (cintojson.py) 這段的程式碼，速度太慢</s></li>
   <li>(Done 2018-03-27)<s>52、修正「英/全」時的Enter有bug</s></li>  
   <li>(Done 2018-04-05)<s>53、修正 putty 裡 vim 裡打中文字的問題</s></li>
+  <li>(Done 2018-04-05)<s>54、修正 putty 裡 vim 裡打中文字的速度</s></li>  
 </ul>
 <br>
 版權：<br>

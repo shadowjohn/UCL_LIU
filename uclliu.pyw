@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 VERSION=1.3
-is_DEBUG_mode = True
+is_DEBUG_mode = False
 
 def debug_print(data):
   global is_DEBUG_mode
@@ -14,6 +14,7 @@ from gtk import gdk
 import hashlib
 import php
 import re
+import win32api
 #import pywinauto             
 #pwa = pywinauto.keyboard
 my = php.kit()
@@ -504,11 +505,20 @@ def senddata(data):
       #https://win32com.goermezer.de/microsoft/windows/controlling-applications-via-sendkeys.html
       #shell.SendKeys("+{INSERT}", 0)
       #2018-04-05 修正 vim 下打中文字的問題
-      SendKeysCtypes.SendKeys("+{INSERT}")
+      SendKeysCtypes.SendKeys("+{INSERT}",pause=0)
+      #0xA0 = left shift
+      #0x2d = insert            
+      #win32api.keybd_event(0x10, 1,0,0)
+      #win32api.keybd_event(45, 1,0,0)      
+      #time.sleep(.05)            
+      #win32api.keybd_event(45,0 ,win32con.KEYEVENTF_KEYUP ,0)
+      #win32api.keybd_event(0x10,0 ,win32con.KEYEVENTF_KEYUP ,0)
+      
+      #win32api.keybd_event(win32con.SHIFT_PRESSED, 0, 0x2d, 0,win32con.KEYEVENTF_KEYUP ,0)
        
       #reload(sys)                                    
       #sys.setdefaultencoding('UNICODE') 
-      #SendKeysCtypes.SendKeys("肥".encode("UTF-8",0))
+      #SendKeysCtypes.SendKeys("肥".encode("UTF-8"),pause=0)
       #reload(sys)                                    
       #sys.setdefaultencoding('UTF-8')
       #也許要設delay...
@@ -521,7 +531,7 @@ def senddata(data):
   for k in f_big5_arr:
     if my.is_string_like(my.strtolower(p.exe()),k):
       debug_print("Debug_f_big5_arr")
-      #SendKeysCtypes.SendKeys(my.utf8tobig5(data))
+      #SendKeysCtypes.SendKeys(my.utf8tobig5(data),pause=0)
       check_kind="2"
       win32clipboard.OpenClipboard()
       orin_clip=""
@@ -545,13 +555,13 @@ def senddata(data):
     #reload(sys)                                    
     #sys.setdefaultencoding('UTF-8')
     #print("CP950")
-    SendKeysCtypes.SendKeys(data.decode("UTF-8"),0)
+    SendKeysCtypes.SendKeys(data.decode("UTF-8"),pause=0)
     #reload(sys)
     #sys.setdefaultencoding('UTF-8')
   
   #reload(sys)                                    
   #sys.setdefaultencoding('auto')
-  #SendKeysCtypes.SendKeys(data.decode("auto"),0)
+  #SendKeysCtypes.SendKeys(data.decode("auto"),pause=0)
   
 def use_pinyi(data):
   global same_sound_data
