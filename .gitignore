@@ -14,3 +14,8 @@ linux/liu.json
 linux/*.pyc
 linux/test/*
 linux/3parts/*
+boshiamy.txt
+fcitx_boshiamy.txt
+linux/boshiamy.txt
+linux/old/*
+linux/fcitx_boshiamy.txt
