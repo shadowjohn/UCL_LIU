@@ -11,7 +11,7 @@
 最初開發日期：2017-06-16 11:24<br>
 最後更新日期：2018-03-27 23:27
 <br>
-版本：V 1.2<br>
+版本：V 1.3<br>
 <br>
 下載位置：<br>
 　　1.主程式：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
@@ -41,6 +41,8 @@
     修正「英/全」一些按鍵如 win、ctrl、enter 等問題
     將 cintojson.py 整支重寫，改成此輸入法需要的部分，初始化 cin -> json 速度就不會像以前那麼慢了! 
     
+    (2018-04-05) V1.3 版：
+    修正 putty 在 vim 時，打中文無法正常出字的問題
 <br>
 開發工具：<br>
   <ul>
@@ -158,6 +160,7 @@ ToDo：<br>
   <li>(Done 2018-02-23)<s>50、同修正6，支援 VRSF 對應 1234 字功能</s></li>
   <li>(Done 2018-03-27)<s>51、自己重寫cin->json (cintojson.py) 這段的程式碼，速度太慢</s></li>
   <li>(Done 2018-03-27)<s>52、修正「英/全」時的Enter有bug</s></li>  
+  <li>(Done 2018-04-05)<s>53、修正 putty 裡 vim 裡打中文字的問題</s></li>
 </ul>
 <br>
 版權：<br>

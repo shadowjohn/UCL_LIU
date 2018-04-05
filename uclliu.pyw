@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.2
+VERSION=1.3
 is_DEBUG_mode = True
 
 def debug_print(data):
@@ -13,7 +13,9 @@ import gtk
 from gtk import gdk
 import hashlib
 import php
-import re             
+import re
+#import pywinauto             
+#pwa = pywinauto.keyboard
 my = php.kit()
 reload(sys)
 sys.setdefaultencoding('UTF-8')
@@ -476,12 +478,13 @@ def senddata(data):
   #print("PP:%s" % (pp))
   debug_print("PP:%s" % (pp))
   p=psutil.Process(pp)
+  debug_print("ProcessP:%s" % (p))
   f_arr = [ "putty","pietty","pcman","xyplorer" ]
   f_big5_arr = [ "zip32w" ]
   check_kind="0"
   for k in f_arr:
     #break;
-    if my.is_string_like(my.strtolower(p.exe()),k):
+    if my.is_string_like(my.strtolower(p.exe()),k):  
       check_kind="1"      
       
       win32clipboard.OpenClipboard()
@@ -498,7 +501,11 @@ def senddata(data):
       win32clipboard.EmptyClipboard()#這一行特別重要，經過實驗如果不加這一行的話會做動不正常
       win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, data)
       win32clipboard.CloseClipboard()
-      shell.SendKeys("+{INSERT}", 0) 
+      #https://win32com.goermezer.de/microsoft/windows/controlling-applications-via-sendkeys.html
+      #shell.SendKeys("+{INSERT}", 0)
+      #2018-04-05 修正 vim 下打中文字的問題
+      SendKeysCtypes.SendKeys("+{INSERT}")
+       
       #reload(sys)                                    
       #sys.setdefaultencoding('UNICODE') 
       #SendKeysCtypes.SendKeys("肥".encode("UTF-8",0))
