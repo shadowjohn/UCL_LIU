@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-VERSION=1.3
-is_DEBUG_mode = False
+VERSION=1.4
+is_DEBUG_mode = True
 
 def debug_print(data):
   global is_DEBUG_mode
@@ -101,7 +101,61 @@ if is_all_fault==True and my.is_file("C:\\Program Files\\BoshiamyTIP\\liu-uni.ta
   is_all_fault=False
   is_need_trans_tab=True
   is_need_trans_cin=True
-
+# 2018-04-08 加入 terry 輸入法支援
+if is_all_fault==True and my.is_file(PWD + "\\terry_boshiamy.txt")==True:
+  #將 terry_boshiamy.txt 轉成 正常的 liu.cin、然後轉成 liu.json
+  debug_print("Run terry ...")
+  my.copy(PWD+"\\terry_boshiamy.txt",PWD+"\\liu.cin");
+  data = my.file_get_contents(PWD+"\\liu.cin");
+  m = my.explode("## 無蝦米-大五碼-常用漢字：",data);
+  data = my.trim(m[1])
+  # 修正 cin 用的表頭
+  data = '''%gen_inp
+%ename liu
+%cname 肥米
+%encoding UTF-8
+%selkey 0123456789
+%keyname begin
+a Ａ
+b Ｂ
+c Ｃ
+d Ｄ
+e Ｅ
+f Ｆ
+g Ｇ
+h Ｈ
+i Ｉ
+j Ｊ
+k Ｋ
+l Ｌ
+m Ｍ
+n Ｎ
+o Ｏ
+p Ｐ
+q Ｑ
+r Ｒ
+s Ｓ
+t Ｔ
+u Ｕ
+v Ｖ
+w Ｗ
+x Ｘ
+y Ｙ
+z Ｚ
+, ，
+. ．
+' ’
+[ 〔
+] 〔
+%keyname end
+%chardef begin
+''' + data +"\n%chardef end\n";
+  my.file_put_contents(PWD+"\\liu.cin",data);
+  is_need_trans_tab = False;
+  is_need_trans_cin = True;
+  is_all_fault = False;
+  
+  
 # 2018-03-22 加入 fcitx 輸入法支援
 if is_all_fault==True and my.is_file(PWD + "\\fcitx_boshiamy.txt")==True:
   #將 fcitx_boshiamy.txt 轉成 正常的 liu.cin、然後轉成 liu.json

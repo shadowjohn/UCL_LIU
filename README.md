@@ -9,9 +9,9 @@
 作者：羽山秋人 (<a target="_blank" href="http://3wa.tw">http://3wa.tw</a>)<br>
 <br>
 最初開發日期：2017-06-16 11:24<br>
-最後更新日期：2018-03-27 23:27
+最後更新日期：2018-04-08 23:39
 <br>
-版本：V 1.3<br>
+版本：V 1.4<br>
 <br>
 下載位置：<br>
 　　1.主程式：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
@@ -43,6 +43,12 @@
     
     (2018-04-05) V1.3 版：
     修正 putty 在 vim 時，打中文無法正常出字的問題
+    
+    (2018-04-08) V1.4 版：
+    支援 Terry_Yong 的 泰瑞版小小輸入法，將 terry_yong.zip 解開，資料夾 mb 裡的 Boshiamy.txt 改名成 terry_boshiamy.txt 跟主程式放一起，
+    就可以把terry_boshiamy.txt 轉成 liu.cin，再轉 liu.json 來使用。
+    此版本筆者測試後，發現無日文，如果不需使用日文是勘用。
+    
 <br>
 開發工具：<br>
   <ul>
@@ -146,7 +152,7 @@ ToDo：<br>
   <li>(Done 2017-09-24)<s>36、增加遊戲模式使用情景，按,lock變成遊戲模式，按,unlock回到正常模式</s></li>
   <li>(Skip 2018-03-22)<s>37、支援「瑲珩版嘸蝦米表格」</s>沒找到這個版本的嘸蝦米表格</li>
   <li>(Done 2018-03-22)<s>38、支援「fcitx裡的嘸蝦米表格」</s></li>
-  <li>39、支援「泰瑞版小小輸入法」</li>
+  <li>(Done 2018-04-08)<s>39、支援「泰瑞版小小輸入法」</s></li>
   <li>40、支援「簡體模式」</li>
   <li>(Done 2017-10-20)<s>41、修正郵局三加二程式無法輸入的問題</s></li>
   <li>(Done 2017-10-24)<s>42、修正「肥/全」模式時，部分全形字只出半形的問題</s></li>
