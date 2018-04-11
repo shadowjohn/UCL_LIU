@@ -48,6 +48,11 @@
     支援 Terry_Yong 的 泰瑞版小小輸入法，將 terry_yong.zip 解開，資料夾 mb 裡的 Boshiamy.txt 改名成 terry_boshiamy.txt 跟主程式放一起，
     就可以把terry_boshiamy.txt 轉成 liu.cin，再轉 liu.json 來使用。
     此版本筆者測試後，發現無日文，如果不需使用日文是勘用。
+
+    (2018-04-11) V1.5 版：
+    將「英/半」的半透明無置頂，改成置「底」，其他狀況「置頂」
+    改寫gtk.main() 改成 gtk.main_iteration(False) 來處理 UI 更新
+    (感謝老炳幫忙測置頂的bug)
     
 <br>
 開發工具：<br>
@@ -168,6 +173,7 @@ ToDo：<br>
   <li>(Done 2018-03-27)<s>52、修正「英/全」時的Enter有bug</s></li>  
   <li>(Done 2018-04-05)<s>53、修正 putty 裡 vim 裡打中文字的問題</s></li>
   <li>(Done 2018-04-05)<s>54、修正 putty 裡 vim 裡打中文字的速度</s></li>  
+  <li>(Done 2018-04-11)<s>55、修正UI置頂的問題</s></li>  
 </ul>
 <br>
 版權：<br>

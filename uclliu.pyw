@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.4
+VERSION=1.5
 is_DEBUG_mode = True
 
 def debug_print(data):
@@ -329,8 +329,12 @@ def toAlphaOrNonAlpha():
   hf_kind = hf_btn.get_label()
   if uclen_btn.get_label()=="英" and hf_kind=="半":
     win.set_opacity(0.2)
+    win.set_keep_above(False)
+    win.set_keep_below(True)    
   else:
     win.set_opacity(1)
+    win.set_keep_above(True)
+    win.set_keep_below(False)
 def toggle_ucl():
   global uclen_btn
   global play_ucl_label
@@ -341,9 +345,11 @@ def toggle_ucl():
     play_ucl_label=""
     type_label_set_text()
     win.set_keep_above(False)
+    win.set_keep_below(True)
   else:
     uclen_btn.set_label("肥")
     win.set_keep_above(True)
+    win.set_keep_below(False)
   uclen_label=uclen_btn.get_child()
   uclen_label.modify_font(pango.FontDescription('標楷體 bold 22'))
                                               
@@ -379,9 +385,9 @@ def uclen_btn_click(self):
 def hf_btn_click(self):
   kind=self.get_label()
   if kind=="半":
-    self.set_label("全")
+    self.set_label("全")    
   else:
-    self.set_label("半")
+    self.set_label("半")    
   hf_label=self.get_child()
   hf_label.modify_font(pango.FontDescription('標楷體 bold 22'))
   toAlphaOrNonAlpha()
@@ -658,7 +664,7 @@ def use_pinyi(data):
   #finds=my.str_replace(data," ",finds)
   #finds=my.str_replace("  "," ",finds)
   
-def OnKeyboardEvent(event):
+def OnKeyboardEvent(event):  
   global last_key
   global flag_is_win_down
   global flag_is_shift_down
@@ -705,16 +711,21 @@ def OnKeyboardEvent(event):
       last_key= ""   
       message = gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)      
       message.set_markup( ("肥米輸入法版本：%s" % VERSION) )
-      message.show()  
+      toAlphaOrNonAlpha()
+      message.show()
+      toAlphaOrNonAlpha()  
       response = message.run()
+      toAlphaOrNonAlpha()
       debug_print("Show Version")
       #print(gtk.ResponseType.BUTTONS_OK)
       if response == -5 or response == -4:
-        #message.hide()  
+        #message.hide()
+        toAlphaOrNonAlpha()  
         message.destroy()            
         play_ucl_label=""
         ucl_find_data=[]
         type_label_set_text()
+        toAlphaOrNonAlpha()
         return False      
   #print("LAST_KEY:" + last_key)
   if gamemode_btn.get_label()=="遊戲模式":      
@@ -1022,10 +1033,19 @@ win.add(vbox)
 
 win.show_all()
 win.set_focus(None)
+#set_interval(1)
 
-gtk.main()
-
+#gtk.main()
+def updateGUI():
+  #global is_shutdown
+  while gtk.events_pending():
+    gtk.main_iteration(False)
+    toAlphaOrNonAlpha()
+while True:
+  time.sleep(0.001)
+  updateGUI()      
 pythoncom.PumpMessages()     
 
-mainloop()  
+#mainloop()
+  
  
