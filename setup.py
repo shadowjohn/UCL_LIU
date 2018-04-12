@@ -3,7 +3,6 @@ import py2exe, sys, os
 sys.argv.append('py2exe')
 setup(
     data_files = [
-      ('',['liu.json']),
       ('',['api-ms-win-core-errorhandling-l1-1-1.dll']),
       ('',['api-ms-win-core-libraryloader-l1-2-0.dll']),
       ('',['api-ms-win-core-processthreads-l1-1-2.dll']),

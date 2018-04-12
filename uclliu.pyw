@@ -26,7 +26,7 @@ def md5_file(fileName):
     try:
         fd = open(fileName,"rb")
     except IOError:
-        print "Reading file has problem:", filename
+        print("Reading file has problem:", filename)
         return
     x = fd.read()
     fd.close()
