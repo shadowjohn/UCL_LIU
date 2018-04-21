@@ -1,1 +1,1 @@
-pyinstaller uclliu.pyw -w -F
+c:\python27\scripts\pyinstaller uclliu.pyw -w -F

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 VERSION=1.5
-is_DEBUG_mode = True
+is_DEBUG_mode = False
 
 def debug_print(data):
   global is_DEBUG_mode
@@ -26,7 +26,7 @@ def md5_file(fileName):
     try:
         fd = open(fileName,"rb")
     except IOError:
-        print "Reading file has problem:", filename
+        print("Reading file has problem:", filename)
         return
     x = fd.read()
     fd.close()
