@@ -54,6 +54,16 @@
     改寫gtk.main() 改成 gtk.main_iteration(False) 來處理 UI 更新
     (感謝老炳幫忙測置頂的bug)
     
+    (2018-04-21) 補充說明：
+    因為最近在使用，發現肥米自己關閉，然後整個exe檔消失，查了一下發現被 Windows Defender 誤判為病毒了
+    Trojan:Win32/Fuery.A!cl、HackToo:Win32/Keygen
+    就把uclliu.exe上傳至微軟自清送驗~
+    https://www.microsoft.com/en-us/wdsi/submission/70669843-8642-4b61-bdb2-561243f78af6
+    等了約1小時，就收到 Final determination : Not malware
+    <img src="http://3wa.tw/uploads/upload/uclliu_save.png">
+    
+     
+    
 <br>
 開發工具：<br>
   <ul>
