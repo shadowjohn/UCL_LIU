@@ -60,9 +60,7 @@
     就把uclliu.exe上傳至微軟自清送驗~
     https://www.microsoft.com/en-us/wdsi/submission/70669843-8642-4b61-bdb2-561243f78af6
     等了約1小時，就收到 Final determination : Not malware
-    <img src="http://3wa.tw/uploads/upload/uclliu_save.png">
-    
-     
+       
     
 <br>
 開發工具：<br>
@@ -115,6 +113,7 @@
     <li>11、build_debug.bat 是方便debug用的版本，運行時還會保留command介面</li>
   </ul>
 <br>
+
 使用方法：<br>
 　　1、您可以只下載dist/uclliu.exe<br>
 　　2、將 「liu-uni.tab 或 liu.cin 或 liu.json」任一種檔案 與 uclliu.exe 放一起<br>
@@ -126,7 +125,8 @@
 　　6、如果需要使用如「'ucl」這種同音字查詢，請將 dist\pinyi.txt 也與uclliu.exe 放一起<br>
 　　7、增加一個遊戲模式的按鈕，只要按「,,,lock」就會變成遊戲模式，再按「,,,unlock」回到正常模式，這樣玩CS殺人時就可以消音走路了<br>
 　　8、增加版本查詢功能，只要按「,,,version」，就會跳出版本提示
-<br>       
+<br>
+       
 ToDo：<br>
 <ul>
   <li>(Done)<s>1、(嚴重)「送出字元」的方法，試了很多send key一直無法解決 send unicode的問題，暫時使用「剪貼簿」的Ctrl+V來實作貼上文字的功能</s></li>
