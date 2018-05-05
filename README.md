@@ -188,9 +188,9 @@ ToDo：<br>
   <li>(Done 2018-04-05)<s>53、修正 putty 裡 vim 裡打中文字的問題</s></li>
   <li>(Done 2018-04-05)<s>54、修正 putty 裡 vim 裡打中文字的速度</s></li>  
   <li>(Done 2018-04-11)<s>55、修正UI置頂的問題</s></li>
-  <li>(Done 2018-05-05)<s>56、右邊數字鍵的 . 直接輸出即可</li>
-  <li>(Done 2018-05-05)<s>57、移除uclliu_debug，改用 -d 即可進入 debug 模式</li>
-  <li>(Done 2018-05-05)<s>58、調整顯示字型大小</li>  
+  <li>(Done 2018-05-05)<s>56、右邊數字鍵的 . 直接輸出即可</s></li>
+  <li>(Done 2018-05-05)<s>57、移除uclliu_debug，改用 -d 即可進入 debug 模式</s></li>
+  <li>(Done 2018-05-05)<s>58、調整顯示字型大小</s></li>  
 </ul>
 <br>
 版權：<br>
