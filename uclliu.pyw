@@ -1,11 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.5
-is_DEBUG_mode = False
-
-def debug_print(data):
-  global is_DEBUG_mode
-  if is_DEBUG_mode==True:
-    print(data)
+VERSION=1.6
 import portalocker
 import os
 import sys
@@ -20,6 +14,30 @@ import win32api
 my = php.kit()
 reload(sys)
 sys.setdefaultencoding('UTF-8')
+
+# Debug 模式
+is_DEBUG_mode = False
+
+# GUI Font
+GUI_FONT_12 = my.utf8tobig5("roman bold 12");
+GUI_FONT_14 = my.utf8tobig5("roman bold 14");
+GUI_FONT_16 = my.utf8tobig5("roman bold 16");
+GUI_FONT_18 = my.utf8tobig5("roman bold 18");
+GUI_FONT_20 = my.utf8tobig5("roman bold 20");
+GUI_FONT_22 = my.utf8tobig5("roman bold 22");
+GUI_FONT_26 = my.utf8tobig5("roman bold 26");
+
+message = ("\nUCLLIU 肥米輸入法\nBy 羽山秋人(http://3wa.tw)\nVersion: %s\n\n若要使用 Debug 模式：uclliu.exe -d\n" % (VERSION));
+if len(sys.argv)!=2:
+  print( my.utf8tobig5(message) );
+elif sys.argv[1]=="-d":
+  is_DEBUG_mode = True
+
+def debug_print(data):
+  global is_DEBUG_mode
+  if is_DEBUG_mode==True:
+    print(data)
+    
 def md5_file(fileName):
     """Compute md5 hash of the specified file"""
     m = hashlib.md5()
@@ -340,6 +358,7 @@ def toggle_ucl():
   global play_ucl_label
   global win
   global debug_print
+  global GUI_FONT_22
   if uclen_btn.get_label()=="肥":
     uclen_btn.set_label("英")
     play_ucl_label=""
@@ -351,7 +370,7 @@ def toggle_ucl():
     win.set_keep_above(True)
     win.set_keep_below(False)
   uclen_label=uclen_btn.get_child()
-  uclen_label.modify_font(pango.FontDescription('標楷體 bold 22'))
+  uclen_label.modify_font(pango.FontDescription(GUI_FONT_22))
                                               
   #window_state_event_cb(None,None)
   debug_print("window_state_event_cb(toggle_ucl)")
@@ -383,13 +402,14 @@ def uclen_btn_click(self):
   toggle_ucl()
   #pass
 def hf_btn_click(self):
+  global GUI_FONT_22
   kind=self.get_label()
   if kind=="半":
     self.set_label("全")    
   else:
     self.set_label("半")    
   hf_label=self.get_child()
-  hf_label.modify_font(pango.FontDescription('標楷體 bold 22'))
+  hf_label.modify_font(pango.FontDescription(GUI_FONT_22))
   toAlphaOrNonAlpha()
   pass
 def is_hf(self):
@@ -403,15 +423,17 @@ def type_label_set_text():
   global type_label
   global play_ucl_label
   global debug_print
+  global GUI_FONT_22
+  global GUI_FONT_20
   type_label.set_label(play_ucl_label)
-  type_label.modify_font(pango.FontDescription('標楷體 bold 22'))
+  type_label.modify_font(pango.FontDescription(GUI_FONT_22))
   if my.strlen(play_ucl_label) > 0:
     debug_print("ShowSearch")
     show_search()
     pass
   else:    
     word_label.set_label("")
-    word_label.modify_font(pango.FontDescription('標楷體 bold 20'))
+    word_label.modify_font(pango.FontDescription(GUI_FONT_20))
     pass 
   return True
 def word_label_set_text():
@@ -419,9 +441,15 @@ def word_label_set_text():
   global ucl_find_data 
   global play_ucl_label
   global is_has_more_page
+  global GUI_FONT_20
+  global GUI_FONT_18
+  global GUI_FONT_16
+  global GUI_FONT_14
+  global GUI_FONT_12
+  
   if play_ucl_label == "":
     word_label.set_label("")
-    word_label.modify_font(pango.FontDescription('標楷體 bold 20'))
+    word_label.modify_font(pango.FontDescription(GUI_FONT_18))
     return
   step=0
   m = []
@@ -433,13 +461,27 @@ def word_label_set_text():
     if is_has_more_page == True:
       tmp = "%s ..." % (tmp)
     word_label.set_label(tmp)
-    word_label.modify_font(pango.FontDescription('標楷體 bold 20'))
+    
+    debug_print(("word_label lens: %d " % (len(tmp))));
+    
+    lt = len(tmp);
+    word_label.modify_font(pango.FontDescription(GUI_FONT_20))
+    '''
+    if lt<=10: 
+      word_label.modify_font(pango.FontDescription(GUI_FONT_20))
+    elif lt>10 and lt<=18:
+      word_label.modify_font(pango.FontDescription(GUI_FONT_18))
+    elif lt>18 and lt<25:
+      word_label.modify_font(pango.FontDescription(GUI_FONT_16))
+    else:
+      word_label.modify_font(pango.FontDescription(GUI_FONT_12))
+    '''
     return True
   except:
     play_ucl_label=""
     play_ucl("")
     word_label.set_label("")
-    word_label.modify_font(pango.FontDescription('標楷體 bold 20'))  
+    word_label.modify_font(pango.FontDescription(GUI_FONT_18))  
     return True
 def show_search():
   #真的要顯示了
@@ -451,7 +493,7 @@ def show_search():
   global same_sound_last_word
   global debug_print
   same_sound_index = 0
-  is_has_more_page=False
+  is_has_more_page = False
   same_sound_last_word=""
   debug_print("ShowSearch1")
   c = my.strtolower(play_ucl_label)
@@ -520,8 +562,8 @@ def senddata(data):
   global same_sound_last_word
   global debug_print
   
-  same_sound_index=0 #回到第零頁
-  is_has_more_page=False #回到沒有分頁
+  same_sound_index = 0 #回到第零頁
+  is_has_more_page = False #回到沒有分頁
   same_sound_last_word=""
   play_ucl_label=""
   ucl_find_data=[]  
@@ -648,13 +690,13 @@ def use_pinyi(data):
   debug_print("Debug Finds: %d " % len(finds))
   debug_print("Debug same_sound_index: %d " % same_sound_index)
   debug_print("Debug same_sound_max_word: %d " % same_sound_max_word)  
-  maxword = same_sound_index+same_sound_max_word
+  maxword = same_sound_index + same_sound_max_word
   if maxword >= len(finds)-1:
     maxword = len(finds)-1
     is_has_more_page = False
   else:
     is_has_more_page = True
-  ucl_find_data=finds[same_sound_index:maxword]
+  ucl_find_data = finds[same_sound_index:maxword]
   debug_print("DEBUG same_sound_index: %d " % same_sound_index)
   same_sound_index=same_sound_index+same_sound_max_word
    
@@ -680,22 +722,24 @@ def OnKeyboardEvent(event):
   #print(dir())  
   #try:  
   #print(event)
-  #print 'MessageName:',event.MessageName
-  #print 'Message:',event.Message
-  #print 'Time:',event.Time
-  #print 'Window:',event.Window
-  #print 'WindowName:',event.WindowName
-  #print 'Ascii:', event.Ascii, chr(event.Ascii)
-  #print 'Key:', event.Key
-  #print 'KeyID:', event.KeyID
-  #print 'ScanCode:', event.ScanCode
-  #print 'Extended:', event.Extended
-  #print 'Injected:', event.Injected
-  #print 'Alt', event.Alt
-  #print 'Transition', event.Transition
-  #print 'IS_UCL', is_ucl()
-  #print '---'
-  #print 'last_key:', last_key[-8:]
+  '''
+  debug_print(('MessageName: %s' % (event.MessageName)))
+  debug_print(('Message: %s' % (event.Message)))
+  debug_print(('Time: %s' % (event.Time)))
+  debug_print(('Window: %s' % (event.Window)))
+  debug_print(('WindowName: %s' % (event.WindowName)))
+  debug_print(('Ascii: %s, %s' % (event.Ascii, chr(event.Ascii))))
+  debug_print(('Key: %s' % (event.Key)))
+  debug_print(('KeyID: %s' % (event.KeyID)))
+  debug_print(('ScanCode: %s' % (event.ScanCode)))
+  debug_print(('Extended: %s' % (event.Extended)))
+  debug_print(('Injected: %s' % (event.Injected)))
+  debug_print(('Alt: %s' % (event.Alt)))
+  debug_print(('Transition: %s' % (event.Transition)))
+  debug_print(('IS_UCL %s' % (is_ucl())))
+  debug_print('---')
+  debug_print(('last_key: %s' % (last_key[-8:])))
+  '''
   if event.MessageName == "key down":
     last_key = last_key + chr(event.Ascii)
     last_key = last_key[-10:]
@@ -766,10 +810,12 @@ def OnKeyboardEvent(event):
     flag_is_shift_down=False    
     debug_print("Debug13")
     return False            
-  if is_ucl():    
+  if is_ucl():
+    debug_print("is ucl")    
     if event.MessageName == "key down" and flag_is_win_down == True : # win key
-      return True 
-    if event.MessageName == "key down" and ( event.Ascii>=48 and event.Ascii <=57) : #0~9 
+      return True
+    #2018-05-05要考慮右邊數字鍵的 . 
+    if event.MessageName == "key down" and ( event.Ascii>=48 and event.Ascii <=57) or (event.Key=="Decimal" and event.Ascii==46) : #0~9 . 
       if len(ucl_find_data)>=1 and int(chr(event.Ascii)) < len(ucl_find_data):
         # send data        
         data = ucl_find_data[int(chr(event.Ascii))]
@@ -788,9 +834,15 @@ def OnKeyboardEvent(event):
         
         debug_print("Debug10")
         #2017-10-24要考慮右邊數字鍵的狀況
-        if is_hf(None)==False and ( event.Ascii==49 or event.Ascii==50 or event.Ascii==51 or event.Ascii==52 or event.Ascii==53 or event.Ascii==54 or event.Ascii==55 or event.Ascii==56 or event.Ascii==57 or event.Ascii==47 or event.Ascii==42 or event.Ascii==45 or event.Ascii==43 or event.Ascii==48 or event.Ascii==46):
+        #2018-05-05要考慮右邊數字鍵的 .
+        # event.Ascii==46 or (event.Key=="Decimal" and event.Ascii==46)
+        # 先出小點好了
+        if is_hf(None)==False and ( event.Ascii==49 or event.Ascii==50 or event.Ascii==51 or event.Ascii==52 or event.Ascii==53 or event.Ascii==54 or event.Ascii==55 or event.Ascii==56 or event.Ascii==57 or event.Ascii==47 or event.Ascii==42 or event.Ascii==45 or event.Ascii==43 or event.Ascii==48):
           kac = event.Ascii        
           k = widen(chr(kac))
+          #if event.Ascii==46:
+          #  senddata("a")
+          #else:
           senddata(k)
           debug_print("Debug100")
           return False
@@ -982,20 +1034,20 @@ vbox.pack_start(hbox, False)
 
 uclen_btn=gtk.Button("肥")
 uclen_label=uclen_btn.get_child()
-uclen_label.modify_font(pango.FontDescription('標楷體 bold 22'))
+uclen_label.modify_font(pango.FontDescription(GUI_FONT_22))
 uclen_btn.connect("clicked",uclen_btn_click)
 uclen_btn.set_size_request(40,40)
 hbox.add(uclen_btn)
 
 hf_btn=gtk.Button("半")
 hf_label=hf_btn.get_child()
-hf_label.modify_font(pango.FontDescription('標楷體 bold 22'))
+hf_label.modify_font(pango.FontDescription(GUI_FONT_22))
 hf_btn.connect("clicked",hf_btn_click)
 hf_btn.set_size_request(40,40)
 hbox.add(hf_btn)
 
 type_label=gtk.Label("")
-type_label.modify_font(pango.FontDescription('標楷體 bold 22'))
+type_label.modify_font(pango.FontDescription(GUI_FONT_22))
 type_label.modify_bg(gtk.STATE_NORMAL, gtk.gdk.Color(6400, 6400, 6440))
 type_label.set_size_request(100,40)
 type_label.set_alignment(xalign=0.1, yalign=0.5) 
@@ -1004,7 +1056,7 @@ f_type.add(type_label)
 hbox.add(f_type)
 
 word_label=gtk.Label("")
-word_label.modify_font(pango.FontDescription('標楷體 bold 20'))
+word_label.modify_font(pango.FontDescription(GUI_FONT_20))
 word_label.modify_bg(gtk.STATE_NORMAL, gtk.gdk.Color(6400, 6400, 6440))
 word_label.set_size_request(350,40)
 word_label.set_alignment(xalign=0.05, yalign=0.5)
@@ -1013,19 +1065,19 @@ f_word.add(word_label)
 hbox.add(f_word)
 
 gamemode_btn=gtk.Button("正常模式")
-gamemode_label=uclen_btn.get_child()
-gamemode_label.modify_font(pango.FontDescription('標楷體 bold 26'))
+gamemode_label=gamemode_btn.get_child()
+gamemode_label.modify_font(pango.FontDescription(GUI_FONT_12))
+gamemode_label.set_label("正常模式")
 gamemode_btn.connect("clicked",gamemode_btn_click)
 gamemode_btn.set_size_request(80,40)
 hbox.add(gamemode_btn)
 
 x_btn=gtk.Button("╳")
-x_label=uclen_btn.get_child()
-x_label.modify_font(pango.FontDescription('標楷體 bold 22'))
+x_label=x_btn.get_child()
+x_label.modify_font(pango.FontDescription(GUI_FONT_14))
 x_btn.connect("clicked",x_btn_click)
 x_btn.set_size_request(40,40)
 hbox.add(x_btn)
-
 
 
 
@@ -1033,6 +1085,11 @@ win.add(vbox)
 
 win.show_all()
 win.set_focus(None)
+
+# 初使化按二次
+#uclen_btn_click(uclen_btn)
+#uclen_btn_click(uclen_btn)
+
 #set_interval(1)
 
 #gtk.main()

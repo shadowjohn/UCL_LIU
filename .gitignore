@@ -8,6 +8,8 @@ screenshot/liu_license.jpg
 liuwords
 dist/old
 dist/old/*
+dist/*.zip
+dist/*.rar
 linux/liu-uni.tab
 linux/liu.cin
 linux/liu.json

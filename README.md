@@ -9,9 +9,9 @@
 作者：羽山秋人 (<a target="_blank" href="http://3wa.tw">http://3wa.tw</a>)<br>
 <br>
 最初開發日期：2017-06-16 11:24<br>
-最後更新日期：2018-04-11 23:50
+最後更新日期：2018-05-05 23:15
 <br>
-版本：V 1.5<br>
+版本：V 1.6<br>
 <br>
 下載位置：<br>
 　　1.主程式：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
@@ -60,7 +60,11 @@
     就把uclliu.exe上傳至微軟自清送驗~
     https://www.microsoft.com/en-us/wdsi/submission/70669843-8642-4b61-bdb2-561243f78af6
     等了約1小時，就收到 Final determination : Not malware
-       
+    
+    (2018-05-05) V1.6 版：
+    (修正)右邊數字鍵的 . 直接輸出即可
+    (修正)移除uclliu_debug，改用 -d 即可進入 debug 模式
+    調整 UI 顯示字型大小     
     
 <br>
 開發工具：<br>
@@ -110,7 +114,7 @@
     <li>8、將買來的嘸蝦米，找到 liu-uni.tab，dist裡提供的pinyi.txt 與主檔 uclliu.pyw 放在一起</li>
     <li>9、執行【python uclliu.pyw】可以跑出程式</li>
     <li>10、編成exe的方法，執行【build.bat】，即可將 uclliu.exe 編到 dist 目錄下</li>
-    <li>11、build_debug.bat 是方便debug用的版本，運行時還會保留command介面</li>
+    <li><s>11、build_debug.bat 是方便debug用的版本，運行時還會保留command介面</s></li>
   </ul>
 <br>
 
@@ -183,7 +187,10 @@ ToDo：<br>
   <li>(Done 2018-03-27)<s>52、修正「英/全」時的Enter有bug</s></li>  
   <li>(Done 2018-04-05)<s>53、修正 putty 裡 vim 裡打中文字的問題</s></li>
   <li>(Done 2018-04-05)<s>54、修正 putty 裡 vim 裡打中文字的速度</s></li>  
-  <li>(Done 2018-04-11)<s>55、修正UI置頂的問題</s></li>  
+  <li>(Done 2018-04-11)<s>55、修正UI置頂的問題</s></li>
+  <li>(Done 2018-05-05)<s>56、右邊數字鍵的 . 直接輸出即可</li>
+  <li>(Done 2018-05-05)<s>57、移除uclliu_debug，改用 -d 即可進入 debug 模式</li>
+  <li>(Done 2018-05-05)<s>58、調整顯示字型大小</li>  
 </ul>
 <br>
 版權：<br>
