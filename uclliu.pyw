@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.6
+VERSION=1.7
 import portalocker
 import os
 import sys
@@ -19,7 +19,7 @@ sys.setdefaultencoding('UTF-8')
 is_DEBUG_mode = False
 
 # GUI Font
-GUI_FONT_12 = my.utf8tobig5("roman bold 12");
+GUI_FONT_12 = my.utf8tobig5("roman 12");
 GUI_FONT_14 = my.utf8tobig5("roman bold 14");
 GUI_FONT_16 = my.utf8tobig5("roman bold 16");
 GUI_FONT_18 = my.utf8tobig5("roman bold 18");
@@ -1067,7 +1067,6 @@ hbox.add(f_word)
 gamemode_btn=gtk.Button("正常模式")
 gamemode_label=gamemode_btn.get_child()
 gamemode_label.modify_font(pango.FontDescription(GUI_FONT_12))
-gamemode_label.set_label("正常模式")
 gamemode_btn.connect("clicked",gamemode_btn_click)
 gamemode_btn.set_size_request(80,40)
 hbox.add(gamemode_btn)
