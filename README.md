@@ -9,9 +9,9 @@
 作者：羽山秋人 (<a target="_blank" href="http://3wa.tw">http://3wa.tw</a>)<br>
 <br>
 最初開發日期：2017-06-16 11:24<br>
-最後更新日期：2018-05-05 23:15
+最後更新日期：2018-05-08 23:15
 <br>
-版本：V 1.6<br>
+版本：V 1.7<br>
 <br>
 下載位置：<br>
 　　1.主程式：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
