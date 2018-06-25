@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.7
+VERSION=1.8
 import portalocker
 import os
 import sys
@@ -119,7 +119,68 @@ if is_all_fault==True and my.is_file("C:\\Program Files\\BoshiamyTIP\\liu-uni.ta
   is_all_fault=False
   is_need_trans_tab=True
   is_need_trans_cin=True
-# 2018-04-08 加入 terry 輸入法支援
+
+# 2018-06-25 加入 RIME liur_trad.dict.yaml 表格支援
+if is_all_fault==True and my.is_file(PWD + "\\liur_trad.dict.yaml")==True:
+  debug_print("Run Rime liur_trad.dict.yaml ...");
+  my.copy(PWD+"\\liur_trad.dict.yaml",PWD+"\\liu.cin");
+  data = my.file_get_contents(PWD+"\\liu.cin");
+  m = my.explode("...",data);
+  data = my.trim(m[1])
+  data = my.str_replace("\t"," ",data);
+  # swap field
+  m = my.explode("\n",data);
+  for i in range(0,len(m)):
+    d = my.explode(" ",m[i]);
+    m[i] = "%s %s" % (d[1],d[0]);
+  data = my.implode("\n",m);  
+  # 修正 cin 用的表頭
+  data = '''%gen_inp
+%ename liu
+%cname 肥米
+%encoding UTF-8
+%selkey 0123456789
+%keyname begin
+a Ａ
+b Ｂ
+c Ｃ
+d Ｄ
+e Ｅ
+f Ｆ
+g Ｇ
+h Ｈ
+i Ｉ
+j Ｊ
+k Ｋ
+l Ｌ
+m Ｍ
+n Ｎ
+o Ｏ
+p Ｐ
+q Ｑ
+r Ｒ
+s Ｓ
+t Ｔ
+u Ｕ
+v Ｖ
+w Ｗ
+x Ｘ
+y Ｙ
+z Ｚ
+, ，
+. ．
+' ’
+[ 〔
+] 〔
+%keyname end
+%chardef begin
+''' + data +"\n%chardef end\n";
+  my.file_put_contents(PWD+"\\liu.cin",data);
+  is_need_trans_tab = False;
+  is_need_trans_cin = True;
+  is_all_fault = False;
+  
+# 2018-04-08 加入 terry 表格支援
 if is_all_fault==True and my.is_file(PWD + "\\terry_boshiamy.txt")==True:
   #將 terry_boshiamy.txt 轉成 正常的 liu.cin、然後轉成 liu.json
   debug_print("Run terry ...")

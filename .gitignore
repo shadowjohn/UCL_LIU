@@ -10,6 +10,7 @@ dist/old
 dist/old/*
 dist/*.zip
 dist/*.rar
+dist/liur_trad.dict.yaml
 linux/liu-uni.tab
 linux/liu.cin
 linux/liu.json
@@ -22,3 +23,4 @@ terry_boshiamy.txt
 linux/boshiamy.txt
 linux/old/*
 linux/fcitx_boshiamy.txt
+字根檔/*
