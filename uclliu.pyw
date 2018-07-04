@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.8
+VERSION=1.9
 import portalocker
 import os
 import sys
@@ -9,6 +9,15 @@ import hashlib
 import php
 import re
 import win32api
+# 用來取反白字
+# https://stackoverflow.com/questions/1007185/how-to-retrieve-the-selected-text-from-the-active-window
+# import win32ui
+# https://superuser.com/questions/1120624/run-script-on-any-selected-text
+
+# 額外出字處理的 app
+f_arr = [ "putty","pietty","pcman","xyplorer" ]
+f_big5_arr = [ "zip32w" ]
+
 #import pywinauto             
 #pwa = pywinauto.keyboard
 my = php.kit()
@@ -398,7 +407,37 @@ if my.is_file("pinyi.txt")==True:
   same_sound_data = my.explode("\n",my.trim(my.file_get_contents("pinyi.txt")))  
   
 uclcode = my.json_decode(my.file_get_contents("liu.json"))
-      
+
+
+def find_ucl_in_uclcode(chinese_data):
+  #用中文反找蝦碼
+  finds = []  
+  for k in uclcode["chardefs"]:
+    if chinese_data in uclcode["chardefs"][k]:
+      index = uclcode["chardefs"][k].index(chinese_data)
+      finds.append(k+"_"+str(index))
+  finds.sort(key=len, reverse=False)
+  
+  shorts_arr = []
+  shorts_len = 999;
+  for k in finds:
+    if len(shorts_arr)==0 or len(k) <=shorts_len :
+      if len(k) == shorts_len:
+        shorts_arr.append(k)
+        shorts_len = len(k)
+      else:
+        shorts_arr = []
+        shorts_arr.append(k)
+        shorts_len = len(k)
+  shorts_arr = sorted(shorts_arr, key = lambda x: int(x.split("_")[1]))
+  if len(shorts_arr) >= 1:
+    d = shorts_arr[0].split("_")
+    return d[0]        
+  else:
+    return "";
+
+#print(find_ucl_in_uclcode("肥"))
+#my.exit();      
 def toAlphaOrNonAlpha():
   global uclen_btn
   global hf_btn
@@ -544,6 +583,33 @@ def word_label_set_text():
     word_label.set_label("")
     word_label.modify_font(pango.FontDescription(GUI_FONT_18))  
     return True
+def uclcode_to_chinese(code):
+  global ucl_find_data
+  global debug_print  
+  c = code
+  c = my.trim(c)
+  if c not in uclcode["chardefs"] and c[-1]=='v' and c[:-1] in uclcode["chardefs"] and len(uclcode["chardefs"][c[:-1]])>=2 :
+    #print("Debug V1")
+    ucl_find_data = uclcode["chardefs"][c[:-1]][1]       
+    return ucl_find_data
+  elif c not in uclcode["chardefs"] and c[-1]=='r' and c[:-1] in uclcode["chardefs"] and len(uclcode["chardefs"][c[:-1]])>=3 :
+    #print("Debug V1")
+    ucl_find_data = uclcode["chardefs"][c[:-1]][2]       
+    return ucl_find_data
+  elif c not in uclcode["chardefs"] and c[-1]=='s' and c[:-1] in uclcode["chardefs"] and len(uclcode["chardefs"][c[:-1]])>=4 :
+    #print("Debug V1")
+    ucl_find_data = uclcode["chardefs"][c[:-1]][3]       
+    return ucl_find_data
+  elif c not in uclcode["chardefs"] and c[-1]=='f' and c[:-1] in uclcode["chardefs"] and len(uclcode["chardefs"][c[:-1]])>=5 :
+    #print("Debug V1")
+    ucl_find_data = uclcode["chardefs"][c[:-1]][4]       
+    return ucl_find_data
+  elif c in uclcode["chardefs"]:
+    #print("Debug V2")
+    ucl_find_data = uclcode["chardefs"][c][0]    
+    return ucl_find_data
+  else:    
+    return ""  
 def show_search():
   #真的要顯示了
   global play_ucl_label
@@ -622,7 +688,8 @@ def senddata(data):
   global is_has_more_page
   global same_sound_last_word
   global debug_print
-  
+  global f_arr
+  global f_big5_arr
   same_sound_index = 0 #回到第零頁
   is_has_more_page = False #回到沒有分頁
   same_sound_last_word=""
@@ -643,8 +710,7 @@ def senddata(data):
   debug_print("PP:%s" % (pp))
   p=psutil.Process(pp)
   debug_print("ProcessP:%s" % (p))
-  f_arr = [ "putty","pietty","pcman","xyplorer" ]
-  f_big5_arr = [ "zip32w" ]
+  
   check_kind="0"
   for k in f_arr:
     #break;
@@ -780,6 +846,7 @@ def OnKeyboardEvent(event):
   global gamemode_btn
   global debug_print
   global VERSION
+  global f_arr
   #print(dir())  
   #try:  
   #print(event)
@@ -808,6 +875,114 @@ def OnKeyboardEvent(event):
       last_key = ""
       if gamemode_btn.get_label()=="正常模式":
         gamemode_btn_click(gamemode_btn)
+    if my.strtolower(last_key[-4:])==",,,x" and is_ucl():
+      # 將框選嘸蝦米的文字，轉成中文字
+      play_ucl_label=""
+      ucl_find_data=[]
+      type_label_set_text()
+      toAlphaOrNonAlpha() 
+      
+      
+      orin_clip=""
+      try:
+        win32clipboard.OpenClipboard()
+        orin_clip=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
+      except:
+        pass
+      try:
+        win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, "")
+        win32clipboard.EmptyClipboard()
+        win32clipboard.CloseClipboard()
+      except:
+        pass      
+      SendKeysCtypes.SendKeys("^C",pause=0.05)
+      #也許要設delay...      
+      try:
+        win32clipboard.OpenClipboard()
+        #try:
+        selectData=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
+        #print(selectData)
+        m = my.explode(" ", selectData);
+        output = "";
+        #print(len(m));
+        for i in range(0,len(m)):
+          output += uclcode_to_chinese(m[i])
+          #print(uclcode_to_chinese(m[i]));
+        senddata(output) 
+        win32clipboard.CloseClipboard()       
+      except:
+        pass
+      
+      
+      #也許要設delay...
+      time.sleep(0.05)
+      try:
+        win32clipboard.OpenClipboard()    
+        win32clipboard.EmptyClipboard()
+        win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip)
+        win32clipboard.CloseClipboard()           
+      except:
+        pass
+      return False   
+    if my.strtolower(last_key[-4:])==",,,z" and is_ucl():
+      # 將框選的文字，轉成嘸蝦米的字
+      
+      play_ucl_label=""
+      ucl_find_data=[]
+      type_label_set_text()
+      toAlphaOrNonAlpha()                   
+      orin_clip=""
+      try:
+        win32clipboard.OpenClipboard()
+        orin_clip=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
+      except:
+        pass
+      try:
+        win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, "")
+        win32clipboard.EmptyClipboard()
+        win32clipboard.CloseClipboard()
+      except:
+        pass
+                        
+      SendKeysCtypes.SendKeys("^C",pause=0.05)
+      
+      try:
+        win32clipboard.OpenClipboard()
+        #try:
+        selectData=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
+        #print(selectData)
+        m = list(selectData);
+        #output = "";
+        output_arr = []
+        #print(len(m));
+        for i in range(0,len(m)):          
+          #output+=(m[i]+"\n");
+          uclcode = find_ucl_in_uclcode(m[i])
+          if uclcode!="":
+            output_arr.append(uclcode)
+        output = my.implode(" ",output_arr);
+        #print(output)
+        win32clipboard.OpenClipboard()    
+        win32clipboard.EmptyClipboard()
+        win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, output)
+        win32clipboard.CloseClipboard()
+        #SendKeysCtypes.SendKeys("^v",pause=0.05)
+        SendKeysCtypes.SendKeys("{BACKSPACE}+{INSERT}",pause=0)
+        #senddata(output)
+      except:
+        pass
+      #return False
+      
+      #也許要設delay...
+      time.sleep(0.05)
+      try:
+        win32clipboard.OpenClipboard()    
+        win32clipboard.EmptyClipboard()
+        win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip)
+        win32clipboard.CloseClipboard()
+      except:
+        pass
+      return False             
     if my.strtolower(last_key[-9:])==",,,unlock":          
       last_key = ""               
       if gamemode_btn.get_label()=="遊戲模式":

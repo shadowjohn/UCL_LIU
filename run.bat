@@ -1,1 +1,1 @@
-python27 uclliu.py &
+python27 uclliu.pyw -d &
