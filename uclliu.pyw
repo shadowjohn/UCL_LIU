@@ -875,23 +875,26 @@ def OnKeyboardEvent(event):
       last_key = ""
       if gamemode_btn.get_label()=="正常模式":
         gamemode_btn_click(gamemode_btn)
-    if my.strtolower(last_key[-4:])==",,,x":
+    if my.strtolower(last_key[-4:])==",,,x" and is_ucl():
       # 將框選嘸蝦米的文字，轉成中文字
       play_ucl_label=""
       ucl_find_data=[]
       type_label_set_text()
       toAlphaOrNonAlpha() 
       
-      win32clipboard.OpenClipboard()
+      
       orin_clip=""
       try:
+        win32clipboard.OpenClipboard()
         orin_clip=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
       except:
         pass
-      win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, "")
-      win32clipboard.EmptyClipboard()
-      win32clipboard.CloseClipboard()
-            
+      try:
+        win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, "")
+        win32clipboard.EmptyClipboard()
+        win32clipboard.CloseClipboard()
+      except:
+        pass      
       SendKeysCtypes.SendKeys("^C",pause=0.05)
       #也許要設delay...      
       try:
@@ -913,28 +916,33 @@ def OnKeyboardEvent(event):
       
       #也許要設delay...
       time.sleep(0.05)
-      win32clipboard.OpenClipboard()    
-      win32clipboard.EmptyClipboard()
-      win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip)
-      win32clipboard.CloseClipboard()           
+      try:
+        win32clipboard.OpenClipboard()    
+        win32clipboard.EmptyClipboard()
+        win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip)
+        win32clipboard.CloseClipboard()           
+      except:
+        pass
       return False   
-    if my.strtolower(last_key[-4:])==",,,z":
+    if my.strtolower(last_key[-4:])==",,,z" and is_ucl():
       # 將框選的文字，轉成嘸蝦米的字
       
       play_ucl_label=""
       ucl_find_data=[]
       type_label_set_text()
-      toAlphaOrNonAlpha()       
-      win32clipboard.OpenClipboard()
-      time.sleep(0.05)
+      toAlphaOrNonAlpha()                   
       orin_clip=""
       try:
+        win32clipboard.OpenClipboard()
         orin_clip=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
       except:
         pass
-      win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, "")
-      win32clipboard.EmptyClipboard()
-      win32clipboard.CloseClipboard()
+      try:
+        win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, "")
+        win32clipboard.EmptyClipboard()
+        win32clipboard.CloseClipboard()
+      except:
+        pass
                         
       SendKeysCtypes.SendKeys("^C",pause=0.05)
       
@@ -967,11 +975,13 @@ def OnKeyboardEvent(event):
       
       #也許要設delay...
       time.sleep(0.05)
-      win32clipboard.OpenClipboard()    
-      win32clipboard.EmptyClipboard()
-      win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip)
-      win32clipboard.CloseClipboard()
-
+      try:
+        win32clipboard.OpenClipboard()    
+        win32clipboard.EmptyClipboard()
+        win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip)
+        win32clipboard.CloseClipboard()
+      except:
+        pass
       return False             
     if my.strtolower(last_key[-9:])==",,,unlock":          
       last_key = ""               
