@@ -9,9 +9,9 @@
 作者：羽山秋人 (<a target="_blank" href="http://3wa.tw">http://3wa.tw</a>)<br>
 <br>
 最初開發日期：2017-06-16 11:24<br>
-最後更新日期：2018-06-25 10:08
+最後更新日期：2018-07-04 14:50
 <br>
-版本：V 1.8<br>
+版本：V 1.9<br>
 <br>
 下載位置：<br>
 　　1.主程式：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
@@ -70,7 +70,12 @@
 
     (2018-06-25) V1.8 版：
     支援RIME afrink 分享的 liur_trad.dict.yaml 字根表
-               
+
+    (2018-07-04) V1.9 版：
+    增加 ,,,x 與 ,,,z 的功能，在「肥」模式下，反白文字：
+    利用 ,,,x 可以將「文字→字根」，如「肥的好→ucl d gz」
+    利用 ,,,z 可以將「字根→文字」，如「ucl d gz→肥的好」
+                  
 <br>
 開發工具：<br>
   <ul>
@@ -197,7 +202,9 @@ ToDo：<br>
   <li>(Done 2018-05-05)57、移除uclliu_debug，改用 -d 即可進入 debug 模式</li>
   <li>(Done 2018-05-05)58、調整顯示字型大小</li>
   <li>(Done 2018-05-08)59、正常模式的字體初始時大小錯誤</li>
-  <li>(Done 2018-06-25)60、支援RIME afrink 整理的 liur_trad.dict.yaml</li>  
+  <li>(Done 2018-06-25)60、支援RIME afrink 整理的 liur_trad.dict.yaml</li>
+  <li>(Done 2018-07-04)61、增加功能反白蝦米英文字解中文，如：eee ei gz ucl，在「肥」模式下，按「,,,x」會變成「羽山好肥」</li>
+  <li>(Done 2018-07-04)62、增加功能反白中文字轉蝦米英文字，如：羽山好肥，在「肥」模式下，按「,,,z」會變成「eee ei gz ucl」</li>  
 </ul>
 <br>
 版權：<br>
