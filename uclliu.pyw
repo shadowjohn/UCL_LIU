@@ -9,6 +9,10 @@ import hashlib
 import php
 import re
 import win32api
+from re import compile as _Re
+_unicode_chr_splitter = _Re( '(?s)((?:[\ud800-\udbff][\udc00-\udfff])|.)' ).split
+def split_unicode_chrs( text ):
+  return [ chr for chr in _unicode_chr_splitter( text ) if chr ]
 # 用來取反白字
 # https://stackoverflow.com/questions/1007185/how-to-retrieve-the-selected-text-from-the-active-window
 # import win32ui
@@ -901,6 +905,7 @@ def OnKeyboardEvent(event):
         win32clipboard.OpenClipboard()
         #try:
         selectData=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
+        selectData=my.trim(selectData);
         #print(selectData)
         m = my.explode(" ", selectData);
         output = "";
@@ -949,15 +954,21 @@ def OnKeyboardEvent(event):
       try:
         win32clipboard.OpenClipboard()
         #try:
+        time.sleep(0.05)
         selectData=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
         #print(selectData)
-        m = list(selectData);
+        #selectData=my.trim(selectData);
+        #m = selectData.split();
+        m = split_unicode_chrs(selectData);
+        
         #output = "";
         output_arr = []
         #print(len(m));
-        for i in range(0,len(m)):          
+        for k in range(0,len(m)):
+          #print(m[k])          
           #output+=(m[i]+"\n");
-          uclcode = find_ucl_in_uclcode(m[i])
+          #m[k]=my.trim(m[k])
+          uclcode = find_ucl_in_uclcode(m[k])
           if uclcode!="":
             output_arr.append(uclcode)
         output = my.implode(" ",output_arr);
