@@ -75,6 +75,10 @@
     增加 ,,,x 與 ,,,z 的功能，在「肥」模式下，反白文字：
     利用 ,,,x 可以將「文字→字根」，如「肥的好→ucl d gz」
     利用 ,,,z 可以將「字根→文字」，如「ucl d gz→肥的好」
+    
+    (2018-07-06) 補充說明：
+    微軟的　Windows Defender 更新後誤判程式是病毒，詳見：screenshot/uclliu_save1.png
+    已提交，判定為 Not malware ，真麻煩 :(
                   
 <br>
 開發工具：<br>
