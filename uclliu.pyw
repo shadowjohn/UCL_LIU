@@ -432,14 +432,14 @@ def thread___x(data):
   selectData=my.trim(data);  
   menter = my.explode("\n",selectData);
   output = "";
-  for k in range(0,len(menter)):
-    m = my.explode(" ", menter[k]);        
+  for kLine in range(0,len(menter)):
+    m = my.explode(" ", menter[kLine]);        
     #print(len(m));
     for i in range(0,len(m)):
       #轉小寫
       ucl_split_code = my.strtolower(m[i])
       output += uclcode_to_chinese(ucl_split_code)      
-    if k != len(menter):      
+    if kLine != len(menter)-1:      
       output+="{ENTER}"
   senddata(output)
      
@@ -449,15 +449,15 @@ def thread___z(data):
   selectData=selectData.replace("\r","");
   menter = my.explode("\n",selectData);
   output = "";
-  for k in range(0,len(menter)):
+  for kLine in range(0,len(menter)):
     output_arr = []
-    m = split_unicode_chrs(menter[k]);
+    m = split_unicode_chrs(menter[kLine]);
     for k in range(0,len(m)):
       _uclcode = find_ucl_in_uclcode(m[k]);
       if _uclcode!="":
         output_arr.append(_uclcode)  
-    output += my.implode(" ",output_arr);
-    if k != len(menter):      
+    output += my.implode(" ",output_arr);    
+    if kLine != len(menter)-1:      
       output+="{ENTER}"
   #print(output)
   output = output.replace(" ","{SPACE}");
@@ -970,12 +970,9 @@ def OnKeyboardEvent(event):
       selectData=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
       # 參考 http://www.runoob.com/python/python-multithreading.html      
       thread.start_new_thread( thread___x, (selectData, ))
-      
       win32clipboard.CloseClipboard()       
       #except:
       #  pass
-      
-      
       #也許要設delay...
       time.sleep(0.05)
       try:
@@ -984,11 +981,10 @@ def OnKeyboardEvent(event):
         win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip)
         win32clipboard.CloseClipboard()           
       except:
-        pass      
+        pass
       return False   
     if my.strtolower(last_key[-4:])==",,,z" and is_ucl():
       # 將框選的文字，轉成嘸蝦米的字
-      
       play_ucl_label=""
       ucl_find_data=[]
       type_label_set_text()
@@ -1005,25 +1001,18 @@ def OnKeyboardEvent(event):
         win32clipboard.CloseClipboard()
       except:
         pass
-                        
       SendKeysCtypes.SendKeys("^C",pause=0.05)
-      
       try:
         win32clipboard.OpenClipboard()
         #try:
         time.sleep(0.05)
         selectData=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)                
-                        
         thread.start_new_thread( thread___z, (selectData, ))
-       
       except:
         pass
-
-      
       #也許要設delay...
-      #time.sleep(0.05)
+      time.sleep(0.05)
       try:
-        #time.sleep(0.1)
         win32clipboard.OpenClipboard()    
         win32clipboard.EmptyClipboard()
         win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip)
