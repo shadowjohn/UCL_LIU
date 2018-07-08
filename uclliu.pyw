@@ -9,6 +9,10 @@ import hashlib
 import php
 import re
 import win32api
+
+#,,,z ,,,x 用thread去輸出字
+import thread
+#切中文使用
 from re import compile as _Re
 _unicode_chr_splitter = _Re( '(?s)((?:[\ud800-\udbff][\udc00-\udfff])|.)' ).split
 def split_unicode_chrs( text ):
@@ -98,9 +102,9 @@ import time
 import win32gui
 import win32process
 import psutil
-import win32com
+#import win32com
 import win32con
-import win32com.client
+#import win32com.client
 
 
 import ctypes
@@ -412,9 +416,64 @@ if my.is_file("pinyi.txt")==True:
   
 uclcode = my.json_decode(my.file_get_contents("liu.json"))
 
-
+uclcode_r = {}
+#然後把 chardefs 的字碼，變成對照字根，可以加速 ,,,z、,,,x 反查的速度
+#only short key
+for k in uclcode["chardefs"]:
+   for kk in range(0,len(uclcode["chardefs"][k])):
+     _word = uclcode["chardefs"][k][kk]     
+     if _word not in uclcode_r:
+       uclcode_r[_word] = k
+     else:
+       if len(k) < len(uclcode_r[_word]):
+         uclcode_r[_word] = k
+def thread___x(data):
+  #字根轉中文 thread  
+  selectData=my.trim(data);  
+  menter = my.explode("\n",selectData);
+  output = "";
+  for k in range(0,len(menter)):
+    m = my.explode(" ", menter[k]);        
+    #print(len(m));
+    for i in range(0,len(m)):
+      #轉小寫
+      ucl_split_code = my.strtolower(m[i])
+      output += uclcode_to_chinese(ucl_split_code)      
+    if k != len(menter):      
+      output+="{ENTER}"
+  senddata(output)
+     
+def thread___z(data):
+  #中文轉字根 thread
+  selectData=data; #my.trim(data);
+  selectData=selectData.replace("\r","");
+  menter = my.explode("\n",selectData);
+  output = "";
+  for k in range(0,len(menter)):
+    output_arr = []
+    m = split_unicode_chrs(menter[k]);
+    for k in range(0,len(m)):
+      _uclcode = find_ucl_in_uclcode(m[k]);
+      if _uclcode!="":
+        output_arr.append(_uclcode)  
+    output += my.implode(" ",output_arr);
+    if k != len(menter):      
+      output+="{ENTER}"
+  #print(output)
+  output = output.replace(" ","{SPACE}");
+  output = output.replace("\n ","{ENTER}");  
+  output = output.replace("\n","{ENTER}");                    
+  senddata(output) 
+       
 def find_ucl_in_uclcode(chinese_data):
-  #用中文反找蝦碼
+  #用中文反找蝦碼(V1.10版寫法)
+  global uclcode_r
+  if chinese_data in uclcode_r:
+    return uclcode_r[chinese_data];
+  else:
+    return chinese_data; 
+def find_ucl_in_uclcode_old(chinese_data):
+  #用中文反找蝦碼(V1.9版寫法)
   finds = []  
   for k in uclcode["chardefs"]:
     if chinese_data in uclcode["chardefs"][k]:
@@ -592,6 +651,9 @@ def uclcode_to_chinese(code):
   global debug_print  
   c = code
   c = my.trim(c)
+  if c == "":
+    return ""
+  #print(c)
   if c not in uclcode["chardefs"] and c[-1]=='v' and c[:-1] in uclcode["chardefs"] and len(uclcode["chardefs"][c[:-1]])>=2 :
     #print("Debug V1")
     ucl_find_data = uclcode["chardefs"][c[:-1]][1]       
@@ -613,7 +675,7 @@ def uclcode_to_chinese(code):
     ucl_find_data = uclcode["chardefs"][c][0]    
     return ucl_find_data
   else:    
-    return ""  
+    return code 
 def show_search():
   #真的要顯示了
   global play_ucl_label
@@ -701,7 +763,7 @@ def senddata(data):
   ucl_find_data=[]  
   type_label_set_text()  
   
-  shell = win32com.client.Dispatch("WScript.Shell")
+  
   
   hwnd = win32gui.GetForegroundWindow()
   pid = win32process.GetWindowThreadProcessId(hwnd)
@@ -776,7 +838,10 @@ def senddata(data):
       win32clipboard.EmptyClipboard()
       win32clipboard.SetClipboardData(win32con.CF_TEXT, my.utf8tobig5(data))
       win32clipboard.CloseClipboard()
-      shell.SendKeys("^v", 0)
+      #之前是用 shell，改用 SendKeysCtypes.SendKeys 看看
+      #shell = win32com.client.Dispatch("WScript.Shell")
+      #shell.SendKeys("^v", 0)
+      SendKeysCtypes.SendKeys("^v")
       time.sleep(0.05)
       win32clipboard.OpenClipboard()    
       win32clipboard.EmptyClipboard()
@@ -885,8 +950,6 @@ def OnKeyboardEvent(event):
       ucl_find_data=[]
       type_label_set_text()
       toAlphaOrNonAlpha() 
-      
-      
       orin_clip=""
       try:
         win32clipboard.OpenClipboard()
@@ -901,22 +964,16 @@ def OnKeyboardEvent(event):
         pass      
       SendKeysCtypes.SendKeys("^C",pause=0.05)
       #也許要設delay...      
-      try:
-        win32clipboard.OpenClipboard()
-        #try:
-        selectData=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
-        selectData=my.trim(selectData);
-        #print(selectData)
-        m = my.explode(" ", selectData);
-        output = "";
-        #print(len(m));
-        for i in range(0,len(m)):
-          output += uclcode_to_chinese(m[i])
-          #print(uclcode_to_chinese(m[i]));
-        senddata(output) 
-        win32clipboard.CloseClipboard()       
-      except:
-        pass
+      #try:
+      win32clipboard.OpenClipboard()
+      #try:
+      selectData=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
+      # 參考 http://www.runoob.com/python/python-multithreading.html      
+      thread.start_new_thread( thread___x, (selectData, ))
+      
+      win32clipboard.CloseClipboard()       
+      #except:
+      #  pass
       
       
       #也許要設delay...
@@ -927,7 +984,7 @@ def OnKeyboardEvent(event):
         win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip)
         win32clipboard.CloseClipboard()           
       except:
-        pass
+        pass      
       return False   
     if my.strtolower(last_key[-4:])==",,,z" and is_ucl():
       # 將框選的文字，轉成嘸蝦米的字
@@ -955,38 +1012,18 @@ def OnKeyboardEvent(event):
         win32clipboard.OpenClipboard()
         #try:
         time.sleep(0.05)
-        selectData=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
-        #print(selectData)
-        #selectData=my.trim(selectData);
-        #m = selectData.split();
-        m = split_unicode_chrs(selectData);
-        
-        #output = "";
-        output_arr = []
-        #print(len(m));
-        for k in range(0,len(m)):
-          #print(m[k])          
-          #output+=(m[i]+"\n");
-          #m[k]=my.trim(m[k])
-          uclcode = find_ucl_in_uclcode(m[k])
-          if uclcode!="":
-            output_arr.append(uclcode)
-        output = my.implode(" ",output_arr);
-        #print(output)
-        win32clipboard.OpenClipboard()    
-        win32clipboard.EmptyClipboard()
-        win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, output)
-        win32clipboard.CloseClipboard()
-        #SendKeysCtypes.SendKeys("^v",pause=0.05)
-        SendKeysCtypes.SendKeys("{BACKSPACE}+{INSERT}",pause=0)
-        #senddata(output)
+        selectData=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)                
+                        
+        thread.start_new_thread( thread___z, (selectData, ))
+       
       except:
         pass
-      #return False
+
       
       #也許要設delay...
-      time.sleep(0.05)
+      #time.sleep(0.05)
       try:
+        #time.sleep(0.1)
         win32clipboard.OpenClipboard()    
         win32clipboard.EmptyClipboard()
         win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip)

@@ -9,9 +9,9 @@
 作者：羽山秋人 (<a target="_blank" href="http://3wa.tw">http://3wa.tw</a>)<br>
 <br>
 最初開發日期：2017-06-16 11:24<br>
-最後更新日期：2018-07-04 21:20
+最後更新日期：2018-07-09 01:27
 <br>
-版本：V 1.9<br>
+版本：V 1.10<br>
 <br>
 下載位置：<br>
 　　1.主程式：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
@@ -79,7 +79,11 @@
     (2018-07-06) 補充說明：
     微軟的　Windows Defender 更新後誤判程式是病毒，詳見：screenshot/uclliu_save1.png
     已提交，判定為 Not malware ，真麻煩 :(
-                  
+
+    (2018-07-09) V1.10 版：
+    移除用不到的 win32com、win32com.client 整個執行檔變小了^_^
+    加速、修正 ,,,x、,,,z 使用 thread 來出字，防止多按一個 z 或 x 的問題
+    修正 ,,,x 大小寫都可以使用               
 <br>
 開發工具：<br>
   <ul>
@@ -209,7 +213,10 @@ ToDo：<br>
   <li>(Done 2018-06-25)60、支援RIME afrink 整理的 liur_trad.dict.yaml</li>
   <li>(Done 2018-07-04)61、增加功能反白蝦米英文字解中文，如：eee ei gz ucl，在「肥」模式下，按「,,,x」會變成「羽山好肥」</li>
   <li>(Done 2018-07-04)62、增加功能反白中文字轉蝦米英文字，如：羽山好肥，在「肥」模式下，按「,,,z」會變成「eee ei gz ucl」</li>  
-  <li>(Done 2018-07-04)63、修正 ,,,z 切字的函式</li>  
+  <li>(Done 2018-07-04)63、修正 ,,,z 切字的函式</li>
+  <li>(Done 2018-07-09)64、修正 ,,,x 大小寫都可以使用的問題</li>
+  <li>(Done 2018-07-09)65、加速 ,,,x、,,,z 的轉換速度</li>
+  <li>(Done 2018-07-09)66、移除 import win32com、win32com.client 整個 uclliu.exe 變小一些</li>  
 </ul>
 <br>
 版權：<br>
