@@ -149,7 +149,13 @@
 　　7、增加一個遊戲模式的按鈕，只要按「,,,lock」就會變成遊戲模式，再按「,,,unlock」回到正常模式，這樣玩CS殺人時就可以消音走路了<br>
 　　8、增加版本查詢功能，只要按「,,,version」，就會跳出版本提示
 <br>
-       
+<br>
+微軟 Windows Defender 誤判與回報：
+<img src="screenshot/uclliu_save1.png">
+由於此程式以 pyhook (keyhook) 方式開發，容易被防毒軟體誤判成病毒，已提供微軟進行病毒排除，正常只需要把 Windows Defender 病毒碼更新，啟動時就不會被封鎖了。
+<br>
+
+
 ToDo：<br>
 <ul>
   <li>(Done)1、(嚴重)「送出字元」的方法，試了很多send key一直無法解決 send unicode的問題，暫時使用「剪貼簿」的Ctrl+V來實作貼上文字的功能</li>
