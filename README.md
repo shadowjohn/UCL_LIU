@@ -133,6 +133,7 @@
     <li>9、執行【python uclliu.pyw】可以跑出程式</li>
     <li>10、編成exe的方法，執行【build.bat】，即可將 uclliu.exe 編到 dist 目錄下</li>
     <li><s>11、build_debug.bat 是方便debug用的版本，運行時還會保留command介面</s></li>
+    <li>11、執行肥米時【python uclliu.pyw -d】可以進入 debug模式，讓 log 訊息在命令提示窗中呈現</li>
   </ul>
 <br>
 
