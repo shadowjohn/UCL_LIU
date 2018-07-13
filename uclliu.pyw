@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.11
+VERSION=1.12
 import portalocker
 import os
 import sys
@@ -9,7 +9,7 @@ import hashlib
 import php
 import re
 import win32api
-
+import configparser
 #,,,z ,,,x 用thread去輸出字
 import thread
 #切中文使用
@@ -36,14 +36,7 @@ sys.setdefaultencoding('UTF-8')
 # Debug 模式
 is_DEBUG_mode = False
 
-# GUI Font
-GUI_FONT_12 = my.utf8tobig5("roman 12");
-GUI_FONT_14 = my.utf8tobig5("roman bold 14");
-GUI_FONT_16 = my.utf8tobig5("roman bold 16");
-GUI_FONT_18 = my.utf8tobig5("roman bold 18");
-GUI_FONT_20 = my.utf8tobig5("roman bold 20");
-GUI_FONT_22 = my.utf8tobig5("roman bold 22");
-GUI_FONT_26 = my.utf8tobig5("roman bold 26");
+
 
 message = ("\nUCLLIU 肥米輸入法\nBy 羽山秋人(http://3wa.tw)\nVersion: %s\n\n若要使用 Debug 模式：uclliu.exe -d\n" % (VERSION));
 
@@ -116,8 +109,9 @@ except:
   response = md.run()            
   if response == gtk.RESPONSE_OK or response == gtk.RESPONSE_DELETE_EVENT:
     md.destroy()
-    sys.exit(0)     
-
+    sys.exit(0)
+         
+import ctypes
 import pythoncom, pyHook
 from pyHook import HookManager
 from pyHook.HookManager import HookConstants 
@@ -135,9 +129,154 @@ import psutil
 import win32con
 #import win32com.client
 
+#2018-07-13 1.12版增加
+#檢查 C:\temp\UCLLIU.ini 初始化設定檔
+#取螢幕大小
+INI_CONFIG_FILE = 'C:\\temp\\UCLLIU.ini'
+user32 = ctypes.windll.user32
+screen_width=user32.GetSystemMetrics(0)
+screen_height=user32.GetSystemMetrics(1)
+config = configparser.ConfigParser()
+config['DEFAULT'] = {
+                      "X": screen_width-700,
+                      "Y": int(screen_height*0.87),
+                      "ALPHA": "1", #嘸蝦米全顯示時時的初值
+                      "SHORT_MODE": "0", #0:簡短畫面，或1:長畫面
+                      "ZOOM": "1" #整體比例大小
+                    };
+if my.is_file(INI_CONFIG_FILE):
+  _config = configparser.ConfigParser()
+  _config.read(INI_CONFIG_FILE)
+  for k in ['X','Y','ALPHA','ZOOM','SHORT_MODE']:
+    if _config['DEFAULT'][k] != None:
+      config['DEFAULT'][k]=_config['DEFAULT'][k]
+      
+config['DEFAULT']['X'] = str(int(config['DEFAULT']['X']));
+config['DEFAULT']['Y'] = str(int(config['DEFAULT']['Y'])); 
+config['DEFAULT']['ALPHA'] = "%.2f" % ( float(config['DEFAULT']['ALPHA'] ));
+config['DEFAULT']['SHORT_MODE'] = str(int(config['DEFAULT']['SHORT_MODE']));
+config['DEFAULT']['ZOOM'] = "%.2f" % ( float(config['DEFAULT']['ZOOM'] ));
 
-import ctypes
+if float(config['DEFAULT']['ALPHA'])>=1:
+  config['DEFAULT']['ALPHA']="1"
+if float(config['DEFAULT']['ALPHA'])<=0.1:
+  config['DEFAULT']['ALPHA']="0.1"
+  
+if int(config['DEFAULT']['SHORT_MODE'])>=1:
+  config['DEFAULT']['SHORT_MODE']="1"
+if int(config['DEFAULT']['SHORT_MODE'])<=0:
+  config['DEFAULT']['SHORT_MODE']="0"
+  
+if float(config['DEFAULT']['ZOOM'])>=3:
+  config['DEFAULT']['ZOOM']="3"
+if float(config['DEFAULT']['ZOOM'])<=0.1:
+  config['DEFAULT']['ZOOM']="0.1"
 
+# GUI Font
+GUI_FONT_12 = my.utf8tobig5("roman %d" % int( float(config['DEFAULT']['ZOOM'])*12) );
+GUI_FONT_14 = my.utf8tobig5("roman bold %d" % int(float(config['DEFAULT']['ZOOM'])*14) );
+GUI_FONT_16 = my.utf8tobig5("roman bold %d" % int(float(config['DEFAULT']['ZOOM'])*16) );
+GUI_FONT_18 = my.utf8tobig5("roman bold %d" % int(float(config['DEFAULT']['ZOOM'])*18) );
+GUI_FONT_20 = my.utf8tobig5("roman bold %d" % int(float(config['DEFAULT']['ZOOM'])*20) );
+GUI_FONT_22 = my.utf8tobig5("roman bold %d" % int(float(config['DEFAULT']['ZOOM'])*22) );
+GUI_FONT_26 = my.utf8tobig5("roman bold %d" % int(float(config['DEFAULT']['ZOOM'])*26) );
+# print config setting
+debug_print("UCLLIU.ini SETTING:")
+debug_print("X:%s" % (config["DEFAULT"]["X"]))
+debug_print("Y:%s" % (config["DEFAULT"]["Y"]))
+debug_print("ALPHA:%s" % (config["DEFAULT"]["ALPHA"]))
+debug_print("SHORT_MODE:%s" % (config["DEFAULT"]["SHORT_MODE"]))
+debug_print("ZOOM:%s" % (config["DEFAULT"]["ZOOM"]))
+
+def saveConfig():
+  global config
+  global INI_CONFIG_FILE
+  with open(INI_CONFIG_FILE, 'w') as configfile:
+    config.write(configfile)
+def run_big_small(kind):
+  global config
+  global GUI_FONT_12
+  global GUI_FONT_14
+  global GUI_FONT_16
+  global GUI_FONT_18
+  global GUI_FONT_20
+  global GUI_FONT_22
+  global GUI_FONT_26
+  global simple_btn
+  global x_btn
+  global gamemode_btn
+  global uclen_btn
+  global hf_btn
+  global type_label
+  global word_label
+  kind = float(kind)
+  if kind > 0:
+    if float(config['DEFAULT']['ZOOM']) < 3:
+      config['DEFAULT']['ZOOM'] = str(float(config['DEFAULT']['ZOOM'])+kind)
+  else:
+    if float(config['DEFAULT']['ZOOM']) > 0.3:
+      config['DEFAULT']['ZOOM'] = str(float(config['DEFAULT']['ZOOM'])+kind)
+    
+  GUI_FONT_12 = my.utf8tobig5("roman %d" % int( float(config['DEFAULT']['ZOOM'])*12) );
+  GUI_FONT_14 = my.utf8tobig5("roman bold %d" % int(float(config['DEFAULT']['ZOOM'])*14) );
+  GUI_FONT_16 = my.utf8tobig5("roman bold %d" % int(float(config['DEFAULT']['ZOOM'])*16) );
+  GUI_FONT_18 = my.utf8tobig5("roman bold %d" % int(float(config['DEFAULT']['ZOOM'])*18) );
+  GUI_FONT_20 = my.utf8tobig5("roman bold %d" % int(float(config['DEFAULT']['ZOOM'])*20) );
+  GUI_FONT_22 = my.utf8tobig5("roman bold %d" % int(float(config['DEFAULT']['ZOOM'])*22) );
+  GUI_FONT_26 = my.utf8tobig5("roman bold %d" % int(float(config['DEFAULT']['ZOOM'])*26) );
+  if is_simple():
+    simple_btn.set_size_request(0,int( float(config['DEFAULT']['ZOOM'])*40))  
+  simple_label=simple_btn.get_child()
+  simple_label.modify_font(pango.FontDescription(GUI_FONT_16))
+  
+  x_label=x_btn.get_child()
+  x_label.modify_font(pango.FontDescription(GUI_FONT_14))  
+  x_btn.set_size_request(int( float(config['DEFAULT']['ZOOM'])*40),int( float(config['DEFAULT']['ZOOM'])*40))
+
+  gamemode_label=gamemode_btn.get_child()
+  gamemode_label.modify_font(pango.FontDescription(GUI_FONT_12))
+  gamemode_btn.set_size_request(int( float(config['DEFAULT']['ZOOM'])*80),int( float(config['DEFAULT']['ZOOM'])*40))
+    
+  uclen_label=uclen_btn.get_child()
+  uclen_label.modify_font(pango.FontDescription(GUI_FONT_22))
+  uclen_btn.set_size_request(int(float(config['DEFAULT']['ZOOM'])*40) ,int(float(config['DEFAULT']['ZOOM'])*40 ))
+  
+  hf_label=hf_btn.get_child()
+  hf_label.modify_font(pango.FontDescription(GUI_FONT_22))
+  hf_btn.set_size_request(int( float(config['DEFAULT']['ZOOM'])*40) ,int(float(config['DEFAULT']['ZOOM'])*40) )
+  
+  type_label.modify_font(pango.FontDescription(GUI_FONT_22))
+  type_label.set_size_request(int( float(config['DEFAULT']['ZOOM'])*100) ,int( float(config['DEFAULT']['ZOOM'])*40) )
+ 
+  word_label.modify_font(pango.FontDescription(GUI_FONT_20))
+  word_label.set_size_request(int( float(config['DEFAULT']['ZOOM'])*350),int( float(config['DEFAULT']['ZOOM'])*40))
+          
+  saveConfig()
+    
+
+def run_short():
+  global config
+  global word_label
+  global type_label
+  global gamemode_btn
+  word_label.set_visible(False)
+  type_label.set_visible(False)
+  gamemode_btn.set_visible(False)
+  config["DEFAULT"]["SHORT_MODE"]="1"
+  saveConfig()
+def run_long():
+  global word_label
+  global type_label
+  global gamemode_btn
+  word_label.set_visible(True)
+  type_label.set_visible(True)
+  gamemode_btn.set_visible(True)
+  config["DEFAULT"]["SHORT_MODE"]="0"
+  type_label.set_size_request(int( float(config['DEFAULT']['ZOOM'])*100),int( float(config['DEFAULT']['ZOOM'])*40))
+  word_label.set_size_request(int( float(config['DEFAULT']['ZOOM'])*350),int( float(config['DEFAULT']['ZOOM'])*40))
+  saveConfig()
+  
+saveConfig()    
 #check if exists tab cin json
 is_need_trans_tab = False
 is_need_trans_cin = False
@@ -533,7 +672,8 @@ def find_ucl_in_uclcode_old(chinese_data):
 def toAlphaOrNonAlpha():
   global uclen_btn
   global hf_btn
-  global win  
+  global win
+  global config  
   #c = hf_btn.get_child()
   #hf_kind = c.get_label()
   hf_kind = hf_btn.get_label()
@@ -542,7 +682,8 @@ def toAlphaOrNonAlpha():
     win.set_keep_above(False)
     win.set_keep_below(True)    
   else:
-    win.set_opacity(1)
+    #win.set_opacity(1)
+    win.set_opacity( float(config["DEFAULT"]["ALPHA"]) )
     win.set_keep_above(True)
     win.set_keep_below(False)
 def toggle_ucl():
@@ -593,8 +734,24 @@ def x_btn_click(self):
   sys.exit()
 # draggable
 def winclicked(self, event):
-  # make UCLLIU can draggable
+  # make UCLLIU can draggable  
   self.window.begin_move_drag(event.button, int(event.x_root), int(event.y_root), event.time)
+  #self.window.begin_move_drag(event.button, int(event.x_root), int(event.y_root), event.time)
+  #self.window.begin_resize_drag(event.button, int(event.x_root), int(event.y_root), event.time)
+  # Write to UCLLIU.ini
+  global config
+  global win
+  
+  #_x = win.get_allocation().width
+  #_y = win.get_allocation().height
+  
+  [ _x,_y ] = win.get_position()
+  #print( "x_root , y_root : %d , %d" % (event.x,event.y))
+  #print( "WIN X,Y:%d , %d" % (_x,_y)) 
+  config["DEFAULT"]["X"] = str(int(_x))
+  config["DEFAULT"]["Y"] = str(int(_y))
+  print( "config X,Y:%s , %s" % (config["DEFAULT"]["X"],config["DEFAULT"]["Y"])) 
+  saveConfig();
   pass
 def uclen_btn_click(self):
   toggle_ucl()
@@ -623,6 +780,7 @@ def type_label_set_text():
   global debug_print
   global GUI_FONT_22
   global GUI_FONT_20
+  global config
   type_label.set_label(play_ucl_label)
   type_label.modify_font(pango.FontDescription(GUI_FONT_22))
   if my.strlen(play_ucl_label) > 0:
@@ -632,7 +790,27 @@ def type_label_set_text():
   else:    
     word_label.set_label("")
     word_label.modify_font(pango.FontDescription(GUI_FONT_20))
-    pass 
+    pass
+  #如果是短米，自動看幾個字展長
+  if config["DEFAULT"]["SHORT_MODE"]=="1":
+    _tape_label = type_label.get_label()
+    _len_tape_label = len(_tape_label)
+    #一字30
+    if _len_tape_label == 0:
+      type_label.set_visible(False)
+    else:
+      type_label.set_visible(True)
+    type_label.set_size_request(int( float(config['DEFAULT']['ZOOM'])*18*_len_tape_label) ,int( float(config['DEFAULT']['ZOOM'])*40) ) 
+    
+    _word_label = word_label.get_label()
+    _len_word_label = len(_word_label)
+    #一字30
+    if _len_word_label == 0:
+      word_label.set_visible(False)
+    else:
+      word_label.set_visible(True)
+    word_label.set_size_request(int( float(config['DEFAULT']['ZOOM'])*15*_len_word_label) ,int( float(config['DEFAULT']['ZOOM'])*40) )    
+    
   return True
 def word_label_set_text():
   global word_label
@@ -674,6 +852,16 @@ def word_label_set_text():
     else:
       word_label.modify_font(pango.FontDescription(GUI_FONT_12))
     '''
+    if config["DEFAULT"]["SHORT_MODE"]=="1":
+      _word_label = word_label.get_label()
+      _len_word_label = len(_word_label)
+      #一字30
+      if _len_word_label == 0:
+        word_label.set_visible(False)
+      else:
+        word_label.set_visible(True)
+      word_label.set_size_request(int( float(config['DEFAULT']['ZOOM'])*15*_len_word_label) ,int( float(config['DEFAULT']['ZOOM'])*40) )    
+        
     return True
   except:
     play_ucl_label=""
@@ -996,7 +1184,7 @@ def OnKeyboardEvent(event):
       if is_ucl()==False:
         # change to ucl
         toggle_ucl()
-      simple_btn.set_size_request(40,40)
+      simple_btn.set_size_request( int(float(config['DEFAULT']['ZOOM'])*40),int(float(config['DEFAULT']['ZOOM'])*40) )
       simple_label=simple_btn.get_child()
       simple_label.set_label("簡")
       simple_btn.set_visible(True)
@@ -1010,7 +1198,7 @@ def OnKeyboardEvent(event):
       if is_ucl()==False:
         # change to ucl
         toggle_ucl()
-      simple_btn.set_size_request(0,40)
+      simple_btn.set_size_request(0,int(float(config['DEFAULT']['ZOOM'])*40) )
       simple_label=simple_btn.get_child()
       simple_label.set_label("")
       simple_btn.set_visible(False)
@@ -1019,6 +1207,34 @@ def OnKeyboardEvent(event):
       last_key = ""
       if gamemode_btn.get_label()=="正常模式":
         gamemode_btn_click(gamemode_btn)
+    if my.strtolower(last_key[-4:])==",,,-":
+      #run small
+      play_ucl_label=""
+      ucl_find_data=[]
+      type_label_set_text()
+      toAlphaOrNonAlpha()
+      run_big_small(-0.1)        
+    if my.strtolower(last_key[-4:])==",,,+":
+      #run big
+      play_ucl_label=""
+      ucl_find_data=[]
+      type_label_set_text()
+      toAlphaOrNonAlpha()
+      run_big_small(0.1)
+    if my.strtolower(last_key[-4:])==",,,s":
+      # run short
+      play_ucl_label=""
+      ucl_find_data=[]
+      type_label_set_text()
+      toAlphaOrNonAlpha() 
+      run_short()
+    if my.strtolower(last_key[-4:])==",,,l":
+      # run long
+      play_ucl_label=""
+      ucl_find_data=[]
+      type_label_set_text()
+      toAlphaOrNonAlpha() 
+      run_long()
     if my.strtolower(last_key[-4:])==",,,x" and is_ucl():
       # 將框選嘸蝦米的文字，轉成中文字
       play_ucl_label=""
@@ -1359,12 +1575,10 @@ win=gtk.Window(type=gtk.WINDOW_POPUP)
 win.set_modal(True)
 win.set_resizable(False)
 
-#取螢幕大小
-user32 = ctypes.windll.user32
-screen_width=user32.GetSystemMetrics(0)
-screen_height=user32.GetSystemMetrics(1)
 
-win.move(screen_width-700,int(screen_height*0.87))
+
+#win.move(screen_width-700,int(screen_height*0.87))
+win.move( int(config["DEFAULT"]["X"]) , int(config["DEFAULT"]["Y"]))
 #always on top
 win.set_keep_above(True)
 win.set_keep_below(False)
@@ -1387,20 +1601,20 @@ uclen_btn=gtk.Button("肥")
 uclen_label=uclen_btn.get_child()
 uclen_label.modify_font(pango.FontDescription(GUI_FONT_22))
 uclen_btn.connect("clicked",uclen_btn_click)
-uclen_btn.set_size_request(40,40)
+uclen_btn.set_size_request(int(float(config['DEFAULT']['ZOOM'])*40) ,int(float(config['DEFAULT']['ZOOM'])*40 ))
 hbox.add(uclen_btn)
 
 hf_btn=gtk.Button("半")
 hf_label=hf_btn.get_child()
 hf_label.modify_font(pango.FontDescription(GUI_FONT_22))
 hf_btn.connect("clicked",hf_btn_click)
-hf_btn.set_size_request(40,40)
+hf_btn.set_size_request(int( float(config['DEFAULT']['ZOOM'])*40) ,int(float(config['DEFAULT']['ZOOM'])*40) )
 hbox.add(hf_btn)
 
 type_label=gtk.Label("")
 type_label.modify_font(pango.FontDescription(GUI_FONT_22))
 type_label.modify_bg(gtk.STATE_NORMAL, gtk.gdk.Color(6400, 6400, 6440))
-type_label.set_size_request(100,40)
+type_label.set_size_request(int( float(config['DEFAULT']['ZOOM'])*100) ,int( float(config['DEFAULT']['ZOOM'])*40) )
 type_label.set_alignment(xalign=0.1, yalign=0.5) 
 f_type = gtk.Frame()
 f_type.add(type_label)
@@ -1409,7 +1623,7 @@ hbox.add(f_type)
 word_label=gtk.Label("")
 word_label.modify_font(pango.FontDescription(GUI_FONT_20))
 word_label.modify_bg(gtk.STATE_NORMAL, gtk.gdk.Color(6400, 6400, 6440))
-word_label.set_size_request(350,40)
+word_label.set_size_request(int( float(config['DEFAULT']['ZOOM'])*350),int( float(config['DEFAULT']['ZOOM'])*40))
 word_label.set_alignment(xalign=0.05, yalign=0.5)
 f_word = gtk.Frame()
 f_word.add(word_label)
@@ -1417,7 +1631,7 @@ hbox.add(f_word)
 
 # 加一個簡繁互換的
 simple_btn=gtk.Button("")
-simple_btn.set_size_request(0,40)
+simple_btn.set_size_request(0,int( float(config['DEFAULT']['ZOOM'])*40))
 simple_label=simple_btn.get_child()
 simple_label.modify_font(pango.FontDescription(GUI_FONT_16))
 #simple_label.modify_bg(gtk.STATE_NORMAL, gtk.gdk.Color(6400, 6400, 6440))
@@ -1432,14 +1646,14 @@ gamemode_btn=gtk.Button("正常模式")
 gamemode_label=gamemode_btn.get_child()
 gamemode_label.modify_font(pango.FontDescription(GUI_FONT_12))
 gamemode_btn.connect("clicked",gamemode_btn_click)
-gamemode_btn.set_size_request(80,40)
+gamemode_btn.set_size_request(int( float(config['DEFAULT']['ZOOM'])*80),int( float(config['DEFAULT']['ZOOM'])*40))
 hbox.add(gamemode_btn)
 
 x_btn=gtk.Button("╳")
 x_label=x_btn.get_child()
 x_label.modify_font(pango.FontDescription(GUI_FONT_14))
 x_btn.connect("clicked",x_btn_click)
-x_btn.set_size_request(40,40)
+x_btn.set_size_request(int( float(config['DEFAULT']['ZOOM'])*40),int( float(config['DEFAULT']['ZOOM'])*40))
 hbox.add(x_btn)
 
 
@@ -1448,6 +1662,14 @@ win.add(vbox)
 
 win.show_all()
 simple_btn.set_visible(False)
+
+if config["DEFAULT"]["SHORT_MODE"] == "1":
+  run_short()
+else:
+  run_long()  
+  
+
+
 win.set_focus(None)
 
 # 初使化按二次

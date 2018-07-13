@@ -9,9 +9,9 @@
 作者：羽山秋人 (<a target="_blank" href="http://3wa.tw">http://3wa.tw</a>)<br>
 <br>
 最初開發日期：2017-06-16 11:24<br>
-最後更新日期：2018-07-12 15:52
+最後更新日期：2018-07-13 12:41
 <br>
-版本：V 1.10<br>
+版本：V 1.12<br>
 <br>
 下載位置：<br>
 　　1.主程式：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
@@ -87,7 +87,16 @@
     
     (2018-07-12) V1.11 版：
     可以使用 ,,,c、,,,t 來切換「簡體/繁體」輸入。<br>
-    感謝臺灣碼農的簡繁對照表 https://ithelp.ithome.com.tw/articles/10196695                
+    感謝臺灣碼農的簡繁對照表 https://ithelp.ithome.com.tw/articles/10196695
+    
+    (2018-07-12) V1.12 版：
+    可紀錄最後 UI 擺放的位置在 C:\temp\UCLLIU.ini
+    增加使用 ,,,s 將肥米 UI 變窄
+    增加使用 ,,,l 將肥米 UI 變寬
+    增加使用 ,,,+ 將肥米 UI 變大
+    增加使用 ,,,- 將肥米 UI 變小
+    UCLLIU.ini 裡 ZOOM 可設定 0.1 ~ 1.0 來改變 肥 模式下透明度
+                    
 <br>
 開發工具：<br>
   <ul>
@@ -227,7 +236,8 @@ ToDo：<br>
   <li>(Done 2018-07-04)63、修正 ,,,z 切字的函式</li>
   <li>(Done 2018-07-09)64、修正 ,,,x 大小寫都可以使用的問題</li>
   <li>(Done 2018-07-09)65、加速 ,,,x、,,,z 的轉換速度</li>
-  <li>(Done 2018-07-09)66、移除 import win32com、win32com.client 整個 uclliu.exe 變小一些</li>  
+  <li>(Done 2018-07-09)66、移除 import win32com、win32com.client 整個 uclliu.exe 變小一些</li>
+  <li>(Done 2018-07-13)67、增加 C:\temp\UCLLIU.ini 設定檔，記錄最後視窗移動位置 X、Y、ALPHA、SHORT_MODE、ZOOM</li>  
 </ul>
 <br>
 版權：<br>
