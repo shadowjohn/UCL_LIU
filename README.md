@@ -124,6 +124,7 @@
     <li>pywin32 【放在p27目錄，點了安裝即可 p27/pywin32-221.win32-py2.7.exe】</li>    
     <li>pyinstaller 可搭配build.bat製作dist/uclliu.exe檔【pip install pyinstaller】</li>
     <li>psutil 用來判斷目前視窗跑什麼，如果是putty、pietty、pcman出字方式是貼上，【pip install psutil】</li>
+    <li>configparser config UCLLIU.ini 需要用來解 ini 的工具【pip install configparser】</li>
     <li>(Third party) php.py 羽山比較熟php，所以在python裡實作很多php的函式</li>
     <li>(Third party) portalocker.py 防重複執行，會Lock c:\temp\UCLLIU.lock</li>
     <li>(Third party) SendKeysCtypes.py 可以送出Unicode的SendKeys</li>
@@ -142,11 +143,12 @@
     <li>5、安裝【p27/pywin32-221.win32-py2.7.exe】</li>
     <li>6、至windows cmd，下指令【pip install psutil】</li>
     <li>7、至windows cmd，下指令【pip install pyinstaller】</li>
-    <li>8、將買來的嘸蝦米，找到 liu-uni.tab，dist裡提供的pinyi.txt 與主檔 uclliu.pyw 放在一起</li>
-    <li>9、執行【python uclliu.pyw】可以跑出程式</li>
-    <li>10、編成exe的方法，執行【build.bat】，即可將 uclliu.exe 編到 dist 目錄下</li>
-    <li><s>11、build_debug.bat 是方便debug用的版本，運行時還會保留command介面</s></li>
-    <li>11、執行肥米時【python uclliu.pyw -d】可以進入 debug模式，讓 log 訊息在命令提示窗中呈現</li>
+    <li>8、至windows cmd，下指令【pip install configparser】</li>
+    <li>9、將買來的嘸蝦米，找到 liu-uni.tab，dist裡提供的pinyi.txt 與主檔 uclliu.pyw 放在一起</li>
+    <li>10、執行【python uclliu.pyw】可以跑出程式</li>
+    <li>11、編成exe的方法，執行【build.bat】，即可將 uclliu.exe 編到 dist 目錄下</li>
+    <li><s>12、build_debug.bat 是方便debug用的版本，運行時還會保留command介面</s></li>
+    <li>12、執行肥米時【python uclliu.pyw -d】可以進入 debug模式，讓 log 訊息在命令提示窗中呈現</li>
   </ul>
 <br>
 
