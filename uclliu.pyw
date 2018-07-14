@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.12
+VERSION=1.13
 import portalocker
 import os
 import sys
@@ -23,7 +23,7 @@ def split_unicode_chrs( text ):
 # https://superuser.com/questions/1120624/run-script-on-any-selected-text
 
 # 額外出字處理的 app
-f_arr = [ "putty","pietty","pcman","xyplorer" ]
+f_arr = [ "putty","pietty","pcman","xyplorer","kinza.exe" ]
 f_big5_arr = [ "zip32w" ]
 
 #import pywinauto             

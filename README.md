@@ -9,9 +9,9 @@
 作者：羽山秋人 (<a target="_blank" href="http://3wa.tw">http://3wa.tw</a>)<br>
 <br>
 最初開發日期：2017-06-16 11:24<br>
-最後更新日期：2018-07-13 12:41
+最後更新日期：2018-07-14 12:22
 <br>
-版本：V 1.12<br>
+版本：V 1.13<br>
 <br>
 下載位置：<br>
 　　1.主程式：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
@@ -240,6 +240,7 @@ ToDo：<br>
   <li>(Done 2018-07-09)65、加速 ,,,x、,,,z 的轉換速度</li>
   <li>(Done 2018-07-09)66、移除 import win32com、win32com.client 整個 uclliu.exe 變小一些</li>
   <li>(Done 2018-07-13)67、增加 C:\temp\UCLLIU.ini 設定檔，記錄最後視窗移動位置 X、Y、ALPHA、SHORT_MODE、ZOOM</li>  
+  <li>(Done 2018-07-14)68、修正 kinza 瀏覽器裡 ptt 打字無法正常的問題</li>  
 </ul>
 <br>
 版權：<br>
