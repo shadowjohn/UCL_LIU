@@ -7,7 +7,7 @@
 </center>
 <br>
 作者：羽山秋人 (<a target="_blank" href="http://3wa.tw">http://3wa.tw</a>)<br>
-信箱：linainverseshadow@gmail.com<br>
+信箱：<a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 最初開發日期：2017-06-16 11:24<br>
 最後更新日期：2018-07-14 12:22
