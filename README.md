@@ -22,17 +22,17 @@
 <br>
 
 使用方法：<br>
-    1、您可以只下載dist/uclliu.exe
-    2、將 「liu-uni.tab 或 liu.cin 或 liu.json」任一種檔案 與 uclliu.exe 放一起
-    3、執行 uclliu.exe 即可開始使用
-    4、首次執行，系統會自動將tab轉成liu.json，需要花大概30秒~1分鐘的時間，之後有liu.json就可以快速開啟。
-    5、未來使用的話，就把uclliu.exe、作好的字根檔liu.json帶著走，四處都能打肥米輸入法了A_A
-    6、下載 pinyi.txt 與 uclliu.exe 放一起執行，同音字庫，如「'pns」，會出現「0你 1妳 2擬 3禰 4儗 5旎...」同音選擇。
-    (還是要再強調一次，不要用義守大學FTP裡的那個liu-uni.tab，建議可以安裝正版嘸蝦米後在C:\windows\Syswow64裡找到)
-    7、「正常模式」=「,,,unlock」：平常打字用。
-    8、「遊戲模式」=「,,,lock」：玩遊戲時用，如CS:GO，需要按著Shift消音走路。
-    (如果忽然無法打字，也許就是進了「遊戲模式」請按「,,,unlock」解除。)
-    9、「查看目前版本」=「,,,version」 
+    1、您可以只下載dist/uclliu.exe<br>
+    2、將 「liu-uni.tab 或 liu.cin 或 liu.json」任一種檔案 與 uclliu.exe 放一起<br>
+    3、執行 uclliu.exe 即可開始使用<br>
+    4、首次執行，系統會自動將tab轉成liu.json，需要花大概30秒~1分鐘的時間，之後有liu.json就可以快速開啟。<br>
+    5、未來使用的話，就把uclliu.exe、作好的字根檔liu.json帶著走，四處都能打肥米輸入法了<br>
+    6、下載 pinyi.txt 與 uclliu.exe 放一起執行，同音字庫，如「'pns」，會出現「0你 1妳 2擬 3禰 4儗 5旎...」同音選擇。<br>
+    (還是要再強調一次，不要用義守大學FTP裡的那個liu-uni.tab，建議可以安裝正版嘸蝦米後在C:\windows\Syswow64裡找到)<br>
+    7、「正常模式」=「,,,unlock」：平常打字用。<br>
+    8、「遊戲模式」=「,,,lock」：玩遊戲時用，如CS:GO，需要按著Shift消音走路。<br>
+    (如果忽然無法打字，也許就是進了「遊戲模式」請按「,,,unlock」解除。)<br>
+    9、「查看目前版本」=「,,,version」 <br>
 <br>
 <br>
 
