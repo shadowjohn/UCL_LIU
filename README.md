@@ -263,6 +263,8 @@ ToDo：<br>
   <li>69、「英/全」時的 ESC 鍵沒有正常的吐出 ESC 的問題，如無法關閉 Line 視窗</li>
   <li>70、shift 加右邊數字鍵，造成 英/肥 不停的切換</li>
   <li>71、「肥」模式時，按到按鍵會造成浮起，要增加判斷只有0-9，A-Z才需要</li>
+  <li>72、UCLLIU.ini 跟在 uclliu.exe 旁</li>
+  <li>73、CapsLook + 任意鍵直接穿透</li>
 </ul>
 <br>
 版權：<br>
