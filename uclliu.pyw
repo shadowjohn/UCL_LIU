@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.13
+VERSION=1.14
 import portalocker
 import os
 import sys
@@ -23,7 +23,7 @@ def split_unicode_chrs( text ):
 # https://superuser.com/questions/1120624/run-script-on-any-selected-text
 
 # 額外出字處理的 app
-f_arr = [ "putty","pietty","pcman","xyplorer","kinza.exe" ]
+f_arr = [ "putty","pietty","pcman","xyplorer","kinza.exe","oxygennotincluded.exe" ]
 f_big5_arr = [ "zip32w" ]
 
 #import pywinauto             
@@ -676,14 +676,19 @@ def toAlphaOrNonAlpha():
   global config  
   #c = hf_btn.get_child()
   #hf_kind = c.get_label()
-  hf_kind = hf_btn.get_label()
-  if uclen_btn.get_label()=="英" and hf_kind=="半":
+  #hf_kind = hf_btn.get_label()
+  if uclen_btn.get_label()=="英" and hf_btn.get_label()=="半":
     win.set_opacity(0.2)
+    #win.set_mnemonics_visible(True)
     win.set_keep_above(False)
     win.set_keep_below(True)    
   else:
     #win.set_opacity(1)
+    #debug_print(win.get_opacity())
+    #if float(win.get_opacity()) != float(config["DEFAULT"]["ALPHA"]): 
     win.set_opacity( float(config["DEFAULT"]["ALPHA"]) )
+    #debug_print(float(config["DEFAULT"]["ALPHA"]))
+    #win.set_mnemonics_visible(True)
     win.set_keep_above(True)
     win.set_keep_below(False)
 def toggle_ucl():
@@ -1014,7 +1019,8 @@ def senddata(data):
   check_kind="0"
   for k in f_arr:
     #break;
-    if my.is_string_like(my.strtolower(p.exe()),k):  
+    exec_proc = my.strtolower(p.exe())
+    if my.is_string_like(exec_proc,k):  
       check_kind="1"      
       
       win32clipboard.OpenClipboard()
@@ -1034,7 +1040,14 @@ def senddata(data):
       #https://win32com.goermezer.de/microsoft/windows/controlling-applications-via-sendkeys.html
       #shell.SendKeys("+{INSERT}", 0)
       #2018-04-05 修正 vim 下打中文字的問題
-      SendKeysCtypes.SendKeys("+{INSERT}",pause=0)
+      #debug_print("Debug Oxygen Not Included")
+      #SendKeysCtypes.SendKeys("+{INSERT}",pause=0)
+      if k == "oxygennotincluded.exe":
+        #2019-02-10 修正 缺氧 無法輸入中文的問題
+        SendKeysCtypes.SendKeys("^v",pause=0)
+      else:
+        SendKeysCtypes.SendKeys("+{INSERT}",pause=0)
+      #SendKeysCtypes.SendKeys("ggggg",pause=0)
       #0xA0 = left shift
       #0x2d = insert            
       #win32api.keybd_event(0x10, 1,0,0)
@@ -1320,19 +1333,22 @@ def OnKeyboardEvent(event):
         gamemode_btn_click(gamemode_btn)
     if my.strtolower(last_key[-10:])==",,,version":
       last_key= ""   
-      message = gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)      
-      message.set_markup( ("肥米輸入法版本：%s" % VERSION) )
-      toAlphaOrNonAlpha()
+      message = gtk.MessageDialog(type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK)
+      message.set_position(gtk.WIN_POS_CENTER_ALWAYS)
+      message.set_keep_above(True)      
+      message.set_markup( ("肥米輸入法\n\n作者：羽山秋人 (http://3wa.tw)\n版本：%s" % VERSION) )
+      #toAlphaOrNonAlpha()
       message.show()
       toAlphaOrNonAlpha()  
       response = message.run()
-      toAlphaOrNonAlpha()
+      #toAlphaOrNonAlpha()
       debug_print("Show Version")
+      debug_print(response)
       #print(gtk.ResponseType.BUTTONS_OK)
       if response == -5 or response == -4:
         #message.hide()
-        toAlphaOrNonAlpha()  
-        message.destroy()            
+        message.destroy()
+        #toAlphaOrNonAlpha()  
         play_ucl_label=""
         ucl_find_data=[]
         type_label_set_text()
@@ -1356,17 +1372,25 @@ def OnKeyboardEvent(event):
     flag_is_play_otherkey=False
   if event.MessageName == "key down" and (event.Key != "Lshift" and event.Key != "Rshift"):
     debug_print("Debug event D")
-    flag_is_play_otherkey=True          
+    flag_is_play_otherkey=True   
+             
   if event.MessageName == "key up" and (event.Key == "Lshift" or event.Key == "Rshift"):
     debug_print("Debug event E")
-    #shift
+    debug_print("event.MessageName:"+event.MessageName)
+    debug_print("event.Ascii:"+str(event.Ascii))
+    debug_print("event.KeyID:"+str(event.KeyID))
+    debug_print("flag_is_play_otherkey:"+str(flag_is_play_otherkey))
+    debug_print("flag_is_shift_down:"+str(flag_is_shift_down))        
+    
     flag_is_shift_down=False
     debug_print("Press shift")
-    # 不可是右邊的2、4、6、8 
+    # 不可是右邊的2、4、6、8      
+    #toAlphaOrNonAlpha()
     if flag_is_play_otherkey==False and (event.Ascii > 40 or event.Ascii < 37) :
       toggle_ucl()
-      debug_print("Debug15")    
-    debug_print("Debug14")
+      debug_print("Debug15")        
+      debug_print("Debug14")
+
     #toAlphaOrNonAlpha()
     return True
   if event.MessageName == "key down" and event.Ascii==32 and flag_is_shift_down==True:
@@ -1415,7 +1439,7 @@ def OnKeyboardEvent(event):
           return False
         else:  
           return True                    
-    if event.MessageName == "key down" and ( (event.Ascii>=65 and event.Ascii <=90) or (event.Ascii>=97 and event.Ascii <=122) or event.Ascii==44 or event.Ascii==46 or event.Ascii==39 or event.Ascii==91 or event.Ascii==93 ):
+    if event.MessageName == "key down" and ( (event.Ascii>=65 and event.Ascii <=90) or (event.Ascii>=97 and event.Ascii <=122) or event.Ascii==44 or event.Ascii==46 or event.Ascii==39 or event.Ascii==91 or event.Ascii==93):
       # 這裡應該是同時按著SHIFT的部分
       flag_is_play_otherkey=True
       if flag_is_shift_down==True:
@@ -1501,7 +1525,8 @@ def OnKeyboardEvent(event):
       return True            
       
   else:
-    debug_print("DDDDDDDDD: " + event.Key + "," + str(event.KeyID) + "," +  event.MessageName)
+    debug_print("DDDDDDDDD: " + event.Key + "," + str(event.KeyID) + "," +  event.MessageName )
+    debug_print("flag_is_shift_down:"+str(flag_is_shift_down))
     debug_print("Debug3")  
     debug_print(event.KeyID)
     # 2018-03-27 此部分修正「英/全」時，按Ctrl A 無效的問題，或ctrl+esc等問題
@@ -1511,6 +1536,11 @@ def OnKeyboardEvent(event):
     if event.MessageName == "key down" and ( event.KeyID == 91 or event.KeyID == 92): #winkey
       flag_is_win_down=True
       return True
+    # 修正  在「英/全」的狀況，按下 esc (231 + 27 ) 無效的問題
+    if event.MessageName == "key down" and ( event.KeyID == 231 or event.KeyID == 27):
+      flag_is_win_down=False
+      debug_print("Fix 23+27")
+      return True                
     if event.MessageName == "key down" and flag_is_win_down == True : # win key
       flag_is_win_down=False
       return True    
@@ -1679,13 +1709,19 @@ win.set_focus(None)
 #set_interval(1)
 
 #gtk.main()
+updateGUI_Step = 0
 def updateGUI():
+  global updateGUI_Step
   #global is_shutdown
   while gtk.events_pending():
     gtk.main_iteration(False)
+  updateGUI_Step = updateGUI_Step + 1
+  if updateGUI_Step % 100 == 0:
+    updateGUI_Step = 0
     toAlphaOrNonAlpha()
 while True:
-  time.sleep(0.001)
+  time.sleep(0.01)
+  #debug_print("gg")
   updateGUI()      
 pythoncom.PumpMessages()     
 

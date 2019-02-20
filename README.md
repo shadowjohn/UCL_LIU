@@ -260,9 +260,11 @@ ToDo：<br>
   <li>(Done 2018-07-09)66、移除 import win32com、win32com.client 整個 uclliu.exe 變小一些</li>
   <li>(Done 2018-07-13)67、增加 C:\temp\UCLLIU.ini 設定檔，記錄最後視窗移動位置 X、Y、ALPHA、SHORT_MODE、ZOOM</li>  
   <li>(Done 2018-07-14)68、修正 kinza 瀏覽器裡 ptt 打字無法正常的問題</li>
-  <li>69、「英/全」時的 ESC 鍵沒有正常的吐出 ESC 的問題，如無法關閉 Line 視窗</li>
+  <li>(Done 2019-02-11)69、「英/全」時的 ESC 鍵沒有正常的吐出 ESC 的問題，如無法關閉 Line 視窗</li>
   <li>70、shift 加右邊數字鍵，造成 英/肥 不停的切換</li>
   <li>71、「肥」模式時，按到按鍵會造成浮起，要增加判斷只有0-9，A-Z才需要</li>
+  <li>(Done 2019-02-10)72、修正遊戲 Oxygen Not Included 無法輸入中文的問題</li>
+  <li>(Done 2019-02-11)73、修正每一段時間自動偵測 肥/半 英/全 肥/全 自動浮起的問題</li>    
 </ul>
 <br>
 版權：<br>
