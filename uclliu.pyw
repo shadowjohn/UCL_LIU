@@ -132,7 +132,13 @@ import win32con
 #2018-07-13 1.12版增加
 #檢查 C:\temp\UCLLIU.ini 初始化設定檔
 #取螢幕大小
+
+#2019-03-02 調整，將 UCLLIU.ini 跟隨在 UCLLIU.exe 旁
 INI_CONFIG_FILE = 'C:\\temp\\UCLLIU.ini'
+if my.is_file(INI_CONFIG_FILE):
+  my.copy(INI_CONFIG_FILE,PWD+"\\UCLLIU.ini")
+  my.unlink(INI_CONFIG_FILE)
+INI_CONFIG_FILE = PWD + "\\UCLLIU.ini" 
 user32 = ctypes.windll.user32
 screen_width=user32.GetSystemMetrics(0)
 screen_height=user32.GetSystemMetrics(1)
@@ -535,7 +541,9 @@ if is_need_trans_cin==True:
   cinapp.run( "liu" , "liu.cin",False)
 
 
-last_key = "" #to save last 7 word for game mode 
+last_key = "" #to save last 7 word for game mode
+flag_is_capslock_down=False
+flag_is_play_capslock_otherkey=False 
 flag_is_win_down=False
 flag_is_shift_down=False
 flag_is_ctrl_down=False
@@ -1100,7 +1108,14 @@ def senddata(data):
     #reload(sys)                                    
     #sys.setdefaultencoding('UTF-8')
     #print("CP950")
-    SendKeysCtypes.SendKeys(data.decode("UTF-8"),pause=0)
+    #2019-03-02 
+    #修正斷行、空白、自定詞庫等功能
+    _str = data.decode("UTF-8")
+    _str = my.str_replace(" ","{SPACE}",_str)
+    _str = my.str_replace("(","{(}",_str)
+    _str = my.str_replace(")","{)}",_str)
+    _str = my.str_replace("\n","{ENTER}",_str)
+    SendKeysCtypes.SendKeys(_str,pause=0)
     #reload(sys)
     #sys.setdefaultencoding('UTF-8')
   
@@ -1153,6 +1168,8 @@ def OnKeyboardEvent(event):
   global last_key
   global flag_is_win_down
   global flag_is_shift_down
+  global flag_is_capslock_down
+  global flag_is_play_capslock_otherkey
   global flag_is_ctrl_down    
   global flag_is_play_otherkey
   global play_ucl_label
@@ -1368,20 +1385,35 @@ def OnKeyboardEvent(event):
     debug_print("Debug event B") 
   if event.MessageName == "key down" and (event.Key == "Lshift" or event.Key == "Rshift"):
     flag_is_shift_down=True
-    debug_print("Debug event C")    
     flag_is_play_otherkey=False
+    debug_print("Debug event C")    
+  if event.MessageName == "key down" and event.Key == "Capital":
+    flag_is_capslock_down=True
+    flag_is_play_capslock_otherkey=False
+    debug_print("Debug event E")
+  if event.MessageName == "key down" and event.Key != "Capital":
+    flag_is_play_capslock_otherkey=True
+    debug_print("Debug event F")
+  if event.MessageName == "key up" and event.Key == "Capital":
+    flag_is_capslock_down=False
+    flag_is_play_capslock_otherkey=False
+    debug_print("Debug event E")
   if event.MessageName == "key down" and (event.Key != "Lshift" and event.Key != "Rshift"):
     debug_print("Debug event D")
     flag_is_play_otherkey=True   
+  
+  if flag_is_capslock_down == True and flag_is_play_capslock_otherkey == True:
+    return True
              
   if event.MessageName == "key up" and (event.Key == "Lshift" or event.Key == "Rshift"):
-    debug_print("Debug event E")
+    debug_print("Debug event G")
     debug_print("event.MessageName:"+event.MessageName)
     debug_print("event.Ascii:"+str(event.Ascii))
     debug_print("event.KeyID:"+str(event.KeyID))
     debug_print("flag_is_play_otherkey:"+str(flag_is_play_otherkey))
     debug_print("flag_is_shift_down:"+str(flag_is_shift_down))        
-    
+    debug_print("flag_is_capslock_down:"+str(flag_is_capslock_down))
+    debug_print("flag_is_play_capslock_otherkey:"+str(flag_is_play_capslock_otherkey))
     flag_is_shift_down=False
     debug_print("Press shift")
     # 不可是右邊的2、4、6、8      
@@ -1525,7 +1557,7 @@ def OnKeyboardEvent(event):
       return True            
       
   else:
-    debug_print("DDDDDDDDD: " + event.Key + "," + str(event.KeyID) + "," +  event.MessageName )
+    debug_print("DDDDDDDDD: event.Key: " + event.Key + "\nDDDDDDDDD: event.KeyID: " + str(event.KeyID) + "\nDDDDDDDDD: event.MessageName: " +  event.MessageName )
     debug_print("flag_is_shift_down:"+str(flag_is_shift_down))
     debug_print("Debug3")  
     debug_print(event.KeyID)
