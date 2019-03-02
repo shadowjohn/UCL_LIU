@@ -10,9 +10,9 @@
 信箱：<a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 最初開發日期：2017-06-16 11:24<br>
-最後更新日期：2018-07-14 12:22
+最後更新日期：2019-03-02 14:11
 <br>
-版本：V 1.13<br>
+版本：V 1.14<br>
 <br>
 下載位置：<br>
 　　1.主程式：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
