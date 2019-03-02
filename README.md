@@ -130,6 +130,7 @@
     修正 kinza 瀏覽器裡 ptt 打字無法正常的問題
     
     (2019-03-02) V1.14 版：
+    病毒碼提交掃描：https://www.microsoft.com/en-us/wdsi/submission/e5cb4092-479b-4188-9978-dea9db49b5ba
     「英/全」時的 ESC 鍵沒有正常的吐出 ESC 的問題，如無法關閉 Line 視窗
     「肥」模式時，按到按鍵會造成浮起，要增加判斷只有0-9，A-Z才需要
     UCLLIU.ini 跟在 uclliu.exe 旁  
