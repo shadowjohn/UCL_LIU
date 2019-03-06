@@ -10,9 +10,9 @@
 信箱：<a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 最初開發日期：2017-06-16 11:24<br>
-最後更新日期：2019-03-02 14:11
+最後更新日期：2019-03-06 22:40
 <br>
-版本：V 1.14<br>
+版本：V 1.15<br>
 <br>
 下載位置：<br>
 　　1.主程式：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
@@ -139,6 +139,10 @@
     自定詞庫有斷行的字詞時，能自動斷行
     CapsLook + 任意鍵直接穿透
     修正遊戲「缺氧」打中文字的問題
+    
+    (2019-03-06) V1.15 版：
+    CapsLock + Backspace 優先刪除 肥模式 打出來的字根
+    CapsLock + Shift 也是穿透    
                     
 <br>
 開發工具：<br>
@@ -281,8 +285,8 @@ ToDo：<br>
   <li>(Done 2019-03-02)76、自定詞庫有斷行的字詞時，能自動斷行</li>
   <li>77、自定詞庫功能</li>
   <li>(Done 2019-03-02)78、修正遊戲「缺氧」中，打中字字的問題</li>  
-  <li>79、CapsLock + BS 優先刪除 肥模式 打出來的字根</li>
-  <li>80、CapsLock + Shift 也是穿透</li>  
+  <li>(Done 2019-03-06)79、CapsLock + Backspace 優先刪除 肥模式 打出來的字根</li>
+  <li>(Done 2019-03-06)80、CapsLock + Shift 也是穿透</li>  
 </ul>
 <br>
 版權：<br>

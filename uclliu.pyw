@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.14
+VERSION=1.15
 import portalocker
 import os
 import sys
@@ -1403,7 +1403,12 @@ def OnKeyboardEvent(event):
     flag_is_play_otherkey=True   
   
   if flag_is_capslock_down == True and flag_is_play_capslock_otherkey == True:
-    return True
+    # 2019-03-06 增加，如果是 肥 模式，且輸入字是 backspace 且框有字根，就跳過這個 True
+    if event.Key == "Back" and is_ucl()==True and len(play_ucl_label) >= 1:
+      debug_print("Debug 2019-03-06 CapsLock + backspace")
+      pass
+    else:  
+      return True
              
   if event.MessageName == "key up" and (event.Key == "Lshift" or event.Key == "Rshift"):
     debug_print("Debug event G")
