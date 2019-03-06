@@ -141,6 +141,7 @@
     修正遊戲「缺氧」打中文字的問題
     
     (2019-03-06) V1.15 版：
+    病毒碼提交掃描：https://www.microsoft.com/en-us/wdsi/submission/99fc1c91-f672-4d69-9d2a-b50ab74fe8b2
     CapsLock + Backspace 優先刪除 肥模式 打出來的字根
     CapsLock + Shift 也是穿透    
                     
