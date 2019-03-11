@@ -288,6 +288,7 @@ ToDo：<br>
   <li>(Done 2019-03-02)78、修正遊戲「缺氧」中，打中字字的問題</li>  
   <li>(Done 2019-03-06)79、CapsLock + Backspace 優先刪除 肥模式 打出來的字根</li>
   <li>(Done 2019-03-06)80、CapsLock + Shift 也是穿透</li>  
+  <li>81、將熱鍵指令寫在 「,,,version」裡面</li>  
 </ul>
 <br>
 版權：<br>

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.15
+VERSION=1.16
 import portalocker
 import os
 import sys
@@ -1352,8 +1352,21 @@ def OnKeyboardEvent(event):
       last_key= ""   
       message = gtk.MessageDialog(type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK)
       message.set_position(gtk.WIN_POS_CENTER_ALWAYS)
-      message.set_keep_above(True)      
-      message.set_markup( ("肥米輸入法\n\n作者：羽山秋人 (http://3wa.tw)\n版本：%s" % VERSION) )
+      message.set_keep_above(True)
+      _msg_text = ("肥米輸入法\n\n作者：羽山秋人 (http://3wa.tw)\n版本：%s" % VERSION)
+      _msg_text += "\n\n熱鍵提示：\n\n"
+      _msg_text += "「,,,VERSION」目前版本\n"
+      _msg_text += "「,,,UNLOCK」回到正常模式\n"
+      _msg_text += "「,,,LOCK」進入遊戲模式\n"
+      _msg_text += "「,,,C」簡體模式\n"
+      _msg_text += "「,,,T」繁體模式\n"
+      _msg_text += "「,,,S」UI變窄\n"
+      _msg_text += "「,,,L」UI變寬\n"
+      _msg_text += "「,,,+」UI變大\n"
+      _msg_text += "「,,,-」UI變小\n"
+      _msg_text += "「,,,X」框字的字根轉回文字\n"
+      _msg_text += "「,,,Z」框字的文字變成字根\n"         
+      message.set_markup( _msg_text )
       #toAlphaOrNonAlpha()
       message.show()
       toAlphaOrNonAlpha()  
