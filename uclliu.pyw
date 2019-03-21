@@ -24,7 +24,7 @@ def split_unicode_chrs( text ):
 
 # 額外出字處理的 app
 f_arr = [ "putty","pietty","pcman","xyplorer","kinza.exe","oxygennotincluded.exe" ]
-f_big5_arr = [ "zip32w" ]
+f_big5_arr = [ "zip32w","daqkingcon.exe" ]
 
 #import pywinauto             
 #pwa = pywinauto.keyboard
@@ -289,9 +289,9 @@ is_need_trans_cin = False
 is_all_fault = False
 #my.unlink("liu.json")
 #my.unlink("liu.cin")
-if my.is_file(PWD+"\\liu.json") == False:
-  if my.is_file(PWD+"\\liu.cin") == False:
-    if my.is_file(PWD+"\\liu-uni.tab") == False:
+if my.is_file(PWD + "\\liu.json") == False:
+  if my.is_file(PWD + "\\liu.cin") == False:
+    if my.is_file(PWD + "\\liu-uni.tab") == False:
       is_all_fault=True
     else:
       is_need_trans_tab=True
@@ -587,8 +587,8 @@ if my.is_file(PWD + "\\liu.json") == False:
   #message.show()
   gtk.main()
   #my.exit()
-if my.is_file("pinyi.txt")==True:
-  same_sound_data = my.explode("\n",my.trim(my.file_get_contents("pinyi.txt")))  
+if my.is_file(PWD + "\\pinyi.txt")==True:
+  same_sound_data = my.explode("\n",my.trim(my.file_get_contents(PWD + "\\pinyi.txt")))  
   
 uclcode = my.json_decode(my.file_get_contents(PWD + "\\liu.json"))
 

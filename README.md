@@ -10,7 +10,7 @@
 信箱：<a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 最初開發日期：2017-06-16 11:24<br>
-最後更新日期：2019-03-21 22:40
+最後更新日期：2019-03-21 16:37
 <br>
 版本：V 1.16<br>
 <br>
@@ -146,7 +146,8 @@
     CapsLock + Shift 也是穿透
     
     (2019-03-21) V1.16 版：
-    修正將肥米放入Windows啟動排程，找不到 liu.json 的問題        
+    修正康和金好康看盤軟體出中文字的問題
+    修正將肥米放入Windows啟動排程，找不到 liu.json 的問題      
                     
 <br>
 開發工具：<br>
@@ -291,8 +292,9 @@ ToDo：<br>
   <li>(Done 2019-03-02)78、修正遊戲「缺氧」中，打中字字的問題</li>  
   <li>(Done 2019-03-06)79、CapsLock + Backspace 優先刪除 肥模式 打出來的字根</li>
   <li>(Done 2019-03-06)80、CapsLock + Shift 也是穿透</li>  
-  <li>(Done 2019-03-11)81、將熱鍵指令寫在 「,,,version」裡面</li>
-  <li>(Done 2019-03-21)82、修正將肥米放入排程，找不到 liu.json 的問題</li>  
+  <li>(Done 2019-03-11)81、將熱鍵指令寫在 「,,,version」裡面</li>  
+  <li>(Done 2019-03-12)82、修正康和金好康看盤軟體出中文字的問題</li>
+  <li>(Done 2019-03-21)83、修正將肥米放入Windows啟動排程，找不到 liu.json 的問題</li>  
 </ul>
 <br>
 版權：<br>
