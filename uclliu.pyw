@@ -289,9 +289,9 @@ is_need_trans_cin = False
 is_all_fault = False
 #my.unlink("liu.json")
 #my.unlink("liu.cin")
-if my.is_file("liu.json") == False:
-  if my.is_file("liu.cin") == False:
-    if my.is_file("liu-uni.tab") == False:
+if my.is_file(PWD+"\\liu.json") == False:
+  if my.is_file(PWD+"\\liu.cin") == False:
+    if my.is_file(PWD+"\\liu-uni.tab") == False:
       is_all_fault=True
     else:
       is_need_trans_tab=True
@@ -577,7 +577,7 @@ def widen(s):
 #def pleave(self, event):
 #  my.exit();
 
-if my.is_file("liu.json") == False:
+if my.is_file(PWD + "\\liu.json") == False:
   message = gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)
   message.set_markup("缺少liu.json")  
   response = message.run()
@@ -590,7 +590,7 @@ if my.is_file("liu.json") == False:
 if my.is_file("pinyi.txt")==True:
   same_sound_data = my.explode("\n",my.trim(my.file_get_contents("pinyi.txt")))  
   
-uclcode = my.json_decode(my.file_get_contents("liu.json"))
+uclcode = my.json_decode(my.file_get_contents(PWD + "\\liu.json"))
 
 uclcode_r = {}
 #然後把 chardefs 的字碼，變成對照字根，可以加速 ,,,z、,,,x 反查的速度
