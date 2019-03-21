@@ -146,6 +146,7 @@
     CapsLock + Shift 也是穿透
     
     (2019-03-21) V1.16 版：
+    病毒碼提交掃描：https://www.microsoft.com/en-us/wdsi/submission/f24a0ff0-4975-4ae6-b6c1-40f1d58f5de6
     修正康和金好康看盤軟體出中文字的問題
     修正將肥米放入Windows啟動排程，找不到 liu.json 的問題      
                     
