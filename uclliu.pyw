@@ -92,7 +92,8 @@ def md5_file(fileName):
 
 
 #PWD=my.pwd()   
-PWD = os.path.dirname(os.path.realpath(__file__))
+PWD = os.path.dirname(os.path.realpath(sys.argv[0]))
+#my.file_put_contents("c:\\temp\\aaa.txt",PWD);
 #debug_print(PWD)
 #sys.exit(0)
 
