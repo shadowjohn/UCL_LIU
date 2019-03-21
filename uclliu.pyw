@@ -91,8 +91,10 @@ def md5_file(fileName):
     return m.hexdigest()
 
 
-PWD=my.pwd()   
-
+#PWD=my.pwd()   
+PWD = os.path.dirname(os.path.realpath(__file__))
+#debug_print(PWD)
+#sys.exit(0)
 
 #此是防止重覆執行
 if os.path.isdir("C:\\temp") == False:
