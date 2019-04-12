@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.16
+VERSION=1.17
 import portalocker
 import os
 import sys
@@ -314,6 +314,60 @@ if is_all_fault==True and my.is_file("C:\\Program Files\\BoshiamyTIP\\liu-uni.ta
   is_need_trans_tab=True
   is_need_trans_cin=True
 
+# 2019-04-13 加入 小小輸入法臺灣包2018年版wuxiami.txt，http://fygul.blogspot.com/2018/05/yong-tw2018.html 裡linux包中的/tw/wuxiami.txt
+if is_all_fault==True and my.is_file(PWD + "\\wuxiami.txt")==True:
+  debug_print("Run wuxiami.txt ...");
+  my.copy(PWD+"\\wuxiami.txt",PWD+"\\liu.cin");
+  data = my.file_get_contents(PWD+"\\liu.cin");
+  m = my.explode("#修正錯誤：2018-4-15,17",data);
+  data = my.trim(m[1])
+  data = my.str_replace("\t"," ",data);
+  data = my.implode("\n",m);  
+  # 修正 cin 用的表頭
+  data = '''%gen_inp
+%ename liu
+%cname 肥米
+%encoding UTF-8
+%selkey 0123456789
+%keyname begin
+a Ａ
+b Ｂ
+c Ｃ
+d Ｄ
+e Ｅ
+f Ｆ
+g Ｇ
+h Ｈ
+i Ｉ
+j Ｊ
+k Ｋ
+l Ｌ
+m Ｍ
+n Ｎ
+o Ｏ
+p Ｐ
+q Ｑ
+r Ｒ
+s Ｓ
+t Ｔ
+u Ｕ
+v Ｖ
+w Ｗ
+x Ｘ
+y Ｙ
+z Ｚ
+, ，
+. ．
+' ’
+[ 〔
+] 〔
+%keyname end
+%chardef begin
+''' + data +"\n%chardef end\n";
+  my.file_put_contents(PWD+"\\liu.cin",data);
+  is_need_trans_tab = False;
+  is_need_trans_cin = True;
+  is_all_fault = False;  
 # 2018-06-25 加入 RIME liur_trad.dict.yaml 表格支援
 if is_all_fault==True and my.is_file(PWD + "\\liur_trad.dict.yaml")==True:
   debug_print("Run Rime liur_trad.dict.yaml ...");

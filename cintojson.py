@@ -24,15 +24,17 @@ class CinToJson(object):
       if value =="":
         continue
       d = value.split(" ")
-      if len(d)!=2:
-        continue
-      #print(d)      
-      #print(d[0])
+      # 2019-04-13 某些 cin 裡是第一個字是關鍵，但連著2、3、4、5字一起，所以這部分已不是不等於2就跳過
+      #if len(d)!=2:
+      #  continue
       d[0] = d[0].strip()
-      d[1] = d[1].strip()             
-      if output["chardefs"].has_key(d[0])==False:      
-        output["chardefs"][d[0]] = []
-      output["chardefs"][d[0]].append(d[1])
+      for kk in range(1,len(d)):            
+        #print(d)      
+        #print(d[0])        
+        d[1] = d[kk].strip()             
+        if output["chardefs"].has_key(d[0])==False:      
+          output["chardefs"][d[0]] = []
+        output["chardefs"][d[0]].append(d[1])
       #sys.exit()
     data = json.dumps(output,indent=4, sort_keys=True, ensure_ascii=False)
     #print(data)

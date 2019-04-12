@@ -10,9 +10,9 @@
 信箱：<a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 最初開發日期：2017-06-16 11:24<br>
-最後更新日期：2019-03-21 16:37
+最後更新日期：2019-04-13 00:42
 <br>
-版本：V 1.16<br>
+版本：V 1.17<br>
 <br>
 下載位置：<br>
 　　1.主程式：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
@@ -48,9 +48,11 @@
 　　6、泰瑞版小小輸入法，將 terry_yong.zip 解開，資料夾 mb 裡的 Boshiamy.txt 改名成 terry_boshiamy.txt 跟主程式放一起<br>
 　　7、RIME afrink 整理的 liur_trad.dict.yaml，liur_trad.dict.yaml 跟主程式放一起<br>
 　　8、支援opendesktop提供的萬國蝦米字根檔uniliu.txt， https://github.com/chinese-opendesktop/cin-tables ，同fcitx 嘸蝦米表格，將uniliu.txt 改名成 fcitx_boshiamy.txt 跟主程式放一起(可惜沒有日文字)<br>
+　　9、支援小小輸入法臺灣包2018年版wuxiami.txt，http://fygul.blogspot.com/2018/05/yong-tw2018.html 裡linux包中的/tw/wuxiami.txt，將wuxiami.txt 跟主程式放一起<br>
       
 開發動機：<br>
 　　吃飽閒閒覺得人生就是該自己寫一套輸入法，然後就開始寫了。<br>
+<br>
 字碼表說明：<br>
 　　　　由於字碼表的版權問題爭議，就不放 liu.json 了，liu.json 的格式同PIME的架構。<br>
 　　要好的字碼表的話，請買正版，將 tab->cin->json <br>
@@ -297,7 +299,7 @@ ToDo：<br>
   <li>(Done 2019-03-11)81、將熱鍵指令寫在 「,,,version」裡面</li>  
   <li>(Done 2019-03-12)82、修正康和金好康看盤軟體出中文字的問題</li>
   <li>(Done 2019-03-21)83、修正將肥米放入Windows啟動排程，找不到 liu.json 的問題</li>
-  <li>84、支援小小輸入法臺灣包2018年版wuxiami.txt，http://fygul.blogspot.com/2018/05/yong-tw2018.html 裡linux包中的/tw/wuxiami.txt</li>
+  <li>(Done 2019-04-13)84、支援小小輸入法臺灣包2018年版wuxiami.txt，http://fygul.blogspot.com/2018/05/yong-tw2018.html 裡linux包中的/tw/wuxiami.txt</li>
   <li>(Done 2019-04-13)85、支援opendesktop提供的萬國蝦米字根檔uniliu.txt，https://github.com/chinese-opendesktop/cin-tables</li>
 </ul>
 <br>
