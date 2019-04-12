@@ -25,8 +25,8 @@ class CinToJson(object):
         continue
       d = value.split(" ")
       # 2019-04-13 某些 cin 裡是第一個字是關鍵，但連著2、3、4、5字一起，所以這部分已不是不等於2就跳過
-      #if len(d)!=2:
-      #  continue
+      if len(d) < 2:
+        continue
       d[0] = d[0].strip()
       for kk in range(1,len(d)):            
         #print(d)      
