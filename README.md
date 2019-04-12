@@ -295,7 +295,9 @@ ToDo：<br>
   <li>(Done 2019-03-06)80、CapsLock + Shift 也是穿透</li>  
   <li>(Done 2019-03-11)81、將熱鍵指令寫在 「,,,version」裡面</li>  
   <li>(Done 2019-03-12)82、修正康和金好康看盤軟體出中文字的問題</li>
-  <li>(Done 2019-03-21)83、修正將肥米放入Windows啟動排程，找不到 liu.json 的問題</li>  
+  <li>(Done 2019-03-21)83、修正將肥米放入Windows啟動排程，找不到 liu.json 的問題</li>
+  <li>84、支援小小輸入法臺灣包2018年版wuxiami.txt，http://fygul.blogspot.com/2018/05/yong-tw2018.html 裡linux包中的/tw/wuxiami.txt</li>
+  <li>85、支援opendesktop提供的萬國蝦米字根檔uniliu.txt，https://github.com/chinese-opendesktop/cin-tables</li>
 </ul>
 <br>
 版權：<br>
