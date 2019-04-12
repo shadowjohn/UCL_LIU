@@ -152,7 +152,12 @@
     病毒碼提交掃描：https://www.microsoft.com/en-us/wdsi/submission/f24a0ff0-4975-4ae6-b6c1-40f1d58f5de6
     修正康和金好康看盤軟體出中文字的問題
     修正將肥米放入Windows啟動排程，找不到 liu.json 的問題      
-                    
+
+    (2019-04-13) V1.17 版：
+    病毒碼提交掃描：https://www.microsoft.com/en-us/wdsi/submission/a3f661ad-7684-42f5-ab5f-6b40e8cbeadd
+    支援小小輸入法臺灣包2018年版wuxiami.txt，http://fygul.blogspot.com/2018/05/yong-tw2018.html 裡linux包中的/tw/wuxiami.txt
+    支援opendesktop提供的萬國蝦米字根檔uniliu.txt，https://github.com/chinese-opendesktop/cin-tables (同fcitx_boshiamy.txt)
+                        
 <br>
 開發工具：<br>
   <ul>
