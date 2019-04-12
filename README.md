@@ -44,9 +44,10 @@
 　　2、官方 7.0.5 liu-uni.tab<br>
 　　3、嘸蝦米 J liu-uni.tab<br>
 　　4、PIME liu.json<br>
-　　5、fcitx 嘸蝦米表格，下載 boshiamy.txt 改名成 fcitx_boshiamy.txt 跟主程式放一起<br>
+　　5、fcitx 嘸蝦米表格，下載 boshiamy.txt 改名成 fcitx_boshiamy.txt 跟主程式放一起(可惜沒有日文字)<br>
 　　6、泰瑞版小小輸入法，將 terry_yong.zip 解開，資料夾 mb 裡的 Boshiamy.txt 改名成 terry_boshiamy.txt 跟主程式放一起<br>
-　　7、RIME afrink 整理的 liur_trad.dict.yaml，liur_trad.dict.yaml 跟主程式放一起<br> 
+　　7、RIME afrink 整理的 liur_trad.dict.yaml，liur_trad.dict.yaml 跟主程式放一起<br>
+　　8、支援opendesktop提供的萬國蝦米字根檔uniliu.txt，https://github.com/chinese-opendesktop/cin-tables，同fcitx 嘸蝦米表格，將uniliu.txt 改名成 fcitx_boshiamy.txt 跟主程式放一起(可惜沒有日文字)<br>
       
 開發動機：<br>
 　　吃飽閒閒覺得人生就是該自己寫一套輸入法，然後就開始寫了。<br>
@@ -297,7 +298,7 @@ ToDo：<br>
   <li>(Done 2019-03-12)82、修正康和金好康看盤軟體出中文字的問題</li>
   <li>(Done 2019-03-21)83、修正將肥米放入Windows啟動排程，找不到 liu.json 的問題</li>
   <li>84、支援小小輸入法臺灣包2018年版wuxiami.txt，http://fygul.blogspot.com/2018/05/yong-tw2018.html 裡linux包中的/tw/wuxiami.txt</li>
-  <li>85、支援opendesktop提供的萬國蝦米字根檔uniliu.txt，https://github.com/chinese-opendesktop/cin-tables</li>
+  <li>(Done 2019-04-13)85、支援opendesktop提供的萬國蝦米字根檔uniliu.txt，https://github.com/chinese-opendesktop/cin-tables</li>
 </ul>
 <br>
 版權：<br>
