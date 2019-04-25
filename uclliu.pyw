@@ -1264,6 +1264,7 @@ def OnKeyboardEvent(event):
   debug_print('---')
   debug_print(('last_key: %s' % (last_key[-8:])))
   '''
+  
   hwnd = win32gui.GetForegroundWindow()
   pid = win32process.GetWindowThreadProcessId(hwnd)
   pp="";
