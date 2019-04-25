@@ -10,9 +10,9 @@
 信箱：<a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 最初開發日期：2017-06-16 11:24<br>
-最後更新日期：2019-04-25 09:06
+最後更新日期：2019-04-25 18:09
 <br>
-版本：V 1.18<br>
+版本：V 1.19<br>
 <br>
 下載位置：<br>
 　　1.主程式：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
@@ -306,7 +306,8 @@ ToDo：<br>
   <li>(Done 2019-03-21)83、修正將肥米放入Windows啟動排程，找不到 liu.json 的問題</li>
   <li>(Done 2019-04-13)84、支援小小輸入法臺灣包2018年版wuxiami.txt，http://fygul.blogspot.com/2018/05/yong-tw2018.html 裡linux包中的/tw/wuxiami.txt</li>
   <li>(Done 2019-04-13)85、支援opendesktop提供的萬國蝦米字根檔uniliu.txt，https://github.com/chinese-opendesktop/cin-tables</li>
-  <li>(Done 2019-04-25)86、使用遠端連線軟體，自動切換成「英/半」</li>
+  <li>(Done 2019-04-25)86、使用 mstsc 遠端連線軟體，自動切換成「英/半」</li>
+  <li>(Done 2019-04-25)87、使用 Chrome 遠端連線軟體，自動切換成「英/半」</li>
 </ul>
 <br>
 版權：<br>

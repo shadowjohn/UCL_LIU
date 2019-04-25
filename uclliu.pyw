@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.18
+VERSION=1.19
 import portalocker
 import os
 import sys
@@ -1265,7 +1265,7 @@ def OnKeyboardEvent(event):
   debug_print(('last_key: %s' % (last_key[-8:])))
   '''
   
-  hwnd = win32gui.GetForegroundWindow()
+  hwnd = win32gui.GetForegroundWindow()  
   pid = win32process.GetWindowThreadProcessId(hwnd)
   pp="";
   if len(pid) >=2:
@@ -1276,12 +1276,24 @@ def OnKeyboardEvent(event):
   #debug_print("PP:%s" % (pp))
   p=psutil.Process(pp)
   #debug_print("ProcessP:%s" % (p))
-  for k in f_pass_app:
-    exec_proc = my.strtolower(p.exe())
+  #print("GGGGGGG %s " % (p.exe()))
+  
+  #print(dir(p))
+  exec_proc = my.strtolower(p.exe())
+  #debug_print("Process :%s" % (exec_proc))
+  #print ("HWND:")
+  #print (win32gui.GetWindowText(hwnd))
+  
+  for k in f_pass_app:        
     if my.is_string_like(exec_proc,k):
       if is_ucl()==True:
         toggle_ucl()
       return True
+  # chrome 遠端桌面也不需要肥米
+  if my.is_string_like(my.strtolower(win32gui.GetWindowText(hwnd)),"- chrome "):
+    if is_ucl()==True:
+      toggle_ucl()
+    return True
   
   if event.MessageName == "key up":
     last_key = last_key + chr(event.Ascii)
