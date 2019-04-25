@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.17
+VERSION=1.18
 import portalocker
 import os
 import sys
@@ -25,6 +25,9 @@ def split_unicode_chrs( text ):
 # 額外出字處理的 app
 f_arr = [ "putty","pietty","pcman","xyplorer","kinza.exe","oxygennotincluded.exe" ]
 f_big5_arr = [ "zip32w","daqkingcon.exe" ]
+
+# 不使用肥米的 app
+f_pass_app = [ "mstsc.exe" ]
 
 #import pywinauto             
 #pwa = pywinauto.keyboard
@@ -1239,6 +1242,7 @@ def OnKeyboardEvent(event):
   global VERSION
   global f_arr
   global GUI_FONT_16
+  global f_pass_app
   #print(dir())  
   #try:  
   #print(event)
@@ -1260,6 +1264,24 @@ def OnKeyboardEvent(event):
   debug_print('---')
   debug_print(('last_key: %s' % (last_key[-8:])))
   '''
+  hwnd = win32gui.GetForegroundWindow()
+  pid = win32process.GetWindowThreadProcessId(hwnd)
+  pp="";
+  if len(pid) >=2:
+    pp=pid[1]
+  else:
+    pp=pid[0]
+  #print("PP:%s" % (pp))
+  #debug_print("PP:%s" % (pp))
+  p=psutil.Process(pp)
+  #debug_print("ProcessP:%s" % (p))
+  for k in f_pass_app:
+    exec_proc = my.strtolower(p.exe())
+    if my.is_string_like(exec_proc,k):
+      if is_ucl()==True:
+        toggle_ucl()
+      return True
+  
   if event.MessageName == "key up":
     last_key = last_key + chr(event.Ascii)
     last_key = last_key[-10:]
