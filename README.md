@@ -40,8 +40,8 @@
 　　14、UI 變小「,,,-」 <br>
 　　15、環境設定(強列建議)：<br>
 <kbd>
-<img src="screenshot/install/1.png" border="1" style="border:1px solid #f00;">
-建議可以跟筆者一樣
+<img src="screenshot/install/1.png" border="1" style="border:1px solid #f00;"><br>
+  <h3>建議可以跟筆者一樣</h3>
 </kbd>
 <kbd>
 <img src="screenshot/install/2.png" border="1" style="border:1px solid #f00;">
