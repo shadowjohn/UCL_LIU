@@ -16,14 +16,17 @@
 <br>
 <h3>版本：V 1.19</h3>
 <br>
-<h3>下載位置：</h3><br>
+<h3>版權：</h3>
+　免錢的 MIT-License
+<br>
+<h3>下載位置：</h3>
 　　1.主程式：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
 　　2.同音字庫：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt</a><br>
 　　3.字根檔(liu-uni.tab、liu.cin、liu.json) 因版權問題無法提供  
 <br>
 <br>
 
-<h3>使用方法：</h3><br>
+<h3>使用方法：</h3>
 　　1、您可以只下載dist/uclliu.exe<br>
 　　2、將 「liu-uni.tab 或 liu.cin 或 liu.json」任一種檔案 與 uclliu.exe 放一起<br>
 　　3、執行 uclliu.exe 即可開始使用<br>
@@ -61,7 +64,7 @@
 <br>
 <br>
 <br>
-目前肥米輸入法支援的字碼表如下：<br>
+<h3>目前肥米輸入法支援的字碼表如下：</h3>
 　　1、官方 7.0.4 liu-uni.tab<br>
 　　2、官方 7.0.5 liu-uni.tab<br>
 　　3、嘸蝦米 J liu-uni.tab<br>
@@ -72,10 +75,10 @@
 　　8、支援opendesktop提供的萬國蝦米字根檔uniliu.txt， https://github.com/chinese-opendesktop/cin-tables ，同fcitx 嘸蝦米表格，將uniliu.txt 改名成 fcitx_boshiamy.txt 跟主程式放一起(可惜沒有日文字)<br>
 　　9、支援小小輸入法臺灣包2018年版wuxiami.txt，http://fygul.blogspot.com/2018/05/yong-tw2018.html 裡linux包中的/tw/wuxiami.txt，將wuxiami.txt 跟主程式放一起<br>
       
-開發動機：<br>
+<h3>開發動機：</h3>
 　　吃飽閒閒覺得人生就是該自己寫一套輸入法，然後就開始寫了。<br>
 <br>
-字碼表說明：<br>
+<h3>字碼表說明：</h3>
 　　　　由於字碼表的版權問題爭議，就不放 liu.json 了，liu.json 的格式同PIME的架構。<br>
 　　要好的字碼表的話，請買正版，將 tab->cin->json <br>
 　　雖然很麻煩，但沒人想因為實作一套輸入法就被告翻。<br>
@@ -187,7 +190,7 @@
     支援Chrome遠端連線，連外部主機時，本機強制使用「英/半」，不會一直彈出來煩。
                                                          
 <br>
-開發工具：<br>
+<h3>開發工具：</h3>
   <ul>
     <li>Python 27 (32BIT)</li>
     <li>pyhook</li>
@@ -204,7 +207,7 @@
     <li>字碼表亦可參考PIME裡的liu.json</li>
 </ul>
 <br>
-檔案說明：<br>
+<h3>檔案說明：</h3>
   <ul>
     <li>Python 27 (x86版本):【https://www.python.org/ftp/python/2.7.13/python-2.7.13.msi】</li>
     <li>請設定windows環境變數，在path裡加上 【;c:\Python27;c:\Python27\Scripts】
@@ -223,7 +226,7 @@
     <li>字碼表亦可參考PIME裡的liu.json</li>
   </ul>
 <br>
-自行編譯：<br>
+<h3>自行編譯：</h3>
   <ul>
     <li>1、請下載並安裝python 27 (x86版) 【https://www.python.org/ftp/python/2.7.13/python-2.7.13.msi】</li>
     <li>2、請設定windows環境變數，在path裡加上 【;c:\Python27;c:\Python27\Scripts】</li>
@@ -241,13 +244,13 @@
   </ul>
 <br>
 <br>
-微軟 Windows Defender 誤判與回報：
-<img src="screenshot/uclliu_save1.png">
+<h3>微軟 Windows Defender 誤判與回報：</h3>
+<img src="screenshot/uclliu_save_1.19.png">
 由於此程式以 pyhook (keyhook) 方式開發，容易被防毒軟體誤判成病毒，已提供微軟進行病毒排除，正常只需要把 Windows Defender 病毒碼更新，啟動時就不會被封鎖了。
 <br>
 
 
-ToDo：<br>
+<h3>ToDo：</h3>
 <ul>
   <li>(Done)1、(嚴重)「送出字元」的方法，試了很多send key一直無法解決 send unicode的問題，暫時使用「剪貼簿」的Ctrl+V來實作貼上文字的功能</li>
   <li>(Done 2017-07-16)2、「英文全形」輸入時，有些組合鍵如 Alt+tab還尚未決定</li>
@@ -338,5 +341,3 @@ ToDo：<br>
   <li>(Done 2019-04-25)87、使用 Chrome 遠端連線軟體，自動切換成「英/半」</li>
 </ul>
 <br>
-版權：<br>
-　免錢的 MIT-License
