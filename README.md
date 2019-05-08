@@ -63,7 +63,8 @@ V 1.19
 </kbd>
   
 <br>
-<br>
+<h3>開發動機：</h3>
+　　吃飽閒閒覺得人生就是該自己寫一套輸入法，然後就開始寫了。<br>
 <br>
 <h3>目前肥米輸入法支援的字碼表如下：</h3>
 　　1、官方 7.0.4 liu-uni.tab<br>
@@ -75,10 +76,7 @@ V 1.19
 　　7、RIME afrink 整理的 liur_trad.dict.yaml，liur_trad.dict.yaml 跟主程式放一起<br>
 　　8、支援opendesktop提供的萬國蝦米字根檔uniliu.txt， https://github.com/chinese-opendesktop/cin-tables ，同fcitx 嘸蝦米表格，將uniliu.txt 改名成 fcitx_boshiamy.txt 跟主程式放一起(可惜沒有日文字)<br>
 　　9、支援小小輸入法臺灣包2018年版wuxiami.txt，http://fygul.blogspot.com/2018/05/yong-tw2018.html 裡linux包中的/tw/wuxiami.txt，將wuxiami.txt 跟主程式放一起<br>
-      
-<h3>開發動機：</h3>
-　　吃飽閒閒覺得人生就是該自己寫一套輸入法，然後就開始寫了。<br>
-<br>
+<br>      
 <h3>字碼表說明：</h3>
 　　　　由於字碼表的版權問題爭議，就不放 liu.json 了，liu.json 的格式同PIME的架構。<br>
 　　要好的字碼表的話，請買正版，將 tab->cin->json <br>
@@ -87,7 +85,9 @@ V 1.19
 　　P.S: 請不要使用守義大學FTP裡的那個 liu-uni.tab ，太古早了，而且有些字根都錯的!
 　　<br>
 　　首次使用如果沒有liu.json，會自動進行 tab->cin->json的轉換，tab會自動查找C:\windows\Syswow64\liu-uni.tab 或 C:\\Program Files\\BoshiamyTIP\\liu-uni.tab 或 同目錄下的tab檔。<br>
-    
+<br>
+<br>
+
     (2018-03-22) V1.2 版，可支援 fcitx 裡的嘸蝦米表格：
     fcitx-table-boshiamy，如要使用fcitx-table-boshiamy，下載 boshiamy.txt 改名成 fcitx_boshiamy.txt 跟主程式放一起，
     就可以把fctix_boshiamy.txt 轉成 liu.cin，再轉 liu.json 來使用。
