@@ -39,21 +39,20 @@
 　　13、UI 變大「,,,+」 <br>
 　　14、UI 變小「,,,-」 <br>
 　　15、環境設定(強列建議)：<br>
-<center>
-<img src="screenshot/install/1.png" border="1" style="border:1px solid #f00;"><br>
-</center>
+<kbd>
+<img src="screenshot/install/1.png" border="1" style="border:1px solid #f00;">
 建議可以跟筆者一樣
-<center>
-<img src="screenshot/install/2.png" border="1" style="border:1px solid #f00;"><br>
-</center>
+</kbd>
+<kbd>
+<img src="screenshot/install/2.png" border="1" style="border:1px solid #f00;">
 安裝一個「ENG語系」，點選【語言喜好設定】」，應該可以在控制台找到。
-<center>
-<img src="screenshot/install/3.png" border="1" style="border:1px solid #f00;"><br>
-</center>
+</kbd>
+<kbd>
+<img src="screenshot/install/3.png" border="1" style="border:1px solid #f00;">
 一、國家與地區，要選「台灣」<br>
 二、新增語言：找到「English (United States)」加入，但【中文(台灣)要設為預設值】<br>
 三、平常打字時，就選「ENG」打起來就會很順手。<br>
-
+</kbd>
   
 <br>
 目前肥米輸入法支援的字碼表如下：<br>
