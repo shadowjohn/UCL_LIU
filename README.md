@@ -44,11 +44,11 @@
   <h3>建議可以跟筆者一樣</h3>
 </kbd>
 <kbd>
-<img src="screenshot/install/2.png" border="1" style="border:1px solid #f00;">br>
+<img src="screenshot/install/2.png" border="1" style="border:1px solid #f00;"><br>
   <h3>安裝一個「ENG語系」，點選【語言喜好設定】」，應該可以在控制台找到。</h3>
 </kbd>
 <kbd>
-<img src="screenshot/install/3.png" border="1" style="border:1px solid #f00;">br>
+<img src="screenshot/install/3.png" border="1" style="border:1px solid #f00;"><br>
   <h3>
 一、國家與地區，要選「台灣」<br>
 二、新增語言：找到「English (United States)」加入，但【中文(台灣)要設為預設值】<br>
