@@ -57,6 +57,8 @@
 </kbd>
   
 <br>
+<br>
+<br>
 目前肥米輸入法支援的字碼表如下：<br>
 　　1、官方 7.0.4 liu-uni.tab<br>
 　　2、官方 7.0.5 liu-uni.tab<br>
