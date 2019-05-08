@@ -6,22 +6,24 @@
   <img src="screenshot/demo.gif">
 </center>
 <br>
-作者：羽山秋人 (<a target="_blank" href="http://3wa.tw">http://3wa.tw</a>)<br>
-信箱：<a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
+<h3>作者：</h3>
+  羽山秋人 (<a target="_blank" href="http://3wa.tw">http://3wa.tw</a>)<br>
+<h3>信箱：</h3>
+  <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
-最初開發日期：2017-06-16 11:24<br>
-最後更新日期：2019-04-25 18:09
+<h3>最初開發日期：</h3>2017-06-16 11:24<br>
+<h3>最後更新日期：</h3>2019-04-25 18:09
 <br>
-版本：V 1.19<br>
+<h3>版本：</h3>V 1.19<br>
 <br>
-下載位置：<br>
+<h3>下載位置：</h3><br>
 　　1.主程式：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
 　　2.同音字庫：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt</a><br>
 　　3.字根檔(liu-uni.tab、liu.cin、liu.json) 因版權問題無法提供  
 <br>
 <br>
 
-使用方法：<br>
+<h3>使用方法：</h3><br>
 　　1、您可以只下載dist/uclliu.exe<br>
 　　2、將 「liu-uni.tab 或 liu.cin 或 liu.json」任一種檔案 與 uclliu.exe 放一起<br>
 　　3、執行 uclliu.exe 即可開始使用<br>
