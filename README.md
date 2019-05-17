@@ -12,9 +12,9 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2019-04-25 18:09
+<h3>最後更新日期：</h3>2019-05-17 13:21
 <br>
-<h3>版本：</h3>V 1.19<br>
+<h3>版本：</h3>V 1.20<br>
 <br>
 <h3>下載位置：</h3><br>
 　　1.主程式：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
@@ -40,7 +40,17 @@
 　　12、UI 變寬「,,,l」 <br>
 　　13、UI 變大「,,,+」 <br>
 　　14、UI 變小「,,,-」 <br>
-　　15、環境設定(強列建議)：<br>
+　　15、UCLLIU.ini<br>
+　　　　[DEFAULT]
+　　　　short_mode = 0  # 是否為「短」版模式， 0 或 1
+　　　　zoom = 0.90  # 縮放大小
+　　　　send_kind_2_big5 = # 如 EWinner.exe 遇到此種程式，以 「big5」 方式出字 
+　　　　send_kind_1_paste = # 如 putty.exe,pcman 遇到此程程式，以 「複製、貼上」 方式出字 
+　　　　alpha = 1 # 透明度
+　　　　y = 950 # 肥米輸入法最後在螢幕 y 軸位置
+　　　　x = 1239 # 肥米輸入法最後在螢幕 x 軸位置
+
+　　16、環境設定(強列建議)：<br>
 <kbd>
 <img src="screenshot/install/1.png"><br>
   <h3>建議可以跟筆者一樣</h3>
@@ -336,6 +346,8 @@ ToDo：<br>
   <li>(Done 2019-04-13)85、支援opendesktop提供的萬國蝦米字根檔uniliu.txt，https://github.com/chinese-opendesktop/cin-tables</li>
   <li>(Done 2019-04-25)86、使用 mstsc 遠端連線軟體，自動切換成「英/半」</li>
   <li>(Done 2019-04-25)87、使用 Chrome 遠端連線軟體，自動切換成「英/半」</li>
+  <li>(Done 2019-05-17)88、元大「點金靈」出字改成 big5</li>
+  <li>(Done 2019-05-17)89、在 UCLLIU.ini 增加 send_kind_1_paste、SEND_KIND_2_BIG5 二種出字模式</li>
 </ul>
 <br>
 版權：<br>

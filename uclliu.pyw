@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.19
+VERSION=1.20
 import portalocker
 import os
 import sys
@@ -24,7 +24,7 @@ def split_unicode_chrs( text ):
 
 # 額外出字處理的 app
 f_arr = [ "putty","pietty","pcman","xyplorer","kinza.exe","oxygennotincluded.exe" ]
-f_big5_arr = [ "zip32w","daqkingcon.exe" ]
+f_big5_arr = [ "zip32w","daqkingcon.exe","EWinner.exe" ]
 
 # 不使用肥米的 app
 f_pass_app = [ "mstsc.exe" ]
@@ -154,12 +154,14 @@ config['DEFAULT'] = {
                       "Y": int(screen_height*0.87),
                       "ALPHA": "1", #嘸蝦米全顯示時時的初值
                       "SHORT_MODE": "0", #0:簡短畫面，或1:長畫面
-                      "ZOOM": "1" #整體比例大小
+                      "ZOOM": "1", #整體比例大小
+                      "SEND_KIND_1_PASTE": "", #出字模式1
+                      "SEND_KIND_2_BIG5": "" #出字模式2
                     };
 if my.is_file(INI_CONFIG_FILE):
   _config = configparser.ConfigParser()
   _config.read(INI_CONFIG_FILE)
-  for k in ['X','Y','ALPHA','ZOOM','SHORT_MODE']:
+  for k in ['X','Y','ALPHA','ZOOM','SHORT_MODE','SEND_KIND_1_PASTE','SEND_KIND_2_BIG5']:
     if _config['DEFAULT'][k] != None:
       config['DEFAULT'][k]=_config['DEFAULT'][k]
       
@@ -168,6 +170,20 @@ config['DEFAULT']['Y'] = str(int(config['DEFAULT']['Y']));
 config['DEFAULT']['ALPHA'] = "%.2f" % ( float(config['DEFAULT']['ALPHA'] ));
 config['DEFAULT']['SHORT_MODE'] = str(int(config['DEFAULT']['SHORT_MODE']));
 config['DEFAULT']['ZOOM'] = "%.2f" % ( float(config['DEFAULT']['ZOOM'] ));
+config['DEFAULT']['SEND_KIND_1_PASTE'] = str(config['DEFAULT']['SEND_KIND_1_PASTE']);
+config['DEFAULT']['SEND_KIND_2_BIG5'] = str(config['DEFAULT']['SEND_KIND_2_BIG5']);
+
+# merge f_arr and f_big5_arr
+config['DEFAULT']['SEND_KIND_1_PASTE'] = my.trim(config['DEFAULT']['SEND_KIND_1_PASTE'])
+config['DEFAULT']['SEND_KIND_1_PASTE'] =  my.str_replace("\"","",config['DEFAULT']['SEND_KIND_1_PASTE'])
+config['DEFAULT']['SEND_KIND_2_BIG5'] = my.trim(config['DEFAULT']['SEND_KIND_2_BIG5'])
+config['DEFAULT']['SEND_KIND_2_BIG5'] =  my.str_replace("\"","",config['DEFAULT']['SEND_KIND_2_BIG5'])
+
+if config['DEFAULT']['SEND_KIND_1_PASTE'] != "": 
+  f_arr = f_arr + my.explode(",",config['DEFAULT']['SEND_KIND_1_PASTE'])
+if config['DEFAULT']['SEND_KIND_2_BIG5'] != "": 
+  f_big5_arr = f_big5_arr + my.explode(",",config['DEFAULT']['SEND_KIND_2_BIG5'])
+
 
 if float(config['DEFAULT']['ALPHA'])>=1:
   config['DEFAULT']['ALPHA']="1"
@@ -199,6 +215,8 @@ debug_print("Y:%s" % (config["DEFAULT"]["Y"]))
 debug_print("ALPHA:%s" % (config["DEFAULT"]["ALPHA"]))
 debug_print("SHORT_MODE:%s" % (config["DEFAULT"]["SHORT_MODE"]))
 debug_print("ZOOM:%s" % (config["DEFAULT"]["ZOOM"]))
+debug_print("SEND_KIND_1_PASTE:%s" % (config["DEFAULT"]["SEND_KIND_1_PASTE"]))
+debug_print("SEND_KIND_2_BIG5:%s" % (config["DEFAULT"]["SEND_KIND_2_BIG5"]))
 
 def saveConfig():
   global config
@@ -1087,6 +1105,7 @@ def senddata(data):
   check_kind="0"
   for k in f_arr:
     #break;
+    k = my.strtolower(k)
     exec_proc = my.strtolower(p.exe())
     if my.is_string_like(exec_proc,k):  
       check_kind="1"      
@@ -1139,6 +1158,7 @@ def senddata(data):
       win32clipboard.CloseClipboard()            
       break
   for k in f_big5_arr:
+    k = my.strtolower(k)
     if my.is_string_like(my.strtolower(p.exe()),k):
       debug_print("Debug_f_big5_arr")
       #SendKeysCtypes.SendKeys(my.utf8tobig5(data),pause=0)
