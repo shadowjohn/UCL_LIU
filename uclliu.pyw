@@ -184,6 +184,14 @@ if config['DEFAULT']['SEND_KIND_1_PASTE'] != "":
 if config['DEFAULT']['SEND_KIND_2_BIG5'] != "": 
   f_big5_arr = f_big5_arr + my.explode(",",config['DEFAULT']['SEND_KIND_2_BIG5'])
 
+#print(f_arr)
+#print(f_big5_arr)
+
+# array_unique
+f_arr = list(set(f_arr))
+f_big5_arr = list(set(f_big5_arr))
+#print(f_arr)
+#print(f_big5_arr)
 
 if float(config['DEFAULT']['ALPHA'])>=1:
   config['DEFAULT']['ALPHA']="1"
