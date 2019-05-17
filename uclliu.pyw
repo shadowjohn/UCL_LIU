@@ -160,9 +160,9 @@ config['DEFAULT'] = {
                     };
 if my.is_file(INI_CONFIG_FILE):
   _config = configparser.ConfigParser()
-  _config.read(INI_CONFIG_FILE)
-  for k in ['X','Y','ALPHA','ZOOM','SHORT_MODE','SEND_KIND_1_PASTE','SEND_KIND_2_BIG5']:
-    if _config['DEFAULT'][k] != None:
+  _config.read(INI_CONFIG_FILE)    
+  for k in _config['DEFAULT'].keys(): # ['X','Y','ALPHA','ZOOM','SHORT_MODE','SEND_KIND_1_PASTE','SEND_KIND_2_BIG5'] 
+    if k in config['DEFAULT'].keys():
       config['DEFAULT'][k]=_config['DEFAULT'][k]
       
 config['DEFAULT']['X'] = str(int(config['DEFAULT']['X']));
