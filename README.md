@@ -200,11 +200,16 @@ V 1.19
     支援小小輸入法臺灣包2018年版wuxiami.txt，http://fygul.blogspot.com/2018/05/yong-tw2018.html 裡linux包中的/tw/wuxiami.txt
     支援opendesktop提供的萬國蝦米字根檔uniliu.txt，https://github.com/chinese-opendesktop/cin-tables (同fcitx_boshiamy.txt)
 
-    (2019-04-25) V1.18、V1.19版：
+    (2019-04-25) V1.18、V1.19 版：
     病毒碼提交掃描：1.18 https://www.microsoft.com/en-us/wdsi/submission/9de232c0-7640-4f9c-8a22-578aa3c218be
     病毒碼提交掃描：1.19 https://www.microsoft.com/en-us/wdsi/submission/1d1895a2-ce1b-4099-b14e-3b5147f34836
     支援微軟遠端連線，連外部主機時，本機強制使用「英/半」，不會一直彈出來煩。
     支援Chrome遠端連線，連外部主機時，本機強制使用「英/半」，不會一直彈出來煩。
+
+    (2019-05-17) V1.20 版：
+    病毒碼提交掃描：1.20 https://www.microsoft.com/en-us/wdsi/submission/ad55d07c-5a7d-44fe-85f1-db7d3e779f3a    
+    讓使用者可以自定二種出字的方法。
+    修正元「點金靈」軟體無法出字的問題。
                                                          
 <br>
 <h3>開發工具：</h3>
