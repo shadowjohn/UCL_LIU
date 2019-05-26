@@ -44,14 +44,14 @@
 　　13、UI 變大「,,,+」 <br>
 　　14、UI 變小「,,,-」 <br>
 　　15、UCLLIU.ini<br>
-　　　　[DEFAULT]
-　　　　short_mode = 0  # 是否為「短」版模式， 0 或 1
-　　　　zoom = 0.90  # 縮放大小
-　　　　send_kind_2_big5 = # 如 EWinner.exe 遇到此種程式，以 「big5」 方式出字 
-　　　　send_kind_1_paste = # 如 putty.exe,pcman 遇到此程程式，以 「複製、貼上」 方式出字 
-　　　　alpha = 1 # 透明度
-　　　　y = 950 # 肥米輸入法最後在螢幕 y 軸位置
-　　　　x = 1239 # 肥米輸入法最後在螢幕 x 軸位置
+　　　　[DEFAULT]<br>
+　　　　short_mode = 0  # 是否為「短」版模式， 0 或 1<br>
+　　　　zoom = 0.90  # 縮放大小<br>
+　　　　send_kind_2_big5 = # 如 EWinner.exe 遇到此種程式，以 「big5」 方式出字 <br>
+　　　　send_kind_1_paste = # 如 putty.exe,pcman 遇到此程程式，以 「複製、貼上」 方式出字 <br>
+　　　　alpha = 1 # 透明度<br>
+　　　　y = 950 # 肥米輸入法最後在螢幕 y 軸位置<br>
+　　　　x = 1239 # 肥米輸入法最後在螢幕 x 軸位置<br>
 　　16、環境設定(強列建議)：<br>
 <kbd>
 <img src="screenshot/install/1.png"><br>
