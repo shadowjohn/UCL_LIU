@@ -12,9 +12,9 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2019-05-17 13:21
+<h3>最後更新日期：</h3>2019-07-19 15:21
 <br>
-<h3>版本：</h3>V 1.20<br>
+<h3>版本：</h3>V 1.21<br>
 <br>
 <h3>版權：</h3>
 　免錢的 MIT-License
@@ -202,7 +202,10 @@
     病毒碼提交掃描：1.20 https://www.microsoft.com/en-us/wdsi/submission/ad55d07c-5a7d-44fe-85f1-db7d3e779f3a    
     讓使用者可以自定二種出字的方法。
     修正元「點金靈」軟體無法出字的問題。
-                                                         
+
+    (2019-07-19) V1.21 版：
+    病毒碼提交掃描：1.21 https://www.microsoft.com/en-us/wdsi/submission/377fd3c3-f176-46bf-b532-4da5dddb9d60
+    在肥模式，輸入字大於 1 以上，按下 esc 鍵，只作刪除所有字根功能。                                                         
 <br>
 <h3>開發工具：</h3>
   <ul>
@@ -355,5 +358,6 @@
   <li>(Done 2019-04-25)87、使用 Chrome 遠端連線軟體，自動切換成「英/半」</li>
   <li>(Done 2019-05-17)88、元大「點金靈」出字改成 big5</li>
   <li>(Done 2019-05-17)89、在 UCLLIU.ini 增加 send_kind_1_paste、SEND_KIND_2_BIG5 二種出字模式</li>
+  <li>(Done 2019-07-19)90、在肥模式，輸入字大於 1 以上，按下 esc 鍵，只作刪除所有字根功能</li>
 </ul>
 <br>

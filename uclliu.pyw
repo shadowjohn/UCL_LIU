@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.20
+VERSION=1.21
 import portalocker
 import os
 import sys
@@ -1323,7 +1323,8 @@ def OnKeyboardEvent(event):
       toggle_ucl()
     return True
   
-  if event.MessageName == "key up":
+  if event.MessageName == "key up":    
+        
     last_key = last_key + chr(event.Ascii)
     last_key = last_key[-10:]
     if my.strtolower(last_key[-4:])==",,,c":
@@ -1510,6 +1511,13 @@ def OnKeyboardEvent(event):
   
   #thekey = chr(event.Ascii)
   # KeyID = 91 = Lwinkey
+  # 2019-07-19
+  # 增加，如果是肥模式，且輸入的字>=1以上，按下 esc 鍵，會把字消除
+  if event.MessageName == "key down" and is_ucl() == True and len(play_ucl_label) >=1 and event.Key == "Escape":
+    #debug_print("2019-07-19 \n 增加，如果是肥模式，且輸入的字>=1以上，按下 esc 鍵，會把字消除)");
+    play_ucl_label = ""
+    type_label_set_text()
+    return False
   if event.MessageName == "key down" and (event.KeyID == 91 or event.KeyID == 92):
     flag_is_win_down = True
     debug_print("Debug event A")
