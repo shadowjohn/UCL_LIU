@@ -357,7 +357,7 @@
   <li>(Done 2019-04-25)86、使用 mstsc 遠端連線軟體，自動切換成「英/半」</li>
   <li>(Done 2019-04-25)87、使用 Chrome 遠端連線軟體，自動切換成「英/半」</li>
   <li>(Done 2019-05-17)88、元大「點金靈」出字改成 big5</li>
-  <li>(Done 2019-05-17)89、在 UCLLIU.ini 增加 send_kind_1_paste、SEND_KIND_2_BIG5 二種出字模式</li>
+  <li>(Done 2019-05-17)89、在 UCLLIU.ini 增加 send_kind_1_paste、send_kind_2_big5 二種出字模式</li>
   <li>(Done 2019-07-19)90、在肥模式，輸入字大於 1 以上，按下 esc 鍵，只作刪除所有字根功能</li>
 </ul>
 <br>
