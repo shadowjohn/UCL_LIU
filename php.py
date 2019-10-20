@@ -109,4 +109,7 @@ class kit:
         if sys.version_info[0] > 2:
           return 3;
         else:
-          return 2;        
+          return 2;
+    def base64_decode(self,data):
+        import base64
+        return base64.decodestring(data)                      

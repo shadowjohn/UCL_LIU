@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
-VERSION=1.21
+VERSION=1.22
 import portalocker
 import os
 import sys
 import gtk
-from gtk import gdk
+from gtk import gdk 
+    
+import gobject
 import hashlib
 import php
 import re
@@ -12,6 +14,8 @@ import win32api
 import configparser
 #,,,z ,,,x 用thread去輸出字
 import thread
+import base64
+
 #切中文使用
 from re import compile as _Re
 _unicode_chr_splitter = _Re( '(?s)((?:[\ud800-\udbff][\udc00-\udfff])|.)' ).split
@@ -25,6 +29,12 @@ def split_unicode_chrs( text ):
 # 額外出字處理的 app
 f_arr = [ "putty","pietty","pcman","xyplorer","kinza.exe","oxygennotincluded.exe" ]
 f_big5_arr = [ "zip32w","daqkingcon.exe","EWinner.exe" ]
+
+# 2019-10-20 增加出字模式
+UCL_PIC_BASE64 = "AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAMIOAADCDgAAAAAAAAAAAAD////////////////////////////////////////////////////////////////////////////////////////////////+/v7//Pz8//v7+//7+/v//f39////////////////////////////////////////////////////////////1s7B/1pVU/9PT0//Tk5Q/56rtP/Cua7/bGlp/2pqa/9tbGz/ampp/25xd//R2eL//////////////////////8O1of8kIyn/fYCD/0A0Lf9vgZD/kIJv/yUrMv9WUEr/FBcd/19eXv8fHR//q7zL///////////////////////CtKH/MDE4/6qwt/9zZFf/boCP/49/bf9VZXf/v7Ok/y0zP//T09P/QDcw/6q7yv//////////////////////w7Wj/yEcGv8pKy//OTUy/3GCkf+Pf23/VWV3/7+zo/8sMz//09PS/0A3MP+qu8r//////////////////////8KzoP84O0H/b2to/y4pJf9wgpH/j4Bt/1BfcP+1qpv/KjA7/8fHx/89NC//qrvK///////////////////////Cs6D/O0FM/9HS0f9IOi//boGQ/5KCcP8UFhn/Ly0p/w0PEv80MzP/FRcc/62+zP//////////////////////wrOh/zI1Ov9hXFT/AwAB/3GDk/+QgW//NkBK/6iqrP+trKz/qqqq/62vs//l6u///////////////////////76vnf8aFhb/Mzs+/0M9OP9wgpD/j39t/1Fhc//7//////////////////////////////////////////////+vnYv/QUtX/9ff3/96alv/bX+P/49/bf9RYHL/+/7/////////////v7Ko/5ifqf/7/v//////////////////inhn/19vgf//////fGpa/21/jv+Of23/UWBy//v+/////////////4Z0Yv9KWmv/+f3/////////////+/bv/1pNQv+Kmaf/samg/z01L/93iZn/n5B+/ygrMf93eXr/fHx8/3p4dv8vKib/eIqc//////////////////37+P/Mycf/5+rt/9HMxv+zs7X/3uPo/+zo4/+4trT/srKy/7Kysv+ysrL/tba5/+Tp7v//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="
+DEFAULT_OUTPUT_TYPE = "DEFAULT"
+#BIG5
+#PASTE
 
 # 不使用肥米的 app
 f_pass_app = [ "mstsc.exe" ]
@@ -47,7 +57,21 @@ TC_CDATA = u"万与丑专业丛东丝丢两严丧个丬丰临为丽举么义乌�
 TC_TDATA = u"萬與醜專業叢東絲丟兩嚴喪個爿豐臨為麗舉麼義烏樂喬習鄉書買亂爭於虧雲亙亞產畝親褻嚲億僅從侖倉儀們價眾優夥會傴傘偉傳傷倀倫傖偽佇體餘傭僉俠侶僥偵側僑儈儕儂俁儔儼倆儷儉債傾傯僂僨償儻儐儲儺兒兌兗黨蘭關興茲養獸囅內岡冊寫軍農塚馮衝決況凍淨淒涼淩減湊凜幾鳳鳧憑凱擊氹鑿芻劃劉則剛創刪別剗剄劊劌剴劑剮劍剝劇勸辦務勱動勵勁勞勢勳猛勩勻匭匱區醫華協單賣盧鹵臥衛卻巹廠廳曆厲壓厭厙廁廂厴廈廚廄廝縣參靉靆雙發變敘疊葉號歎嘰籲後嚇呂嗎唚噸聽啟吳嘸囈嘔嚦唄員咼嗆嗚詠哢嚨嚀噝吒噅鹹呱響啞噠嘵嗶噦嘩噲嚌噥喲嘜嗊嘮啢嗩唕喚呼嘖嗇囀齧囉嘽嘯噴嘍嚳囁嗬噯噓嚶囑嚕劈囂謔團園囪圍圇國圖圓聖壙場阪壞塊堅壇壢壩塢墳墜壟壟壚壘墾坰堊墊埡墶壋塏堖塒塤堝墊垵塹墮壪牆壯聲殼壺壼處備複夠頭誇夾奪奩奐奮獎奧妝婦媽嫵嫗媯姍薑婁婭嬈嬌孌娛媧嫻嫿嬰嬋嬸媼嬡嬪嬙嬤孫學孿寧寶實寵審憲宮寬賓寢對尋導壽將爾塵堯尷屍盡層屭屜屆屬屢屨嶼歲豈嶇崗峴嶴嵐島嶺嶽崠巋嶨嶧峽嶢嶠崢巒嶗崍嶮嶄嶸嶔崳嶁脊巔鞏巰幣帥師幃帳簾幟帶幀幫幬幘幗冪襆幹並廣莊慶廬廡庫應廟龐廢廎廩開異棄張彌弳彎彈強歸當錄彠彥徹徑徠禦憶懺憂愾懷態慫憮慪悵愴憐總懟懌戀懇惡慟懨愷惻惱惲悅愨懸慳憫驚懼慘懲憊愜慚憚慣湣慍憤憒願懾憖怵懣懶懍戇戔戲戧戰戩戶紮撲扡執擴捫掃揚擾撫拋摶摳掄搶護報擔擬攏揀擁攔擰撥擇掛摯攣掗撾撻挾撓擋撟掙擠揮撏撈損撿換搗據撚擄摑擲撣摻摜摣攬撳攙擱摟攪攜攝攄擺搖擯攤攖撐攆擷擼攛擻攢敵斂數齋斕鬥斬斷無舊時曠暘曇晝曨顯晉曬曉曄暈暉暫曖劄術樸機殺雜權條來楊榪傑極構樅樞棗櫪梘棖槍楓梟櫃檸檉梔柵標棧櫛櫳棟櫨櫟欄樹棲樣欒棬椏橈楨檔榿橋樺檜槳樁夢檮棶檢欞槨櫝槧欏橢樓欖櫬櫚櫸檟檻檳櫧橫檣櫻櫫櫥櫓櫞簷檁歡歟歐殲歿殤殘殞殮殫殯毆毀轂畢斃氈毿氌氣氫氬氳匯漢汙湯洶遝溝沒灃漚瀝淪滄渢溈滬濔濘淚澩瀧瀘濼瀉潑澤涇潔灑窪浹淺漿澆湞溮濁測澮濟瀏滻渾滸濃潯濜塗湧濤澇淶漣潿渦溳渙滌潤澗漲澀澱淵淥漬瀆漸澠漁瀋滲溫遊灣濕潰濺漵漊潷滾滯灩灄滿瀅濾濫灤濱灘澦濫瀠瀟瀲濰潛瀦瀾瀨瀕灝滅燈靈災燦煬爐燉煒熗點煉熾爍爛烴燭煙煩燒燁燴燙燼熱煥燜燾煆糊溜愛爺牘犛牽犧犢強狀獷獁猶狽麅獮獰獨狹獅獪猙獄猻獫獵獼玀豬貓蝟獻獺璣璵瑒瑪瑋環現瑲璽瑉玨琺瓏璫琿璡璉瑣瓊瑤璦璿瓔瓚甕甌電畫暢佘疇癤療瘧癘瘍鬁瘡瘋皰屙癰痙癢瘂癆瘓癇癡癉瘮瘞瘺癟癱癮癭癩癬癲臒皚皺皸盞鹽監蓋盜盤瞘眥矓著睜睞瞼瞞矚矯磯礬礦碭碼磚硨硯碸礪礱礫礎硜矽碩硤磽磑礄確鹼礙磧磣堿镟滾禮禕禰禎禱禍稟祿禪離禿稈種積稱穢穠穭稅穌穩穡窮竊竅窯竄窩窺竇窶豎競篤筍筆筧箋籠籩築篳篩簹箏籌簽簡籙簀篋籜籮簞簫簣簍籃籬籪籟糴類秈糶糲粵糞糧糝餱緊縶糸糾紆紅紂纖紇約級紈纊紀紉緯紜紘純紕紗綱納紝縱綸紛紙紋紡紵紖紐紓線紺絏紱練組紳細織終縐絆紼絀紹繹經紿綁絨結絝繞絰絎繪給絢絳絡絕絞統綆綃絹繡綌綏絛繼綈績緒綾緓續綺緋綽緔緄繩維綿綬繃綢綯綹綣綜綻綰綠綴緇緙緗緘緬纜緹緲緝縕繢緦綞緞緶線緱縋緩締縷編緡緣縉縛縟縝縫縗縞纏縭縊縑繽縹縵縲纓縮繆繅纈繚繕繒韁繾繰繯繳纘罌網羅罰罷羆羈羥羨翹翽翬耮耬聳恥聶聾職聹聯聵聰肅腸膚膁腎腫脹脅膽勝朧腖臚脛膠脈膾髒臍腦膿臠腳脫腡臉臘醃膕齶膩靦膃騰臏臢輿艤艦艙艫艱豔艸藝節羋薌蕪蘆蓯葦藶莧萇蒼苧蘇檾蘋莖蘢蔦塋煢繭荊薦薘莢蕘蓽蕎薈薺蕩榮葷滎犖熒蕁藎蓀蔭蕒葒葤藥蒞蓧萊蓮蒔萵薟獲蕕瑩鶯蓴蘀蘿螢營縈蕭薩蔥蕆蕢蔣蔞藍薊蘺蕷鎣驀薔蘞藺藹蘄蘊藪槁蘚虜慮虛蟲虯蟣雖蝦蠆蝕蟻螞蠶蠔蜆蠱蠣蟶蠻蟄蛺蟯螄蠐蛻蝸蠟蠅蟈蟬蠍螻蠑螿蟎蠨釁銜補襯袞襖嫋褘襪襲襏裝襠褌褳襝褲襇褸襤繈襴見觀覎規覓視覘覽覺覬覡覿覥覦覯覲覷觴觸觶讋譽謄訁計訂訃認譏訐訌討讓訕訖訓議訊記訒講諱謳詎訝訥許訛論訩訟諷設訪訣證詁訶評詛識詗詐訴診詆謅詞詘詔詖譯詒誆誄試詿詩詰詼誠誅詵話誕詬詮詭詢詣諍該詳詫諢詡譸誡誣語誚誤誥誘誨誑說誦誒請諸諏諾讀諑誹課諉諛誰諗調諂諒諄誶談誼謀諶諜謊諫諧謔謁謂諤諭諼讒諮諳諺諦謎諞諝謨讜謖謝謠謗諡謙謐謹謾謫譾謬譚譖譙讕譜譎讞譴譫讖穀豶貝貞負貟貢財責賢敗賬貨質販貪貧貶購貯貫貳賤賁貰貼貴貺貸貿費賀貽賊贄賈賄貲賃賂贓資賅贐賕賑賚賒賦賭齎贖賞賜贔賙賡賠賧賴賵贅賻賺賽賾贗讚贇贈贍贏贛赬趙趕趨趲躉躍蹌蹠躒踐躂蹺蹕躚躋踴躊蹤躓躑躡蹣躕躥躪躦軀車軋軌軒軑軔轉軛輪軟轟軲軻轤軸軹軼軤軫轢軺輕軾載輊轎輈輇輅較輒輔輛輦輩輝輥輞輬輟輜輳輻輯轀輸轡轅轄輾轆轍轔辭辯辮邊遼達遷過邁運還這進遠違連遲邇逕跡適選遜遞邐邏遺遙鄧鄺鄔郵鄒鄴鄰鬱郤郟鄶鄭鄆酈鄖鄲醞醱醬釅釃釀釋裏钜鑒鑾鏨釓釔針釘釗釙釕釷釺釧釤鈒釩釣鍆釹鍚釵鈃鈣鈈鈦鈍鈔鍾鈉鋇鋼鈑鈐鑰欽鈞鎢鉤鈧鈁鈥鈄鈕鈀鈺錢鉦鉗鈷缽鈳鉕鈽鈸鉞鑽鉬鉭鉀鈿鈾鐵鉑鈴鑠鉛鉚鈰鉉鉈鉍鈹鐸鉶銬銠鉺銪鋏鋣鐃銍鐺銅鋁銱銦鎧鍘銖銑鋌銩銛鏵銓鉿銚鉻銘錚銫鉸銥鏟銃鐋銨銀銣鑄鐒鋪鋙錸鋱鏈鏗銷鎖鋰鋥鋤鍋鋯鋨鏽銼鋝鋒鋅鋶鐦鐧銳銻鋃鋟鋦錒錆鍺錯錨錡錁錕錩錫錮鑼錘錐錦鍁錈錇錟錠鍵鋸錳錙鍥鍈鍇鏘鍶鍔鍤鍬鍾鍛鎪鍠鍰鎄鍍鎂鏤鎡鏌鎮鎛鎘鑷鐫鎳鎿鎦鎬鎊鎰鎔鏢鏜鏍鏰鏞鏡鏑鏃鏇鏐鐔钁鐐鏷鑥鐓鑭鐠鑹鏹鐙鑊鐳鐶鐲鐮鐿鑔鑣鑞鑲長門閂閃閆閈閉問闖閏闈閑閎間閔閌悶閘鬧閨聞闥閩閭闓閥閣閡閫鬮閱閬闍閾閹閶鬩閿閽閻閼闡闌闃闠闊闋闔闐闒闕闞闤隊陽陰陣階際陸隴陳陘陝隉隕險隨隱隸雋難雛讎靂霧霽黴靄靚靜靨韃鞽韉韝韋韌韍韓韙韞韜韻頁頂頃頇項順須頊頑顧頓頎頒頌頏預顱領頗頸頡頰頲頜潁熲頦頤頻頮頹頷頴穎顆題顒顎顓顏額顳顢顛顙顥纇顫顬顰顴風颺颭颮颯颶颸颼颻飀飄飆飆飛饗饜飣饑飥餳飩餼飪飫飭飯飲餞飾飽飼飿飴餌饒餉餄餎餃餏餅餑餖餓餘餒餕餜餛餡館餷饋餶餿饞饁饃餺餾饈饉饅饊饌饢馬馭馱馴馳驅馹駁驢駔駛駟駙駒騶駐駝駑駕驛駘驍罵駰驕驊駱駭駢驫驪騁驗騂駸駿騏騎騍騅騌驌驂騙騭騤騷騖驁騮騫騸驃騾驄驏驟驥驦驤髏髖髕鬢魘魎魚魛魢魷魨魯魴魺鮁鮃鯰鱸鮋鮓鮒鮊鮑鱟鮍鮐鮭鮚鮳鮪鮞鮦鰂鮜鱠鱭鮫鮮鮺鯗鱘鯁鱺鰱鰹鯉鰣鰷鯀鯊鯇鮶鯽鯒鯖鯪鯕鯫鯡鯤鯧鯝鯢鯰鯛鯨鯵鯴鯔鱝鰈鰏鱨鯷鰮鰃鰓鱷鰍鰒鰉鰁鱂鯿鰠鼇鰭鰨鰥鰩鰟鰜鰳鰾鱈鱉鰻鰵鱅鰼鱖鱔鱗鱒鱯鱤鱧鱣鳥鳩雞鳶鳴鳲鷗鴉鶬鴇鴆鴣鶇鸕鴨鴞鴦鴒鴟鴝鴛鴬鴕鷥鷙鴯鴰鵂鴴鵃鴿鸞鴻鵐鵓鸝鵑鵠鵝鵒鷳鵜鵡鵲鶓鵪鶤鵯鵬鵮鶉鶊鵷鷫鶘鶡鶚鶻鶿鶥鶩鷊鷂鶲鶹鶺鷁鶼鶴鷖鸚鷓鷚鷯鷦鷲鷸鷺鸇鷹鸌鸏鸛鸘鹺麥麩黃黌黶黷黲黽黿鼂鼉鞀鼴齇齊齏齒齔齕齗齟齡齙齠齜齦齬齪齲齷龍龔龕龜誌製谘隻裡係範鬆冇嚐嘗鬨麵準鐘彆閒乾儘臟拚";
 mTC_CDATA = list(TC_CDATA);
 mTC_TDATA = list(TC_TDATA);
-
+def about_uclliu():
+  _msg_text = ("肥米輸入法\n\n作者：羽山秋人 (http://3wa.tw)\n版本：%s" % VERSION)
+  _msg_text += "\n\n熱鍵提示：\n\n"
+  _msg_text += "「,,,VERSION」目前版本\n"
+  _msg_text += "「,,,UNLOCK」回到正常模式\n"
+  _msg_text += "「,,,LOCK」進入遊戲模式\n"
+  _msg_text += "「,,,C」簡體模式\n"
+  _msg_text += "「,,,T」繁體模式\n"
+  _msg_text += "「,,,S」UI變窄\n"
+  _msg_text += "「,,,L」UI變寬\n"
+  _msg_text += "「,,,+」UI變大\n"
+  _msg_text += "「,,,-」UI變小\n"
+  _msg_text += "「,,,X」框字的字根轉回文字\n"
+  _msg_text += "「,,,Z」框字的文字變成字根\n"
+  return _msg_text  
 def simple2trad(data):
   global mTC_TDATA
   global mTC_CDATA
@@ -101,9 +125,9 @@ PWD = os.path.dirname(os.path.realpath(sys.argv[0]))
 #sys.exit(0)
 
 #此是防止重覆執行
-if os.path.isdir("C:\\temp") == False:
-  os.mkdir("C:\\temp")
-check_file_run = open('c:\\temp\\UCLLIU.lock', "a+")
+#if os.path.isdir("C:\\temp") == False:
+#  os.mkdir("C:\\temp")
+check_file_run = open(PWD + '\\UCLLIU.lock', "a+")
 try:  
   portalocker.lock(check_file_run, portalocker.LOCK_EX | portalocker.LOCK_NB)
 except:
@@ -830,6 +854,10 @@ def gamemode_btn_click(self):
     gamemode_btn.set_label("正常模式")
 def x_btn_click(self):
   print("Bye Bye");
+  global tray
+  #global menu  
+  tray.set_visible(False)
+  #menu.set_visible(False)
   sys.exit()
 # draggable
 def winclicked(self, event):
@@ -1078,7 +1106,8 @@ def senddata(data):
   global debug_print
   global f_arr
   global f_big5_arr
-  
+  #2019-10-20 增加出字強制選擇
+  global DEFAULT_OUTPUT_TYPE
   #for i in range(0,len(mTC_TDATA)):
   #  print(mTC_TDATA[i]);
   #my.exit(); 
@@ -1108,14 +1137,17 @@ def senddata(data):
   #print("PP:%s" % (pp))
   debug_print("PP:%s" % (pp))
   p=psutil.Process(pp)
+  
   debug_print("ProcessP:%s" % (p))
   
   check_kind="0"
+  
+  # 這是貼上模式
   for k in f_arr:
     #break;
     k = my.strtolower(k)
     exec_proc = my.strtolower(p.exe())
-    if my.is_string_like(exec_proc,k):  
+    if my.is_string_like(exec_proc,k) or DEFAULT_OUTPUT_TYPE == "PASTE":  
       check_kind="1"      
       
       win32clipboard.OpenClipboard()
@@ -1167,7 +1199,7 @@ def senddata(data):
       break
   for k in f_big5_arr:
     k = my.strtolower(k)
-    if my.is_string_like(my.strtolower(p.exe()),k):
+    if my.is_string_like(my.strtolower(p.exe()),k) or DEFAULT_OUTPUT_TYPE == "BIG5":
       debug_print("Debug_f_big5_arr")
       #SendKeysCtypes.SendKeys(my.utf8tobig5(data),pause=0)
       check_kind="2"
@@ -1474,19 +1506,7 @@ def OnKeyboardEvent(event):
       message = gtk.MessageDialog(type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK)
       message.set_position(gtk.WIN_POS_CENTER_ALWAYS)
       message.set_keep_above(True)
-      _msg_text = ("肥米輸入法\n\n作者：羽山秋人 (http://3wa.tw)\n版本：%s" % VERSION)
-      _msg_text += "\n\n熱鍵提示：\n\n"
-      _msg_text += "「,,,VERSION」目前版本\n"
-      _msg_text += "「,,,UNLOCK」回到正常模式\n"
-      _msg_text += "「,,,LOCK」進入遊戲模式\n"
-      _msg_text += "「,,,C」簡體模式\n"
-      _msg_text += "「,,,T」繁體模式\n"
-      _msg_text += "「,,,S」UI變窄\n"
-      _msg_text += "「,,,L」UI變寬\n"
-      _msg_text += "「,,,+」UI變大\n"
-      _msg_text += "「,,,-」UI變小\n"
-      _msg_text += "「,,,X」框字的字根轉回文字\n"
-      _msg_text += "「,,,Z」框字的文字變成字根\n"         
+      _msg_text = about_uclliu()       
       message.set_markup( _msg_text )
       #toAlphaOrNonAlpha()
       message.show()
@@ -1867,6 +1887,178 @@ hbox.add(x_btn)
 
 
 win.add(vbox)
+
+# 2019-10-20 加入 trayicon
+def message(data=None):
+  "Function to display messages to the user."
+  
+  msg=gtk.MessageDialog(None, gtk.DIALOG_MODAL,
+    gtk.MESSAGE_INFO, gtk.BUTTONS_OK, data)
+  msg.run()
+  msg.destroy()
+
+# From : https://github.com/gevasiliou/PythonTests/blob/master/TrayAllClicksMenu.py
+class TrayIcon(gtk.StatusIcon):
+    def __init__(self):
+      global VERSION
+      global PWD
+      global UCL_PIC_BASE64
+      gtk.StatusIcon.__init__(self)
+      #self.set_from_icon_name('help-about')
+      #debug_print(PWD+"\\UCLLIU.png")
+      # base64.b64decode
+      # From : https://sourceforge.net/p/matplotlib/mailman/message/20449481/
+      raw_data = base64.decodestring(UCL_PIC_BASE64)
+      #debug_print(gtk.gdk.Pixbuf)
+      w = 16
+      h = 16
+      img_pixbuf = gtk.gdk.pixbuf_new_from_data(
+              raw_data, gtk.gdk.COLORSPACE_RGB, True, 8, w, h, w*4)
+
+      self.set_from_pixbuf(img_pixbuf)
+      self.set_tooltip("肥米輸入法：%s" % (VERSION))
+      self.set_has_tooltip(True)
+      self.set_visible(True)
+      self.connect("button-press-event", self.on_click)
+
+    def m_about(self,data=None):  # if i ommit the data=none section python complains about too much arguments passed on greetme
+      message = gtk.MessageDialog(type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK)
+      message.set_position(gtk.WIN_POS_CENTER_ALWAYS)
+      message.set_keep_above(True)
+      _msg_text = about_uclliu()       
+      message.set_markup( _msg_text )
+      #toAlphaOrNonAlpha()
+      message.show()
+      toAlphaOrNonAlpha()  
+      response = message.run()
+      #toAlphaOrNonAlpha()
+      debug_print("Show Version")
+      debug_print(response)
+      #print(gtk.ResponseType.BUTTONS_OK)
+      if response == -5 or response == -4:
+        #message.hide()
+        message.destroy()
+        #toAlphaOrNonAlpha()  
+        play_ucl_label=""
+        ucl_find_data=[]
+        type_label_set_text()
+        toAlphaOrNonAlpha()
+        #return False
+    def m_game_switch(self,data=None):
+      global gamemode_btn_click
+      global gamemode_btn
+      gamemode_btn_click(gamemode_btn)      
+    def m_quit(self,data=None):
+      self.set_visible(False)      
+      x_btn_click(self)
+    def m_output_type(self,data=None,kind="DEFAULT"):
+      global DEFAULT_OUTPUT_TYPE
+      debug_print(kind)
+      DEFAULT_OUTPUT_TYPE=kind
+    def m_none(self,data=None):
+      return False
+    def on_click(self,data,event): #data1 and data2 received by the connect action line 23
+      #print ('self :', self)
+      #print('data :',data)
+      #print('event :',event)
+      btn=event.button #Bby controlling this value (1-2-3 for left-middle-right) you can call other functions.
+      #debug_print('event.button :',btn)
+      time=gtk.get_current_event_time() # required by the popup. No time - no popup.
+      #debug_print ('time:', time)
+
+      global menu
+      global menu_items
+      global gamemode_btn
+      global DEFAULT_OUTPUT_TYPE
+      
+      #debug_print(dir(menu))
+      menu.set_visible(False)
+      #menu = gtk.Menu()
+      for i in range(0,len(menu_items)):
+        menu.remove(menu_items[i])
+      menu_items=[]
+      menu_items.append(gtk.MenuItem("1.關於肥米輸入法"))
+      menu.append( menu_items[len(menu_items)-1] )
+      menu_items[len(menu_items)-1].connect("activate", self.m_about) #added by gv - it had nothing before
+      
+      if gamemode_btn.get_label()=="正常模式":        
+        menu_items.append(gtk.MenuItem("2.切換至「遊戲模式」"))
+      else:
+        menu_items.append(gtk.MenuItem("2.切換至「正常模式」"))
+      menu.append( menu_items[len(menu_items)-1] )
+      menu_items[len(menu_items)-1].connect("activate", self.m_game_switch) #added by gv - it had nothing before
+
+      menu_items.append(gtk.MenuItem("3.選擇出字模式"))
+      menu.append( menu_items[len(menu_items)-1] )
+      menu_items[len(menu_items)-1].connect("activate", self.m_none)
+      #print(dir(menu_items[len(menu_items)-1]))
+      # From : https://www.twblogs.net/a/5beb3c312b717720b51efe87
+      sub_menu = gtk.Menu()
+      sub_menu_items = []
+      is_o = ""
+      if DEFAULT_OUTPUT_TYPE=="DEFAULT":
+        is_o = "○"
+      else:
+        is_o = "　"      
+      sub_menu_items.append(gtk.MenuItem("【%s】正常出字模式" % (is_o)))
+      sub_menu.append( sub_menu_items[len(sub_menu_items)-1] )
+      sub_menu_items[len(sub_menu_items)-1].connect("activate", self.m_output_type,"DEFAULT")
+      
+      if DEFAULT_OUTPUT_TYPE=="BIG5":
+        is_o = "○"
+      else:
+        is_o = "　"
+      sub_menu_items.append(gtk.MenuItem("【%s】BIG5模式" % (is_o)))
+      sub_menu.append( sub_menu_items[len(sub_menu_items)-1] )
+      sub_menu_items[len(sub_menu_items)-1].connect("activate", self.m_output_type,"BIG5")
+      
+      if DEFAULT_OUTPUT_TYPE=="PASTE":
+        is_o = "○"
+      else:
+        is_o = "　"
+      sub_menu_items.append(gtk.MenuItem("【%s】複製貼上模式" % (is_o)))
+      sub_menu.append( sub_menu_items[len(sub_menu_items)-1] )
+      sub_menu_items[len(sub_menu_items)-1].connect("activate", self.m_output_type,"PASTE")
+      
+      menu_items[len(menu_items)-1].set_submenu(sub_menu)
+      #sub_menu.show_all()
+      #sub_menu.popup(None, None, None, btn, 2)
+      #menu_items[len(menu_items)-1].connect("activate", self.m_game_switch) #added by gv - it had nothing before
+      
+      menu_items.append(gtk.MenuItem(""))
+      menu.append( menu_items[len(menu_items)-1] )
+      
+      menu_items.append(gtk.MenuItem("離開(Quit)"))
+      menu.append( menu_items[len(menu_items)-1] )
+      menu_items[len(menu_items)-1].connect("activate", self.m_quit)
+
+      #add space
+      menu_items.append(gtk.MenuItem(""))
+      menu.append( menu_items[len(menu_items)-1] )
+      menu_items.append(gtk.MenuItem(""))
+      menu.append( menu_items[len(menu_items)-1] )
+      menu_items.append(gtk.MenuItem(""))
+      
+      
+      menu.show_all()
+      menu.popup(None, None, None, btn, 2) #button can be hardcoded (i.e 1) but time must be correct.      
+      #menu.reposition()
+      #print(dir(menu))
+
+  #message("Status Icon Left Clicked")
+  #make_menu(event_button, event_time)
+# 生成肥圖片
+#if my.is_file(PWD+"\\UCLLIU.png") == False:
+#  my.file_put_contents(PWD+"\\UCLLIU.png",my.base64_decode(UCL_PIC_BASE64))  
+menu_items = []
+menu = gtk.Menu()  
+tray = TrayIcon()
+
+#icon.set_visible(True)
+# Create menu
+
+ 
+
 
 win.show_all()
 simple_btn.set_visible(False)

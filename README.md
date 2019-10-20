@@ -12,9 +12,9 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2019-07-19 15:21
+<h3>最後更新日期：</h3>2019-10-20 20:00
 <br>
-<h3>版本：</h3>V 1.21<br>
+<h3>版本：</h3>V 1.22<br>
 <br>
 <h3>版權：</h3>
 　免錢的 MIT-License
@@ -205,7 +205,12 @@
 
     (2019-07-19) V1.21 版：
     病毒碼提交掃描：1.21 https://www.microsoft.com/en-us/wdsi/submission/377fd3c3-f176-46bf-b532-4da5dddb9d60
-    在肥模式，輸入字大於 1 以上，按下 esc 鍵，只作刪除所有字根功能。                                                         
+    在肥模式，輸入字大於 1 以上，按下 esc 鍵，只作刪除所有字根功能。
+    
+    (2019-10-20) V1.22 版：
+    病毒碼提交掃描：1.22 https://www.microsoft.com/en-us/wdsi/submission/1b5d942a-6d11-4d14-907a-3a3ba13b1d63
+    增加右下角 Trayicon 點開功能，允許使用正常出字、BIG5出字、貼上出字
+    使用貼上出字，可以修正 https://term.ptt.cc/ 無法正常輸入中文的問題                                                                      
 <br>
 <h3>開發工具：</h3>
   <ul>
@@ -359,5 +364,6 @@
   <li>(Done 2019-05-17)88、元大「點金靈」出字改成 big5</li>
   <li>(Done 2019-05-17)89、在 UCLLIU.ini 增加 send_kind_1_paste、send_kind_2_big5 二種出字模式</li>
   <li>(Done 2019-07-19)90、在肥模式，輸入字大於 1 以上，按下 esc 鍵，只作刪除所有字根功能</li>
+  <li>(Done 2019-10-20)91、增加右下角 Trayicon 點開功能，允許使用正常出字、BIG5出字、貼上出字，使用貼上出字，可以修正 https://term.ptt.cc/ 無法正常輸入中文的問題</li>
 </ul>
 <br>
