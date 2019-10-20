@@ -210,7 +210,9 @@
     (2019-10-20) V1.22 版：
     病毒碼提交掃描：1.22 https://www.microsoft.com/en-us/wdsi/submission/1b5d942a-6d11-4d14-907a-3a3ba13b1d63
     增加右下角 Trayicon 點開功能，允許使用正常出字、BIG5出字、貼上出字
-    使用貼上出字，可以修正 https://term.ptt.cc/ 無法正常輸入中文的問題                                                                      
+    使用貼上出字，可以修正 https://term.ptt.cc/ 無法正常輸入中文的問題
+    把 UCLLIU.lock 從 C:\temp 搬到與執行程式同階
+    <img src="screenshot/1_22.png">                                                                      
 <br>
 <h3>開發工具：</h3>
   <ul>
