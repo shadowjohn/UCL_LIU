@@ -70,8 +70,7 @@
   </h3>
     17、出字模式選擇：<br>
 <kbd>
-<img src="screenshot/1_22.png"><br>
-<h3>由於 klt 網友回報，提到使用 https://term.ptt.cc/ 無法正常出字，將出字選擇功能作成自定選擇</h3>
+<h3>感謝網友 klt 回報，提到使用 https://term.ptt.cc/ 無法正常出字，將出字選擇功能作成自定選擇</h3>
 </kbd>
 </kbd>
   
@@ -371,6 +370,6 @@
   <li>(Done 2019-05-17)88、元大「點金靈」出字改成 big5</li>
   <li>(Done 2019-05-17)89、在 UCLLIU.ini 增加 send_kind_1_paste、send_kind_2_big5 二種出字模式</li>
   <li>(Done 2019-07-19)90、在肥模式，輸入字大於 1 以上，按下 esc 鍵，只作刪除所有字根功能</li>
-  <li>(Done 2019-10-20)91、增加右下角 Trayicon 點開功能，允許使用正常出字、BIG5出字、貼上出字，使用貼上出字，可以修正 https://term.ptt.cc/ 無法正常輸入中文的問題</li>
+  <li>(Done 2019-10-20)91、增加右下角 Trayicon 點開功能，允許使用正常出字、BIG5出字、貼上出字，使用貼上出字，可以修正 https://term.ptt.cc/ 無法正常輸入中文的問題(感謝網友 klt 回報)</li>
 </ul>
 <br>
