@@ -68,6 +68,10 @@
 二、新增語言：找到「English (United States)」加入，但【中文(台灣)要設為預設值】<br>
 三、平常打字時，就選「ENG」打起來就會很順手。<br>
   </h3>
+    17、出字模式選擇：<br>
+<kbd>
+<img src="screenshot/1_22.png"><br>
+<h3>由於 klt 網友回報，提到使用 https://term.ptt.cc/ 無法正常出字，將出字選擇功能作成自定選擇</h3>
 </kbd>
   
 <br>
