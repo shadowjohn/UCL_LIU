@@ -73,6 +73,7 @@
 <img src="screenshot/1_22.png"><br>
 <h3>由於 klt 網友回報，提到使用 https://term.ptt.cc/ 無法正常出字，將出字選擇功能作成自定選擇</h3>
 </kbd>
+</kbd>
   
 <br>
 <h3>開發動機：</h3>
