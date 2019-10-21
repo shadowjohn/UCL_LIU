@@ -12,9 +12,9 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2019-10-20 20:00
+<h3>最後更新日期：</h3>2019-10-22 01:34
 <br>
-<h3>版本：</h3>V 1.22<br>
+<h3>版本：</h3>V 1.23<br>
 <br>
 <h3>版權：</h3>
 　免錢的 MIT-License
@@ -216,7 +216,13 @@
     增加右下角 Trayicon 點開功能，允許使用正常出字、BIG5出字、貼上出字
     使用貼上出字，可以修正 https://term.ptt.cc/ 無法正常輸入中文的問題
     把 UCLLIU.lock 從 C:\temp 搬到與執行程式同階
-    <img src="screenshot/1_22.png">                                                                      
+    <img src="screenshot/1_22.png">
+    
+    (2019-10-22) V1.23 版：
+    病毒碼提交掃描：1.23 https://www.microsoft.com/en-us/wdsi/submission/725eeb8a-22cc-42a4-aad2-55f55a4ac13a
+    1、修正肥米的視窗，不會超出螢幕
+    2、按著 Shift 框字時，不會改變 英/肥 的狀態
+                                                                              
 <br>
 <h3>開發工具：</h3>
   <ul>
@@ -371,7 +377,7 @@
   <li>(Done 2019-05-17)89、在 UCLLIU.ini 增加 send_kind_1_paste、send_kind_2_big5 二種出字模式</li>
   <li>(Done 2019-07-19)90、在肥模式，輸入字大於 1 以上，按下 esc 鍵，只作刪除所有字根功能</li>
   <li>(Done 2019-10-20)91、增加右下角 Trayicon 點開功能，允許使用正常出字、BIG5出字、貼上出字，使用貼上出字，可以修正 https://term.ptt.cc/ 無法正常輸入中文的問題(感謝網友 klt 回報)</li>
-  <li>92、當按著 Shift + 滑鼠框選時，不要改變輸入法的狀態【英/肥】切換</li>
-  <li>93、切換解析度時，如果肥米超過螢幕範圍時，自動回到螢幕右下角的位置</li>
+  <li>(Done 2019-10-22)92、當按著 Shift + 滑鼠框選時，不要改變輸入法的狀態【英/肥】切換</li>
+  <li>(Done 2019-10-22)93、切換解析度時，如果肥米超過螢幕範圍時，自動回到螢幕右下角的位置</li>
 </ul>
 <br>

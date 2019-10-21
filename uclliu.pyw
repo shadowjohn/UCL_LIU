@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.22
+VERSION=1.23
 import portalocker
 import os
 import sys
@@ -791,7 +791,32 @@ def toAlphaOrNonAlpha():
   global uclen_btn
   global hf_btn
   global win
-  global config  
+  global config
+  global user32 
+  global win
+  #2019-10-22 check screen size and uclliu position
+  # 偵測肥米的位置，超出螢幕時，彈回
+  screen_width=user32.GetSystemMetrics(0)
+  screen_height=user32.GetSystemMetrics(1)
+  [ _x,_y ] = win.get_position()
+  [_width,_height] = win.get_size()
+  
+  new_position_x = _x
+  new_position_y = _y
+  if _x  > screen_width - _width:
+    new_position_x = screen_width-_width-20    
+    win.move( new_position_x,new_position_y)
+  if _y > screen_height - _height:
+    new_position_y = screen_height-_height-80 
+    win.move( new_position_x,new_position_y)
+  
+  if _x < 0:
+    new_position_x = 0
+    win.move( new_position_x,new_position_y)
+  if _y < 0:
+    new_position_y = 0
+    win.move( new_position_x,new_position_y)
+  
   #c = hf_btn.get_child()
   #hf_kind = c.get_label()
   #hf_kind = hf_btn.get_label()
@@ -877,7 +902,7 @@ def winclicked(self, event):
   #print( "WIN X,Y:%d , %d" % (_x,_y)) 
   config["DEFAULT"]["X"] = str(int(_x))
   config["DEFAULT"]["Y"] = str(int(_y))
-  print( "config X,Y:%s , %s" % (config["DEFAULT"]["X"],config["DEFAULT"]["Y"])) 
+  debug_print( "config X,Y:%s , %s" % (config["DEFAULT"]["X"],config["DEFAULT"]["Y"])) 
   saveConfig();
   pass
 def uclen_btn_click(self):
@@ -1283,7 +1308,19 @@ def use_pinyi(data):
   word_label_set_text()
   #finds=my.str_replace(data," ",finds)
   #finds=my.str_replace("  "," ",finds)
-  
+def OnMouseEvent(event):
+  global flag_is_shift_down
+  global flag_is_play_otherkey
+  #if flag_is_shift_down==True:
+    #如果同時按著 shift 時，滑鼠有操作就視窗按別的鍵 ok
+  if event.MessageName == "mouse left down" or event.MessageName == "mouse right down" :
+    #flag_is_shift_down=False
+    flag_is_play_otherkey=True
+    debug_print(('MessageName: %s' % (event.MessageName)))
+    debug_print(('Message: %s' % (event.Message))) 
+    debug_print("Debug event MouseA")
+    debug_print(flag_is_play_otherkey)
+  return True  
 def OnKeyboardEvent(event):  
   global last_key
   global flag_is_win_down
@@ -1532,7 +1569,7 @@ def OnKeyboardEvent(event):
   #thekey = chr(event.Ascii)
   # KeyID = 91 = Lwinkey
   # 2019-07-19
-  # 增加，如果是肥模式，且輸入的字>=1以上，按下 esc 鍵，會把字消除
+  # 增加，如果是肥模式，且輸入的字>=1以上，按下 esc 鍵，會把字消除  
   if event.MessageName == "key down" and is_ucl() == True and len(play_ucl_label) >=1 and event.Key == "Escape":
     #debug_print("2019-07-19 \n 增加，如果是肥模式，且輸入的字>=1以上，按下 esc 鍵，會把字消除)");
     play_ucl_label = ""
@@ -1545,9 +1582,11 @@ def OnKeyboardEvent(event):
     flag_is_win_down = False
     debug_print("Debug event B") 
   if event.MessageName == "key down" and (event.Key == "Lshift" or event.Key == "Rshift"):
+    #2019-10-22 如果按著 shift 還用 滑鼠，不會切換 英/肥
+    if flag_is_shift_down==False:
+      flag_is_play_otherkey=False      
     flag_is_shift_down=True
-    flag_is_play_otherkey=False
-    debug_print("Debug event C")    
+    debug_print("Debug event C")       
   if event.MessageName == "key down" and event.Key == "Capital":
     flag_is_capslock_down=True
     flag_is_play_capslock_otherkey=False
@@ -1797,6 +1836,11 @@ print(dir(hm))
 # set the hook
 hm.HookKeyboard()
 # wait forever
+
+# watch for all mouse events
+hm.MouseAll = OnMouseEvent
+# set the hook
+hm.HookMouse()
         
 #win=gtk.Window(type=gtk.WINDOW_POPUP)
 win=gtk.Window(type=gtk.WINDOW_POPUP)
