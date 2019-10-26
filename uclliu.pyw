@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.23
+VERSION=1.24
 import portalocker
 import os
 import sys
@@ -169,9 +169,18 @@ if my.is_file(INI_CONFIG_FILE):
   my.copy(INI_CONFIG_FILE,PWD+"\\UCLLIU.ini")
   my.unlink(INI_CONFIG_FILE)
 INI_CONFIG_FILE = PWD + "\\UCLLIU.ini" 
-user32 = ctypes.windll.user32
-screen_width=user32.GetSystemMetrics(0)
-screen_height=user32.GetSystemMetrics(1)
+
+#user32 = ctypes.windll.user32
+#user32.SetProcessDPIAware()
+
+#screen_width=user32.GetSystemMetrics(0)
+#screen_height=user32.GetSystemMetrics(1)
+#debug_print("screen width, height : %s , %s" % (screen_width,screen_height))
+#window = gtk.Window()
+screen_width = gtk.gdk.screen_width()
+screen_height = gtk.gdk.screen_height()
+
+  
 config = configparser.ConfigParser()
 config['DEFAULT'] = {
                       "X": screen_width-700,
@@ -796,8 +805,12 @@ def toAlphaOrNonAlpha():
   global win
   #2019-10-22 check screen size and uclliu position
   # 偵測肥米的位置，超出螢幕時，彈回
-  screen_width=user32.GetSystemMetrics(0)
-  screen_height=user32.GetSystemMetrics(1)
+  #screen_width=user32.GetSystemMetrics(0)
+  #screen_height=user32.GetSystemMetrics(1)
+  
+  screen_width = gtk.gdk.screen_width()
+  screen_height = gtk.gdk.screen_height()
+  
   [ _x,_y ] = win.get_position()
   [_width,_height] = win.get_size()
   
@@ -806,8 +819,8 @@ def toAlphaOrNonAlpha():
   if _x  > screen_width - _width:
     new_position_x = screen_width-_width-20    
     win.move( new_position_x,new_position_y)
-  if _y > screen_height - _height:
-    new_position_y = screen_height-_height-80 
+  if _y > screen_height - _height - 40:
+    new_position_y = screen_height-_height - 40 
     win.move( new_position_x,new_position_y)
   
   if _x < 0:
