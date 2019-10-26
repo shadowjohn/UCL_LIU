@@ -177,6 +177,7 @@ INI_CONFIG_FILE = PWD + "\\UCLLIU.ini"
 #screen_height=user32.GetSystemMetrics(1)
 #debug_print("screen width, height : %s , %s" % (screen_width,screen_height))
 #window = gtk.Window()
+#From : https://www.familylifemag.com/question/701406/how-do-i-get-monitor-resolution-in-python
 screen_width = gtk.gdk.screen_width()
 screen_height = gtk.gdk.screen_height()
 
