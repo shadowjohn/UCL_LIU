@@ -27,7 +27,7 @@ def split_unicode_chrs( text ):
 # https://superuser.com/questions/1120624/run-script-on-any-selected-text
 
 # 額外出字處理的 app
-f_arr = [ "putty","pietty","pcman","xyplorer","kinza.exe","oxygennotincluded.exe" ]
+f_arr = [ "putty","pietty","pcman","xyplorer","kinza.exe","oxygennotincluded.exe","iedit.exe","iedit_.exe" ]
 f_big5_arr = [ "zip32w","daqkingcon.exe","EWinner.exe" ]
 
 # 2019-10-20 增加出字模式
@@ -1211,6 +1211,9 @@ def senddata(data):
       if k == "oxygennotincluded.exe":
         #2019-02-10 修正 缺氧 無法輸入中文的問題
         SendKeysCtypes.SendKeys("^v",pause=0)
+      elif k == "iedit_.exe":
+        #2019-10-29 修正 PhotoImpact x3 無法輸入中文的問題
+        SendKeysCtypes.SendKeys("^v",pause=0)
       else:
         SendKeysCtypes.SendKeys("+{INSERT}",pause=0)
       #SendKeysCtypes.SendKeys("ggggg",pause=0)
@@ -2098,7 +2101,7 @@ class TrayIcon(gtk.StatusIcon):
       menu_items.append(gtk.MenuItem(""))
       
       
-      menu.show_all()
+      menu.show_all()      
       menu.popup(None, None, None, btn, 2) #button can be hardcoded (i.e 1) but time must be correct.      
       #menu.reposition()
       #print(dir(menu))
