@@ -228,6 +228,7 @@
     1、修正肥米雙螢幕時，可以在不同螢幕中拖移
     
     (2019-12-03) V1.25 版：
+    病毒碼提交掃描：1.25 https://www.microsoft.com/en-us/wdsi/submission/b7810d0b-cbf5-4710-adb9-bc2a7594d189
     1、修正 Photoimpact 8、photoimpact X3 無法輸入中文的問題
     2、(可開關)中文出字後，自動提示最短根
 <br>
