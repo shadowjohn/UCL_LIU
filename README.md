@@ -12,9 +12,9 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2019-10-26 08:31
+<h3>最後更新日期：</h3>2019-12-03 16:03
 <br>
-<h3>版本：</h3>V 1.24<br>
+<h3>版本：</h3>V 1.25<br>
 <br>
 <h3>版權：</h3>
 　免錢的 MIT-License
@@ -222,9 +222,14 @@
     病毒碼提交掃描：1.23 https://www.microsoft.com/en-us/wdsi/submission/725eeb8a-22cc-42a4-aad2-55f55a4ac13a
     1、修正肥米的視窗，不會超出螢幕
     2、按著 Shift 框字時，不會改變 英/肥 的狀態
-                                                                              
+    
+    (2019-10-26) V1.24 版：                                                                          
     病毒碼提交掃描：1.24 https://www.microsoft.com/en-us/wdsi/submission/2d8f7570-fd3d-4c3e-9869-331f2f75565e
     1、修正肥米雙螢幕時，可以在不同螢幕中拖移
+    
+    (2019-12-03) V1.25 版：
+    1、修正 Photoimpact 8、photoimpact X3 無法輸入中文的問題
+    2、(可開關)中文出字後，自動提示最短根
 <br>
 <h3>開發工具：</h3>
   <ul>
