@@ -384,5 +384,6 @@
   <li>(Done 2019-10-26)94、修正肥米雙螢幕時，可以在不同螢幕中拖移</li>
   <li>95、Trayicon的zindex要作調整到置頂</li>
   <li>(Done 2019-10-29)96、修正 Photoimpact 8、photoimpact X3 無法輸入中文的問題</li>
+  <li>(Done 2019-12-03)97、中文出字後，自動提示最短根</li>
 </ul>
 <br>

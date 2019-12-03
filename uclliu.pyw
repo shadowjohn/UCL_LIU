@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.24
+VERSION=1.25
 import portalocker
 import os
 import sys
@@ -675,6 +675,7 @@ same_sound_index=0 #預設第零頁
 same_sound_max_word=6 #一頁最多五字
 is_has_more_page=False #是否還有下頁
 same_sound_last_word="" #lastword
+is_display_sp=False #是否顯示簡根
 # 用來出半型字的
 # https://stackoverflow.com/questions/2422177/python-how-can-i-replace-full-width-characters-with-half-width-characters
 HALF2FULL = dict((i, i + 0xFEE0) for i in range(0x21, 0x7F))
@@ -737,9 +738,10 @@ def thread___x(data):
       output += uclcode_to_chinese(ucl_split_code)      
     if kLine != len(menter)-1:      
       output+="{ENTER}"
-  senddata(output)
-     
-def thread___z(data):
+  senddata(output)  
+def word_to_sp(data):
+  #中文轉最簡字根
+  #回傳字根文字
   #中文轉字根 thread
   selectData=data; #my.trim(data);
   selectData=selectData.replace("\r","");
@@ -758,7 +760,20 @@ def thread___z(data):
   #print(output)
   output = output.replace(" ","{SPACE}");
   output = output.replace("\n ","{ENTER}");  
-  output = output.replace("\n","{ENTER}");                    
+  output = output.replace("\n","{ENTER}"); 
+  return output 
+def show_sp_to_label(data):
+  #顯示最簡字根到輸入結束框後
+  global is_display_sp
+  global play_ucl_label
+  if is_display_sp==False:
+    return
+  sp = "簡根："+my.strtoupper(word_to_sp(data))
+  #word_label.set_label(sp)
+  #word_label.modify_font(pango.FontDescription(GUI_FONT_18))
+  type_label_set_text(sp)     
+def thread___z(data):
+  output = word_to_sp(data)                   
   senddata(output) 
        
 def find_ucl_in_uclcode(chinese_data):
@@ -767,7 +782,8 @@ def find_ucl_in_uclcode(chinese_data):
   if chinese_data in uclcode_r:
     return uclcode_r[chinese_data];
   else:
-    return chinese_data; 
+    return chinese_data;
+     
 def find_ucl_in_uclcode_old(chinese_data):
   #用中文反找蝦碼(V1.9版寫法)
   finds = []  
@@ -940,7 +956,7 @@ def is_hf(self):
   return (kind=="半")
    
 # http://stackoverflow.com/questions/7050448/write-image-to-windows-clipboard-in-python-with-pil-and-win32clipboard
-def type_label_set_text():
+def type_label_set_text(last_word_label_txt=""):
   global type_label
   global play_ucl_label
   global debug_print
@@ -957,6 +973,11 @@ def type_label_set_text():
     word_label.set_label("")
     word_label.modify_font(pango.FontDescription(GUI_FONT_20))
     pass
+  # 如果 last_word_label_txt 不是空值，代表有簡根或其他用字
+  word_label.modify_fg(gtk.STATE_NORMAL, gtk.gdk.color_parse('black'))
+  if last_word_label_txt != "":
+    word_label.set_label( last_word_label_txt )
+    word_label.modify_fg(gtk.STATE_NORMAL, gtk.gdk.Color("#007fff"))
   #如果是短米，自動看幾個字展長
   if config["DEFAULT"]["SHORT_MODE"]=="1":
     _tape_label = type_label.get_label()
@@ -1664,7 +1685,13 @@ def OnKeyboardEvent(event):
       if len(ucl_find_data)>=1 and int(chr(event.Ascii)) < len(ucl_find_data):
         # send data        
         data = ucl_find_data[int(chr(event.Ascii))]
+        #print(ucl_find_data)
+        
         senddata(data)
+        show_sp_to_label(data.decode('utf-8'))
+        #print(data)
+        #快選用的
+        #print(data)        
         debug_print("Debug12")
         return False
       else:
@@ -1744,6 +1771,7 @@ def OnKeyboardEvent(event):
           use_pinyi(same_sound_last_word)
         else:
           senddata(text)
+          show_sp_to_label(text)
         debug_print("Debug4")
         return False 
       elif len(ucl_find_data)==0 and len(play_ucl_label)!=0:
@@ -2005,6 +2033,12 @@ class TrayIcon(gtk.StatusIcon):
         type_label_set_text()
         toAlphaOrNonAlpha()
         #return False
+    def m_sp_switch(self,data=None):
+      global is_display_sp
+      if is_display_sp == False:
+        is_display_sp = True
+      else:
+        is_display_sp = False      
     def m_game_switch(self,data=None):
       global gamemode_btn_click
       global gamemode_btn
@@ -2031,7 +2065,7 @@ class TrayIcon(gtk.StatusIcon):
       global menu_items
       global gamemode_btn
       global DEFAULT_OUTPUT_TYPE
-      
+      global is_display_sp
       #debug_print(dir(menu))
       menu.set_visible(False)
       #menu = gtk.Menu()
@@ -2058,7 +2092,7 @@ class TrayIcon(gtk.StatusIcon):
       sub_menu_items = []
       is_o = ""
       if DEFAULT_OUTPUT_TYPE=="DEFAULT":
-        is_o = "○"
+        is_o = "●"
       else:
         is_o = "　"      
       sub_menu_items.append(gtk.MenuItem("【%s】正常出字模式" % (is_o)))
@@ -2066,7 +2100,7 @@ class TrayIcon(gtk.StatusIcon):
       sub_menu_items[len(sub_menu_items)-1].connect("activate", self.m_output_type,"DEFAULT")
       
       if DEFAULT_OUTPUT_TYPE=="BIG5":
-        is_o = "○"
+        is_o = "●"
       else:
         is_o = "　"
       sub_menu_items.append(gtk.MenuItem("【%s】BIG5模式" % (is_o)))
@@ -2074,7 +2108,7 @@ class TrayIcon(gtk.StatusIcon):
       sub_menu_items[len(sub_menu_items)-1].connect("activate", self.m_output_type,"BIG5")
       
       if DEFAULT_OUTPUT_TYPE=="PASTE":
-        is_o = "○"
+        is_o = "●"
       else:
         is_o = "　"
       sub_menu_items.append(gtk.MenuItem("【%s】複製貼上模式" % (is_o)))
@@ -2086,6 +2120,15 @@ class TrayIcon(gtk.StatusIcon):
       #sub_menu.popup(None, None, None, btn, 2)
       #menu_items[len(menu_items)-1].connect("activate", self.m_game_switch) #added by gv - it had nothing before
       
+      if is_display_sp==True:
+        menu_items.append(gtk.MenuItem("4.【●】顯示短根"))
+        menu.append( menu_items[len(menu_items)-1] )
+        menu_items[len(menu_items)-1].connect("activate", self.m_sp_switch)
+      else:
+        menu_items.append(gtk.MenuItem("4.【　】顯示短根"))
+        menu.append( menu_items[len(menu_items)-1] )
+        menu_items[len(menu_items)-1].connect("activate", self.m_sp_switch)
+                
       menu_items.append(gtk.MenuItem(""))
       menu.append( menu_items[len(menu_items)-1] )
       
