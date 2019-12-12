@@ -1,0 +1,8 @@
+C:\Users\John\Desktop\UCL_LIU\C#\uclliu\bin\Debug\uclliu.exe.config
+C:\Users\John\Desktop\UCL_LIU\C#\uclliu\bin\Debug\uclliu.exe
+C:\Users\John\Desktop\UCL_LIU\C#\uclliu\bin\Debug\uclliu.pdb
+C:\Users\John\Desktop\UCL_LIU\C#\uclliu\obj\Debug\uclliu.Form1.resources
+C:\Users\John\Desktop\UCL_LIU\C#\uclliu\obj\Debug\uclliu.Properties.Resources.resources
+C:\Users\John\Desktop\UCL_LIU\C#\uclliu\obj\Debug\uclliu.csproj.GenerateResource.Cache
+C:\Users\John\Desktop\UCL_LIU\C#\uclliu\obj\Debug\uclliu.exe
+C:\Users\John\Desktop\UCL_LIU\C#\uclliu\obj\Debug\uclliu.pdb
