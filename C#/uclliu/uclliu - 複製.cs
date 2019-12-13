@@ -20,7 +20,7 @@ namespace uclliu
         //UserActivityHook actHook = new UserActivityHook();
         //public static extern int SetWindowsHookEx(int idHook, NativeStructs.HookProc lpfn, IntPtr hInstance, int threadId);
         public string VERSION = "0.1";
-        public bool is_DEBUG_mode = true;
+        public bool is_DEBUG_mode = false;
         public bool is_send_ucl = false;
         public bool flag_is_ucl = true;
         public bool flag_is_hf = true;
@@ -60,8 +60,7 @@ namespace uclliu
             return new string(c);
             */
             //改用黑暗執行序的方法：https://blog.darkthread.net/blog/strconv-half-full-width-notes/
-            //debug_print(input);
-            //return Microsoft.VisualBasic.Strings.StrConv(input, Microsoft.VisualBasic.VbStrConv.Wide, 1028);
+            debug_print(input);
             return Microsoft.VisualBasic.Strings.StrConv(input, Microsoft.VisualBasic.VbStrConv.Wide, 1028);
         }
         public void show_sp_to_label(string data)
@@ -238,12 +237,10 @@ namespace uclliu
             //From : https://burorly.pixnet.net/blog/post/10185692-c%23%E8%A7%A3%E6%B1%BA%E4%B8%AD%E6%96%87%E5%AD%97%E5%8D%A0%E7%94%A82%E5%80%8Bbyte%E9%95%B7%E5%BA%A6%E8%A8%88%E7%AE%97%E6%96%B9%E5%BC%8F
             //byte[] lineStr = System.Text.Encoding.UTF8.GetBytes(data);
             //int len = System.Text.Encoding.UTF8.GetByteCount(data);
-            debug_print("Sendkeys:"+data);
             for (int i = 0; i < data.Length; i++)
             {
                 string str = data.Substring(i, 1); // System.Text.Encoding.UTF8.GetString(lineStr, i,1);
                 is_send_ucl = true;
-                
                 SendKeys.SendWait(str);
                 //Thread.Sleep(50);
             }

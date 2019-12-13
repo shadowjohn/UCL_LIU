@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 
 namespace uclliu
 {
-    public partial class Form1 : Form
+    public partial class Form1 : Form 
     {
         //Allow console,
         //From : https://stackoverflow.com/questions/4362111/how-do-i-show-a-console-output-window-in-a-forms-application
@@ -61,7 +61,7 @@ namespace uclliu
             ref KBDLLHOOKSTRUCT lParam)
         {
             //return 0;
-
+            
             bool isCapsLock = (((ushort)GetKeyState(0x14)) & 0xffff) != 0;
             bool keydown = (wParam == 256);
             bool keyup = (wParam == 257);
@@ -69,7 +69,7 @@ namespace uclliu
             bool LShift = (lParam.vkCode == 160);
             bool RShift = (lParam.vkCode == 161);
             bool LCtrl = (lParam.vkCode == 162);
-            bool RCtrl = (lParam.vkCode == 163);
+            bool LRtrl = (lParam.vkCode == 163);
             bool ESC = (lParam.vkCode == 27);
             bool LWin = (lParam.vkCode == 91);
             bool RWin = (lParam.vkCode == 92);
@@ -86,9 +86,9 @@ namespace uclliu
 
             int OK = 0; //同 pyhook 的 return True;
             int NO = 1; //同 pyhook 的 return False;
-                        //int BK = -1;
-
-
+            //int BK = -1;
+            
+            /*
             ucl.debug_print("nCode:" + nCode.ToString());
             ucl.debug_print("wParam:" + wParam.ToString());
             ucl.debug_print("vkCode:" + ea.ToString());
@@ -97,9 +97,7 @@ namespace uclliu
             ucl.debug_print("vkCode flags:" + lParam.flags);
             ucl.debug_print("vkCode GetHashCode:" + lParam.GetHashCode());
             ucl.debug_print("is_send_ucl:" + ucl.is_send_ucl.ToString());
-            ucl.debug_print("flag_is_capslock_down:" + ucl.flag_is_capslock_down.ToString());
-            ucl.debug_print("flag_is_play_capslock_otherkey:" + ucl.flag_is_play_capslock_otherkey.ToString());
-
+            */
             if (ucl.is_send_ucl == true)
             {
                 //出字用
@@ -123,7 +121,7 @@ namespace uclliu
                 ucl.flag_is_win_down = false;
                 ucl.debug_print("Debug event B");
             }
-
+            
             if (keydown && (LShift || RShift))
             {
                 //如果按著 shift 還用 滑鼠，不會切換 英/肥
@@ -151,27 +149,12 @@ namespace uclliu
                 ucl.flag_is_play_capslock_otherkey = false;
                 ucl.debug_print("Debug event E");
             }
-            if (keydown && (LCtrl || RCtrl))
-            {
-                ucl.flag_is_ctrl_down = true;
-                ucl.debug_print("Ctrl key");
-                return OK;
-            }
-            if (keyup && (LCtrl || RCtrl))
-            {
-                ucl.flag_is_ctrl_down = false;
-                return OK;
-            }
-            if(keydown && ucl.flag_is_ctrl_down)
-            {
-                return OK;
-            }
             if (keydown && (!LShift && !RShift))
             {
                 ucl.debug_print("Debug event D");
                 ucl.flag_is_play_otherkey = true;
             }
-
+            
             if (ucl.flag_is_capslock_down && ucl.flag_is_play_capslock_otherkey)
             {
                 if (BACK && ucl.is_ucl() && ucl.play_ucl_label.Length >= 1)
@@ -206,7 +189,7 @@ namespace uclliu
                 }
                 return OK;
             }
-
+            
             if (keydown && ea == 32 && ucl.flag_is_shift_down)
             {
                 //# Press shift and space
@@ -225,8 +208,7 @@ namespace uclliu
                     return OK;
                 }
                 //#2018-05-05要考慮右邊數字鍵的 . 
-                //107 +
-                if (keydown && ucl.flag_is_shift_down == false && ((ea >= 48 && ea <= 57) || (ea >= 96 && ea <= 105) || ea == 110 || ea == 107 || ea == 109 || ea == 106 || ea == 111))
+                if (keydown && (ea >= 48 && ea <= 57) || (ea >= 96 && ea <= 105 || ea == 110))
                 { // #0~9 .=110
 
                     if (ucl.ucl_find_data.Count >= 1 && Convert.ToInt32((char)(ea)) < ucl.ucl_find_data.Count)
@@ -260,27 +242,9 @@ namespace uclliu
                          # ea==46 or (event.Key=="Decimal" and ea==46)
                          # 先出小點好了
                          */
-                        if (ucl.is_hf() == false && ucl.flag_is_shift_down == false && ((ea >= 96 && ea <= 105) || ea == 49 || ea == 50 || ea == 51 || ea == 52 || ea == 53 || ea == 54 || ea == 55 || ea == 56 || ea == 57 || ea == 47 || ea == 42 || ea == 45 || ea == 43 || ea == 48 || ea == 107 || ea == 110 || ea == 109 || ea == 106 || ea == 111))
+                        if (ucl.is_hf() == false && (ea == 49 || ea == 50 || ea == 51 || ea == 52 || ea == 53 || ea == 54 || ea == 55 || ea == 56 || ea == 57 || ea == 47 || ea == 42 || ea == 45 || ea == 43 || ea == 48))
                         {
-                            int kac = ea;
-                            switch (kac)
-                            {
-                                //修正肥/全，右邊數字鍵
-                                case 106: //*
-                                case 111: ///
-                                case 110: //.
-                                case 109: //-
-                                case 107: //-
-                                    kac -= 64;
-                                    break;
-                            }
-                            if (kac >= 96 && kac <= 105)
-                            {
-                                //右邊的 0~9
-                                kac -= 48;
-                            }
-
-                            string k = ucl.widen(((char)(kac)).ToString());
+                            string k = ucl.widen(((char)(ea)).ToString());
                             ucl.senddata(k);
                             ucl.debug_print("Debug100");
                             return NO;
@@ -291,24 +255,14 @@ namespace uclliu
                         }
                     }
                 }
-
                 //ea == 46 是 DELETE
                 //(ea >= 97 && ea <= 122) a~z
-                //|| ea == 39 右邊數字 →
-                if (keydown && ((ea >= 65 && ea <= 90) || (ea >= 48 && ea <= 57) || ea == 44 || ea == 91 || ea == 93
-                    || ea == 58 || ea == 59 || ea == 123 || ea == 125 || ea == 41 || ea == 43 || ea == 126 || ea == 64
-                    || ea == 94 || ea == 42 || ea == 95 || ea == 60 || ea == 62 || ea == 63 || ea == 124 ||
-                    ea == 47 || ea == 186 || ea == 187 || ea == 189 || ea == 191 || ea == 192 ||
-                    ea == 219 || ea == 221 || ea == 222 || ea == 188 || ea == 190 || ea == 220 || ea == 222 
-
-                    ))
+                if (keydown && ((ea >= 65 && ea <= 90) || ea == 44 || ea == 39 || ea == 91 || ea == 93))
                 {
                     //# 這裡應該是同時按著SHIFT的部分
                     ucl.flag_is_play_otherkey = true;
-
                     if (ucl.flag_is_shift_down == true)
                     {
-                        ucl.debug_print("肥全按著 shift ");
                         if (((char)(ea)).ToString().Length == 1 && ucl.is_hf() == false)
                         {
                             int kac = ea;
@@ -319,70 +273,7 @@ namespace uclliu
                             }
                             else if (kac >= 65 && kac <= 90 && isCapsLock)
                             {
-                                //kac = kac;
-                            }
-                            switch (kac)
-                            {
-                                case 186: // : 
-                                    kac = 58;
-                                    break;
-                                case 222: // "
-                                    kac = 34;
-                                    break;
-                                case 220: // |
-                                    kac = 124;
-                                    break;
-                                case 219: // {
-                                    kac = 123;
-                                    break;
-                                case 221: // }
-                                    kac = 125;
-                                    break;
-                                case 187: // =
-                                    kac = 61;
-                                    break;
-                                case 188: // <
-                                    kac = 60;
-                                    break;
-                                case 190: // >
-                                    kac = 62;
-                                    break;
-                                case 189: // _
-                                    kac = 95;
-                                    break;
-                                case 192: // ~
-                                    kac = 126;
-                                    break;
-                                case 48: // )
-                                    kac = 41;
-                                    break;
-                                case 49: // !
-                                    kac = 33;
-                                    break;
-                                case 50: // @
-                                    kac = 64;
-                                    break;
-                                case 51: // #
-                                    kac = 35;
-                                    break;
-                                case 52: // $
-                                    kac = 36;
-                                    break;
-                                case 53: // %
-                                    kac = 37;
-                                    break;
-                                case 54: // ^
-                                    kac = 94;
-                                    break;
-                                case 55: // &
-                                    kac = 38;
-                                    break;
-                                case 56: // *
-                                    kac = 42;
-                                    break;
-                                case 57: // (
-                                    kac = 40;
-                                    break;
+                                kac = kac;
                             }
                             string k = ucl.widen(((char)(kac)).ToString());
                             //ucl.debug_print("285 event.Key to Full:%s %s" % (event.Key,k));
@@ -393,73 +284,14 @@ namespace uclliu
                         ucl.debug_print("Debug8");
                         return OK;
                     }
-                    else if (ucl.flag_is_shift_down == false && ucl.is_hf() == false &&
-                    (ea == 58 || ea == 59 || ea == 123 || ea == 125 || ea == 41 || ea == 43 || ea == 126 || ea == 64
-                    || ea == 94 || ea == 42 || ea == 95 || ea == 60 || ea == 62 || ea == 63 || ea == 124 ||
-                    ea == 47 || ea == 186 || ea == 187 || ea == 189 || ea == 191 || ea == 192 || ea == 220))  //`: # : ;｛｝（）＋～！＠＃＄％＾＆＊＿＜＞？＂｜／－
+                    else
                     {
-                        //      #修正 肥/全 時，按分號、冒號只出半型的問題
-                        int kac = ea;
-                        switch (ea)
-                        {
-                            case 192: //`
-                                kac -= 96;
-                                break;
-                            case 186: // ;                                
-                                kac -= 127;
-                                break;
-                            case 220: //\
-                                //kac = 92;
-                                ucl.senddata("＼");
-                                return NO;
-                                break;
-                            case 187: //+
-                            case 188: //,
-                            case 189: //-                            
-                            case 190: //.
-                            case 191: ///                           
-                                kac -= 144;
-                                break;
-                        }
-                        string k = ucl.widen(((char)(kac)).ToString());
-                        ucl.senddata(k);
-                        ucl.debug_print("Debug22");
-                        return NO;
-                    }
-                    else if ((ea >= 65 && ea <= 91) || ea == 219 || ea == 221 || ea == 222 || ea == 188 || ea == 190)
-                    {
-                        //需a~z 、 [ ] ' ,
                         //# Play ucl
                         //#print("Play UCL")
                         //#print(thekey)
-                        int kac = ea;
-                        switch (kac)
-                        {
-                            case 188: // ,
-                                kac = 44;
-                                break;
-                            case 190: // .
-                                kac = 46;
-                                break;
-                            case 219: // [
-                                kac = 91;
-                                break;
-                            case 221: // ]
-                                kac = 93;
-                                break;
-                            case 222: //'
-                                kac = 39;
-                                break;
-                        }
-                        ucl.play_ucl(((char)(kac)).ToString());
+                        ucl.play_ucl(((char)(ea)).ToString());
                         ucl.debug_print("Debug7");
                         return NO;
-                    }
-                    else
-                    {
-                        //nothing to do
-                        ucl.debug_print("對應不到功能");
-                        return OK;
                     }
                 }
                 if (keydown && (ea == 8)) //: # ← backspace
@@ -533,14 +365,23 @@ namespace uclliu
                     }
                 } // 空白
                   //45  是 ins || ea == 45
-                  //38 上 ea == 38 ||
-                  //37 左 ea == 37 ||
-                  //40 右 ea == 40 ||
-                  //33 pageup
-                  //34 pagedown
-                  //35 end
-                  //36 home
-                  //186 ;
+                else if (keydown && (ea == 58 || ea == 59 || ea == 123 || ea == 125 || ea == 40 || ea == 41 || ea == 43 || ea == 126 || ea == 33 || ea == 64 || ea == 35 || ea == 36 || ea == 37 || ea == 94 || ea == 38 || ea == 42 || ea == 95 || ea == 60 || ea == 62 || ea == 63 || ea == 34 || ea == 124 || ea == 47))  //: # : ;｛｝（）＋～！＠＃＄％＾＆＊＿＜＞？＂｜／－
+                {
+                    //      #修正 肥/全 時，按分號、冒號只出半型的問題
+                    if (ucl.is_hf() == false)
+                    {
+                        int kac = ea;
+                        string k = ucl.widen(((char)(kac)).ToString());
+                        ucl.senddata(k);
+                        ucl.debug_print("Debug22");
+                        return NO;
+                    }
+                    else
+                    {
+                        ucl.debug_print("Debug22OK");
+                        return OK;
+                    }
+                }
                 else
                 {
                     return OK;
@@ -627,6 +468,17 @@ namespace uclliu
                     ucl.flag_is_win_down = false;
                     return OK;
                 }
+                if (keydown && (ea == 231 || ea == 162 || ea == 163))
+                {
+                    ucl.flag_is_ctrl_down = true;
+                    ucl.debug_print("Ctrl key");
+                    return OK;
+                }
+                if (ucl.flag_is_ctrl_down == true)
+                {
+                    ucl.flag_is_ctrl_down = false;
+                    return OK;
+                }
                 if (keydown && (LShift || RShift))
                 {
                     ucl.flag_is_shift_down = true;
@@ -660,70 +512,8 @@ namespace uclliu
                 if (keydown && ((char)(ea)).ToString().Length == 1 && ucl.is_hf() == false)  // && event.Injected == 0 :
                 {
                     int kac = ea;
-                    //修正 c# 版無法偵測大小寫要作在這
-                    //如果本來就是96~105，代表右邊的數字鍵
-                    switch (kac)
-                    {
-                        case 96:
-                        case 97:
-                        case 98:
-                        case 99:
-                        case 100:
-                        case 101:
-                        case 102:
-                        case 103:
-                        case 104:
-                        case 105:
-                            kac -= 48;
-                            break;
-                        case 106:
-                        case 107:
-                        case 108:
-                        case 109:
-                        case 110:
-                        case 111:
-                            //右邊數字鍵，英全形
-                            kac -= 64;
-                            break;
-                        case 186: // ;                                
-                            kac -= 127;
-                            break;
-                        case 220: //\
-                            kac -= 128;
-                            ucl.senddata("＼");
-                            return NO;
-                            break;
-                        case 219: //[
-                            kac = 91;
-                            break;
-                        case 221: //]
-                            kac = 93;
-                            break;
-                        case 222:
-                            kac -= 183;
-                            break;
-                        case 187: //+
-                        case 188: //,
-                        case 189: //-                            
-                        case 190: //.
-                        case 191: ///                           
-                            kac -= 144;
-                            break;
-                        case 192: //`
-                            kac -= 96;
-                            break;
-                    }
-                    if (kac >= 65 && kac <= 90 && !isCapsLock)
-                    {
-                        kac = kac + 32;
-                    }
-                    else if (kac >= 65 && kac <= 90 && isCapsLock)
-                    {
-                        //kac = kac;
-                    }
                     string k = ucl.widen(((char)(kac)).ToString());
                     ucl.senddata(k);
-                    ucl.debug_print("eng / full");
                     //數字變全型
                     return NO;
                 }
@@ -731,14 +521,18 @@ namespace uclliu
             }
 
         }
-        static LowLevelKeyboardProcDelegate hookProc;
         public void KeyboardHook(object sender, EventArgs e)
         {
-            hookProc = new LowLevelKeyboardProcDelegate(LowLevelKeyboardProc);
-            intLLKey = SetWindowsHookEx(WH_KEYBOARD_LL, hookProc,
-                        System.Runtime.InteropServices.Marshal.GetHINSTANCE(
-                        System.Reflection.Assembly.GetExecutingAssembly().GetModules()[0]).ToInt32(), 0);
-
+            //try
+            //{
+            intLLKey = SetWindowsHookEx(WH_KEYBOARD_LL, new LowLevelKeyboardProcDelegate(LowLevelKeyboardProc),
+                       System.Runtime.InteropServices.Marshal.GetHINSTANCE(
+                       System.Reflection.Assembly.GetExecutingAssembly().GetModules()[0]).ToInt32(), 0);
+            //}
+            //catch (Exception ee)
+            //{
+            //    Console.WriteLine(ee);
+            //}
 
         }
 
@@ -755,13 +549,13 @@ namespace uclliu
         //        releasekeyboardhook();
         //        }
         //}
-        uclliu ucl;
-        private static Form1 form = null;
+        static uclliu ucl;
+        
         public Form1()
         {
             InitializeComponent();
             //https://stackoverflow.com/questions/12983427/accessing-forms-controls-from-another-class
-            form = this;
+            Form1 form = this;
             ucl = new uclliu(ref form);
         }
 
