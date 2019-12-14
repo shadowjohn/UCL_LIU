@@ -32,3 +32,10 @@ wuxiami.txt
 /dist/UCLLIU.lock
 /dist/test_ar30
 /UCLLIU.ini
+/C#/uclliu/bin/Debug/uclliu.exe
+/C#/uclliu/bin/Debug/uclliu.pdb
+/C#/uclliu/obj/Debug/uclliu.csproj.GenerateResource.cache
+/C#/uclliu/obj/Debug/uclliu.csprojAssemblyReference.cache
+/C#/uclliu/obj/Debug/uclliu.exe
+/C#/uclliu/obj/Debug/uclliu.pdb
+/dist/ar30.cin

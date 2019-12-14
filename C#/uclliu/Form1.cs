@@ -60,8 +60,7 @@ namespace uclliu
             int nCode, int wParam,
             ref KBDLLHOOKSTRUCT lParam)
         {
-            //return 0;
-
+            //return 0;            
             bool isCapsLock = (((ushort)GetKeyState(0x14)) & 0xffff) != 0;
             bool keydown = (wParam == 256);
             bool keyup = (wParam == 257);
@@ -820,9 +819,36 @@ namespace uclliu
             type_label.Text = "";
             KeyboardHook(this, e);
             //修正一下畫面
+            //
+
+             
+            /*this.TopLevel = true;
+            this.TopLevel = false;
+            this.TopLevel = true;
+            this.TopMost = true;            
+            this.TopMost = false;
+            this.TopMost = true;
+            */
+            //Thread.Sleep(3000);
+            btn_UCL.PerformClick();            
             btn_UCL.PerformClick();
-            btn_UCL.PerformClick();
+            //起始不可以是 topmost ，在程式執行後，才置高，不然
+            //首次切換輸入法時，會失去原始的焦點(如記事本)
+            this.TopMost = true; 
+            /*Thread.Sleep(1000);
+            SendKeys.SendWait("+");
+            Thread.Sleep(1000);
+            SendKeys.SendWait("+");
+            Thread.Sleep(1000);
+            SendKeys.SendWait("+");
+            Thread.Sleep(1000);
+            SendKeys.SendWait("+");
+            Thread.Sleep(1000);
+            SendKeys.SendWait("+");
+            Thread.Sleep(1000);
+            SendKeys.SendWait("+");
             ucl.toAlphaOrNonAlpha();
+            */
             //AllocConsole();            
         }
 

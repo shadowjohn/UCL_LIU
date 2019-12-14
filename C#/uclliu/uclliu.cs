@@ -443,7 +443,7 @@ namespace uclliu
                 f.Opacity = Convert.ToDouble(config["DEFAULT"]["ALPHA"]);
                 debug_print("Opacity:" + f.Opacity.ToString());
                 f.TopMost = true;
-                f.TopLevel = true;
+                //f.TopLevel = true;
             }
             else
             {
@@ -594,7 +594,7 @@ namespace uclliu
             string tmp = "";
             List<string> m = new List<string>();
             //MessageBox.Show(f.word_label.Visible.ToString());
-            f.word_label.Text = "BBB";
+            //f.word_label.Text = "BBB";
 
             try
             {
