@@ -790,6 +790,13 @@ namespace uclliu
         private void Form1_MouseUp(object sender, MouseEventArgs e)
         {
             mouseDown = false;
+            //如果超過畫面，要彈回來
+            ucl.toAlphaOrNonAlpha();
+            //換新位置了
+            ucl.debug_print("肥米換新位置了，儲存");
+            ucl.config["DEFAULT"]["X"] = this.Left.ToString();
+            ucl.config["DEFAULT"]["Y"] = this.Top.ToString();
+            ucl.saveConfig();
         }
         private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
@@ -798,13 +805,25 @@ namespace uclliu
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-            //this.Size = new Size(400, 330);
+            //檢查不能重複啟動
+            if (!ucl.checkLockSuccess())
+            {
+                MessageBox.Show("肥米已執行了...");
+                Application.Exit();
+            }
+            //載入 UCLLIU.ini
             ucl.loadConfig();
+            //載入字根檔     
+            ucl.loadJsonData();
+
             word_label.Text = "";
             type_label.Text = "";
             KeyboardHook(this, e);
+            //修正一下畫面
+            btn_UCL.PerformClick();
+            btn_UCL.PerformClick();
             ucl.toAlphaOrNonAlpha();
-            AllocConsole();
+            //AllocConsole();            
         }
 
         private void LP_MouseDown(object sender, MouseEventArgs e)
@@ -824,23 +843,25 @@ namespace uclliu
 
         private void btn_X_Click(object sender, EventArgs e)
         {
+            ucl.debug_print("Bye Bye!");
             Application.Exit();
         }
-
-
-
+               
         private void btn_UCL_Click(object sender, EventArgs e)
         {
+            //點到 肥 或 英
             ucl.toggle_ucl();
         }
 
         public void btn_HALF_Click(object sender, EventArgs e)
         {
+            //點到 半形 或 全形
             ucl.toggle_hf();
         }
 
         private void btn_gamemode_Click(object sender, EventArgs e)
         {
+            //點到 正常模式 或 遊戲模式
             ucl.toggle_gamemode();
         }
 

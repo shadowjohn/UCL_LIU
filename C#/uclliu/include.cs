@@ -1,20 +1,11 @@
 ﻿using System;
-using System.Reflection;
-using System.Collections;
-using System.Collections.Generic;
 using System.Text;
 using System.IO;
-using System.Web;
-using System.Data.SqlClient;
-using System.Data;
-using System.Net;
-using System.Configuration;
-using System.Runtime.Serialization;
-using System.Globalization;
-using System.Text.RegularExpressions;
-using System.Threading;
 using System.Diagnostics;
-
+using System.Collections.Generic;
+using System.Linq;
+using System.Collections;
+using System.Json;
 
 namespace utility
 {
@@ -40,8 +31,75 @@ namespace utility
                 File.Delete(filepath);
             }
         }
-
-
+        public bool in_array(string find_key, List<string> arr)
+        {
+            return arr.Contains(find_key);
+        }
+        public bool in_array(string find_key, string[] arr)
+        {
+            return arr.Contains(find_key);
+        }
+        public string implode(string keyword, string[] arrays)
+        {
+            return string.Join(keyword, arrays);
+        }
+        public string implode(string keyword, List<string> arrays)
+        {
+            return string.Join<string>(keyword, arrays);
+        }
+        public string implode(string keyword, Dictionary<int, string> arrays)
+        {
+            string[] tmp = new String[arrays.Keys.Count];
+            int i = 0;
+            foreach (int k in arrays.Keys)
+            {
+                tmp[i++] = arrays[k];
+            }
+            return string.Join(keyword, tmp);
+        }
+        public string implode(string keyword, Dictionary<string, string> arrays)
+        {
+            string[] tmp = new String[arrays.Keys.Count];
+            int i = 0;
+            foreach (string k in arrays.Keys)
+            {
+                tmp[i++] = arrays[k];
+            }
+            return string.Join(keyword, tmp);
+        }
+        public string implode(string keyword, ArrayList arrays)
+        {
+            string[] tmp = new String[arrays.Count];
+            for (int i = 0; i < arrays.Count; i++)
+            {
+                tmp[i] = arrays[i].ToString();
+            }
+            return string.Join(keyword, tmp);
+        }
+        public List<string> jsonValueToListString(JsonValue data)
+        {
+            List<string> o = new List<string>();
+            if (data.ToString().Contains("["))
+            {
+                for (int i = 0, max_i = data.Count; i < max_i; i++)
+                {
+                    o.Add(data[i].ToString().Replace("\"", ""));
+                }
+            }
+            else
+            {
+                o.Add(data.ToString().Replace("\"",""));
+            }
+            return o;
+        }
+        public bool in_array(string find_key, ArrayList arr)
+        {
+            return arr.Contains(find_key);
+        }
+        public bool in_array(string find_key, JsonValue arr)
+        {
+            return arr.ContainsKey(find_key);
+        }
         public bool is_string_like(string data, string find_string)
         {
             return (data.IndexOf(find_string) == -1) ? false : true;
@@ -146,6 +204,31 @@ namespace utility
         public string[] explode(string[] keyword, string data)
         {
             return data.Split(keyword, StringSplitOptions.None);
+        }
+        public byte[] s2b(string input)
+        {
+            return System.Text.Encoding.UTF8.GetBytes(input);
+        }
+        public string b2s(byte[] input)
+        {
+            return System.Text.Encoding.UTF8.GetString(input);
+        }
+        public void file_put_contents(string filepath, string input)
+        {
+            file_put_contents(filepath, s2b(input));
+        }
+        public void file_put_contents(string filepath, byte[] input)
+        {
+            FileStream myFile = File.Open(@filepath, FileMode.Create);
+            myFile.Write(input, 0, input.Length);
+            myFile.Dispose();
+        }
+        public byte[] file_get_contents(string path)
+        {
+            System.IO.StreamReader sr = new System.IO.StreamReader(path);
+            string sContents = sr.ReadToEnd();
+            sr.Close();
+            return s2b(sContents);
         }
         //strtotime 轉換成 Unix time
         public string strtotime(string value)
