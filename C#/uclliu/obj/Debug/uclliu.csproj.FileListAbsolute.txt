@@ -6,7 +6,6 @@ C:\Users\John\Desktop\UCL_LIU\C#\uclliu\obj\Debug\uclliu.Properties.Resources.re
 C:\Users\John\Desktop\UCL_LIU\C#\uclliu\obj\Debug\uclliu.csproj.GenerateResource.Cache
 C:\Users\John\Desktop\UCL_LIU\C#\uclliu\obj\Debug\uclliu.exe
 C:\Users\John\Desktop\UCL_LIU\C#\uclliu\obj\Debug\uclliu.pdb
-C:\Users\John\Desktop\UCL_LIU\C#\uclliu\obj\Debug\uclliu.csprojResolveAssemblyReference.cache
 C:\Users\john.GIS\Desktop\UCL_LIU\C#\uclliu\bin\Debug\uclliu.exe.config
 C:\Users\john.GIS\Desktop\UCL_LIU\C#\uclliu\bin\Debug\uclliu.exe
 C:\Users\john.GIS\Desktop\UCL_LIU\C#\uclliu\bin\Debug\uclliu.pdb
@@ -17,3 +16,8 @@ C:\Users\john.GIS\Desktop\UCL_LIU\C#\uclliu\obj\Debug\uclliu.csproj.GenerateReso
 C:\Users\john.GIS\Desktop\UCL_LIU\C#\uclliu\obj\Debug\uclliu.csproj.CoreCompileInputs.cache
 C:\Users\john.GIS\Desktop\UCL_LIU\C#\uclliu\obj\Debug\uclliu.exe
 C:\Users\john.GIS\Desktop\UCL_LIU\C#\uclliu\obj\Debug\uclliu.pdb
+C:\Users\John\Desktop\UCL_LIU\C#\uclliu\bin\Debug\INIFileParser.dll
+C:\Users\John\Desktop\UCL_LIU\C#\uclliu\bin\Debug\INIFileParser.xml
+C:\Users\John\Desktop\UCL_LIU\C#\uclliu\obj\Debug\uclliu.csprojAssemblyReference.cache
+C:\Users\John\Desktop\UCL_LIU\C#\uclliu\obj\Debug\uclliu.csproj.CoreCompileInputs.cache
+C:\Users\John\Desktop\UCL_LIU\C#\uclliu\obj\Debug\uclliu.csproj.CopyComplete

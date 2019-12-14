@@ -106,6 +106,11 @@ namespace uclliu
                 ucl.is_send_ucl = false;
                 return OK;
             }
+            if (ucl.flag_is_gamemode)
+            {
+                return OK;
+            }
+
             if (keydown && ucl.is_ucl() && ucl.play_ucl_label.Length >= 1 && ESC)
             {
                 //如果是肥模式，且輸入的字>=1以上，按下 esc 鍵，會把字消除
@@ -162,7 +167,7 @@ namespace uclliu
                 ucl.flag_is_ctrl_down = false;
                 return OK;
             }
-            if(keydown && ucl.flag_is_ctrl_down)
+            if (keydown && ucl.flag_is_ctrl_down)
             {
                 return OK;
             }
@@ -299,7 +304,7 @@ namespace uclliu
                     || ea == 58 || ea == 59 || ea == 123 || ea == 125 || ea == 41 || ea == 43 || ea == 126 || ea == 64
                     || ea == 94 || ea == 42 || ea == 95 || ea == 60 || ea == 62 || ea == 63 || ea == 124 ||
                     ea == 47 || ea == 186 || ea == 187 || ea == 189 || ea == 191 || ea == 192 ||
-                    ea == 219 || ea == 221 || ea == 222 || ea == 188 || ea == 190 || ea == 220 || ea == 222 
+                    ea == 219 || ea == 221 || ea == 222 || ea == 188 || ea == 190 || ea == 220 || ea == 222
 
                     ))
                 {
@@ -398,7 +403,7 @@ namespace uclliu
                     || ea == 94 || ea == 42 || ea == 95 || ea == 60 || ea == 62 || ea == 63 || ea == 124 ||
                     ea == 47 || ea == 186 || ea == 187 || ea == 189 || ea == 191 || ea == 192 || ea == 220))  //`: # : ;｛｝（）＋～！＠＃＄％＾＆＊＿＜＞？＂｜／－
                     {
-                        //      #修正 肥/全 時，按分號、冒號只出半型的問題
+                        //      #修正 肥/全 時，按分號、冒號只出半形的問題
                         int kac = ea;
                         switch (ea)
                         {
@@ -627,7 +632,7 @@ namespace uclliu
                     ucl.flag_is_win_down = false;
                     return OK;
                 }
-                if (keydown && (LShift || RShift))
+                /*if (keydown && (LShift || RShift))
                 {
                     ucl.flag_is_shift_down = true;
                     ucl.flag_is_play_otherkey = false;
@@ -652,6 +657,7 @@ namespace uclliu
                     ucl.debug_print("Debug314");
                     return OK;
                 }
+                */
                 //debug_print("Debug3: %s" % (event.Transition))
                 if (ea == 8 || ea == 20 || ea == 45 || ea == 46 || ea == 36 || ea == 33 || ea == 34 || ea == 35 || ea == 160 || ea == 161 || ea == 9 || ea == 37 || ea == 38 || ea == 39 || ea == 40 || ea == 231 || ea == 162 || ea == 163)
                 { // #↑←→↓
@@ -724,7 +730,7 @@ namespace uclliu
                     string k = ucl.widen(((char)(kac)).ToString());
                     ucl.senddata(k);
                     ucl.debug_print("eng / full");
-                    //數字變全型
+                    //數字變全形
                     return NO;
                 }
                 return OK;
@@ -793,21 +799,25 @@ namespace uclliu
         private void Form1_Load(object sender, EventArgs e)
         {
             //this.Size = new Size(400, 330);
+            ucl.loadConfig();
+            word_label.Text = "";
+            type_label.Text = "";
             KeyboardHook(this, e);
+            ucl.toAlphaOrNonAlpha();
             AllocConsole();
         }
 
-        private void tableLayoutPanel1_MouseDown(object sender, MouseEventArgs e)
+        private void LP_MouseDown(object sender, MouseEventArgs e)
         {
             Form1_MouseDown(sender, e);
         }
 
-        private void tableLayoutPanel1_MouseMove(object sender, MouseEventArgs e)
+        private void LP_MouseMove(object sender, MouseEventArgs e)
         {
             Form1_MouseMove(sender, e);
         }
 
-        private void tableLayoutPanel1_MouseUp(object sender, MouseEventArgs e)
+        private void LP_MouseUp(object sender, MouseEventArgs e)
         {
             Form1_MouseUp(sender, e);
         }
@@ -817,10 +827,7 @@ namespace uclliu
             Application.Exit();
         }
 
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
-        {
 
-        }
 
         private void btn_UCL_Click(object sender, EventArgs e)
         {
@@ -831,5 +838,11 @@ namespace uclliu
         {
             ucl.toggle_hf();
         }
+
+        private void btn_gamemode_Click(object sender, EventArgs e)
+        {
+            ucl.toggle_gamemode();
+        }
+
     }
 }
