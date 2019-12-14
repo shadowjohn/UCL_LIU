@@ -12,6 +12,8 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters;
 using utility;
 using System.Json;
+using System.Text;
+using System.Diagnostics;
 
 //using Microsoft.VisualBasic.Strings;
 namespace uclliu
@@ -19,8 +21,6 @@ namespace uclliu
     public class uclliu
     {
         myinclude my = new myinclude();
-        //UserActivityHook actHook = new UserActivityHook();
-        //public static extern int SetWindowsHookEx(int idHook, NativeStructs.HookProc lpfn, IntPtr hInstance, int threadId);        
         public string VERSION = "0.1";
         public FileStream lockFileString;
 
@@ -117,6 +117,7 @@ namespace uclliu
             //uclcode = my.json_decode(my.file_get_contents(PWD + "\\liu.json"))            
             try
             {
+                //JsonValue 使用 System.Json
                 //https://stackoverflow.com/questions/6620165/how-can-i-parse-json-with-c
                 string data = my.b2s(my.file_get_contents(liu_json_path));
                 uclcode = JsonValue.Parse(data);
@@ -443,13 +444,13 @@ namespace uclliu
                 f.Opacity = Convert.ToDouble(config["DEFAULT"]["ALPHA"]);
                 debug_print("Opacity:" + f.Opacity.ToString());
                 f.TopMost = true;
-                //f.TopLevel = true;
+                //f.TopLevel = true; //if open , lost focus 
             }
             else
             {
                 f.Opacity = 0.2;
                 f.TopMost = false;
-                //f.TopLevel = false;
+                //f.TopLevel = false; //if open , lost focus 
             }
         }
         public void toggle_ucl()
@@ -503,7 +504,7 @@ namespace uclliu
             if (last_word_label_txt != "")
             {
                 f.word_label.Text = last_word_label_txt;
-                f.word_label.ForeColor = Color.FromArgb(0,127,255);
+                f.word_label.ForeColor = Color.FromArgb(0, 127, 255);
                 //word_label.modify_fg(gtk.STATE_NORMAL, gtk.gdk.Color("#007fff"));
             }
             //如果是短米，自動看幾個字展長
@@ -534,7 +535,7 @@ namespace uclliu
                 }
                 else
                 {
-                   // f.word_label.Visible = true;
+                    // f.word_label.Visible = true;
                 }
                 //f.word_label.set_size_request(int(float(config['DEFAULT']['zoom']) * 15 * _len_word_label), int(float(config['DEFAULT']['zoom']) * 40))
                 f.LP.ColumnStyles[3] = new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute,
@@ -601,15 +602,15 @@ namespace uclliu
                 foreach (var k in ucl_find_data)
                 {
                     m.Add(string.Format("{0}{1}", step, k));
-                    step = step + 1;                    
+                    step = step + 1;
                 }
                 tmp = my.implode(" ", m);
                 if (is_has_more_page == true)
                 {
-                    tmp = string.Format("{0} ...", tmp);                    
-                }                
+                    tmp = string.Format("{0} ...", tmp);
+                }
                 f.word_label.Text = tmp;
-                debug_print(string.Format("word_label lens: {0} " , tmp.Length));
+                debug_print(string.Format("word_label lens: {0} ", tmp.Length));
                 int lt = tmp.Length;
             }
             catch (Exception ex)
@@ -634,6 +635,7 @@ namespace uclliu
                     break;
             }
         }
+
         public void senddata(string data)
         {
             //data = "肥的天下";
@@ -656,14 +658,78 @@ namespace uclliu
             //byte[] lineStr = System.Text.Encoding.UTF8.GetBytes(data);
             //int len = System.Text.Encoding.UTF8.GetByteCount(data);
             debug_print("Sendkeys:" + data);
-            for (int i = 0; i < data.Length; i++)
-            {
-                string str = data.Substring(i, 1); // System.Text.Encoding.UTF8.GetString(lineStr, i,1);
-                is_send_ucl = true;
+            //const int nChars = 256;
+            //https://stackoverflow.com/questions/115868/how-do-i-get-the-title-of-the-current-active-window-using-c
+            IntPtr handle = Form1.GetForegroundWindow();
+            var intLength = Form1.GetWindowTextLength(handle) + 1;
+            StringBuilder Buff = new StringBuilder(intLength);
+            // From : https://stackoverflow.com/questions/115868/how-do-i-get-the-title-of-the-current-active-window-using-c                
 
-                SendKeys.SendWait(str);
-                //Thread.Sleep(50);
+            if (Form1.GetWindowText(handle, Buff, intLength) > 0)
+            {
+                // return Buff.ToString();
+                debug_print("BBBBBBBBBBBBBBBB:" + Buff.ToString());
             }
+            string P_TITLE = Buff.ToString();
+            uint pid;
+            Form1.GetWindowThreadProcessId(handle, out pid);
+            Process p = Process.GetProcessById((int)pid);
+            string P_NAME = "";
+            try
+            {
+                P_NAME = p.MainModule.FileName;
+            }catch(Exception ex)
+            {
+
+            }
+            // Try : https://github.com/ReneLergner/WPinternals/blob/master/CommandLine.cs
+            //Microsoft.Win32.SafeHandles.SafeFileHandle safeFileHandle = new Microsoft.Win32.SafeHandles.SafeFileHandle(handle, true);
+            //FileStream fileStream = new FileStream(safeFileHandle, FileAccess.Write);
+            //fileStream.
+            //Encoding encoding = System.Text.Encoding.GetEncoding(MY_CODE_PAGE);
+
+
+
+            //string output = "";
+            string orin_Clip = Clipboard.GetText();
+            Clipboard.SetText(data);
+            is_send_ucl = true;
+            string exec_proc = my.mainname(P_NAME).ToLower();
+            debug_print("exec_proc:" + exec_proc);
+            if (exec_proc == "putty")
+            {
+                data = "+{INSERT}";
+            }
+            else
+            {
+                data = "^{v}";
+            }
+            
+            SendKeys.Send(data);
+            is_send_ucl = false;
+            Clipboard.SetText(orin_Clip);
+            //{
+            //
+            //  string str = data.Substring(i, 1); 
+            //sendinput
+            //https://dotblogs.com.tw/eaglewolf/2010/10/08/18220
+            //https://www.itread01.com/content/1548344359.html
+            /*
+                更多舉例:
+                SendKeys.SendWait("^C");  //Ctrl+C 組合鍵
+                SendKeys.SendWait("+C");  //Shift+C 組合鍵
+                SendKeys.SendWait("%C");  //Alt+C 組合鍵
+                SendKeys.SendWait("+(AX)");  //Shift+A+X 組合鍵
+                SendKeys.SendWait("+AX");  //Shift+A 組合鍵,之後按X鍵
+                SendKeys.SendWait("{left 5}");  //按←鍵 5次
+                SendKeys.SendWait("{h 10}");   //按h鍵 10次
+                SendKeys.Send("漢字");  //模擬輸入"漢字"2個字
+            */
+
+            //output += str;
+            //Thread.Sleep(50);
+            //}
+
         }
 
         public uclliu(ref Form1 _f)

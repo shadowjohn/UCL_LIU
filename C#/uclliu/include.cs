@@ -92,6 +92,25 @@ namespace utility
             }
             return o;
         }
+        public string Big5ToUtf8(string src)
+        {
+            string s = Encoding.GetEncoding("BIG5").GetString(s2b(src));
+            byte[] dst = Encoding.UTF8.GetBytes(s);
+            return b2s(dst);
+        }
+        public string UTF8toBig5(string strInput)
+        {
+            byte[] strut8 = System.Text.Encoding.Unicode.GetBytes(strInput);
+            byte[] strbig5 = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, System.Text.Encoding.Default, strut8);
+            return System.Text.Encoding.Default.GetString(strbig5);
+        }
+        public string UTF8toCP950(string strInput)
+        {
+            byte[] unknow = System.Text.Encoding.Default.GetBytes(strInput);
+            string Big5 = System.Text.Encoding.Default.GetString(unknow);
+            return Big5;
+
+        }
         public bool in_array(string find_key, ArrayList arr)
         {
             return arr.Contains(find_key);

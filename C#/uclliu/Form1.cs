@@ -14,6 +14,62 @@ namespace uclliu
 {
     public partial class Form1 : Form
     {
+        //From : https://stackoverflow.com/questions/115868/how-do-i-get-the-title-of-the-current-active-window-using-c
+        //https://stackoverflow.com/questions/6569405/how-to-get-active-process-name-in-c
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern IntPtr GetWindowThreadProcessId(IntPtr hWnd, out uint ProcessId);
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern IntPtr GetForegroundWindow();
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern int GetWindowTextLength(IntPtr hWnd);
+
+        //From : https://dotblogs.com.tw/eaglewolf/2010/10/08/18220
+        [DllImport("user32.dll", SetLastError = true)]
+        internal static extern uint SendInput(uint nInput, ref INPUT pInput, int cbSize);
+        [StructLayout(LayoutKind.Explicit)]
+        internal struct INPUT
+        {
+            [FieldOffset(0)]
+            internal int type;//0:mouse event;1:keyboard event;2:hardware event
+            [FieldOffset(4)]
+            internal MOUSEINPUT mi;
+            [FieldOffset(4)]
+            internal KEYBDINPUT ki;
+            [FieldOffset(4)]
+            internal HARDWAREINPUT hi;
+        }
+        [StructLayout(LayoutKind.Sequential)]
+        internal struct HARDWAREINPUT
+        {
+            internal int uMsg;
+            internal short wParamL;
+            internal short wParamH;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        internal struct KEYBDINPUT
+        {
+            internal ushort wVk;
+            internal ushort wScan;
+            internal uint dwFlags;
+            internal uint time;
+            internal IntPtr dwExtraInfo;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        internal struct MOUSEINPUT
+        {
+            internal int dx;
+            internal int dy;
+            internal int mouseData;
+            internal int dwFlags;
+            internal int time;
+            internal IntPtr dwExtraInfo;
+        }
+
         //Allow console,
         //From : https://stackoverflow.com/questions/4362111/how-do-i-show-a-console-output-window-in-a-forms-application
         [DllImport("kernel32.dll", SetLastError = true)]
@@ -102,7 +158,7 @@ namespace uclliu
             if (ucl.is_send_ucl == true)
             {
                 //出字用
-                ucl.is_send_ucl = false;
+                //ucl.is_send_ucl = false;
                 return OK;
             }
             if (ucl.flag_is_gamemode)
