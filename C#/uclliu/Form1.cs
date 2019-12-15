@@ -27,7 +27,7 @@ namespace uclliu
         public static extern int GetWindowTextLength(IntPtr hWnd);
 
         //From : https://dotblogs.com.tw/eaglewolf/2010/10/08/18220
-        [DllImport("user32.dll", SetLastError = true)]
+        /*[DllImport("user32.dll", SetLastError = true)]
         internal static extern uint SendInput(uint nInput, ref INPUT pInput, int cbSize);
         [StructLayout(LayoutKind.Explicit)]
         internal struct INPUT
@@ -69,7 +69,7 @@ namespace uclliu
             internal int time;
             internal IntPtr dwExtraInfo;
         }
-
+        */
         //Allow console,
         //From : https://stackoverflow.com/questions/4362111/how-do-i-show-a-console-output-window-in-a-forms-application
         [DllImport("kernel32.dll", SetLastError = true)]
@@ -718,11 +718,14 @@ namespace uclliu
                 { // #↑←→↓
                     return OK;
                 }
-                if (keydown && ((char)(ea)).ToString().Length == 1 && ucl.is_hf() == false)  // && event.Injected == 0 :
+                if (keydown && !ucl.flag_is_shift_down && ((char)(ea)).ToString().Length == 1 && ucl.is_hf() == false && ea < 112 && ea > 123)  // && event.Injected == 0 :
                 {
                     int kac = ea;
+                    //112~123 是 F1~F12
                     //修正 c# 版無法偵測大小寫要作在這
                     //如果本來就是96~105，代表右邊的數字鍵
+                    //這裡在處理 英/全
+                    //Console.WriteLine("ea:" + ea.ToString());
                     switch (kac)
                     {
                         case 96:
@@ -773,6 +776,115 @@ namespace uclliu
                         case 192: //`
                             kac -= 96;
                             break;
+                    }
+                    if (kac >= 65 && kac <= 90 && !isCapsLock)
+                    {
+                        kac = kac + 32;
+                    }
+                    else if (kac >= 65 && kac <= 90 && isCapsLock)
+                    {
+                        //kac = kac;
+                    }
+                    string k = ucl.widen(((char)(kac)).ToString());
+                    ucl.senddata(k);
+                    ucl.debug_print("eng / full");
+                    //數字變全形
+                    return NO;
+                }
+                else if (keydown && ucl.flag_is_shift_down && ((char)(ea)).ToString().Length == 1 && ucl.is_hf() == false && ea <112 && ea > 123)  // && event.Injected == 0 :
+                {
+                    //112~123 是 F1~F12
+                    //英 / 全 按著 shift 時
+                    int kac = ea;
+                    //修正 c# 版無法偵測大小寫要作在這
+                    //如果本來就是96~105，代表右邊的數字鍵
+                    //這裡在處理 英/全
+                    //Console.WriteLine("英全 + shift ea:" + ea.ToString());
+                    switch (kac)
+                    {
+                        case 186: // : 
+                            kac = 58;
+                            break;
+                        case 222: // "
+                            kac = 34;
+                            break;
+                        case 220: // |
+                            kac = 124;
+                            break;
+                        case 219: // {
+                            kac = 123;
+                            break;
+                        case 221: // }
+                            kac = 125;
+                            break;
+                        case 187: // =
+                            kac = 61;
+                            break;
+                        case 188: // <
+                            kac = 60;
+                            break;
+                        case 190: // >
+                            kac = 62;
+                            break;
+                        case 189: // _
+                            kac = 95;
+                            break;
+                        case 192: // ~
+                            kac = 126;
+                            break;
+                        case 48: // )
+                            kac = 41;
+                            break;
+                        case 49: // !
+                            kac = 33;
+                            break;
+                        case 50: // @
+                            kac = 64;
+                            break;
+                        case 51: // #
+                            kac = 35;
+                            break;
+                        case 52: // $
+                            kac = 36;
+                            break;
+                        case 53: // %
+                            kac = 37;
+                            break;
+                        case 54: // ^
+                            kac = 94;
+                            break;
+                        case 55: // &
+                            kac = 38;
+                            break;
+                        case 56: // *
+                            kac = 42;
+                            break;
+                        case 57: // (
+                            kac = 40;
+                            break;
+
+                        case 96:
+                        case 97:
+                        case 98:
+                        case 99:
+                        case 100:
+                        case 101:
+                        case 102:
+                        case 103:
+                        case 104:
+                        case 105:
+                            kac -= 48;
+                            break;
+                        case 106:
+                        case 107:
+                        case 108:
+                        case 109:
+                        case 110:
+                        case 111:
+                            //右邊數字鍵，英全形
+                            kac -= 64;
+                            break;
+
                     }
                     if (kac >= 65 && kac <= 90 && !isCapsLock)
                     {

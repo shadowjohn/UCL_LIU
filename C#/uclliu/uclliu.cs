@@ -27,8 +27,8 @@ namespace uclliu
         //把 chardefs 的字碼，變成對照字根，可以加速 ,,,z、,,,x 反查的速度
         public Dictionary<string, string> uclcode_r = new Dictionary<string, string>();
         public JsonValue uclcode = null;
-        public bool is_DEBUG_mode = true;
-        public string INI_CONFIG_FILE = "C:\\temp\\UCLLIU.ini";
+        public bool is_DEBUG_mode = true; //除錯模式
+        public string INI_CONFIG_FILE = "C:\\temp\\UCLLIU.ini"; //預設在 此，實際使用的位置同在 uclliu.exe
         public IniData config = new IniData();
         public bool is_send_ucl = false;
         public bool flag_is_ucl = true;
@@ -551,21 +551,38 @@ namespace uclliu
             is_has_more_page = false;
             same_sound_last_word = "";
             debug_print("ShowSearch1");
-            string c = my.strtolower(play_ucl_label);
-            c = c.Trim();
+            string c = play_ucl_label.ToLower().Trim();            
             is_need_use_pinyi = false;
             if (c.Substring(0, 1) == "'" && c.Length > 1)
             {
                 c = c.Substring(1);
                 is_need_use_pinyi = true;
             }
-            if (!my.in_array(c, uclcode["chardefs"]) &&
-                c.Substring(c.Length - 1, 1).ToLower() == "v" &&
-                my.in_array(c.Substring(0, c.Length - 1), uclcode["chardefs"]) &&
-                uclcode["chardefs"][c.Substring(0, c.Length - 1)].Count >= 2)
+            if (!my.in_array(c, uclcode["chardefs"]) && c.Substring(c.Length - 1, 1) == "v" && my.in_array(c.Substring(0, c.Length - 1), uclcode["chardefs"]) && uclcode["chardefs"][c.Substring(0, c.Length - 1)].Count >= 2)
             {
                 //#print("Debug V1")
                 ucl_find_data = my.jsonValueToListString(uclcode["chardefs"][c.Substring(0, c.Length - 1)][1]);
+                word_label_set_text();
+                return true;
+            }
+            else if (!my.in_array(c, uclcode["chardefs"]) && c.Substring(c.Length - 1, 1) == "r" && my.in_array(c.Substring(0, c.Length - 1), uclcode["chardefs"]) && uclcode["chardefs"][c.Substring(0, c.Length - 1)].Count >= 3)
+            {
+                //#print("Debug V1")
+                ucl_find_data = my.jsonValueToListString(uclcode["chardefs"][c.Substring(0, c.Length - 1)][2]);
+                word_label_set_text();
+                return true;
+            }
+            else if (!my.in_array(c, uclcode["chardefs"]) && c.Substring(c.Length - 1, 1) == "s" && my.in_array(c.Substring(0, c.Length - 1), uclcode["chardefs"]) && uclcode["chardefs"][c.Substring(0, c.Length - 1)].Count >= 4)
+            {
+                //#print("Debug V1")
+                ucl_find_data = my.jsonValueToListString(uclcode["chardefs"][c.Substring(0, c.Length - 1)][3]);
+                word_label_set_text();
+                return true;
+            }
+            else if (!my.in_array(c, uclcode["chardefs"]) && c.Substring(c.Length - 1, 1) == "f" && my.in_array(c.Substring(0, c.Length - 1), uclcode["chardefs"]) && uclcode["chardefs"][c.Substring(0, c.Length - 1)].Count >= 5)
+            {
+                //#print("Debug V1")
+                ucl_find_data = my.jsonValueToListString(uclcode["chardefs"][c.Substring(0, c.Length - 1)][4]);
                 word_label_set_text();
                 return true;
             }
@@ -638,6 +655,9 @@ namespace uclliu
 
         public void senddata(string data)
         {
+            //人生很難，研究很久 C# 的 sendkeys 遇到有些吃 iso-8859-1、big5 的app 如pcman、putty
+            //或是早期的 photoimpact，最好的方法還是利用剪貼簿貼上，使用前備份一下原來的內容即可
+            //sendinput 似乎也是一個解法，但有空再來研究
             //data = "肥的天下";
             same_sound_index = 0;// #回到第零頁
             is_has_more_page = false;// #回到沒有分頁
@@ -668,7 +688,7 @@ namespace uclliu
             if (Form1.GetWindowText(handle, Buff, intLength) > 0)
             {
                 // return Buff.ToString();
-                debug_print("BBBBBBBBBBBBBBBB:" + Buff.ToString());
+                //debug_print("BBBBBBBBBBBBBBBB:" + Buff.ToString());
             }
             string P_TITLE = Buff.ToString();
             uint pid;
@@ -677,8 +697,10 @@ namespace uclliu
             string P_NAME = "";
             try
             {
+                //某些 app 會當，如 skype
                 P_NAME = p.MainModule.FileName;
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
 
             }
@@ -704,7 +726,7 @@ namespace uclliu
             {
                 data = "^{v}";
             }
-            
+
             SendKeys.Send(data);
             is_send_ucl = false;
             Clipboard.SetText(orin_Clip);
