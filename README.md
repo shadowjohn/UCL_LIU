@@ -12,7 +12,7 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2020-05-24 01:58
+<h3>最後更新日期：</h3>2020-05-24 02:28
 <br>
 <h3>版本：</h3>V 1.26<br>
 <br>
@@ -234,6 +234,7 @@
     2、(可開關)中文出字後，自動提示最短根
     
     (2020-05-24) V1.26 版：(約 14 MB)
+    病毒碼提交掃描：1.26 https://www.microsoft.com/en-us/wdsi/submission/675103f9-7e52-49b8-a077-0d0babf84fe7
     1、同目錄下 1.wav ~ 9.wav 為隨機打字音檔，目錄下任意 wav 都可以讀入
     2、增加打字音勾選功能
     3、可以在 UCLLIU.ini 中調整打字音量，KEYBOARD_VOLUME 0~50

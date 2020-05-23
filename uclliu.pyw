@@ -751,8 +751,11 @@ def thread___playMusic():
   global config
   # https://stackoverflow.com/questions/43679631/python-how-to-change-audio-volume
   # 調整聲音大小
-  if (len) !=0 :
-    play( random.choice(m_song) + ( -20 + int(config['DEFAULT']['KEYBOARD_VOLUME'])) )           
+  try:
+    if len(m_song) !=0 :
+      play( random.choice(m_song) + ( -20 + int(config['DEFAULT']['KEYBOARD_VOLUME'])) )
+  except:
+    pass           
 def thread___x(data):
   #字根轉中文 thread  
   selectData=my.trim(data);  
