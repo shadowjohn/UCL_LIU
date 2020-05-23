@@ -12,7 +12,7 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2020-05-24 04:27
+<h3>最後更新日期：</h3>2020-05-24 05:23
 <br>
 <h3>版本：</h3>V 1.26<br>
 <br>

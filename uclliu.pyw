@@ -22,7 +22,7 @@ import random
 import pyaudio
 import audioop
 import wave
-paudio_player = pyaudio.PyAudio()
+
 #切中文使用
 from re import compile as _Re
 _unicode_chr_splitter = _Re( '(?s)((?:[\ud800-\udbff][\udc00-\udfff])|.)' ).split
@@ -697,7 +697,7 @@ for i in range(0,len(wavs)):
   #from : https://pythonbasics.org/python-play-sound/
   #m_song.extend([ AudioSegment.from_wav(wavs[i]) ])
   m_song.extend([ wavs[i] ])
-
+m_play_song = []
 #debug_print(PWD)
 #debug_print(list(m_song))
 #my.exit()
@@ -749,40 +749,53 @@ for k in uclcode["chardefs"]:
      else:
        if len(k) < len(uclcode_r[_word]):
          uclcode_r[_word] = k
-         
-def thread___playMusic(m_song,keyboard_valume):
-  global paudio_player  
+paudio_player = pyaudio.PyAudio()
+
+def thread___playMusic(keyboard_valume):
+  
   # https://stackoverflow.com/questions/43679631/python-how-to-change-audio-volume
   # 調整聲音大小
   # https://stackoverrun.com/cn/q/10107660
-  # Last : https://www.thinbug.com/q/45219574  
-  if len(m_song) !=0 :
+  # Last : https://www.thinbug.com/q/45219574
+  global paudio_player
+  global m_play_song
+  #global paudio_stream  
+    
+  #time.sleep(0.01)      
+  if len(m_play_song) !=0 :
+    
     # https://stackoverflow.com/questions/36664121/modify-volume-while-streaming-with-pyaudio
-    chunk = 1024
-    s = random.choice(m_song)    
-    try:
-      wf = wave.open(s, 'rb')            
-      # 打开声音输出流
-      stream = paudio_player.open(format = paudio_player.get_format_from_width(wf.getsampwidth()),
-                      channels = wf.getnchannels(),
-                      rate = wf.getframerate(),
-                      output = True)
+    chunk = 2048
+    #s = random.choice(m_song)
+    m_play_song = m_play_song[ : 2]  
+    s = m_play_song.pop(0) #m_play_song[0]
+            
   
-      # 写声音输出流进行播放
-      while True:    
-        d = wf.readframes(chunk)
-        if d == "": break      
-        new_d = audioop.mul(d, 2, keyboard_valume / 100.0 )      
-        stream.write(new_d, chunk)
-      #while True:
-      #    data = wf.readframes(chunk)
-      #    if data == "": break                           
-      #    data = audio_datalist_set_volume(data,20)         
-      #    stream.write(data)
-      
-      stream.close()
-    except:
-      pass
+    wf = wave.open(s, 'rb')            
+    # 打开声音输出流
+    
+    paudio_stream = paudio_player.open(format = paudio_player.get_format_from_width(wf.getsampwidth()),
+                    channels = wf.getnchannels(),
+                    rate = wf.getframerate(),
+                    output = True)
+
+    # 写声音输出流进行播放
+    while True:    
+      d = wf.readframes(chunk)
+      if d == "": break      
+      new_d = audioop.mul(d, 2, keyboard_valume / 100.0 )      
+      paudio_stream.write(new_d)
+      #paudio_stream.write(d)
+      #print("played")
+    #while True:
+    #    data = wf.readframes(chunk)
+    #    if data == "": break                           
+    #    data = audio_datalist_set_volume(data,20)         
+    #    stream.write(data)    
+    paudio_stream.close()
+    wf.close()
+    #paudio_player.close()
+     
     #p.terminate()
   #if len(m_song) !=0 :
            
@@ -1420,7 +1433,11 @@ def OnMouseEvent(event):
     debug_print(('Message: %s' % (event.Message))) 
     debug_print("Debug event MouseA")
     debug_print(flag_is_play_otherkey)
-  return True  
+  return True
+
+# run always thread  
+
+    
 def OnKeyboardEvent(event):  
   global last_key
   global flag_is_win_down
@@ -1443,14 +1460,15 @@ def OnKeyboardEvent(event):
   global is_play_music
   global m_song
   global config 
-  
+  global m_play_song
   # From : https://stackoverflow.com/questions/20021457/playing-mp3-song-on-python
   # 1.26 版，加入打字音的功能
   try:
     if is_play_music == True:
       if event.MessageName == "key down":      
-        thread.start_new_thread( thread___playMusic,(m_song,int(config['DEFAULT']['KEYBOARD_VOLUME'])))
-        #thread___playMusic(m_song,config)  
+        m_play_song.extend( [ random.choice(m_song) ])
+        thread.start_new_thread( thread___playMusic,(int(config['DEFAULT']['KEYBOARD_VOLUME']),))
+        #thread___playMusic(m_song,int(config['DEFAULT']['KEYBOARD_VOLUME']))
   except:
     pass
   
