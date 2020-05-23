@@ -17,10 +17,12 @@ import thread
 import base64
 import random
 # 播放打字音用
-from pydub import AudioSegment
-from pydub.playback import play
-
-
+#from pydub import AudioSegment
+#from pydub.playback import play
+import pyaudio
+import audioop
+import wave
+paudio_player = pyaudio.PyAudio()
 #切中文使用
 from re import compile as _Re
 _unicode_chr_splitter = _Re( '(?s)((?:[\ud800-\udbff][\udc00-\udfff])|.)' ).split
@@ -107,7 +109,7 @@ elif sys.argv[1]=="-d":
 
 def debug_print(data):
   global is_DEBUG_mode
-  if is_DEBUG_mode==True:
+  if is_DEBUG_mode == True:
     print(data)
     
 def md5_file(fileName):
@@ -197,7 +199,7 @@ config['DEFAULT'] = {
                       "ZOOM": "1", #整體比例大小
                       "SEND_KIND_1_PASTE": "", #出字模式1
                       "SEND_KIND_2_BIG5": "", #出字模式2
-                      "KEYBOARD_VOLUME": "5" #打字聲音量，0~50
+                      "KEYBOARD_VOLUME": "30" #打字聲音量，0~100
                     };
 if my.is_file(INI_CONFIG_FILE):
   _config = configparser.ConfigParser()
@@ -228,8 +230,8 @@ if config['DEFAULT']['SEND_KIND_2_BIG5'] != "":
 
 if int(config['DEFAULT']['KEYBOARD_VOLUME']) < 0:
   config['DEFAULT']['KEYBOARD_VOLUME'] = "0"
-if int(config['DEFAULT']['KEYBOARD_VOLUME']) > 50:
-  config['DEFAULT']['KEYBOARD_VOLUME'] = "50"  
+if int(config['DEFAULT']['KEYBOARD_VOLUME']) > 100:
+  config['DEFAULT']['KEYBOARD_VOLUME'] = "100"  
 #print(f_arr)
 #print(f_big5_arr)
 
@@ -693,10 +695,11 @@ wavs = my.glob(PWD + "\\*.wav")
 m_song = []
 for i in range(0,len(wavs)):
   #from : https://pythonbasics.org/python-play-sound/
-  m_song.extend([ AudioSegment.from_wav(wavs[i]) ])
+  #m_song.extend([ AudioSegment.from_wav(wavs[i]) ])
+  m_song.extend([ wavs[i] ])
 
 #debug_print(PWD)
-#debug_print(my.json_encode(wavs))
+#debug_print(list(m_song))
 #my.exit()
 # 用來出半型字的
 # https://stackoverflow.com/questions/2422177/python-how-can-i-replace-full-width-characters-with-half-width-characters
@@ -746,16 +749,43 @@ for k in uclcode["chardefs"]:
      else:
        if len(k) < len(uclcode_r[_word]):
          uclcode_r[_word] = k
-def thread___playMusic():
-  global m_song
-  global config
+         
+def thread___playMusic(m_song,keyboard_valume):
+  global paudio_player  
   # https://stackoverflow.com/questions/43679631/python-how-to-change-audio-volume
   # 調整聲音大小
-  try:
-    if len(m_song) !=0 :
-      play( random.choice(m_song) + ( -20 + int(config['DEFAULT']['KEYBOARD_VOLUME'])) )
-  except:
-    pass           
+  # https://stackoverrun.com/cn/q/10107660
+  # Last : https://www.thinbug.com/q/45219574  
+  if len(m_song) !=0 :
+    # https://stackoverflow.com/questions/36664121/modify-volume-while-streaming-with-pyaudio
+    chunk = 1024
+    s = random.choice(m_song)    
+    try:
+      wf = wave.open(s, 'rb')            
+      # 打开声音输出流
+      stream = paudio_player.open(format = paudio_player.get_format_from_width(wf.getsampwidth()),
+                      channels = wf.getnchannels(),
+                      rate = wf.getframerate(),
+                      output = True)
+  
+      # 写声音输出流进行播放
+      while True:    
+        d = wf.readframes(chunk)
+        if d == "": break      
+        new_d = audioop.mul(d, 2, keyboard_valume / 100.0 )      
+        stream.write(new_d, chunk)
+      #while True:
+      #    data = wf.readframes(chunk)
+      #    if data == "": break                           
+      #    data = audio_datalist_set_volume(data,20)         
+      #    stream.write(data)
+      
+      stream.close()
+    except:
+      pass
+    #p.terminate()
+  #if len(m_song) !=0 :
+           
 def thread___x(data):
   #字根轉中文 thread  
   selectData=my.trim(data);  
@@ -1411,13 +1441,18 @@ def OnKeyboardEvent(event):
   global GUI_FONT_16
   global f_pass_app  
   global is_play_music
-  
+  global m_song
+  global config 
   
   # From : https://stackoverflow.com/questions/20021457/playing-mp3-song-on-python
   # 1.26 版，加入打字音的功能
-  if is_play_music == True:
-    if event.MessageName == "key down":      
-      thread.start_new_thread( thread___playMusic,())  
+  try:
+    if is_play_music == True:
+      if event.MessageName == "key down":      
+        thread.start_new_thread( thread___playMusic,(m_song,int(config['DEFAULT']['KEYBOARD_VOLUME'])))
+        #thread___playMusic(m_song,config)  
+  except:
+    pass
   
   #  playsound.playsound(mp3s[1])
   #print(dir())  
