@@ -41,3 +41,5 @@ wuxiami.txt
 /C#/uclliu/bin/Debug/UCLLIU.ini
 /C#/uclliu/bin/Debug/UCLLIU.lock
 /dist/ar30.cin
+*.mp3
+/*.wav

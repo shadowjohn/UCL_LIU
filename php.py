@@ -112,4 +112,7 @@ class kit:
           return 2;
     def base64_decode(self,data):
         import base64
-        return base64.decodestring(data)                      
+        return base64.decodestring(data)
+    def glob(self,pathdata):
+        import glob
+        return glob.glob(pathdata)

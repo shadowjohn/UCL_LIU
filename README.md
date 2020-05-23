@@ -12,9 +12,9 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2019-12-03 16:03
+<h3>最後更新日期：</h3>2020-05-24 01:58
 <br>
-<h3>版本：</h3>V 1.25<br>
+<h3>版本：</h3>V 1.26<br>
 <br>
 <h3>版權：</h3>
 　免錢的 MIT-License
@@ -227,10 +227,15 @@
     病毒碼提交掃描：1.24 https://www.microsoft.com/en-us/wdsi/submission/2d8f7570-fd3d-4c3e-9869-331f2f75565e
     1、修正肥米雙螢幕時，可以在不同螢幕中拖移
     
-    (2019-12-03) V1.25 版：
+    (2019-12-03) V1.25 版：(約 11 MB)
     病毒碼提交掃描：1.25 https://www.microsoft.com/en-us/wdsi/submission/b7810d0b-cbf5-4710-adb9-bc2a7594d189
     1、修正 Photoimpact 8、photoimpact X3 無法輸入中文的問題
     2、(可開關)中文出字後，自動提示最短根
+    
+    (2020-05-24) V1.26 版：(約 14 MB)
+    1、同目錄下 1.wav ~ 9.wav 為隨機打字音檔，目錄下任意 wav 都可以讀入
+    2、增加打字音勾選功能
+    3、可以在 UCLLIU.ini 中調整打字音量，KEYBOARD_VOLUME 0~50
 <br>
 <h3>開發工具：</h3>
   <ul>
@@ -246,6 +251,7 @@
     <li>(Third party) liu_unitab2cin.py 可以將tab轉成cin的檔案，改成支援python2.7的寫法</li>
     <li>(Third party) cintojson.py 可以將cin轉成json的檔案，改成支援python2.7的寫法</li>
     <li>(Third party) cin\phone.cin 同音字表參考新酷音的傳統注音表:https://raw.githubusercontent.com/google/jscin/master/src/tables/phone.cin</li>
+    <li>(Third party) pydub 打字音</li>
     <li>字碼表亦可參考PIME裡的liu.json</li>
 </ul>
 <br>
@@ -255,7 +261,8 @@
     <li>請設定windows環境變數，在path裡加上 【;c:\Python27;c:\Python27\Scripts】
     <li>pyhook【放在p27目錄，點了安裝即可 p27/pyHook-1.5.1.win32-py2.7.exe】</li>
     <li>pygtk 【放在p27目錄，點了安裝即可 p27/pygtk-all-in-one-2.24.1.win32-py2.7.msi】</li>
-    <li>pywin32 【放在p27目錄，點了安裝即可 p27/pywin32-221.win32-py2.7.exe】</li>    
+    <li>pywin32 【放在p27目錄，點了安裝即可 p27/pywin32-221.win32-py2.7.exe】</li>
+    <li>pydub 打字音用【pip install pydub】</li>    
     <li>pyinstaller 可搭配build.bat製作dist/uclliu.exe檔【pip install pyinstaller】</li>
     <li>psutil 用來判斷目前視窗跑什麼，如果是putty、pietty、pcman出字方式是貼上，【pip install psutil】</li>
     <li>configparser config UCLLIU.ini 需要用來解 ini 的工具【pip install configparser】</li>
@@ -391,5 +398,6 @@
   <li>95、Trayicon的zindex要作調整到置頂</li>
   <li>(Done 2019-10-29)96、修正 Photoimpact 8、photoimpact X3 無法輸入中文的問題</li>
   <li>(Done 2019-12-03)97、中文出字後，自動提示最短根</li>
+  <li>(Done 2020-05-24)98、增加打字聲音功能</li>
 </ul>
 <br>

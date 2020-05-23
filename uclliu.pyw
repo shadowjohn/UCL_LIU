@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.25
+VERSION=1.26
 import portalocker
 import os
 import sys
@@ -15,6 +15,11 @@ import configparser
 #,,,z ,,,x 用thread去輸出字
 import thread
 import base64
+import random
+# 播放打字音用
+from pydub import AudioSegment
+from pydub.playback import play
+
 
 #切中文使用
 from re import compile as _Re
@@ -43,6 +48,7 @@ f_pass_app = [ "mstsc.exe" ]
 #pwa = pywinauto.keyboard
 
 my = php.kit()
+
 reload(sys)
 sys.setdefaultencoding('UTF-8')
 
@@ -190,7 +196,8 @@ config['DEFAULT'] = {
                       "SHORT_MODE": "0", #0:簡短畫面，或1:長畫面
                       "ZOOM": "1", #整體比例大小
                       "SEND_KIND_1_PASTE": "", #出字模式1
-                      "SEND_KIND_2_BIG5": "" #出字模式2
+                      "SEND_KIND_2_BIG5": "", #出字模式2
+                      "KEYBOARD_VOLUME": "5" #打字聲音量，0~50
                     };
 if my.is_file(INI_CONFIG_FILE):
   _config = configparser.ConfigParser()
@@ -206,6 +213,7 @@ config['DEFAULT']['SHORT_MODE'] = str(int(config['DEFAULT']['SHORT_MODE']));
 config['DEFAULT']['ZOOM'] = "%.2f" % ( float(config['DEFAULT']['ZOOM'] ));
 config['DEFAULT']['SEND_KIND_1_PASTE'] = str(config['DEFAULT']['SEND_KIND_1_PASTE']);
 config['DEFAULT']['SEND_KIND_2_BIG5'] = str(config['DEFAULT']['SEND_KIND_2_BIG5']);
+config['DEFAULT']['KEYBOARD_VOLUME'] = str(int(config['DEFAULT']['KEYBOARD_VOLUME']));
 
 # merge f_arr and f_big5_arr
 config['DEFAULT']['SEND_KIND_1_PASTE'] = my.trim(config['DEFAULT']['SEND_KIND_1_PASTE'])
@@ -218,6 +226,10 @@ if config['DEFAULT']['SEND_KIND_1_PASTE'] != "":
 if config['DEFAULT']['SEND_KIND_2_BIG5'] != "": 
   f_big5_arr = f_big5_arr + my.explode(",",config['DEFAULT']['SEND_KIND_2_BIG5'])
 
+if int(config['DEFAULT']['KEYBOARD_VOLUME']) < 0:
+  config['DEFAULT']['KEYBOARD_VOLUME'] = "0"
+if int(config['DEFAULT']['KEYBOARD_VOLUME']) > 50:
+  config['DEFAULT']['KEYBOARD_VOLUME'] = "50"  
 #print(f_arr)
 #print(f_big5_arr)
 
@@ -676,6 +688,16 @@ same_sound_max_word=6 #一頁最多五字
 is_has_more_page=False #是否還有下頁
 same_sound_last_word="" #lastword
 is_display_sp=False #是否顯示簡根
+is_play_music=False #打字音
+wavs = my.glob(PWD + "\\*.wav")
+m_song = []
+for i in range(0,len(wavs)):
+  #from : https://pythonbasics.org/python-play-sound/
+  m_song.extend([ AudioSegment.from_wav(wavs[i]) ])
+
+#debug_print(PWD)
+#debug_print(my.json_encode(wavs))
+#my.exit()
 # 用來出半型字的
 # https://stackoverflow.com/questions/2422177/python-how-can-i-replace-full-width-characters-with-half-width-characters
 HALF2FULL = dict((i, i + 0xFEE0) for i in range(0x21, 0x7F))
@@ -724,6 +746,13 @@ for k in uclcode["chardefs"]:
      else:
        if len(k) < len(uclcode_r[_word]):
          uclcode_r[_word] = k
+def thread___playMusic():
+  global m_song
+  global config
+  # https://stackoverflow.com/questions/43679631/python-how-to-change-audio-volume
+  # 調整聲音大小
+  if (len) !=0 :
+    play( random.choice(m_song) + ( -20 + int(config['DEFAULT']['KEYBOARD_VOLUME'])) )           
 def thread___x(data):
   #字根轉中文 thread  
   selectData=my.trim(data);  
@@ -1377,7 +1406,17 @@ def OnKeyboardEvent(event):
   global VERSION
   global f_arr
   global GUI_FONT_16
-  global f_pass_app
+  global f_pass_app  
+  global is_play_music
+  
+  
+  # From : https://stackoverflow.com/questions/20021457/playing-mp3-song-on-python
+  # 1.26 版，加入打字音的功能
+  if is_play_music == True:
+    if event.MessageName == "key down":      
+      thread.start_new_thread( thread___playMusic,())  
+  
+  #  playsound.playsound(mp3s[1])
   #print(dir())  
   #try:  
   #print(event)
@@ -2039,6 +2078,12 @@ class TrayIcon(gtk.StatusIcon):
         is_display_sp = True
       else:
         is_display_sp = False      
+    def m_pm_switch(self,data=None):
+      global is_play_music
+      if is_play_music == False:
+        is_play_music = True
+      else:
+        is_play_music = False
     def m_game_switch(self,data=None):
       global gamemode_btn_click
       global gamemode_btn
@@ -2128,7 +2173,16 @@ class TrayIcon(gtk.StatusIcon):
         menu_items.append(gtk.MenuItem("4.【　】顯示短根"))
         menu.append( menu_items[len(menu_items)-1] )
         menu_items[len(menu_items)-1].connect("activate", self.m_sp_switch)
-                
+      
+      if is_play_music==True:
+        menu_items.append(gtk.MenuItem("5.【●】打字音"))
+        menu.append( menu_items[len(menu_items)-1] )
+        menu_items[len(menu_items)-1].connect("activate", self.m_pm_switch)
+      else:
+        menu_items.append(gtk.MenuItem("5.【　】打字音"))
+        menu.append( menu_items[len(menu_items)-1] )
+        menu_items[len(menu_items)-1].connect("activate", self.m_pm_switch)
+                        
       menu_items.append(gtk.MenuItem(""))
       menu.append( menu_items[len(menu_items)-1] )
       
