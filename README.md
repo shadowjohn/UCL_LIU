@@ -236,6 +236,7 @@
     1、同目錄下 1.wav ~ 9.wav 為隨機打字音檔，目錄下任意 wav 都可以讀入
     2、增加打字音勾選功能
     3、可以在 UCLLIU.ini 中調整打字音量，KEYBOARD_VOLUME 0~50
+    4、打字聲音檔：https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip 下載後解開，0~9.wav 與 uclliu.exe 放一起即可
 <br>
 <h3>開發工具：</h3>
   <ul>
