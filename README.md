@@ -3,7 +3,10 @@
 <br>
 <center>
   <img src="screenshot/ucl_2.png">
-  <img src="screenshot/demo.gif">
+  <img src="screenshot/demo.gif"><br>
+  <video src="screenshot/video/keyboard_sound.mp4"></video>
+  <br>
+  V1.26 加入鍵盤打字聲
 </center>
 <br>
 <h3>作者：</h3>
