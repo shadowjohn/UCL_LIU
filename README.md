@@ -237,7 +237,7 @@
     2、(可開關)中文出字後，自動提示最短根
     
     (2020-05-24) V1.26 版：
-    病毒碼提交掃描：1.26 https://www.microsoft.com/en-us/wdsi/submission/675103f9-7e52-49b8-a077-0d0babf84fe7
+    病毒碼提交掃描：1.26 https://www.microsoft.com/en-us/wdsi/submission/3d892a5b-f215-455b-ade5-f7bdb02da0b1
     1、同目錄下 1.wav ~ 9.wav 為隨機打字音檔，目錄下任意 wav 都可以讀入
     2、增加打字音勾選功能
     3、可以在 UCLLIU.ini 中調整打字音量，KEYBOARD_VOLUME 0~50
