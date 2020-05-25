@@ -694,6 +694,9 @@ is_play_music=False #打字音
 wavs = my.glob(PWD + "\\*.wav")
 o_song = {}
 m_play_song = []
+max_thread___playMusic_counts = 5 #最多同時五個執行緒在作動
+step_thread___playMusic_counts = 0 #目前0個執行緒
+
 for i in range(0,len(wavs)):
   #from : https://pythonbasics.org/python-play-sound/
   #m_song.extend([ AudioSegment.from_wav(wavs[i]) ])
@@ -757,56 +760,48 @@ for k in uclcode["chardefs"]:
 
 
 def thread___playMusic(keyboard_valume):
-  
-  # https://stackoverflow.com/questions/43679631/python-how-to-change-audio-volume
-  # 調整聲音大小
-  # https://stackoverrun.com/cn/q/10107660
-  # Last : https://www.thinbug.com/q/45219574
-  global paudio_player
-  global o_song
-  global m_play_song
-  #global paudio_stream  
+  try:
+    # https://stackoverflow.com/questions/43679631/python-how-to-change-audio-volume
+    # 調整聲音大小
+    # https://stackoverrun.com/cn/q/10107660
+    # Last : https://www.thinbug.com/q/45219574
+    global paudio_player
+    global o_song
+    global m_play_song
+    global step_thread___playMusic_counts
     
-  #time.sleep(0.01)      
-  if len(m_play_song) !=0 :
-    #print("TEST")
-    # https://stackoverflow.com/questions/36664121/modify-volume-while-streaming-with-pyaudio
-    chunk = 2048
-    #s = random.choice(m_song)
-    m_play_song = m_play_song[ : 2]
-    #print("TEST1")
-    s = m_play_song.pop(0) #m_play_song[0]
-    #print("TEST2")  
-    if len(o_song[s]["data"]) == 0:
-      #print("TEST3")
-      o_song[s]["wf"] = wf = wave.open(s, 'rb')
-      o_song[s]["paudio_stream"] = paudio_player.open(format = paudio_player.get_format_from_width(o_song[s]["wf"].getsampwidth()),
-                    channels = o_song[s]["wf"].getnchannels(),
-                    rate = o_song[s]["wf"].getframerate(),
-                    output = True)
-      # 写声音输出流进行播放
-      while True:
-        #print("TEST4")    
-        d = o_song[s]["wf"].readframes(chunk)
-        if d == "": break      
-        o_song[s]["data"].extend([ audioop.mul(d, 2, keyboard_valume / 100.0 ) ])              
-    #print("TEST5")
-    for i in range(0,len(o_song[s]["data"])):
-      o_song[s]["paudio_stream"].write(o_song[s]["data"][i])
-
-      #paudio_stream.write(d)
-      #print("played")
-    #while True:
-    #    data = wf.readframes(chunk)
-    #    if data == "": break                           
-    #    data = audio_datalist_set_volume(data,20)         
-    #    stream.write(data)    
-    #paudio_stream.close()
-    #wf.close()
-    #paudio_player.close()
-     
-    #p.terminate()
-  #if len(m_song) !=0 :
+    #time.sleep(0.01)      
+    if len(m_play_song) !=0 :
+      #print("TEST")
+      # https://stackoverflow.com/questions/36664121/modify-volume-while-streaming-with-pyaudio
+      chunk = 2048
+      #s = random.choice(m_song)
+      m_play_song = m_play_song[ : 2]
+      #print("TEST1")
+      s = m_play_song.pop(0) #m_play_song[0]
+      #print("TEST2")  
+      if len(o_song[s]["data"]) == 0:
+        #print("TEST3")
+        o_song[s]["wf"] = wf = wave.open(s, 'rb')
+        o_song[s]["paudio_stream"] = paudio_player.open(format = paudio_player.get_format_from_width(o_song[s]["wf"].getsampwidth()),
+                      channels = o_song[s]["wf"].getnchannels(),
+                      rate = o_song[s]["wf"].getframerate(),
+                      output = True)
+        # 寫聲音檔輸出來播放
+        while True:
+          #print("TEST4")    
+          d = o_song[s]["wf"].readframes(chunk)
+          if d == "": break      
+          # 這是調整音量大小的方法
+          o_song[s]["data"].extend([ audioop.mul(d, 2, keyboard_valume / 100.0 ) ])              
+      #print("TEST5")
+      for i in range(0,len(o_song[s]["data"])):
+        o_song[s]["paudio_stream"].write(o_song[s]["data"][i])
+    if step_thread___playMusic_counts > 0:
+      step_thread___playMusic_counts = step_thread___playMusic_counts -1         
+  except Exception as e:
+    debug_print("thread___playMusic error:")
+    debug_print(e)  
            
 def thread___x(data):
   #字根轉中文 thread  
@@ -1469,506 +1464,513 @@ def OnKeyboardEvent(event):
   global is_play_music  
   global config 
   global m_play_song
+  global max_thread___playMusic_counts
+  global step_thread___playMusic_counts    
   # From : https://stackoverflow.com/questions/20021457/playing-mp3-song-on-python
   # 1.26 版，加入打字音的功能
-  
-  if is_play_music == True:
-    if event.MessageName == "key down":      
+  try:
+    if is_play_music == True and event.MessageName == "key down" and len(o_song.keys())!=0 and step_thread___playMusic_counts < max_thread___playMusic_counts:
+      step_thread___playMusic_counts = step_thread___playMusic_counts + 1                  
       m_play_song.extend( [ random.choice(o_song.keys()) ])
       thread.start_new_thread( thread___playMusic,(int(config['DEFAULT']['KEYBOARD_VOLUME']),))
-        #thread___playMusic(m_song,int(config['DEFAULT']['KEYBOARD_VOLUME']))
-  
-  
-  #  playsound.playsound(mp3s[1])
-  #print(dir())  
-  #try:  
-  #print(event)
-  '''
-  debug_print(('MessageName: %s' % (event.MessageName)))
-  debug_print(('Message: %s' % (event.Message)))
-  debug_print(('Time: %s' % (event.Time)))
-  debug_print(('Window: %s' % (event.Window)))
-  debug_print(('WindowName: %s' % (event.WindowName)))
-  debug_print(('Ascii: %s, %s' % (event.Ascii, chr(event.Ascii))))
-  debug_print(('Key: %s' % (event.Key)))
-  debug_print(('KeyID: %s' % (event.KeyID)))
-  debug_print(('ScanCode: %s' % (event.ScanCode)))
-  debug_print(('Extended: %s' % (event.Extended)))
-  debug_print(('Injected: %s' % (event.Injected)))
-  debug_print(('Alt: %s' % (event.Alt)))
-  debug_print(('Transition: %s' % (event.Transition)))
-  debug_print(('IS_UCL %s' % (is_ucl())))
-  debug_print('---')
-  debug_print(('last_key: %s' % (last_key[-8:])))
-  '''
-  
-  hwnd = win32gui.GetForegroundWindow()  
-  pid = win32process.GetWindowThreadProcessId(hwnd)
-  pp="";
-  if len(pid) >=2:
-    pp=pid[1]
-  else:
-    pp=pid[0]
-  #print("PP:%s" % (pp))
-  #debug_print("PP:%s" % (pp))
-  p=psutil.Process(pp)
-  #debug_print("ProcessP:%s" % (p))
-  #print("GGGGGGG %s " % (p.exe()))
-  
-  #print(dir(p))
-  exec_proc = my.strtolower(p.exe())
-  #debug_print("Process :%s" % (exec_proc))
-  #print ("HWND:")
-  #print (win32gui.GetWindowText(hwnd))
-  
-  for k in f_pass_app:        
-    if my.is_string_like(exec_proc,k):
+      #thread___playMusic(m_song,int(config['DEFAULT']['KEYBOARD_VOLUME']))
+    
+    
+    #  playsound.playsound(mp3s[1])
+    #print(dir())  
+    #try:  
+    #print(event)
+    '''
+    debug_print(('MessageName: %s' % (event.MessageName)))
+    debug_print(('Message: %s' % (event.Message)))
+    debug_print(('Time: %s' % (event.Time)))
+    debug_print(('Window: %s' % (event.Window)))
+    debug_print(('WindowName: %s' % (event.WindowName)))
+    debug_print(('Ascii: %s, %s' % (event.Ascii, chr(event.Ascii))))
+    debug_print(('Key: %s' % (event.Key)))
+    debug_print(('KeyID: %s' % (event.KeyID)))
+    debug_print(('ScanCode: %s' % (event.ScanCode)))
+    debug_print(('Extended: %s' % (event.Extended)))
+    debug_print(('Injected: %s' % (event.Injected)))
+    debug_print(('Alt: %s' % (event.Alt)))
+    debug_print(('Transition: %s' % (event.Transition)))
+    debug_print(('IS_UCL %s' % (is_ucl())))
+    debug_print('---')
+    debug_print(('last_key: %s' % (last_key[-8:])))
+    '''
+    
+    hwnd = win32gui.GetForegroundWindow()  
+    pid = win32process.GetWindowThreadProcessId(hwnd)
+    pp="";
+    if len(pid) >=2:
+      pp=pid[1]
+    else:
+      pp=pid[0]
+    #print("PP:%s" % (pp))
+    #debug_print("PP:%s" % (pp))
+    p=psutil.Process(pp)
+    #debug_print("ProcessP:%s" % (p))
+    #print("GGGGGGG %s " % (p.exe()))
+    
+    #print(dir(p))
+    exec_proc = my.strtolower(p.exe())
+    #debug_print("Process :%s" % (exec_proc))
+    #print ("HWND:")
+    #print (win32gui.GetWindowText(hwnd))
+    
+    for k in f_pass_app:        
+      if my.is_string_like(exec_proc,k):
+        if is_ucl()==True:
+          toggle_ucl()
+        return True
+    # chrome 遠端桌面也不需要肥米
+    if my.is_string_like(my.strtolower(win32gui.GetWindowText(hwnd)),"- chrome "):
       if is_ucl()==True:
         toggle_ucl()
       return True
-  # chrome 遠端桌面也不需要肥米
-  if my.is_string_like(my.strtolower(win32gui.GetWindowText(hwnd)),"- chrome "):
-    if is_ucl()==True:
-      toggle_ucl()
-    return True
-  
-  if event.MessageName == "key up":    
-        
-    last_key = last_key + chr(event.Ascii)
-    last_key = last_key[-10:]
-    if my.strtolower(last_key[-4:])==",,,c":
-      play_ucl_label=""
-      ucl_find_data=[]
-      type_label_set_text()
-      toAlphaOrNonAlpha() 
-      if is_ucl()==False:
-        # change to ucl
-        toggle_ucl()
-      simple_btn.set_size_request( int(float(config['DEFAULT']['ZOOM'])*40),int(float(config['DEFAULT']['ZOOM'])*40) )
-      simple_label=simple_btn.get_child()
-      simple_label.set_label("簡")
-      simple_btn.set_visible(True)
-      simple_label.modify_font(pango.FontDescription(GUI_FONT_16))      
-      #simple_label.set_justify(gtk.JUSTIFY_CENTER)
-    if my.strtolower(last_key[-4:])==",,,t":
-      play_ucl_label=""
-      ucl_find_data=[]
-      type_label_set_text()
-      toAlphaOrNonAlpha() 
-      if is_ucl()==False:
-        # change to ucl
-        toggle_ucl()
-      simple_btn.set_size_request(0,int(float(config['DEFAULT']['ZOOM'])*40) )
-      simple_label=simple_btn.get_child()
-      simple_label.set_label("")
-      simple_btn.set_visible(False)
-      simple_label.modify_font(pango.FontDescription(GUI_FONT_16))       
-    if my.strtolower(last_key[-7:])==",,,lock":
-      last_key = ""
-      if gamemode_btn.get_label()=="正常模式":
-        gamemode_btn_click(gamemode_btn)
-    if my.strtolower(last_key[-4:])==",,,-":
-      #run small
-      play_ucl_label=""
-      ucl_find_data=[]
-      type_label_set_text()
-      toAlphaOrNonAlpha()
-      run_big_small(-0.1)        
-    if my.strtolower(last_key[-4:])==",,,+":
-      #run big
-      play_ucl_label=""
-      ucl_find_data=[]
-      type_label_set_text()
-      toAlphaOrNonAlpha()
-      run_big_small(0.1)
-    if my.strtolower(last_key[-4:])==",,,s":
-      # run short
-      play_ucl_label=""
-      ucl_find_data=[]
-      type_label_set_text()
-      toAlphaOrNonAlpha() 
-      run_short()
-    if my.strtolower(last_key[-4:])==",,,l":
-      # run long
-      play_ucl_label=""
-      ucl_find_data=[]
-      type_label_set_text()
-      toAlphaOrNonAlpha() 
-      run_long()
-    if my.strtolower(last_key[-4:])==",,,x" and is_ucl():
-      # 將框選嘸蝦米的文字，轉成中文字
-      play_ucl_label=""
-      ucl_find_data=[]
-      type_label_set_text()
-      toAlphaOrNonAlpha() 
-      orin_clip=""
-      try:
-        win32clipboard.OpenClipboard()
-        orin_clip=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
-      except:
-        pass
-      try:
-        win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, "")
-        win32clipboard.EmptyClipboard()
-        win32clipboard.CloseClipboard()
-      except:
-        pass      
-      SendKeysCtypes.SendKeys("^C",pause=0.05)
-      #也許要設delay...      
-      #try:
-      win32clipboard.OpenClipboard()
-      #try:
-      selectData=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
-      # 參考 http://www.runoob.com/python/python-multithreading.html      
-      thread.start_new_thread( thread___x, (selectData, ))
-      win32clipboard.CloseClipboard()       
-      #except:
-      #  pass
-      #也許要設delay...
-      time.sleep(0.05)
-      try:
-        win32clipboard.OpenClipboard()    
-        win32clipboard.EmptyClipboard()
-        win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip)
-        win32clipboard.CloseClipboard()           
-      except:
-        pass
-      return False   
-    if my.strtolower(last_key[-4:])==",,,z" and is_ucl():
-      # 將框選的文字，轉成嘸蝦米的字
-      play_ucl_label=""
-      ucl_find_data=[]
-      type_label_set_text()
-      toAlphaOrNonAlpha()                   
-      orin_clip=""
-      try:
-        win32clipboard.OpenClipboard()
-        orin_clip=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
-      except:
-        pass
-      try:
-        win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, "")
-        win32clipboard.EmptyClipboard()
-        win32clipboard.CloseClipboard()
-      except:
-        pass
-      SendKeysCtypes.SendKeys("^C",pause=0.05)
-      try:
-        win32clipboard.OpenClipboard()
-        #try:
-        time.sleep(0.05)
-        selectData=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
-        #簡轉繁
-        selectData = simple2trad(selectData)       
-                        
-        thread.start_new_thread( thread___z, (selectData, ))
-      except:
-        pass
-      #也許要設delay...
-      time.sleep(0.05)
-      try:
-        win32clipboard.OpenClipboard()    
-        win32clipboard.EmptyClipboard()
-        win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip)
-        win32clipboard.CloseClipboard()
-      except:
-        pass
-      return False             
-    if my.strtolower(last_key[-9:])==",,,unlock":          
-      last_key = ""               
-      if gamemode_btn.get_label()=="遊戲模式":
-        gamemode_btn_click(gamemode_btn)
-    if my.strtolower(last_key[-10:])==",,,version":
-      last_key= ""   
-      message = gtk.MessageDialog(type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK)
-      message.set_position(gtk.WIN_POS_CENTER_ALWAYS)
-      message.set_keep_above(True)
-      _msg_text = about_uclliu()       
-      message.set_markup( _msg_text )
-      #toAlphaOrNonAlpha()
-      message.show()
-      toAlphaOrNonAlpha()  
-      response = message.run()
-      #toAlphaOrNonAlpha()
-      debug_print("Show Version")
-      debug_print(response)
-      #print(gtk.ResponseType.BUTTONS_OK)
-      if response == -5 or response == -4:
-        #message.hide()
-        message.destroy()
-        #toAlphaOrNonAlpha()  
+    
+    if event.MessageName == "key up":    
+          
+      last_key = last_key + chr(event.Ascii)
+      last_key = last_key[-10:]
+      if my.strtolower(last_key[-4:])==",,,c":
+        play_ucl_label=""
+        ucl_find_data=[]
+        type_label_set_text()
+        toAlphaOrNonAlpha() 
+        if is_ucl()==False:
+          # change to ucl
+          toggle_ucl()
+        simple_btn.set_size_request( int(float(config['DEFAULT']['ZOOM'])*40),int(float(config['DEFAULT']['ZOOM'])*40) )
+        simple_label=simple_btn.get_child()
+        simple_label.set_label("簡")
+        simple_btn.set_visible(True)
+        simple_label.modify_font(pango.FontDescription(GUI_FONT_16))      
+        #simple_label.set_justify(gtk.JUSTIFY_CENTER)
+      if my.strtolower(last_key[-4:])==",,,t":
+        play_ucl_label=""
+        ucl_find_data=[]
+        type_label_set_text()
+        toAlphaOrNonAlpha() 
+        if is_ucl()==False:
+          # change to ucl
+          toggle_ucl()
+        simple_btn.set_size_request(0,int(float(config['DEFAULT']['ZOOM'])*40) )
+        simple_label=simple_btn.get_child()
+        simple_label.set_label("")
+        simple_btn.set_visible(False)
+        simple_label.modify_font(pango.FontDescription(GUI_FONT_16))       
+      if my.strtolower(last_key[-7:])==",,,lock":
+        last_key = ""
+        if gamemode_btn.get_label()=="正常模式":
+          gamemode_btn_click(gamemode_btn)
+      if my.strtolower(last_key[-4:])==",,,-":
+        #run small
         play_ucl_label=""
         ucl_find_data=[]
         type_label_set_text()
         toAlphaOrNonAlpha()
-        return False      
-  #print("LAST_KEY:" + last_key)
-  if gamemode_btn.get_label()=="遊戲模式":      
-    return True    
-  
-  #thekey = chr(event.Ascii)
-  # KeyID = 91 = Lwinkey
-  # 2019-07-19
-  # 增加，如果是肥模式，且輸入的字>=1以上，按下 esc 鍵，會把字消除  
-  if event.MessageName == "key down" and is_ucl() == True and len(play_ucl_label) >=1 and event.Key == "Escape":
-    #debug_print("2019-07-19 \n 增加，如果是肥模式，且輸入的字>=1以上，按下 esc 鍵，會把字消除)");
-    play_ucl_label = ""
-    type_label_set_text()
-    return False
-  if event.MessageName == "key down" and (event.KeyID == 91 or event.KeyID == 92):
-    flag_is_win_down = True
-    debug_print("Debug event A")
-  if event.MessageName == "key up" and (event.KeyID == 91 or event.KeyID == 92):
-    flag_is_win_down = False
-    debug_print("Debug event B") 
-  if event.MessageName == "key down" and (event.Key == "Lshift" or event.Key == "Rshift"):
-    #2019-10-22 如果按著 shift 還用 滑鼠，不會切換 英/肥
-    if flag_is_shift_down==False:
-      flag_is_play_otherkey=False      
-    flag_is_shift_down=True
-    debug_print("Debug event C")       
-  if event.MessageName == "key down" and event.Key == "Capital":
-    flag_is_capslock_down=True
-    flag_is_play_capslock_otherkey=False
-    debug_print("Debug event E")
-  if event.MessageName == "key down" and event.Key != "Capital":
-    flag_is_play_capslock_otherkey=True
-    debug_print("Debug event F")
-  if event.MessageName == "key up" and event.Key == "Capital":
-    flag_is_capslock_down=False
-    flag_is_play_capslock_otherkey=False
-    debug_print("Debug event E")
-  if event.MessageName == "key down" and (event.Key != "Lshift" and event.Key != "Rshift"):
-    debug_print("Debug event D")
-    flag_is_play_otherkey=True   
-  
-  if flag_is_capslock_down == True and flag_is_play_capslock_otherkey == True:
-    # 2019-03-06 增加，如果是 肥 模式，且輸入字是 backspace 且框有字根，就跳過這個 True
-    if event.Key == "Back" and is_ucl()==True and len(play_ucl_label) >= 1:
-      debug_print("Debug 2019-03-06 CapsLock + backspace")
-      pass
-    else:  
-      return True
-             
-  if event.MessageName == "key up" and (event.Key == "Lshift" or event.Key == "Rshift"):
-    debug_print("Debug event G")
-    debug_print("event.MessageName:"+event.MessageName)
-    debug_print("event.Ascii:"+str(event.Ascii))
-    debug_print("event.KeyID:"+str(event.KeyID))
-    debug_print("flag_is_play_otherkey:"+str(flag_is_play_otherkey))
-    debug_print("flag_is_shift_down:"+str(flag_is_shift_down))        
-    debug_print("flag_is_capslock_down:"+str(flag_is_capslock_down))
-    debug_print("flag_is_play_capslock_otherkey:"+str(flag_is_play_capslock_otherkey))
-    flag_is_shift_down=False
-    debug_print("Press shift")
-    # 不可是右邊的2、4、6、8      
-    #toAlphaOrNonAlpha()
-    if flag_is_play_otherkey==False and (event.Ascii > 40 or event.Ascii < 37) :
-      toggle_ucl()
-      debug_print("Debug15")        
-      debug_print("Debug14")
-
-    #toAlphaOrNonAlpha()
-    return True
-  if event.MessageName == "key down" and event.Ascii==32 and flag_is_shift_down==True:
-    # Press shift and space
-    # switch 半/全
-    hf_btn_click(hf_btn)
-    flag_is_play_otherkey=True
-    flag_is_shift_down=False    
-    debug_print("Debug13")
-    return False            
-  if is_ucl():
-    #debug_print("is ucl")    
-    if event.MessageName == "key down" and flag_is_win_down == True : # win key
-      return True
-    #2018-05-05要考慮右邊數字鍵的 . 
-    if event.MessageName == "key down" and ( event.Ascii>=48 and event.Ascii <=57) or (event.Key=="Decimal" and event.Ascii==46) : #0~9 . 
-      if len(ucl_find_data)>=1 and int(chr(event.Ascii)) < len(ucl_find_data):
-        # send data        
-        data = ucl_find_data[int(chr(event.Ascii))]
-        #print(ucl_find_data)
-        
-        senddata(data)
-        show_sp_to_label(data.decode('utf-8'))
-        #print(data)
-        #快選用的
-        #print(data)        
-        debug_print("Debug12")
-        return False
-      else:
-        if len(event.Key) == 1 and is_hf(None)==False:
-          #k = widen(event.Key)
-          kac = event.Ascii          
-          k = widen(chr(kac))
-          debug_print("event.Key to Full:%s %s" % (event.Key,k))
-          senddata(k)
-          debug_print("Debug11")
-          return False
-        
-        debug_print("Debug10")
-        #2017-10-24要考慮右邊數字鍵的狀況
-        #2018-05-05要考慮右邊數字鍵的 .
-        # event.Ascii==46 or (event.Key=="Decimal" and event.Ascii==46)
-        # 先出小點好了
-        if is_hf(None)==False and ( event.Ascii==49 or event.Ascii==50 or event.Ascii==51 or event.Ascii==52 or event.Ascii==53 or event.Ascii==54 or event.Ascii==55 or event.Ascii==56 or event.Ascii==57 or event.Ascii==47 or event.Ascii==42 or event.Ascii==45 or event.Ascii==43 or event.Ascii==48):
-          kac = event.Ascii        
-          k = widen(chr(kac))
-          #if event.Ascii==46:
-          #  senddata("a")
-          #else:
-          senddata(k)
-          debug_print("Debug100")
-          return False
-        else:  
-          return True                    
-    if event.MessageName == "key down" and ( (event.Ascii>=65 and event.Ascii <=90) or (event.Ascii>=97 and event.Ascii <=122) or event.Ascii==44 or event.Ascii==46 or event.Ascii==39 or event.Ascii==91 or event.Ascii==93):
-      # 這裡應該是同時按著SHIFT的部分
-      flag_is_play_otherkey=True
-      if flag_is_shift_down==True:
-        if len(event.Key) == 1 and is_hf(None)==False:
-          #k = widen(event.Key)
-          kac = event.Ascii
-          if kac>=65 and kac<=90:
-            kac=kac+32
-          else:
-            kac=kac-32
-          k = widen(chr(kac))
-          debug_print("285 event.Key to Full:%s %s" % (event.Key,k))
-          senddata(k)
-          debug_print("Debug9")
-          return False
-        debug_print("Debug8")
-        return True
-      else:
-        # Play ucl
-        #print("Play UCL")
-        #print(thekey)
-        play_ucl(chr(event.Ascii))
-        debug_print("Debug7")
-        return False    
-    if event.MessageName == "key down" and ( event.Ascii == 8 ): # ←      
-      if my.strlen(play_ucl_label) <= 0:                    
-        play_ucl_label=""
-        play_ucl("")
-        debug_print("Debug6")
-        return True
-      else:
-        play_ucl_label = play_ucl_label[:-1]
-        type_label_set_text()
-        debug_print("Debug5")        
-        return False       
-    if event.MessageName == "key down" and event.Ascii==32 : #空白
-      # Space                          
-      if len(ucl_find_data)>=1:        
-        #丟出第一個字                
-        text = ucl_find_data[0]
-        if same_sound_last_word=="":
-          same_sound_last_word=text
-        #] my.utf8tobig5("好的")
-        
-        if is_need_use_pinyi==True:
-          #使用同音字
-          debug_print("Debug use pinyi")
-          use_pinyi(same_sound_last_word)
-        else:
-          senddata(text)
-          show_sp_to_label(text)
-        debug_print("Debug4")
-        return False 
-      elif len(ucl_find_data)==0 and len(play_ucl_label)!=0:
-        #無此字根時，按到空白鍵
-        debug_print("Debug11")
+        run_big_small(-0.1)        
+      if my.strtolower(last_key[-4:])==",,,+":
+        #run big
         play_ucl_label=""
         ucl_find_data=[]
         type_label_set_text()
-        return False 
-      else:
-        #沒字時直接出空白
-        debug_print("Debug1")
+        toAlphaOrNonAlpha()
+        run_big_small(0.1)
+      if my.strtolower(last_key[-4:])==",,,s":
+        # run short
+        play_ucl_label=""
+        ucl_find_data=[]
+        type_label_set_text()
+        toAlphaOrNonAlpha() 
+        run_short()
+      if my.strtolower(last_key[-4:])==",,,l":
+        # run long
+        play_ucl_label=""
+        ucl_find_data=[]
+        type_label_set_text()
+        toAlphaOrNonAlpha() 
+        run_long()
+      if my.strtolower(last_key[-4:])==",,,x" and is_ucl():
+        # 將框選嘸蝦米的文字，轉成中文字
+        play_ucl_label=""
+        ucl_find_data=[]
+        type_label_set_text()
+        toAlphaOrNonAlpha() 
+        orin_clip=""
+        try:
+          win32clipboard.OpenClipboard()
+          orin_clip=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
+        except:
+          pass
+        try:
+          win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, "")
+          win32clipboard.EmptyClipboard()
+          win32clipboard.CloseClipboard()
+        except:
+          pass      
+        SendKeysCtypes.SendKeys("^C",pause=0.05)
+        #也許要設delay...      
+        #try:
+        win32clipboard.OpenClipboard()
+        #try:
+        selectData=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
+        # 參考 http://www.runoob.com/python/python-multithreading.html      
+        thread.start_new_thread( thread___x, (selectData, ))
+        win32clipboard.CloseClipboard()       
+        #except:
+        #  pass
+        #也許要設delay...
+        time.sleep(0.05)
+        try:
+          win32clipboard.OpenClipboard()    
+          win32clipboard.EmptyClipboard()
+          win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip)
+          win32clipboard.CloseClipboard()           
+        except:
+          pass
+        return False   
+      if my.strtolower(last_key[-4:])==",,,z" and is_ucl():
+        # 將框選的文字，轉成嘸蝦米的字
+        play_ucl_label=""
+        ucl_find_data=[]
+        type_label_set_text()
+        toAlphaOrNonAlpha()                   
+        orin_clip=""
+        try:
+          win32clipboard.OpenClipboard()
+          orin_clip=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
+        except:
+          pass
+        try:
+          win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, "")
+          win32clipboard.EmptyClipboard()
+          win32clipboard.CloseClipboard()
+        except:
+          pass
+        SendKeysCtypes.SendKeys("^C",pause=0.05)
+        try:
+          win32clipboard.OpenClipboard()
+          #try:
+          time.sleep(0.05)
+          selectData=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
+          #簡轉繁
+          selectData = simple2trad(selectData)       
+                          
+          thread.start_new_thread( thread___z, (selectData, ))
+        except:
+          pass
+        #也許要設delay...
+        time.sleep(0.05)
+        try:
+          win32clipboard.OpenClipboard()    
+          win32clipboard.EmptyClipboard()
+          win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip)
+          win32clipboard.CloseClipboard()
+        except:
+          pass
+        return False             
+      if my.strtolower(last_key[-9:])==",,,unlock":          
+        last_key = ""               
+        if gamemode_btn.get_label()=="遊戲模式":
+          gamemode_btn_click(gamemode_btn)
+      if my.strtolower(last_key[-10:])==",,,version":
+        last_key= ""   
+        message = gtk.MessageDialog(type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK)
+        message.set_position(gtk.WIN_POS_CENTER_ALWAYS)
+        message.set_keep_above(True)
+        _msg_text = about_uclliu()       
+        message.set_markup( _msg_text )
+        #toAlphaOrNonAlpha()
+        message.show()
+        toAlphaOrNonAlpha()  
+        response = message.run()
+        #toAlphaOrNonAlpha()
+        debug_print("Show Version")
+        debug_print(response)
+        #print(gtk.ResponseType.BUTTONS_OK)
+        if response == -5 or response == -4:
+          #message.hide()
+          message.destroy()
+          #toAlphaOrNonAlpha()  
+          play_ucl_label=""
+          ucl_find_data=[]
+          type_label_set_text()
+          toAlphaOrNonAlpha()
+          return False      
+    #print("LAST_KEY:" + last_key)
+    if gamemode_btn.get_label()=="遊戲模式":      
+      return True    
+    
+    #thekey = chr(event.Ascii)
+    # KeyID = 91 = Lwinkey
+    # 2019-07-19
+    # 增加，如果是肥模式，且輸入的字>=1以上，按下 esc 鍵，會把字消除  
+    if event.MessageName == "key down" and is_ucl() == True and len(play_ucl_label) >=1 and event.Key == "Escape":
+      #debug_print("2019-07-19 \n 增加，如果是肥模式，且輸入的字>=1以上，按下 esc 鍵，會把字消除)");
+      play_ucl_label = ""
+      type_label_set_text()
+      return False
+    if event.MessageName == "key down" and (event.KeyID == 91 or event.KeyID == 92):
+      flag_is_win_down = True
+      debug_print("Debug event A")
+    if event.MessageName == "key up" and (event.KeyID == 91 or event.KeyID == 92):
+      flag_is_win_down = False
+      debug_print("Debug event B") 
+    if event.MessageName == "key down" and (event.Key == "Lshift" or event.Key == "Rshift"):
+      #2019-10-22 如果按著 shift 還用 滑鼠，不會切換 英/肥
+      if flag_is_shift_down==False:
+        flag_is_play_otherkey=False      
+      flag_is_shift_down=True
+      debug_print("Debug event C")       
+    if event.MessageName == "key down" and event.Key == "Capital":
+      flag_is_capslock_down=True
+      flag_is_play_capslock_otherkey=False
+      debug_print("Debug event E")
+    if event.MessageName == "key down" and event.Key != "Capital":
+      flag_is_play_capslock_otherkey=True
+      debug_print("Debug event F")
+    if event.MessageName == "key up" and event.Key == "Capital":
+      flag_is_capslock_down=False
+      flag_is_play_capslock_otherkey=False
+      debug_print("Debug event E")
+    if event.MessageName == "key down" and (event.Key != "Lshift" and event.Key != "Rshift"):
+      debug_print("Debug event D")
+      flag_is_play_otherkey=True   
+    
+    if flag_is_capslock_down == True and flag_is_play_capslock_otherkey == True:
+      # 2019-03-06 增加，如果是 肥 模式，且輸入字是 backspace 且框有字根，就跳過這個 True
+      if event.Key == "Back" and is_ucl()==True and len(play_ucl_label) >= 1:
+        debug_print("Debug 2019-03-06 CapsLock + backspace")
+        pass
+      else:  
+        return True
+               
+    if event.MessageName == "key up" and (event.Key == "Lshift" or event.Key == "Rshift"):
+      debug_print("Debug event G")
+      debug_print("event.MessageName:"+event.MessageName)
+      debug_print("event.Ascii:"+str(event.Ascii))
+      debug_print("event.KeyID:"+str(event.KeyID))
+      debug_print("flag_is_play_otherkey:"+str(flag_is_play_otherkey))
+      debug_print("flag_is_shift_down:"+str(flag_is_shift_down))        
+      debug_print("flag_is_capslock_down:"+str(flag_is_capslock_down))
+      debug_print("flag_is_play_capslock_otherkey:"+str(flag_is_play_capslock_otherkey))
+      flag_is_shift_down=False
+      debug_print("Press shift")
+      # 不可是右邊的2、4、6、8      
+      #toAlphaOrNonAlpha()
+      if flag_is_play_otherkey==False and (event.Ascii > 40 or event.Ascii < 37) :
+        toggle_ucl()
+        debug_print("Debug15")        
+        debug_print("Debug14")
+  
+      #toAlphaOrNonAlpha()
+      return True
+    if event.MessageName == "key down" and event.Ascii==32 and flag_is_shift_down==True:
+      # Press shift and space
+      # switch 半/全
+      hf_btn_click(hf_btn)
+      flag_is_play_otherkey=True
+      flag_is_shift_down=False    
+      debug_print("Debug13")
+      return False            
+    if is_ucl():
+      #debug_print("is ucl")    
+      if event.MessageName == "key down" and flag_is_win_down == True : # win key
+        return True
+      #2018-05-05要考慮右邊數字鍵的 . 
+      if event.MessageName == "key down" and ( event.Ascii>=48 and event.Ascii <=57) or (event.Key=="Decimal" and event.Ascii==46) : #0~9 . 
+        if len(ucl_find_data)>=1 and int(chr(event.Ascii)) < len(ucl_find_data):
+          # send data        
+          data = ucl_find_data[int(chr(event.Ascii))]
+          #print(ucl_find_data)
+          
+          senddata(data)
+          show_sp_to_label(data.decode('utf-8'))
+          #print(data)
+          #快選用的
+          #print(data)        
+          debug_print("Debug12")
+          return False
+        else:
+          if len(event.Key) == 1 and is_hf(None)==False:
+            #k = widen(event.Key)
+            kac = event.Ascii          
+            k = widen(chr(kac))
+            debug_print("event.Key to Full:%s %s" % (event.Key,k))
+            senddata(k)
+            debug_print("Debug11")
+            return False
+          
+          debug_print("Debug10")
+          #2017-10-24要考慮右邊數字鍵的狀況
+          #2018-05-05要考慮右邊數字鍵的 .
+          # event.Ascii==46 or (event.Key=="Decimal" and event.Ascii==46)
+          # 先出小點好了
+          if is_hf(None)==False and ( event.Ascii==49 or event.Ascii==50 or event.Ascii==51 or event.Ascii==52 or event.Ascii==53 or event.Ascii==54 or event.Ascii==55 or event.Ascii==56 or event.Ascii==57 or event.Ascii==47 or event.Ascii==42 or event.Ascii==45 or event.Ascii==43 or event.Ascii==48):
+            kac = event.Ascii        
+            k = widen(chr(kac))
+            #if event.Ascii==46:
+            #  senddata("a")
+            #else:
+            senddata(k)
+            debug_print("Debug100")
+            return False
+          else:  
+            return True                    
+      if event.MessageName == "key down" and ( (event.Ascii>=65 and event.Ascii <=90) or (event.Ascii>=97 and event.Ascii <=122) or event.Ascii==44 or event.Ascii==46 or event.Ascii==39 or event.Ascii==91 or event.Ascii==93):
+        # 這裡應該是同時按著SHIFT的部分
+        flag_is_play_otherkey=True
+        if flag_is_shift_down==True:
+          if len(event.Key) == 1 and is_hf(None)==False:
+            #k = widen(event.Key)
+            kac = event.Ascii
+            if kac>=65 and kac<=90:
+              kac=kac+32
+            else:
+              kac=kac-32
+            k = widen(chr(kac))
+            debug_print("285 event.Key to Full:%s %s" % (event.Key,k))
+            senddata(k)
+            debug_print("Debug9")
+            return False
+          debug_print("Debug8")
+          return True
+        else:
+          # Play ucl
+          #print("Play UCL")
+          #print(thekey)
+          play_ucl(chr(event.Ascii))
+          debug_print("Debug7")
+          return False    
+      if event.MessageName == "key down" and ( event.Ascii == 8 ): # ←      
+        if my.strlen(play_ucl_label) <= 0:                    
+          play_ucl_label=""
+          play_ucl("")
+          debug_print("Debug6")
+          return True
+        else:
+          play_ucl_label = play_ucl_label[:-1]
+          type_label_set_text()
+          debug_print("Debug5")        
+          return False       
+      if event.MessageName == "key down" and event.Ascii==32 : #空白
+        # Space                          
+        if len(ucl_find_data)>=1:        
+          #丟出第一個字                
+          text = ucl_find_data[0]
+          if same_sound_last_word=="":
+            same_sound_last_word=text
+          #] my.utf8tobig5("好的")
+          
+          if is_need_use_pinyi==True:
+            #使用同音字
+            debug_print("Debug use pinyi")
+            use_pinyi(same_sound_last_word)
+          else:
+            senddata(text)
+            show_sp_to_label(text)
+          debug_print("Debug4")
+          return False 
+        elif len(ucl_find_data)==0 and len(play_ucl_label)!=0:
+          #無此字根時，按到空白鍵
+          debug_print("Debug11")
+          play_ucl_label=""
+          ucl_find_data=[]
+          type_label_set_text()
+          return False 
+        else:
+          #沒字時直接出空白
+          debug_print("Debug1")
+          if is_hf(None)==False:        
+            kac = event.Ascii        
+            k = widen(chr(kac))
+            senddata(k)
+            debug_print("Debug23")
+            return False
+          else:
+            return True
+      elif event.MessageName == "key down" and ( event.Ascii==58 or event.Ascii==59 or event.Ascii==123 or event.Ascii==125 or event.Ascii==40 or event.Ascii==41 or event.Ascii==43 or event.Ascii==126 or event.Ascii==33 or event.Ascii==64 or event.Ascii==35 or event.Ascii==36 or event.Ascii==37 or event.Ascii==94 or event.Ascii==38 or event.Ascii==42 or event.Ascii==95 or event.Ascii==60 or event.Ascii==62 or event.Ascii==63 or event.Ascii==34 or event.Ascii==124 or event.Ascii==47 or event.Ascii==45) : # : ;｛｝（）＋～！＠＃＄％＾＆＊＿＜＞？＂｜／－
+        #修正 肥/全 時，按分號、冒號只出半型的問題
         if is_hf(None)==False:        
           kac = event.Ascii        
           k = widen(chr(kac))
           senddata(k)
-          debug_print("Debug23")
+          debug_print("Debug22")
           return False
         else:
-          return True
-    elif event.MessageName == "key down" and ( event.Ascii==58 or event.Ascii==59 or event.Ascii==123 or event.Ascii==125 or event.Ascii==40 or event.Ascii==41 or event.Ascii==43 or event.Ascii==126 or event.Ascii==33 or event.Ascii==64 or event.Ascii==35 or event.Ascii==36 or event.Ascii==37 or event.Ascii==94 or event.Ascii==38 or event.Ascii==42 or event.Ascii==95 or event.Ascii==60 or event.Ascii==62 or event.Ascii==63 or event.Ascii==34 or event.Ascii==124 or event.Ascii==47 or event.Ascii==45) : # : ;｛｝（）＋～！＠＃＄％＾＆＊＿＜＞？＂｜／－
-      #修正 肥/全 時，按分號、冒號只出半型的問題
-      if is_hf(None)==False:        
-        kac = event.Ascii        
-        k = widen(chr(kac))
+          debug_print("Debug22OK")
+          return True     
+      else:                  
+        return True            
+        
+    else:
+      debug_print("DDDDDDDDD: event.Key: " + event.Key + "\nDDDDDDDDD: event.KeyID: " + str(event.KeyID) + "\nDDDDDDDDD: event.MessageName: " +  event.MessageName )
+      debug_print("flag_is_shift_down:"+str(flag_is_shift_down))
+      debug_print("Debug3")  
+      debug_print(event.KeyID)
+      # 2018-03-27 此部分修正「英/全」時，按Ctrl A 無效的問題，或ctrl+esc等問題
+      # 修正enter、winkey 在「英/全」的狀況
+      if event.MessageName == "key down" and event.KeyID == 13:
+        return True
+      if event.MessageName == "key down" and ( event.KeyID == 91 or event.KeyID == 92): #winkey
+        flag_is_win_down=True
+        return True
+      # 修正  在「英/全」的狀況，按下 esc (231 + 27 ) 無效的問題
+      if event.MessageName == "key down" and ( event.KeyID == 231 or event.KeyID == 27):
+        flag_is_win_down=False
+        debug_print("Fix 23+27")
+        return True                
+      if event.MessageName == "key down" and flag_is_win_down == True : # win key
+        flag_is_win_down=False
+        return True    
+      if event.MessageName == "key down" and ( event.KeyID == 231 or event.KeyID == 162 or event.KeyID == 163):
+        flag_is_ctrl_down=True
+        debug_print("Ctrl key")
+        return True
+      if flag_is_ctrl_down == True:
+        flag_is_ctrl_down=False
+        return True       
+      if event.MessageName == "key down" and (event.Key == "Lshift" or event.Key == "Rshift"):      
+        flag_is_shift_down=True
+        flag_is_play_otherkey=False      
+        debug_print("Debug331")                
+      if event.MessageName == "key down" and (event.Key != "Lshift" and event.Key != "Rshift"): 
+        flag_is_play_otherkey=True                                                                               
+        debug_print("Debug332")                
+      if event.MessageName == "key up" and (event.Key == "Lshift" or event.Key == "Rshift"):
+        debug_print("Debug333")
+        #shift
+        flag_is_shift_down=False
+        debug_print("Press shift")
+        if flag_is_play_otherkey==False:
+          toggle_ucl()
+          debug_print("Debug315")    
+        debug_print("Debug314")
+        return True
+      #if event.MessageName == "key up" and len(event.Key) == 1 and is_hf(None)==False:
+      #  k = widen(event.Key)
+      #  print("335 event.Key to Full:%s %s" % (event.Key,k))
+      #  senddata(k)
+      #  return False
+      #if len(event.Key) == 1 and is_hf(None)==False and event.KeyID !=0 and event.KeyID !=145 and event.KeyID !=162:
+      #  k = widen(event.Key)      
+      #  senddata(k) 
+      debug_print("Debug3: %s" % (event.Transition))
+      if event.KeyID==8 or event.KeyID==20 or event.KeyID==45 or event.KeyID==46 or event.KeyID==36 or event.KeyID==33 or event.KeyID==34 or event.KeyID==35 or event.KeyID==160 or event.KeyID==161 or event.KeyID==9 or event.KeyID == 37 or event.KeyID == 38 or event.KeyID == 39 or event.KeyID == 40 or event.KeyID == 231 or event.KeyID == 162 or event.KeyID == 163: #↑←→↓
+        return True
+      if event.MessageName == "key down" and len( str(chr(event.Ascii)) ) == 1 and is_hf(None)==False and event.Injected == 0 :
+        k = widen( str(chr(event.Ascii)) )
+        #print("ｋｋｋｋｋｋｋｋｋｋｋｋｋｋｋK:%s" % k)
         senddata(k)
-        debug_print("Debug22")
         return False
-      else:
-        debug_print("Debug22OK")
-        return True     
-    else:                  
-      return True            
-      
-  else:
-    debug_print("DDDDDDDDD: event.Key: " + event.Key + "\nDDDDDDDDD: event.KeyID: " + str(event.KeyID) + "\nDDDDDDDDD: event.MessageName: " +  event.MessageName )
-    debug_print("flag_is_shift_down:"+str(flag_is_shift_down))
-    debug_print("Debug3")  
-    debug_print(event.KeyID)
-    # 2018-03-27 此部分修正「英/全」時，按Ctrl A 無效的問題，或ctrl+esc等問題
-    # 修正enter、winkey 在「英/全」的狀況
-    if event.MessageName == "key down" and event.KeyID == 13:
-      return True
-    if event.MessageName == "key down" and ( event.KeyID == 91 or event.KeyID == 92): #winkey
-      flag_is_win_down=True
-      return True
-    # 修正  在「英/全」的狀況，按下 esc (231 + 27 ) 無效的問題
-    if event.MessageName == "key down" and ( event.KeyID == 231 or event.KeyID == 27):
-      flag_is_win_down=False
-      debug_print("Fix 23+27")
-      return True                
-    if event.MessageName == "key down" and flag_is_win_down == True : # win key
-      flag_is_win_down=False
       return True    
-    if event.MessageName == "key down" and ( event.KeyID == 231 or event.KeyID == 162 or event.KeyID == 163):
-      flag_is_ctrl_down=True
-      debug_print("Ctrl key")
-      return True
-    if flag_is_ctrl_down == True:
-      flag_is_ctrl_down=False
-      return True       
-    if event.MessageName == "key down" and (event.Key == "Lshift" or event.Key == "Rshift"):      
-      flag_is_shift_down=True
-      flag_is_play_otherkey=False      
-      debug_print("Debug331")                
-    if event.MessageName == "key down" and (event.Key != "Lshift" and event.Key != "Rshift"): 
-      flag_is_play_otherkey=True                                                                               
-      debug_print("Debug332")                
-    if event.MessageName == "key up" and (event.Key == "Lshift" or event.Key == "Rshift"):
-      debug_print("Debug333")
-      #shift
-      flag_is_shift_down=False
-      debug_print("Press shift")
-      if flag_is_play_otherkey==False:
-        toggle_ucl()
-        debug_print("Debug315")    
-      debug_print("Debug314")
-      return True
-    #if event.MessageName == "key up" and len(event.Key) == 1 and is_hf(None)==False:
-    #  k = widen(event.Key)
-    #  print("335 event.Key to Full:%s %s" % (event.Key,k))
-    #  senddata(k)
-    #  return False
-    #if len(event.Key) == 1 and is_hf(None)==False and event.KeyID !=0 and event.KeyID !=145 and event.KeyID !=162:
-    #  k = widen(event.Key)      
-    #  senddata(k) 
-    debug_print("Debug3: %s" % (event.Transition))
-    if event.KeyID==8 or event.KeyID==20 or event.KeyID==45 or event.KeyID==46 or event.KeyID==36 or event.KeyID==33 or event.KeyID==34 or event.KeyID==35 or event.KeyID==160 or event.KeyID==161 or event.KeyID==9 or event.KeyID == 37 or event.KeyID == 38 or event.KeyID == 39 or event.KeyID == 40 or event.KeyID == 231 or event.KeyID == 162 or event.KeyID == 163: #↑←→↓
-      return True
-    if event.MessageName == "key down" and len( str(chr(event.Ascii)) ) == 1 and is_hf(None)==False and event.Injected == 0 :
-      k = widen( str(chr(event.Ascii)) )
-      #print("ｋｋｋｋｋｋｋｋｋｋｋｋｋｋｋK:%s" % k)
-      senddata(k)
-      return False
-    return True    
+  except Exception as e:
+    # 理論上不會發生，也不該發生
+    debug_print("KeyPressed")
+    debug_print(e)
+    return True
       
 #程式主流程
 #功能說明
