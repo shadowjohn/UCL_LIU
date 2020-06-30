@@ -6,7 +6,7 @@
   <img src="screenshot/demo.gif"><br>
   https://youtu.be/ClSbkHDqkOs
   <br>
-  V1.26 加入鍵盤打字聲
+  加入鍵盤打字聲
 </center>
 <br>
 <h3>作者：</h3>
@@ -15,9 +15,9 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2020-05-24 13:28
+<h3>最後更新日期：</h3>2020-07-01 00:15
 <br>
-<h3>版本：</h3>V 1.26<br>
+<h3>版本：</h3>V 1.27<br>
 <br>
 <h3>版權：</h3>
 　免錢的 MIT-License
@@ -56,6 +56,8 @@
 　　　　alpha = 1 # 透明度<br>
 　　　　y = 950 # 肥米輸入法最後在螢幕 y 軸位置<br>
 　　　　x = 1239 # 肥米輸入法最後在螢幕 x 軸位置<br>
+　　　　SP = 0 # 是否顯示短根， 0 或 1<br>
+　　　　PLAY_SOUND_ENABLE = 0 # 是否有打字音， 0 或 1<br>
 　　16、環境設定(強列建議)：<br>
 <kbd>
 <img src="screenshot/install/1.png"><br>
@@ -242,6 +244,11 @@
     2、增加打字音勾選功能
     3、可以在 UCLLIU.ini 中調整打字音量，KEYBOARD_VOLUME 0~50
     4、打字聲音檔：https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip 下載後解開，0~9.wav 與 uclliu.exe 放一起即可
+    
+    (2020-07-01) V1.27 版：
+    病毒碼提交掃描：1.27 https://www.microsoft.com/en-us/wdsi/submission/e074cf5b-dc2c-40a2-9e6a-45360f497ea8
+    1、SP短字根，可以記憶到UCLLIU.ini
+    2、打字音的開關，可以記憶到UCLLIU.ini
 <br>
 <h3>開發工具：</h3>
   <ul>
@@ -407,6 +414,7 @@
   <li>(Done 2020-05-24)98、增加打字聲音功能</li>
   <li>(Done 2020-05-25)99、修正打字過快時，開啟字打聲易當機的問題，設定最多同時五個線程</li>
   <li>100、打字聲音可以調整大小聲</li>
-  <li>101、SP短字根，可以記憶到UCLLIU.ini</li>
+  <li>(Done 2020-07-01)101、SP短字根，可以記憶到UCLLIU.ini</li>
+  <li>(Done 2020-07-01)102、打字音的開關，可以記憶到UCLLIU.ini</li>
 </ul>
 <br>

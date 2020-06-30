@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.26
+VERSION=1.27
 import portalocker
 import os
 import sys
@@ -199,7 +199,9 @@ config['DEFAULT'] = {
                       "ZOOM": "1", #整體比例大小
                       "SEND_KIND_1_PASTE": "", #出字模式1
                       "SEND_KIND_2_BIG5": "", #出字模式2
-                      "KEYBOARD_VOLUME": "30" #打字聲音量，0~100
+                      "KEYBOARD_VOLUME": "30", #打字聲音量，0~100
+                      "SP": "0", #短根
+                      "PLAY_SOUND_ENABLE": "0" #打字音
                     };
 if my.is_file(INI_CONFIG_FILE):
   _config = configparser.ConfigParser()
@@ -216,6 +218,8 @@ config['DEFAULT']['ZOOM'] = "%.2f" % ( float(config['DEFAULT']['ZOOM'] ));
 config['DEFAULT']['SEND_KIND_1_PASTE'] = str(config['DEFAULT']['SEND_KIND_1_PASTE']);
 config['DEFAULT']['SEND_KIND_2_BIG5'] = str(config['DEFAULT']['SEND_KIND_2_BIG5']);
 config['DEFAULT']['KEYBOARD_VOLUME'] = str(int(config['DEFAULT']['KEYBOARD_VOLUME']));
+config['DEFAULT']['SP'] = str(int(config['DEFAULT']['SP']));
+config['DEFAULT']['PLAY_SOUND_ENABLE'] = str(int(config['DEFAULT']['PLAY_SOUND_ENABLE']));
 
 # merge f_arr and f_big5_arr
 config['DEFAULT']['SEND_KIND_1_PASTE'] = my.trim(config['DEFAULT']['SEND_KIND_1_PASTE'])
@@ -231,7 +235,8 @@ if config['DEFAULT']['SEND_KIND_2_BIG5'] != "":
 if int(config['DEFAULT']['KEYBOARD_VOLUME']) < 0:
   config['DEFAULT']['KEYBOARD_VOLUME'] = "0"
 if int(config['DEFAULT']['KEYBOARD_VOLUME']) > 100:
-  config['DEFAULT']['KEYBOARD_VOLUME'] = "100"  
+  config['DEFAULT']['KEYBOARD_VOLUME'] = "100"
+  
 #print(f_arr)
 #print(f_big5_arr)
 
@@ -256,6 +261,16 @@ if float(config['DEFAULT']['ZOOM'])>=3:
 if float(config['DEFAULT']['ZOOM'])<=0.1:
   config['DEFAULT']['ZOOM']="0.1"
 
+if int(config['DEFAULT']['SP'])<=0:
+  config['DEFAULT']['SP']="0"  
+else:
+  config['DEFAULT']['SP']="1"  
+
+if int(config['DEFAULT']['PLAY_SOUND_ENABLE'])<=0:
+  config['DEFAULT']['PLAY_SOUND_ENABLE']="0"  
+else:
+  config['DEFAULT']['PLAY_SOUND_ENABLE']="1"  
+
 # GUI Font
 GUI_FONT_12 = my.utf8tobig5("roman %d" % int( float(config['DEFAULT']['ZOOM'])*12) );
 GUI_FONT_14 = my.utf8tobig5("roman bold %d" % int(float(config['DEFAULT']['ZOOM'])*14) );
@@ -273,6 +288,7 @@ debug_print("SHORT_MODE:%s" % (config["DEFAULT"]["SHORT_MODE"]))
 debug_print("ZOOM:%s" % (config["DEFAULT"]["ZOOM"]))
 debug_print("SEND_KIND_1_PASTE:%s" % (config["DEFAULT"]["SEND_KIND_1_PASTE"]))
 debug_print("SEND_KIND_2_BIG5:%s" % (config["DEFAULT"]["SEND_KIND_2_BIG5"]))
+debug_print("SP:%s" % (config["DEFAULT"]["SP"]))
 
 def saveConfig():
   global config
@@ -689,8 +705,6 @@ same_sound_index=0 #預設第零頁
 same_sound_max_word=6 #一頁最多五字
 is_has_more_page=False #是否還有下頁
 same_sound_last_word="" #lastword
-is_display_sp=False #是否顯示簡根
-is_play_music=False #打字音
 wavs = my.glob(PWD + "\\*.wav")
 o_song = {}
 m_play_song = []
@@ -843,9 +857,9 @@ def word_to_sp(data):
   return output 
 def show_sp_to_label(data):
   #顯示最簡字根到輸入結束框後
-  global is_display_sp
+  global config
   global play_ucl_label
-  if is_display_sp==False:
+  if config['DEFAULT']['SP']=="0":
     return
   sp = "簡根："+my.strtoupper(word_to_sp(data))
   #word_label.set_label(sp)
@@ -1460,8 +1474,7 @@ def OnKeyboardEvent(event):
   global VERSION
   global f_arr
   global GUI_FONT_16
-  global f_pass_app  
-  global is_play_music  
+  global f_pass_app    
   global config 
   global m_play_song
   global max_thread___playMusic_counts
@@ -1469,7 +1482,7 @@ def OnKeyboardEvent(event):
   # From : https://stackoverflow.com/questions/20021457/playing-mp3-song-on-python
   # 1.26 版，加入打字音的功能
   try:
-    if is_play_music == True and event.MessageName == "key down" and len(o_song.keys())!=0 and step_thread___playMusic_counts < max_thread___playMusic_counts:
+    if config['DEFAULT']['PLAY_SOUND_ENABLE'] == "1" and event.MessageName == "key down" and len(o_song.keys())!=0 and step_thread___playMusic_counts < max_thread___playMusic_counts:
       step_thread___playMusic_counts = step_thread___playMusic_counts + 1                  
       m_play_song.extend( [ random.choice(o_song.keys()) ])
       thread.start_new_thread( thread___playMusic,(int(config['DEFAULT']['KEYBOARD_VOLUME']),))
@@ -2138,17 +2151,22 @@ class TrayIcon(gtk.StatusIcon):
         toAlphaOrNonAlpha()
         #return False
     def m_sp_switch(self,data=None):
-      global is_display_sp
-      if is_display_sp == False:
-        is_display_sp = True
+      global config
+      if config['DEFAULT']['SP'] == "0":        
+        config['DEFAULT']['SP']="1"
       else:
-        is_display_sp = False      
+        config['DEFAULT']['SP']="0"
+      #切換後，都要存設定
+      saveConfig()      
     def m_pm_switch(self,data=None):
-      global is_play_music
-      if is_play_music == False:
-        is_play_music = True
+      global config
+      #is_play_music
+      if config['DEFAULT']['PLAY_SOUND_ENABLE'] == "0":
+         config['DEFAULT']['PLAY_SOUND_ENABLE'] = "1"
       else:
-        is_play_music = False
+         config['DEFAULT']['PLAY_SOUND_ENABLE'] = "0"
+      #切換後，都要存設定
+      saveConfig()
     def m_game_switch(self,data=None):
       global gamemode_btn_click
       global gamemode_btn
@@ -2175,7 +2193,7 @@ class TrayIcon(gtk.StatusIcon):
       global menu_items
       global gamemode_btn
       global DEFAULT_OUTPUT_TYPE
-      global is_display_sp
+      global config
       #debug_print(dir(menu))
       menu.set_visible(False)
       #menu = gtk.Menu()
@@ -2230,7 +2248,7 @@ class TrayIcon(gtk.StatusIcon):
       #sub_menu.popup(None, None, None, btn, 2)
       #menu_items[len(menu_items)-1].connect("activate", self.m_game_switch) #added by gv - it had nothing before
       
-      if is_display_sp==True:
+      if config['DEFAULT']['SP'] == "1":
         menu_items.append(gtk.MenuItem("4.【●】顯示短根"))
         menu.append( menu_items[len(menu_items)-1] )
         menu_items[len(menu_items)-1].connect("activate", self.m_sp_switch)
@@ -2239,7 +2257,7 @@ class TrayIcon(gtk.StatusIcon):
         menu.append( menu_items[len(menu_items)-1] )
         menu_items[len(menu_items)-1].connect("activate", self.m_sp_switch)
       
-      if is_play_music==True:
+      if config['DEFAULT']['PLAY_SOUND_ENABLE'] == "1":
         menu_items.append(gtk.MenuItem("5.【●】打字音"))
         menu.append( menu_items[len(menu_items)-1] )
         menu_items[len(menu_items)-1].connect("activate", self.m_pm_switch)
