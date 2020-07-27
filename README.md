@@ -10,7 +10,7 @@
 </center>
 <br>
 <h3>作者：</h3>
-  羽山秋人 (<a target="_blank" href="http://3wa.tw">http://3wa.tw</a>)<br>
+  羽山秋人 (<a target="_blank" href="https://3wa.tw">https://3wa.tw</a>)<br>
 <h3>信箱：</h3>
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
@@ -259,13 +259,13 @@
     <li>pywin32</li>
     <li>pyinstaller 可搭配build.bat製作dist/uclliu.exe檔</li>
     <li>psutil 用來判斷目前視窗跑什麼，如果是putty、pietty、pcman出字方式要調整</li>
+    <li>pyaudio 打字聲音模組</li>
     <li>(Third party) php.py 羽山比較熟php，所以在python裡實作很多php的函式</li>
     <li>(Third party) portalocker.py 防重複執行，會Lock <s>c:\temp\UCLLIU.lock</s> 1.20 版改成跟 UCLLIU.exe 同目錄下的 UCLLIU.lock</li>
     <li>(Third party) SendKeysCtypes.py 可以送出Unicode的SendKeys</li>
     <li>(Third party) liu_unitab2cin.py 可以將tab轉成cin的檔案，改成支援python2.7的寫法</li>
     <li>(Third party) cintojson.py 可以將cin轉成json的檔案，改成支援python2.7的寫法</li>
-    <li>(Third party) cin\phone.cin 同音字表參考新酷音的傳統注音表:https://raw.githubusercontent.com/google/jscin/master/src/tables/phone.cin</li>
-    <li>(Third party) pyaudio 打字音</li>
+    <li>(Third party) cin\phone.cin 同音字表參考新酷音的傳統注音表:https://raw.githubusercontent.com/google/jscin/master/src/tables/phone.cin</li>    
     <li>字碼表亦可參考PIME裡的liu.json</li>
 </ul>
 <br>
@@ -299,13 +299,14 @@
     <li>6、至windows cmd，下指令【pip install psutil】</li>
     <li>7、至windows cmd，下指令【pip install pyinstaller】</li>
     <li>8、至windows cmd，下指令【pip install configparser】</li>
-    <li>9、將買來的嘸蝦米，找到 liu-uni.tab，dist裡提供的pinyi.txt 與主檔 uclliu.pyw 放在一起</li>
-    <li>10、執行【python uclliu.pyw】可以跑出程式</li>
-    <li>11、編成exe的方法，執行【build.bat】，即可將 uclliu.exe 編到 dist 目錄下</li>
-    <li>12、build_debug.bat 是方便debug用的版本，運行時還會保留command介面</li>
-    <li><s>12、執行肥米時【python uclliu.pyw -d】可以進入 debug模式，讓 log 訊息在命令提示窗中呈現</s></li>
-    <li>13、pyhook 可以自行編譯，參考心得：【https://3wa.tw/mypaper/index.php?mode=view&id=1709】</li>
-    <li>14、如 pyhook 使用自行編譯，可能會遇到【No module named pkgutil】，參考修正心得：【https://3wa.tw/mypaper/index.php?uid=shadow&mode=view&id=1708】</li>
+    <li>9、至windows cmd，下指令【pip install pyaudio】</li>
+    <li>10、將買來的嘸蝦米，找到 liu-uni.tab，dist裡提供的pinyi.txt 與主檔 uclliu.pyw 放在一起</li>
+    <li>11、執行【python uclliu.pyw】可以跑出程式</li>
+    <li>12、編成exe的方法，執行【build.bat】，即可將 uclliu.exe 編到 dist 目錄下</li>
+    <li>13、build_debug.bat 是方便debug用的版本，運行時還會保留command介面</li>
+    <li><s>13、執行肥米時【python uclliu.pyw -d】可以進入 debug模式，讓 log 訊息在命令提示窗中呈現</s></li>
+    <li>14、pyhook 可以自行編譯，參考心得：【https://3wa.tw/mypaper/index.php?mode=view&id=1709】</li>
+    <li>15、如 pyhook 使用自行編譯，可能會遇到【No module named pkgutil】，參考修正心得：【https://3wa.tw/mypaper/index.php?uid=shadow&mode=view&id=1708】</li>
   </ul>
 <br>
 <br>
