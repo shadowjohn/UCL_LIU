@@ -302,8 +302,10 @@
     <li>9、將買來的嘸蝦米，找到 liu-uni.tab，dist裡提供的pinyi.txt 與主檔 uclliu.pyw 放在一起</li>
     <li>10、執行【python uclliu.pyw】可以跑出程式</li>
     <li>11、編成exe的方法，執行【build.bat】，即可將 uclliu.exe 編到 dist 目錄下</li>
-    <li><s>12、build_debug.bat 是方便debug用的版本，運行時還會保留command介面</s></li>
-    <li>12、執行肥米時【python uclliu.pyw -d】可以進入 debug模式，讓 log 訊息在命令提示窗中呈現</li>
+    <li>12、build_debug.bat 是方便debug用的版本，運行時還會保留command介面</li>
+    <li><s>12、執行肥米時【python uclliu.pyw -d】可以進入 debug模式，讓 log 訊息在命令提示窗中呈現</s></li>
+    <li>13、pyhook 可以自行編譯，參考心得：【https://3wa.tw/mypaper/index.php?mode=view&id=1709】</li>
+    <li>14、如 pyhook 使用自行編譯，可能會遇到【No module named pkgutil】，參考修正心得：【https://3wa.tw/mypaper/index.php?uid=shadow&mode=view&id=1708】</li>
   </ul>
 <br>
 <br>
