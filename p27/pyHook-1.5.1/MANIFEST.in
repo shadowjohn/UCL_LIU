@@ -1,0 +1,11 @@
+include HookManager.py
+include __init__.py
+include aa?hook.py
+include cpyHook.i
+include doc.py
+include example.py
+include setup.py
+include README.txt
+include CHANGELOG.txt
+include LICENSE.txt
+include MANIFEST.in
