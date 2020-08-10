@@ -1,10 +1,10 @@
-# -*- mode: python -*-
+# -*- mode: python ; coding: utf-8 -*-
 
 block_cipher = None
 
 
 a = Analysis(['uclliu.pyw'],
-             pathex=['C:\\Users\\john.GIS\\Desktop\\ucl\\UCLLIU'],
+             pathex=['C:\\Users\\john.GIS\\Desktop\\UCL_LIU'],
              binaries=[],
              datas=[],
              hiddenimports=[],
@@ -13,16 +13,25 @@ a = Analysis(['uclliu.pyw'],
              excludes=[],
              win_no_prefer_redirects=False,
              win_private_assemblies=False,
-             cipher=block_cipher)
+             cipher=block_cipher,
+             noarchive=False)
 pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
 exe = EXE(pyz,
           a.scripts,
-          a.binaries,
-          a.zipfiles,
-          a.datas,
+          [],
+          exclude_binaries=True,
           name='uclliu_debug',
-          debug=True,
+          debug=False,
+          bootloader_ignore_signals=False,
           strip=False,
           upx=True,
-          console=True )
+          console=False )
+coll = COLLECT(exe,
+               a.binaries,
+               a.zipfiles,
+               a.datas,
+               strip=False,
+               upx=True,
+               upx_exclude=[],
+               name='uclliu_debug')

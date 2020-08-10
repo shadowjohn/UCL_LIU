@@ -1425,8 +1425,9 @@ def use_pinyi(data):
   debug_print("Debug same_sound_index: %d " % same_sound_index)
   debug_print("Debug same_sound_max_word: %d " % same_sound_max_word)  
   maxword = same_sound_index + same_sound_max_word
-  if maxword >= len(finds)-1:
-    maxword = len(finds)-1
+  # 2020-08-10 103 分頁異常，修正同音字少一字，最後分頁有機會顯示錯誤的問題
+  if maxword >= len(finds):
+    maxword = len(finds)
     is_has_more_page = False
   else:
     is_has_more_page = True

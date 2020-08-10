@@ -19,5 +19,5 @@ setup(
       }
     },
     windows = [{'script': "uclliu.py"}],
-    zipfile = None,
+    zipfile = None
 )
