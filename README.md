@@ -17,7 +17,7 @@
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
 <h3>最後更新日期：</h3>2020-10-03 01:09
 <br>
-<h3>版本：</h3>V 1.27<br>
+<h3>版本：</h3>V 1.28<br>
 <br>
 <h3>版權：</h3>
 　免錢的 MIT-License
@@ -95,7 +95,8 @@
 　　8、支援opendesktop提供的萬國蝦米字根檔uniliu.txt， https://github.com/chinese-opendesktop/cin-tables ，同fcitx 嘸蝦米表格，將uniliu.txt 改名成 fcitx_boshiamy.txt 跟主程式放一起(可惜沒有日文字)<br>
 　　9、支援小小輸入法臺灣包2018年版wuxiami.txt，http://fygul.blogspot.com/2018/05/yong-tw2018.html 裡linux包中的/tw/wuxiami.txt，將wuxiami.txt 跟主程式放一起<br>
 　　10、支援 Bluebat 版 fcitx 嘸蝦米表格，下載 https://github.com/chinese-opendesktop/cin-tables/blob/master/boshiamy.cin 改名成 fcitx_boshiamy.txt 跟主程式放一起(可惜沒有日文字)<br>
-　　11、支援 https://echeck.blogspot.com/2011/06/blog-post.html 韓語字根，把字根下載解壓後，把 ; 改成 . 再複製到自己的 liu.cin 刪除 liu.json 重新執行肥米，即可以輸入韓語字<br>  
+　　11、支援 https://echeck.blogspot.com/2011/06/blog-post.html 韓語字根，把字根下載解壓後，把 ; 改成 . 再複製到自己的 liu.cin 刪除 liu.json 重新執行肥米，即可以輸入韓語字<br>
+        <img src="screenshot/koera.png"><br>  
 <br>      
 <h3>字碼表說明：</h3>
 　　　　由於字碼表的版權問題爭議，就不放 liu.json 了，liu.json 的格式同PIME的架構。<br>
