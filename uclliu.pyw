@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.27
+VERSION=1.28
 import portalocker
 import os
 import sys
@@ -272,13 +272,13 @@ else:
   config['DEFAULT']['PLAY_SOUND_ENABLE']="1"  
 
 # GUI Font
-GUI_FONT_12 = my.utf8tobig5("roman %d" % int( float(config['DEFAULT']['ZOOM'])*12) );
-GUI_FONT_14 = my.utf8tobig5("roman bold %d" % int(float(config['DEFAULT']['ZOOM'])*14) );
-GUI_FONT_16 = my.utf8tobig5("roman bold %d" % int(float(config['DEFAULT']['ZOOM'])*16) );
-GUI_FONT_18 = my.utf8tobig5("roman bold %d" % int(float(config['DEFAULT']['ZOOM'])*18) );
-GUI_FONT_20 = my.utf8tobig5("roman bold %d" % int(float(config['DEFAULT']['ZOOM'])*20) );
-GUI_FONT_22 = my.utf8tobig5("roman bold %d" % int(float(config['DEFAULT']['ZOOM'])*22) );
-GUI_FONT_26 = my.utf8tobig5("roman bold %d" % int(float(config['DEFAULT']['ZOOM'])*26) );
+GUI_FONT_12 = my.utf8tobig5("Mingliu,Malgun Gothic %d" % int( float(config['DEFAULT']['ZOOM'])*12) );
+GUI_FONT_14 = my.utf8tobig5("Mingliu,Malgun Gothic bold %d" % int(float(config['DEFAULT']['ZOOM'])*14) );
+GUI_FONT_16 = my.utf8tobig5("Mingliu,Malgun Gothic bold %d" % int(float(config['DEFAULT']['ZOOM'])*16) );
+GUI_FONT_18 = my.utf8tobig5("Mingliu,Malgun Gothic bold %d" % int(float(config['DEFAULT']['ZOOM'])*18) );
+GUI_FONT_20 = my.utf8tobig5("Mingliu,Malgun Gothic bold %d" % int(float(config['DEFAULT']['ZOOM'])*20) );
+GUI_FONT_22 = my.utf8tobig5("Mingliu,Malgun Gothic bold %d" % int(float(config['DEFAULT']['ZOOM'])*22) );
+GUI_FONT_26 = my.utf8tobig5("Mingliu,Malgun Gothic bold %d" % int(float(config['DEFAULT']['ZOOM'])*26) );
 # print config setting
 debug_print("UCLLIU.ini SETTING:")
 debug_print("X:%s" % (config["DEFAULT"]["X"]))
@@ -319,13 +319,13 @@ def run_big_small(kind):
     if float(config['DEFAULT']['ZOOM']) > 0.3:
       config['DEFAULT']['ZOOM'] = str(float(config['DEFAULT']['ZOOM'])+kind)
     
-  GUI_FONT_12 = my.utf8tobig5("roman %d" % int( float(config['DEFAULT']['ZOOM'])*12) );
-  GUI_FONT_14 = my.utf8tobig5("roman bold %d" % int(float(config['DEFAULT']['ZOOM'])*14) );
-  GUI_FONT_16 = my.utf8tobig5("roman bold %d" % int(float(config['DEFAULT']['ZOOM'])*16) );
-  GUI_FONT_18 = my.utf8tobig5("roman bold %d" % int(float(config['DEFAULT']['ZOOM'])*18) );
-  GUI_FONT_20 = my.utf8tobig5("roman bold %d" % int(float(config['DEFAULT']['ZOOM'])*20) );
-  GUI_FONT_22 = my.utf8tobig5("roman bold %d" % int(float(config['DEFAULT']['ZOOM'])*22) );
-  GUI_FONT_26 = my.utf8tobig5("roman bold %d" % int(float(config['DEFAULT']['ZOOM'])*26) );
+  GUI_FONT_12 = my.utf8tobig5("Mingliu,Malgun Gothic %d" % int( float(config['DEFAULT']['ZOOM'])*12) );
+  GUI_FONT_14 = my.utf8tobig5("Mingliu,Malgun Gothic bold %d" % int(float(config['DEFAULT']['ZOOM'])*14) );
+  GUI_FONT_16 = my.utf8tobig5("Mingliu,Malgun Gothic bold %d" % int(float(config['DEFAULT']['ZOOM'])*16) );
+  GUI_FONT_18 = my.utf8tobig5("Mingliu,Malgun Gothic bold %d" % int(float(config['DEFAULT']['ZOOM'])*18) );
+  GUI_FONT_20 = my.utf8tobig5("Mingliu,Malgun Gothic bold %d" % int(float(config['DEFAULT']['ZOOM'])*20) );
+  GUI_FONT_22 = my.utf8tobig5("Mingliu,Malgun Gothic bold %d" % int(float(config['DEFAULT']['ZOOM'])*22) );
+  GUI_FONT_26 = my.utf8tobig5("Mingliu,Malgun Gothic bold %d" % int(float(config['DEFAULT']['ZOOM'])*26) );
   if is_simple():
     simple_btn.set_size_request(0,int( float(config['DEFAULT']['ZOOM'])*40))  
   simple_label=simple_btn.get_child()
