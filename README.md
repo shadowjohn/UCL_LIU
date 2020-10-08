@@ -261,6 +261,7 @@
     <img src="screenshot/koera.png"><br>
 
     (2020-10-08) V1.29 版：
+    病毒碼提交掃描：1.29 https://www.microsoft.com/en-us/wdsi/submission/8d30cbe3-a2a0-47be-a5e0-7b00f5841e75
     1、修正 exit 離開會當機的問題
     2、修正自行編譯 pyhook 發佈失敗的問題        
 <br>
