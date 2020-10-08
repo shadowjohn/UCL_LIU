@@ -15,7 +15,7 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2020-10-08 11:36
+<h3>最後更新日期：</h3>2020-10-08 13:07
 <br>
 <h3>版本：</h3>V 1.29<br>
 <br>
@@ -438,5 +438,6 @@
   <li>(Done 2020-10-03)105、修改 pango 字型，允許韓語字型 Malgun Gothic</li>
   <li>(Done 2020-10-08)106、修正 exit 離開會當機的問題</li>
   <li>(Done 2020-10-08)107、修正自行編譯 pyhook 發佈失敗的問題</li>
+  <li>(Done 2020-10-08)108、加入 roman 字型</li>
 </ul>
 <br>

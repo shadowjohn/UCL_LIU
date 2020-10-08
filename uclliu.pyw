@@ -309,7 +309,7 @@ else:
   config['DEFAULT']['PLAY_SOUND_ENABLE']="1"  
 
 # GUI Font
-GLOBAL_FONT_FAMILY = "Mingliu,Malgun Gothic" #roman
+GLOBAL_FONT_FAMILY = "Mingliu,Malgun Gothic,roman" #roman
 GUI_FONT_12 = my.utf8tobig5("%s %d" % (GLOBAL_FONT_FAMILY,int( float(config['DEFAULT']['ZOOM'])*12) ));
 GUI_FONT_14 = my.utf8tobig5("%s bold %d" % (GLOBAL_FONT_FAMILY,int(float(config['DEFAULT']['ZOOM'])*14) ));
 GUI_FONT_16 = my.utf8tobig5("%s bold %d" % (GLOBAL_FONT_FAMILY,int(float(config['DEFAULT']['ZOOM'])*16) ));
