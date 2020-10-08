@@ -1,0 +1,18 @@
+Metadata-Version: 1.0
+Name: pyHook
+Version: 1.5.1
+Summary: pyHook: Python wrapper for out-of-context input hooks in Windows
+Home-page: http://pyhook.sourceforge.net
+Author: Peter Parente
+Author-email: parente@cs.unc.edu
+License: http://www.opensource.org/licenses/mit-license.php
+Download-URL: http://www.sourceforge.net/projects/pyhook
+Description: The pyHook package provides callbacks for global mouse and keyboard events in Windows. Python applications register event handlers for user input events such as left mouse down, left mouse up, key down, etc. and set the keyboard and/or mouse hook. The underlying C library reports information like the time of the event, the name of the window in which the event occurred, the value of the event, any keyboard modifiers, etc.
+Platform: Win32
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python
+Classifier: Topic :: System :: Monitoring
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Operating System :: Microsoft :: Windows

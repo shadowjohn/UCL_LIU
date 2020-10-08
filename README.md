@@ -15,9 +15,9 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2020-10-03 01:09
+<h3>最後更新日期：</h3>2020-10-08 11:36
 <br>
-<h3>版本：</h3>V 1.28<br>
+<h3>版本：</h3>V 1.29<br>
 <br>
 <h3>版權：</h3>
 　免錢的 MIT-License
@@ -259,7 +259,10 @@
         分頁異常，範例：'gtn 某，本來有三個字，只顯示了二個字的問題
     2、修改 pango 字型，允許韓語字型 Malgun Gothic
     <img src="screenshot/koera.png"><br>
-    
+
+    (2020-10-08) V1.29 版：
+    1、修正 exit 離開會當機的問題
+    2、修正自行編譯 pyhook 發佈失敗的問題        
 <br>
 <h3>開發工具：</h3>
   <ul>
@@ -433,5 +436,7 @@
   <li>(Done 2020-08-10)103、分頁異常，範例：'hdfu 慢，最後一頁會無法回到第一頁</li>
   <li>(Done 2020-08-10)104、分頁異常，範例：'gtn 某，本來有三個字，只顯示了二個字的問題</li>
   <li>(Done 2020-10-03)105、修改 pango 字型，允許韓語字型 Malgun Gothic</li>
+  <li>(Done 2020-10-08)106、修正 exit 離開會當機的問題</li>
+  <li>(Done 2020-10-08)107、修正自行編譯 pyhook 發佈失敗的問題</li>
 </ul>
 <br>

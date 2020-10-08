@@ -8,6 +8,7 @@ setup(
       ('',['api-ms-win-core-processthreads-l1-1-2.dll']),
       ('',['api-ms-win-core-profile-l1-1-0.dll']),
       ('',['api-ms-win-core-sysinfo-l1-2-1.dll']),
+      ('',['pyhook\\_cpyHook.lib']),
       ('',['mfc90.dll']),
       ('',['msvcp90.dll'])      
     ],
@@ -18,6 +19,6 @@ setup(
     		'compressed':1
       }
     },
-    windows = [{'script': "uclliu.py"}],
+    windows = [{'script': "uclliu.pyw"}],
     zipfile = None
 )

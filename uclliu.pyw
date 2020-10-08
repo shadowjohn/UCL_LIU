@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.28
+VERSION=1.29
 import portalocker
 import os
 import sys
@@ -22,12 +22,46 @@ import random
 import pyaudio
 import audioop
 import wave
+#os.setpgrp()
 paudio_player = pyaudio.PyAudio()
 #切中文使用
 from re import compile as _Re
 _unicode_chr_splitter = _Re( '(?s)((?:[\ud800-\udbff][\udc00-\udfff])|.)' ).split
+#import atexit
 def split_unicode_chrs( text ):
   return [ chr for chr in _unicode_chr_splitter( text ) if chr ]
+# Fix exit crash problem
+# 改用 
+# https://stackoverflow.com/questions/23727539/runtime-error-in-python/24035224#24035224
+'''
+def cleanup():
+  timeout_sec = 5
+  for p in all_processes: # list of your processes
+    p_sec = 0
+    for second in range(timeout_sec):
+      if p.poll() == None:
+        time.sleep(1)
+        p_sec += 1
+    if p_sec >= timeout_sec:
+      p.kill() # supported from python 2.6
+  #print 'cleaned up!'
+  #atexit.register(cleanup)  
+def win_kill(pid):
+  # From : https://stackoverflow.com/questions/320232/ensuring-subprocesses-are-dead-on-exiting-python-program
+  #kill a process by specified PID in windows
+  import win32api
+  import win32con
+  hProc = None
+  try:
+    hProc = win32api.OpenProcess(win32con.PROCESS_TERMINATE, 0, pid)
+    win32api.TerminateProcess(hProc, 0)
+  except Exception:
+    return False
+  finally:
+    if hProc != None:
+        hProc.Close()
+  return True
+'''    
 # 用來取反白字
 # https://stackoverflow.com/questions/1007185/how-to-retrieve-the-selected-text-from-the-active-window
 # import win32ui
@@ -147,6 +181,9 @@ except:
   response = md.run()            
   if response == gtk.RESPONSE_OK or response == gtk.RESPONSE_DELETE_EVENT:
     md.destroy()
+    ctypes.windll.user32.PostQuitMessage(0)
+    #atexit.register(cleanup)
+    #os.killpg(0, signal.SIGKILL)
     sys.exit(0)
          
 import ctypes
@@ -272,13 +309,14 @@ else:
   config['DEFAULT']['PLAY_SOUND_ENABLE']="1"  
 
 # GUI Font
-GUI_FONT_12 = my.utf8tobig5("Mingliu,Malgun Gothic %d" % int( float(config['DEFAULT']['ZOOM'])*12) );
-GUI_FONT_14 = my.utf8tobig5("Mingliu,Malgun Gothic bold %d" % int(float(config['DEFAULT']['ZOOM'])*14) );
-GUI_FONT_16 = my.utf8tobig5("Mingliu,Malgun Gothic bold %d" % int(float(config['DEFAULT']['ZOOM'])*16) );
-GUI_FONT_18 = my.utf8tobig5("Mingliu,Malgun Gothic bold %d" % int(float(config['DEFAULT']['ZOOM'])*18) );
-GUI_FONT_20 = my.utf8tobig5("Mingliu,Malgun Gothic bold %d" % int(float(config['DEFAULT']['ZOOM'])*20) );
-GUI_FONT_22 = my.utf8tobig5("Mingliu,Malgun Gothic bold %d" % int(float(config['DEFAULT']['ZOOM'])*22) );
-GUI_FONT_26 = my.utf8tobig5("Mingliu,Malgun Gothic bold %d" % int(float(config['DEFAULT']['ZOOM'])*26) );
+GLOBAL_FONT_FAMILY = "Mingliu,Malgun Gothic" #roman
+GUI_FONT_12 = my.utf8tobig5("%s %d" % (GLOBAL_FONT_FAMILY,int( float(config['DEFAULT']['ZOOM'])*12) ));
+GUI_FONT_14 = my.utf8tobig5("%s bold %d" % (GLOBAL_FONT_FAMILY,int(float(config['DEFAULT']['ZOOM'])*14) ));
+GUI_FONT_16 = my.utf8tobig5("%s bold %d" % (GLOBAL_FONT_FAMILY,int(float(config['DEFAULT']['ZOOM'])*16) ));
+GUI_FONT_18 = my.utf8tobig5("%s bold %d" % (GLOBAL_FONT_FAMILY,int(float(config['DEFAULT']['ZOOM'])*18) ));
+GUI_FONT_20 = my.utf8tobig5("%s bold %d" % (GLOBAL_FONT_FAMILY,int(float(config['DEFAULT']['ZOOM'])*20) ));
+GUI_FONT_22 = my.utf8tobig5("%s bold %d" % (GLOBAL_FONT_FAMILY,int(float(config['DEFAULT']['ZOOM'])*22) ));
+GUI_FONT_26 = my.utf8tobig5("%s bold %d" % (GLOBAL_FONT_FAMILY,int(float(config['DEFAULT']['ZOOM'])*26) ));
 # print config setting
 debug_print("UCLLIU.ini SETTING:")
 debug_print("X:%s" % (config["DEFAULT"]["X"]))
@@ -297,6 +335,7 @@ def saveConfig():
     config.write(configfile)
 def run_big_small(kind):
   global config
+  global GLOBAL_FONT_FAMILY
   global GUI_FONT_12
   global GUI_FONT_14
   global GUI_FONT_16
@@ -318,14 +357,15 @@ def run_big_small(kind):
   else:
     if float(config['DEFAULT']['ZOOM']) > 0.3:
       config['DEFAULT']['ZOOM'] = str(float(config['DEFAULT']['ZOOM'])+kind)
-    
-  GUI_FONT_12 = my.utf8tobig5("Mingliu,Malgun Gothic %d" % int( float(config['DEFAULT']['ZOOM'])*12) );
-  GUI_FONT_14 = my.utf8tobig5("Mingliu,Malgun Gothic bold %d" % int(float(config['DEFAULT']['ZOOM'])*14) );
-  GUI_FONT_16 = my.utf8tobig5("Mingliu,Malgun Gothic bold %d" % int(float(config['DEFAULT']['ZOOM'])*16) );
-  GUI_FONT_18 = my.utf8tobig5("Mingliu,Malgun Gothic bold %d" % int(float(config['DEFAULT']['ZOOM'])*18) );
-  GUI_FONT_20 = my.utf8tobig5("Mingliu,Malgun Gothic bold %d" % int(float(config['DEFAULT']['ZOOM'])*20) );
-  GUI_FONT_22 = my.utf8tobig5("Mingliu,Malgun Gothic bold %d" % int(float(config['DEFAULT']['ZOOM'])*22) );
-  GUI_FONT_26 = my.utf8tobig5("Mingliu,Malgun Gothic bold %d" % int(float(config['DEFAULT']['ZOOM'])*26) );
+  
+  GUI_FONT_12 = my.utf8tobig5("%s %d" % (GLOBAL_FONT_FAMILY,int( float(config['DEFAULT']['ZOOM'])*12) ));
+  GUI_FONT_14 = my.utf8tobig5("%s bold %d" % (GLOBAL_FONT_FAMILY,int(float(config['DEFAULT']['ZOOM'])*14) ));
+  GUI_FONT_16 = my.utf8tobig5("%s bold %d" % (GLOBAL_FONT_FAMILY,int(float(config['DEFAULT']['ZOOM'])*16) ));
+  GUI_FONT_18 = my.utf8tobig5("%s bold %d" % (GLOBAL_FONT_FAMILY,int(float(config['DEFAULT']['ZOOM'])*18) ));
+  GUI_FONT_20 = my.utf8tobig5("%s bold %d" % (GLOBAL_FONT_FAMILY,int(float(config['DEFAULT']['ZOOM'])*20) ));
+  GUI_FONT_22 = my.utf8tobig5("%s bold %d" % (GLOBAL_FONT_FAMILY,int(float(config['DEFAULT']['ZOOM'])*22) ));
+  GUI_FONT_26 = my.utf8tobig5("%s bold %d" % (GLOBAL_FONT_FAMILY,int(float(config['DEFAULT']['ZOOM'])*26) ));  
+  
   if is_simple():
     simple_btn.set_size_request(0,int( float(config['DEFAULT']['ZOOM'])*40))  
   simple_label=simple_btn.get_child()
@@ -656,6 +696,9 @@ if is_all_fault == True:
   response = message.run()
   #print(gtk.ResponseType.BUTTONS_OK)
   if response == -5 or response == -4:
+    ctypes.windll.user32.PostQuitMessage(0)
+    #atexit.register(cleanup)
+    #os.killpg(0, signal.SIGKILL)
     my.exit()
   #message.show()
   gtk.main()
@@ -669,6 +712,9 @@ if is_need_trans_tab==True:
     response = message.run()
     #print(gtk.ResponseType.BUTTONS_OK)
     if response == -5 or response == -4:
+      ctypes.windll.user32.PostQuitMessage(0)
+      #atexit.register(cleanup)
+      #os.killpg(0, signal.SIGKILL)
       my.exit()
     #message.show()
     gtk.main()
@@ -678,6 +724,9 @@ if is_need_trans_tab==True:
     response = message.run()
     #print(gtk.ResponseType.BUTTONS_OK)
     if response == -5 or response == -4:
+      ctypes.windll.user32.PostQuitMessage(0)
+      #atexit.register(cleanup)
+      #os.killpg(0, signal.SIGKILL)
       my.exit()
     #message.show()
     gtk.main()
@@ -751,6 +800,9 @@ if my.is_file(PWD + "\\liu.json") == False:
   response = message.run()
   #print(gtk.ResponseType.BUTTONS_OK)
   if response == -5 or response == -4:
+    ctypes.windll.user32.PostQuitMessage(0)
+    #atexit.register(cleanup)
+    #os.killpg(0, signal.SIGKILL)
     my.exit()
   #message.show()
   gtk.main()
@@ -1006,6 +1058,9 @@ def x_btn_click(self):
   #global menu  
   tray.set_visible(False)
   #menu.set_visible(False)
+  ctypes.windll.user32.PostQuitMessage(0)
+  #atexit.register(cleanup)
+  #os.killpg(0, signal.SIGKILL)
   sys.exit()
 # draggable
 def winclicked(self, event):
