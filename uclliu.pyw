@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.29
+VERSION=1.30
 import portalocker
 import os
 import sys
@@ -78,7 +78,8 @@ DEFAULT_OUTPUT_TYPE = "DEFAULT"
 #PASTE
 
 # 不使用肥米的 app
-f_pass_app = [ "mstsc.exe" ]
+# 2021-03-19 2077 也不能使用肥米
+f_pass_app = [ "mstsc.exe","Cyberpunk2077.exe" ]
 
 #import pywinauto             
 #pwa = pywinauto.keyboard
@@ -238,6 +239,7 @@ config['DEFAULT'] = {
                       "SEND_KIND_2_BIG5": "", #出字模式2
                       "KEYBOARD_VOLUME": "30", #打字聲音量，0~100
                       "SP": "0", #短根
+                      "CTRL_SP": "0", #使用CTRL+SPACE換肥米
                       "PLAY_SOUND_ENABLE": "0" #打字音
                     };
 if my.is_file(INI_CONFIG_FILE):
@@ -256,6 +258,7 @@ config['DEFAULT']['SEND_KIND_1_PASTE'] = str(config['DEFAULT']['SEND_KIND_1_PAST
 config['DEFAULT']['SEND_KIND_2_BIG5'] = str(config['DEFAULT']['SEND_KIND_2_BIG5']);
 config['DEFAULT']['KEYBOARD_VOLUME'] = str(int(config['DEFAULT']['KEYBOARD_VOLUME']));
 config['DEFAULT']['SP'] = str(int(config['DEFAULT']['SP']));
+config['DEFAULT']['CTRL_SP'] = str(int(config['DEFAULT']['CTRL_SP']));
 config['DEFAULT']['PLAY_SOUND_ENABLE'] = str(int(config['DEFAULT']['PLAY_SOUND_ENABLE']));
 
 # merge f_arr and f_big5_arr
@@ -302,6 +305,11 @@ if int(config['DEFAULT']['SP'])<=0:
   config['DEFAULT']['SP']="0"  
 else:
   config['DEFAULT']['SP']="1"  
+  
+if int(config['DEFAULT']['CTRL_SP'])<=0:
+  config['DEFAULT']['CTRL_SP']="0"  
+else:
+  config['DEFAULT']['CTRL_SP']="1"    
 
 if int(config['DEFAULT']['PLAY_SOUND_ENABLE'])<=0:
   config['DEFAULT']['PLAY_SOUND_ENABLE']="0"  
@@ -747,6 +755,8 @@ flag_is_win_down=False
 flag_is_shift_down=False
 flag_is_ctrl_down=False
 flag_is_play_otherkey=False
+flag_shift_down_microtime=0
+flag_isCTRLSPACE=False
 play_ucl_label=""
 ucl_find_data=[]
 same_sound_data=[] #同音字表
@@ -1498,15 +1508,17 @@ def use_pinyi(data):
 def OnMouseEvent(event):
   global flag_is_shift_down
   global flag_is_play_otherkey
+  global hm
   #if flag_is_shift_down==True:
     #如果同時按著 shift 時，滑鼠有操作就視窗按別的鍵 ok
   if event.MessageName == "mouse left down" or event.MessageName == "mouse right down" :
     #flag_is_shift_down=False
     flag_is_play_otherkey=True
-    debug_print(('MessageName: %s' % (event.MessageName)))
-    debug_print(('Message: %s' % (event.Message))) 
-    debug_print("Debug event MouseA")
-    debug_print(flag_is_play_otherkey)
+    #debug_print(('MessageName: %s' % (event.MessageName)))
+    #debug_print(('Message: %s' % (event.Message))) 
+    #debug_print("Debug event MouseA")
+    #debug_print(flag_is_play_otherkey)
+    #hm.UnhookMouse()
   return True
 
 # run always thread  
@@ -1534,7 +1546,9 @@ def OnKeyboardEvent(event):
   global config 
   global m_play_song
   global max_thread___playMusic_counts
-  global step_thread___playMusic_counts    
+  global step_thread___playMusic_counts
+  global flag_shift_down_microtime 
+  global hm   
   # From : https://stackoverflow.com/questions/20021457/playing-mp3-song-on-python
   # 1.26 版，加入打字音的功能
   try:
@@ -1786,17 +1800,41 @@ def OnKeyboardEvent(event):
       debug_print("Debug event A")
     if event.MessageName == "key up" and (event.KeyID == 91 or event.KeyID == 92):
       flag_is_win_down = False
-      debug_print("Debug event B") 
+      debug_print("Debug event B")
     if event.MessageName == "key down" and (event.Key == "Lshift" or event.Key == "Rshift"):
-      #2019-10-22 如果按著 shift 還用 滑鼠，不會切換 英/肥
       if flag_is_shift_down==False:
-        flag_is_play_otherkey=False      
+        flag_is_play_otherkey=False
+        flag_shift_down_microtime = my.microtime()      
       flag_is_shift_down=True
-      debug_print("Debug event C")       
+      debug_print("Debug event CC")
+    if event.MessageName == "key down" and (event.Key == "Lshift" or event.Key == "Rshift") and config['DEFAULT']['CTRL_SP'] == "0":
+      #2019-10-22 如果按著 shift 還用 滑鼠，不會切換 英/肥
+      #hm.UnhookMouse()
+      if flag_is_shift_down==False:
+        flag_is_play_otherkey=False
+        flag_shift_down_microtime = my.microtime()      
+      flag_is_shift_down=True
+      
+      #hm.HookMouse()            
+      debug_print("Debug event C") 
+    if event.MessageName == "key down" and (event.Key == "Lcontrol" or event.Key == "Rcontrol") and config['DEFAULT']['CTRL_SP'] == "1":
+      #2019-10-22 如果按著 shift 還用 滑鼠，不會切換 英/肥
+      #hm.UnhookMouse()        
+      flag_is_ctrl_down=True      
+      #hm.HookMouse()            
+      debug_print("Debug event Ctrl C")         
+    if event.MessageName == "key up" and (event.Key == "Lcontrol" or event.Key == "Rcontrol") and config['DEFAULT']['CTRL_SP'] == "1":
+      #2019-10-22 如果按著 shift 還用 滑鼠，不會切換 英/肥
+      #hm.UnhookMouse()                  
+      flag_is_ctrl_down=False      
+      #hm.HookMouse()            
+      debug_print("Debug event Ctrl C")
+      return True
     if event.MessageName == "key down" and event.Key == "Capital":
       flag_is_capslock_down=True
       flag_is_play_capslock_otherkey=False
       debug_print("Debug event E")
+      return True
     if event.MessageName == "key down" and event.Key != "Capital":
       flag_is_play_capslock_otherkey=True
       debug_print("Debug event F")
@@ -1804,7 +1842,7 @@ def OnKeyboardEvent(event):
       flag_is_capslock_down=False
       flag_is_play_capslock_otherkey=False
       debug_print("Debug event E")
-    if event.MessageName == "key down" and (event.Key != "Lshift" and event.Key != "Rshift"):
+    if event.MessageName == "key down" and (event.Key != "Lshift" and event.Key != "Rshift") and config['DEFAULT']['CTRL_SP'] == "0":
       debug_print("Debug event D")
       flag_is_play_otherkey=True   
     
@@ -1815,8 +1853,10 @@ def OnKeyboardEvent(event):
         pass
       else:  
         return True
-               
     if event.MessageName == "key up" and (event.Key == "Lshift" or event.Key == "Rshift"):
+      flag_is_shift_down=False
+               
+    if event.MessageName == "key up" and (event.Key == "Lshift" or event.Key == "Rshift") and config['DEFAULT']['CTRL_SP'] == "0":
       debug_print("Debug event G")
       debug_print("event.MessageName:"+event.MessageName)
       debug_print("event.Ascii:"+str(event.Ascii))
@@ -1826,7 +1866,14 @@ def OnKeyboardEvent(event):
       debug_print("flag_is_capslock_down:"+str(flag_is_capslock_down))
       debug_print("flag_is_play_capslock_otherkey:"+str(flag_is_play_capslock_otherkey))
       flag_is_shift_down=False
+      #hm.UnhookMouse()
       debug_print("Press shift")
+      
+      #2021-03-20 如果 microtime() - flag_shift_down_microtime>=500 flag_is_play_otherkey = true
+      st = my.microtime() - flag_shift_down_microtime
+      debug_print("st: %d " % (st))
+      if st>=500:
+         flag_is_play_otherkey = True
       # 不可是右邊的2、4、6、8      
       #toAlphaOrNonAlpha()
       if flag_is_play_otherkey==False and (event.Ascii > 40 or event.Ascii < 37) :
@@ -1924,7 +1971,11 @@ def OnKeyboardEvent(event):
           type_label_set_text()
           debug_print("Debug5")        
           return False       
-      if event.MessageName == "key down" and event.Ascii==32 : #空白
+      if event.MessageName == "key down" and event.Key=="Space" and config['DEFAULT']['CTRL_SP']=="1": # check ctrl + space
+          if flag_is_ctrl_down == True:
+            toggle_ucl()
+            return False
+      if event.MessageName == "key down" and event.Key=="Space": #空白
         # Space                          
         if len(ucl_find_data)>=1:        
           #丟出第一個字                
@@ -1977,6 +2028,7 @@ def OnKeyboardEvent(event):
     else:
       debug_print("DDDDDDDDD: event.Key: " + event.Key + "\nDDDDDDDDD: event.KeyID: " + str(event.KeyID) + "\nDDDDDDDDD: event.MessageName: " +  event.MessageName )
       debug_print("flag_is_shift_down:"+str(flag_is_shift_down))
+      debug_print("flag_is_ctrl_down:"+str(flag_is_ctrl_down))
       debug_print("Debug3")  
       debug_print(event.KeyID)
       # 2018-03-27 此部分修正「英/全」時，按Ctrl A 無效的問題，或ctrl+esc等問題
@@ -1994,13 +2046,13 @@ def OnKeyboardEvent(event):
       if event.MessageName == "key down" and flag_is_win_down == True : # win key
         flag_is_win_down=False
         return True    
-      if event.MessageName == "key down" and ( event.KeyID == 231 or event.KeyID == 162 or event.KeyID == 163):
-        flag_is_ctrl_down=True
-        debug_print("Ctrl key")
-        return True
-      if flag_is_ctrl_down == True:
-        flag_is_ctrl_down=False
-        return True       
+      #if event.MessageName == "key down" and ( event.KeyID == 231 or event.KeyID == 162 or event.KeyID == 163):
+      #  flag_is_ctrl_down=True
+      #  debug_print("Ctrl key")
+      #  return True
+      #if flag_is_ctrl_down == True:
+      #  flag_is_ctrl_down=False
+      #  return True       
       if event.MessageName == "key down" and (event.Key == "Lshift" or event.Key == "Rshift"):      
         flag_is_shift_down=True
         flag_is_play_otherkey=False      
@@ -2013,11 +2065,16 @@ def OnKeyboardEvent(event):
         #shift
         flag_is_shift_down=False
         debug_print("Press shift")
+      if event.MessageName == "key up" and (event.Key == "Lshift" or event.Key == "Rshift") and config['DEFAULT']['CTRL_SP'] == "0":
         if flag_is_play_otherkey==False:
           toggle_ucl()
           debug_print("Debug315")    
         debug_print("Debug314")
         return True
+      if event.MessageName == "key down" and event.Key=="Space" and config['DEFAULT']['CTRL_SP']=="1": # check ctrl + space
+        if flag_is_ctrl_down == True:
+          toggle_ucl()
+          return False        
       #if event.MessageName == "key up" and len(event.Key) == 1 and is_hf(None)==False:
       #  k = widen(event.Key)
       #  print("335 event.Key to Full:%s %s" % (event.Key,k))
@@ -2047,18 +2104,23 @@ def OnKeyboardEvent(event):
 
 # create a hook manager
 hm = pyHook.HookManager()
-hm.UnhookMouse();
+#hm.UnhookMouse();
 # watch for all mouse events
 hm.KeyAll = OnKeyboardEvent
-print(dir(hm))
+debug_print(dir(hm))
 # set the hook
 hm.HookKeyboard()
 # wait forever
 
 # watch for all mouse events
-hm.MouseAll = OnMouseEvent
+# 2021-03-19 改成只Hook MouseAllButtons，MouseAll 好像會造成lag
+# From : http://pyhook.sourceforge.net/doc_1.5.0/
+#hm.MouseAll = OnMouseEvent
+#hm.MouseAllButtons = OnMouseEvent
 # set the hook
-hm.HookMouse()
+# 改成按到 shift 才 hook
+#hm.HookMouse()
+
         
 #win=gtk.Window(type=gtk.WINDOW_POPUP)
 win=gtk.Window(type=gtk.WINDOW_POPUP)
@@ -2213,7 +2275,15 @@ class TrayIcon(gtk.StatusIcon):
       else:
         config['DEFAULT']['SP']="0"
       #切換後，都要存設定
-      saveConfig()      
+      saveConfig()
+    def m_ctrlsp_switch(self,data=None):
+      global config
+      if config['DEFAULT']['CTRL_SP'] == "0":        
+        config['DEFAULT']['CTRL_SP']="1"
+      else:
+        config['DEFAULT']['CTRL_SP']="0"
+      #切換後，都要存設定
+      saveConfig()            
     def m_pm_switch(self,data=None):
       global config
       #is_play_music
@@ -2267,7 +2337,7 @@ class TrayIcon(gtk.StatusIcon):
       menu.append( menu_items[len(menu_items)-1] )
       menu_items[len(menu_items)-1].connect("activate", self.m_game_switch) #added by gv - it had nothing before
 
-      menu_items.append(gtk.MenuItem("3.選擇出字模式"))
+      menu_items.append(gtk.MenuItem("4.選擇出字模式"))
       menu.append( menu_items[len(menu_items)-1] )
       menu_items[len(menu_items)-1].connect("activate", self.m_none)
       #print(dir(menu_items[len(menu_items)-1]))
@@ -2304,21 +2374,30 @@ class TrayIcon(gtk.StatusIcon):
       #sub_menu.popup(None, None, None, btn, 2)
       #menu_items[len(menu_items)-1].connect("activate", self.m_game_switch) #added by gv - it had nothing before
       
+      if config['DEFAULT']['CTRL_SP'] == "1":
+        menu_items.append(gtk.MenuItem("4.【●】使用 CTRL+SPACE 切換輸入法"))
+        menu.append( menu_items[len(menu_items)-1] )
+        menu_items[len(menu_items)-1].connect("activate", self.m_ctrlsp_switch)
+      else:
+        menu_items.append(gtk.MenuItem("4.【　】使用 CTRL+SPACE 切換輸入法"))
+        menu.append( menu_items[len(menu_items)-1] )
+        menu_items[len(menu_items)-1].connect("activate", self.m_ctrlsp_switch)
+      
       if config['DEFAULT']['SP'] == "1":
-        menu_items.append(gtk.MenuItem("4.【●】顯示短根"))
+        menu_items.append(gtk.MenuItem("5.【●】顯示短根"))
         menu.append( menu_items[len(menu_items)-1] )
         menu_items[len(menu_items)-1].connect("activate", self.m_sp_switch)
       else:
-        menu_items.append(gtk.MenuItem("4.【　】顯示短根"))
+        menu_items.append(gtk.MenuItem("5.【　】顯示短根"))
         menu.append( menu_items[len(menu_items)-1] )
         menu_items[len(menu_items)-1].connect("activate", self.m_sp_switch)
       
       if config['DEFAULT']['PLAY_SOUND_ENABLE'] == "1":
-        menu_items.append(gtk.MenuItem("5.【●】打字音"))
+        menu_items.append(gtk.MenuItem("6.【●】打字音"))
         menu.append( menu_items[len(menu_items)-1] )
         menu_items[len(menu_items)-1].connect("activate", self.m_pm_switch)
       else:
-        menu_items.append(gtk.MenuItem("5.【　】打字音"))
+        menu_items.append(gtk.MenuItem("6.【　】打字音"))
         menu.append( menu_items[len(menu_items)-1] )
         menu_items[len(menu_items)-1].connect("activate", self.m_pm_switch)
                         
