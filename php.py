@@ -28,7 +28,10 @@ class kit:
         else:
           return "/"    
     def strlen(self,x):
-        return len(x)   
+        return len(x)
+    def microtime(self):
+        import time
+        return round(time.time() * 1000)   
     def trim(self,input): 
         # Return trim data
         return str(input).strip();    

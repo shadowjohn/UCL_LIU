@@ -1,1 +1,1 @@
-python27 uclliu.pyw -d &
+c:\python27\python.exe uclliu.pyw -d &
