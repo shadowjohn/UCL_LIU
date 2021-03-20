@@ -266,7 +266,7 @@
     2、修正自行編譯 pyhook 發佈失敗的問題
     
     (2021-03-20) V1.30 版：
-    病毒碼提交掃描：1.30 https://www.microsoft.com/en-us/wdsi/submission/411c63fd-edbc-4730-be26-17f9daf10624
+    病毒碼提交掃描：1.30 https://www.microsoft.com/en-us/wdsi/submission/287899c5-5244-4a2f-a4e9-3c24f7ac3216
     1、電馭叛客2077，按 shift 應該無效化，遊戲中不用切換中文
     2、滑鼠事件造成lag與beep聲問題處理
     3、CTRL+SPACE也可以切換輸入法
