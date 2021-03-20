@@ -19,11 +19,10 @@ import random
 # 播放打字音用
 #from pydub import AudioSegment
 #from pydub.playback import play
-import pyaudio
-import audioop
-import wave
-#os.setpgrp()
-paudio_player = pyaudio.PyAudio()
+paudio_player = None
+
+
+
 #切中文使用
 from re import compile as _Re
 _unicode_chr_splitter = _Re( '(?s)((?:[\ud800-\udbff][\udc00-\udfff])|.)' ).split
@@ -845,6 +844,12 @@ def thread___playMusic(keyboard_valume):
     global o_song
     global m_play_song
     global step_thread___playMusic_counts
+    import pyaudio
+    import audioop
+    import wave
+    if paudio_player == None:       
+      #os.setpgrp()
+      paudio_player = pyaudio.PyAudio()
     
     #time.sleep(0.01)      
     if len(m_play_song) !=0 :

@@ -266,9 +266,12 @@
     2、修正自行編譯 pyhook 發佈失敗的問題
     
     (2021-03-20) V1.30 版：
+    病毒碼提交掃描：1.30 https://www.microsoft.com/en-us/wdsi/submission/411c63fd-edbc-4730-be26-17f9daf10624
     1、電馭叛客2077，按 shift 應該無效化，遊戲中不用切換中文
     2、滑鼠事件造成lag與beep聲問題處理
-    3、CTRL+SPACE也可以切換輸入法        
+    3、CTRL+SPACE也可以切換輸入法
+    4、加入 metadata 應用程式詳細說明
+    5、pyaudio 改成要使用時才 import 細節        
 <br>
 <h3>開發工具：</h3>
   <ul>
@@ -296,9 +299,9 @@
     <li>pygtk 【放在p27目錄，點了安裝即可 p27/pygtk-all-in-one-2.24.1.win32-py2.7.msi】</li>
     <li>pywin32 【放在p27目錄，點了安裝即可 p27/pywin32-221.win32-py2.7.exe】</li>
     <li>pyaudio 打字音用【pip install pyaudio==0.2.11】</li>    
-    <li>pyinstaller 可搭配build.bat製作dist/uclliu.exe檔【pip install pyinstaller==3.6】</li>
+    <li>pyinstaller 可搭配build.bat製作dist/uclliu.exe檔【pip install pyinstaller==3.4】</li>
     <li>psutil 用來判斷目前視窗跑什麼，如果是putty、pietty、pcman出字方式是貼上，【pip install psutil==5.8.0】</li>
-    <li>configparser config UCLLIU.ini 需要用來解 ini 的工具【pip install configparser】</li>
+    <li>configparser config UCLLIU.ini 需要用來解 ini 的工具【pip install configparser==4.0.2】</li>
     <li>(Third party) php.py 羽山比較熟php，所以在python裡實作很多php的函式</li>
     <li>(Third party) portalocker.py 防重複執行，會Lock <s>c:\temp\UCLLIU.lock</s> 1.20 版改成跟 UCLLIU.exe 同目錄下的 UCLLIU.lock</li>
     <li>(Third party) SendKeysCtypes.py 可以送出Unicode的SendKeys</li>
@@ -315,10 +318,10 @@
     <li>3、安裝【p27/pyHook-1.5.1.win32-py2.7.exe】</li>
     <li>4、安裝【p27/pygtk-all-in-one-2.24.1.win32-py2.7.msi】</li>
     <li>5、安裝【p27/pywin32-221.win32-py2.7.exe】</li>
-    <li>6、至windows cmd，下指令【pip install psutil】</li>
-    <li>7、至windows cmd，下指令【pip install pyinstaller】</li>
-    <li>8、至windows cmd，下指令【pip install configparser】</li>
-    <li>9、至windows cmd，下指令【pip install pyaudio】</li>
+    <li>6、至windows cmd，下指令【pip install psutil==5.8.0】</li>
+    <li>7、至windows cmd，下指令【pip install pyinstaller==3.4】</li>
+    <li>8、至windows cmd，下指令【pip install configparser==4.0.2】</li>
+    <li>9、至windows cmd，下指令【pip install pyaudio==0.2.11】</li>
     <li>10、將買來的嘸蝦米，找到 liu-uni.tab，dist裡提供的pinyi.txt 與主檔 uclliu.pyw 放在一起</li>
     <li>11、執行【python uclliu.pyw】可以跑出程式</li>
     <li>12、編成exe的方法，執行【build.bat】，即可將 uclliu.exe 編到 dist 目錄下</li>

@@ -1,6 +1,6 @@
 # -*- mode: python ; coding: utf-8 -*-
 
-block_cipher = None
+block_cipher = pyi_crypto.PyiBlockCipher(key='0919566444')
 
 
 a = Analysis(['uclliu.pyw'],
@@ -30,4 +30,4 @@ exe = EXE(pyz,
           upx=True,
           upx_exclude=[],
           runtime_tmpdir=None,
-          console=False )
+          console=False , version='metadata.txt')
