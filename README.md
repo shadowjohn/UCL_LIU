@@ -275,7 +275,7 @@
     5、pyaudio 改成要使用時才 import 細節
     
     (2021-03-21) V1.31 版：
-    病毒碼提交掃描：1.31 https://www.microsoft.com/en-us/wdsi/submission/82cfbcd7-92f6-42af-a269-f442888b66de
+    病毒碼提交掃描：1.31 https://www.microsoft.com/en-us/wdsi/submission/150a4bf2-f22c-4b3a-bfe0-f6e10dd5e2e3
     1、修正 rime 字根表 liur_Trad.dict.yaml 轉 cin 漏字的問題
     2、修正 rime 字根表有些字根是 ~ 開頭，如 備、刪        
 <br>
