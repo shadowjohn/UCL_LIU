@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.30
+VERSION=1.31
 import portalocker
 import os
 import sys
@@ -513,12 +513,14 @@ if is_all_fault==True and my.is_file(PWD + "\\liur_trad.dict.yaml")==True:
   debug_print("Run Rime liur_trad.dict.yaml ...");
   my.copy(PWD+"\\liur_trad.dict.yaml",PWD+"\\liu.cin");
   data = my.file_get_contents(PWD+"\\liu.cin");
-  m = my.explode("...",data);
+  # 2021-03-21
+  # 修正 ... 因為字根裡也有 ... 笑死 XD
+  m = my.explode("#字碼格式: 字 + Tab + 字碼",data);
   data = my.trim(m[1])
   data = my.str_replace("\t"," ",data);
   # swap field
   m = my.explode("\n",data);
-  for i in range(0,len(m)):
+  for i in range(1,len(m)):
     d = my.explode(" ",m[i]);
     m[i] = "%s %s" % (d[1],d[0]);
   data = my.implode("\n",m);  
