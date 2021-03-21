@@ -514,6 +514,9 @@ if is_all_fault==True and my.is_file(PWD + "\\liur_trad.dict.yaml")==True:
   my.copy(PWD+"\\liur_trad.dict.yaml",PWD+"\\liu.cin");
   data = my.file_get_contents(PWD+"\\liu.cin");
   # 2021-03-21
+  # 不知道為啥 rime 要把好字的打改成 ~ 開頭@_@?
+  data = my.str_replace("~","",data); 
+  # 2021-03-21
   # 修正 ... 因為字根裡也有 ... 笑死 XD
   m = my.explode("#字碼格式: 字 + Tab + 字碼",data);
   data = my.trim(m[1])
