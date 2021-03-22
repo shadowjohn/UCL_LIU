@@ -280,6 +280,7 @@
     2、修正 rime 字根表有些字根是 ~ 開頭，如 備、刪
     
     (2021-03-22) V1.32 版：
+    病毒碼提交掃描：1.32 https://www.microsoft.com/en-us/wdsi/submission/5149f240-117d-48fe-8231-fbb9e1b43ecd
     1、修正 英/全 在使用 ctrl+c、ctrl+v 這類的組合鍵異常的問題            
 <br>
 <h3>開發工具：</h3>
