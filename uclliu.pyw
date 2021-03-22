@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.31
+VERSION=1.32
 import portalocker
 import os
 import sys
@@ -1827,18 +1827,20 @@ def OnKeyboardEvent(event):
       
       #hm.HookMouse()            
       debug_print("Debug event C") 
-    if event.MessageName == "key down" and (event.Key == "Lcontrol" or event.Key == "Rcontrol") and config['DEFAULT']['CTRL_SP'] == "1":
+    if event.MessageName == "key down" and (event.Key == "Lcontrol" or event.Key == "Rcontrol"):  # and config['DEFAULT']['CTRL_SP'] == "1"
       #2019-10-22 如果按著 shift 還用 滑鼠，不會切換 英/肥
+      #2021-03-22 修正英/全時，複製、貼上，按著 Ctrl + 任意鍵 有問題
       #hm.UnhookMouse()        
       flag_is_ctrl_down=True      
       #hm.HookMouse()            
-      debug_print("Debug event Ctrl C")         
-    if event.MessageName == "key up" and (event.Key == "Lcontrol" or event.Key == "Rcontrol") and config['DEFAULT']['CTRL_SP'] == "1":
+      debug_print("Debug event Ctrl C 1")         
+    if event.MessageName == "key up" and (event.Key == "Lcontrol" or event.Key == "Rcontrol"): #  and config['DEFAULT']['CTRL_SP'] == "1"
       #2019-10-22 如果按著 shift 還用 滑鼠，不會切換 英/肥
+      #2021-03-22 修正英/全時，複製、貼上，按著 Ctrl + 任意鍵 有問題
       #hm.UnhookMouse()                  
       flag_is_ctrl_down=False      
       #hm.HookMouse()            
-      debug_print("Debug event Ctrl C")
+      debug_print("Debug event Ctrl C 2")
       return True
     if event.MessageName == "key down" and event.Key == "Capital":
       flag_is_capslock_down=True
@@ -2055,7 +2057,7 @@ def OnKeyboardEvent(event):
         return True                
       if event.MessageName == "key down" and flag_is_win_down == True : # win key
         flag_is_win_down=False
-        return True    
+        return True          
       #if event.MessageName == "key down" and ( event.KeyID == 231 or event.KeyID == 162 or event.KeyID == 163):
       #  flag_is_ctrl_down=True
       #  debug_print("Ctrl key")
@@ -2081,10 +2083,14 @@ def OnKeyboardEvent(event):
           debug_print("Debug315")    
         debug_print("Debug314")
         return True
+                
       if event.MessageName == "key down" and event.Key=="Space" and config['DEFAULT']['CTRL_SP']=="1": # check ctrl + space
         if flag_is_ctrl_down == True:
           toggle_ucl()
-          return False        
+          return False
+      #2021-03-22 修正 英/全 模式下，按 CTRL + 任意鍵，也是穿透的問題
+      if is_hf(None)==False and event.MessageName == "key down" and flag_is_ctrl_down == True:
+        return True        
       #if event.MessageName == "key up" and len(event.Key) == 1 and is_hf(None)==False:
       #  k = widen(event.Key)
       #  print("335 event.Key to Full:%s %s" % (event.Key,k))

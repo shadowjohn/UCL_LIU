@@ -15,9 +15,9 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2021-03-21 14:09
+<h3>最後更新日期：</h3>2021-03-22 14:31
 <br>
-<h3>版本：</h3>V 1.31<br>
+<h3>版本：</h3>V 1.32<br>
 <br>
 <h3>版權：</h3>
 　免錢的 MIT-License
@@ -277,7 +277,10 @@
     (2021-03-21) V1.31 版：
     病毒碼提交掃描：1.31 https://www.microsoft.com/en-us/wdsi/submission/150a4bf2-f22c-4b3a-bfe0-f6e10dd5e2e3
     1、修正 rime 字根表 liur_Trad.dict.yaml 轉 cin 漏字的問題
-    2、修正 rime 字根表有些字根是 ~ 開頭，如 備、刪        
+    2、修正 rime 字根表有些字根是 ~ 開頭，如 備、刪
+    
+    (2021-03-22) V1.32 版：
+    1、修正 英/全 在使用 ctrl+c、ctrl+v 這類的組合鍵異常的問題            
 <br>
 <h3>開發工具：</h3>
   <ul>
@@ -459,5 +462,6 @@
   <li>(Done 2021-03-20)111、CTRL+SPACE也可以切換輸入法</li>
   <li>(Done 2021-03-21)112、修正 rime 字根表 liur_Trad.dict.yaml 轉 cin 漏字的問題</li>
   <li>(Done 2021-03-21)113、修正 rime 字根表有些字根是 ~ 開頭，如 備、刪</li>
+  <li>(Done 2021-03-22)114、修正 英/全 在使用 ctrl+c、ctrl+v 這類的組合鍵異常的問題</li>
 </ul>
 <br>
