@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.32
+VERSION=1.33
 import portalocker
 import os
 import sys
@@ -69,16 +69,16 @@ def win_kill(pid):
 # 額外出字處理的 app
 f_arr = [ "putty","pietty","pcman","xyplorer","kinza.exe","oxygennotincluded.exe","iedit.exe","iedit_.exe" ]
 f_big5_arr = [ "zip32w","daqkingcon.exe","EWinner.exe" ]
+# 不使用肥米的 app
+# 2021-03-19 2077 也不能使用肥米
+# 2021-07-03 vncviewer.exe 不需要肥米
+f_pass_app = [ "mstsc.exe","Cyberpunk2077.exe","vncviewer.exe" ]
 
 # 2019-10-20 增加出字模式
 UCL_PIC_BASE64 = "AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAMIOAADCDgAAAAAAAAAAAAD////////////////////////////////////////////////////////////////////////////////////////////////+/v7//Pz8//v7+//7+/v//f39////////////////////////////////////////////////////////////1s7B/1pVU/9PT0//Tk5Q/56rtP/Cua7/bGlp/2pqa/9tbGz/ampp/25xd//R2eL//////////////////////8O1of8kIyn/fYCD/0A0Lf9vgZD/kIJv/yUrMv9WUEr/FBcd/19eXv8fHR//q7zL///////////////////////CtKH/MDE4/6qwt/9zZFf/boCP/49/bf9VZXf/v7Ok/y0zP//T09P/QDcw/6q7yv//////////////////////w7Wj/yEcGv8pKy//OTUy/3GCkf+Pf23/VWV3/7+zo/8sMz//09PS/0A3MP+qu8r//////////////////////8KzoP84O0H/b2to/y4pJf9wgpH/j4Bt/1BfcP+1qpv/KjA7/8fHx/89NC//qrvK///////////////////////Cs6D/O0FM/9HS0f9IOi//boGQ/5KCcP8UFhn/Ly0p/w0PEv80MzP/FRcc/62+zP//////////////////////wrOh/zI1Ov9hXFT/AwAB/3GDk/+QgW//NkBK/6iqrP+trKz/qqqq/62vs//l6u///////////////////////76vnf8aFhb/Mzs+/0M9OP9wgpD/j39t/1Fhc//7//////////////////////////////////////////////+vnYv/QUtX/9ff3/96alv/bX+P/49/bf9RYHL/+/7/////////////v7Ko/5ifqf/7/v//////////////////inhn/19vgf//////fGpa/21/jv+Of23/UWBy//v+/////////////4Z0Yv9KWmv/+f3/////////////+/bv/1pNQv+Kmaf/samg/z01L/93iZn/n5B+/ygrMf93eXr/fHx8/3p4dv8vKib/eIqc//////////////////37+P/Mycf/5+rt/9HMxv+zs7X/3uPo/+zo4/+4trT/srKy/7Kysv+ysrL/tba5/+Tp7v//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="
 DEFAULT_OUTPUT_TYPE = "DEFAULT"
 #BIG5
 #PASTE
-
-# 不使用肥米的 app
-# 2021-03-19 2077 也不能使用肥米
-f_pass_app = [ "mstsc.exe","Cyberpunk2077.exe" ]
 
 #import pywinauto             
 #pwa = pywinauto.keyboard
@@ -236,6 +236,7 @@ config['DEFAULT'] = {
                       "ZOOM": "1", #整體比例大小
                       "SEND_KIND_1_PASTE": "", #出字模式1
                       "SEND_KIND_2_BIG5": "", #出字模式2
+                      "SEND_KIND_3_NOUCL":"", #Force no UCL
                       "KEYBOARD_VOLUME": "30", #打字聲音量，0~100
                       "SP": "0", #短根
                       "CTRL_SP": "0", #使用CTRL+SPACE換肥米
@@ -265,11 +266,15 @@ config['DEFAULT']['SEND_KIND_1_PASTE'] = my.trim(config['DEFAULT']['SEND_KIND_1_
 config['DEFAULT']['SEND_KIND_1_PASTE'] =  my.str_replace("\"","",config['DEFAULT']['SEND_KIND_1_PASTE'])
 config['DEFAULT']['SEND_KIND_2_BIG5'] = my.trim(config['DEFAULT']['SEND_KIND_2_BIG5'])
 config['DEFAULT']['SEND_KIND_2_BIG5'] =  my.str_replace("\"","",config['DEFAULT']['SEND_KIND_2_BIG5'])
+config['DEFAULT']['SEND_KIND_3_NOUCL'] =  my.str_replace("\"","",config['DEFAULT']['SEND_KIND_3_NOUCL'])
 
 if config['DEFAULT']['SEND_KIND_1_PASTE'] != "": 
   f_arr = f_arr + my.explode(",",config['DEFAULT']['SEND_KIND_1_PASTE'])
 if config['DEFAULT']['SEND_KIND_2_BIG5'] != "": 
   f_big5_arr = f_big5_arr + my.explode(",",config['DEFAULT']['SEND_KIND_2_BIG5'])
+if config['DEFAULT']['SEND_KIND_3_NOUCL'] != "": 
+  f_pass_app = f_pass_app + my.explode(",",config['DEFAULT']['SEND_KIND_3_NOUCL'])  
+
 
 if int(config['DEFAULT']['KEYBOARD_VOLUME']) < 0:
   config['DEFAULT']['KEYBOARD_VOLUME'] = "0"
@@ -282,6 +287,7 @@ if int(config['DEFAULT']['KEYBOARD_VOLUME']) > 100:
 # array_unique
 f_arr = list(set(f_arr))
 f_big5_arr = list(set(f_big5_arr))
+f_pass_app = list(set(f_pass_app))
 #print(f_arr)
 #print(f_big5_arr)
 
@@ -1552,7 +1558,7 @@ def OnKeyboardEvent(event):
   global VERSION
   global f_arr
   global GUI_FONT_16
-  global f_pass_app    
+  global f_pass_app
   global config 
   global m_play_song
   global max_thread___playMusic_counts

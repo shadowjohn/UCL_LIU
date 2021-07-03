@@ -1,6 +1,6 @@
 # -*- mode: python ; coding: utf-8 -*-
 
-block_cipher = pyi_crypto.PyiBlockCipher(key='0919566444')
+block_cipher = None
 
 
 a = Analysis(['uclliu.pyw'],

@@ -15,9 +15,9 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2021-03-22 14:31
+<h3>最後更新日期：</h3>2021-07-03 14:55
 <br>
-<h3>版本：</h3>V 1.32<br>
+<h3>版本：</h3>V 1.33<br>
 <br>
 <h3>版權：</h3>
 　免錢的 MIT-License
@@ -52,8 +52,9 @@
 　　　　[DEFAULT]<br>
 　　　　short_mode = 0  # 是否為「短」版模式， 0 或 1<br>
 　　　　zoom = 0.90  # 縮放大小<br>
-　　　　send_kind_2_big5 = # 如 EWinner.exe 遇到此種程式，以 「big5」 方式出字 <br>
 　　　　send_kind_1_paste = # 如 putty.exe,pcman 遇到此程程式，以 「複製、貼上」 方式出字 <br>
+　　　　send_kind_2_big5 = # 如 EWinner.exe 遇到此種程式，以 「big5」 方式出字 <br>
+        send_kind_3_noucl = vncviewer.exe,2077 遇到此程式，就無法切換 肥/半、肥/全<br>
 　　　　alpha = 1 # 透明度<br>
 　　　　y = 950 # 肥米輸入法最後在螢幕 y 軸位置<br>
 　　　　x = 1239 # 肥米輸入法最後在螢幕 x 軸位置<br>
@@ -281,7 +282,13 @@
     
     (2021-03-22) V1.32 版：
     病毒碼提交掃描：1.32 https://www.microsoft.com/en-us/wdsi/submission/5149f240-117d-48fe-8231-fbb9e1b43ecd
-    1、修正 英/全 在使用 ctrl+c、ctrl+v 這類的組合鍵異常的問題            
+    1、修正 英/全 在使用 ctrl+c、ctrl+v 這類的組合鍵異常的問題
+    
+    (2021-07-03) V1.33 版：
+    病毒碼提交掃描：1.33
+    1、vncviewer.exe，不用切換中文
+    2、可以在 UCLLIU.ini 裡設定 send_kind_3_noucl ，需強制 英/半 的軟體，逗號分格
+                 
 <br>
 <h3>開發工具：</h3>
   <ul>
@@ -464,5 +471,6 @@
   <li>(Done 2021-03-21)112、修正 rime 字根表 liur_Trad.dict.yaml 轉 cin 漏字的問題</li>
   <li>(Done 2021-03-21)113、修正 rime 字根表有些字根是 ~ 開頭，如 備、刪</li>
   <li>(Done 2021-03-22)114、修正 英/全 在使用 ctrl+c、ctrl+v 這類的組合鍵異常的問題</li>
+  <li>(Done 2021-07-03)115、增加send_kind_3_noucl設定，不需要使用肥米的軟體</li>
 </ul>
 <br>
