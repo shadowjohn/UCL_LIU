@@ -286,7 +286,7 @@
     1、修正 英/全 在使用 ctrl+c、ctrl+v 這類的組合鍵異常的問題
     
     (2021-07-03) V1.33 版：
-    病毒碼提交掃描：1.33
+    病毒碼提交掃描：1.33 https://www.microsoft.com/en-us/wdsi/submission/a85a1285-faeb-4bb7-a28d-2e850b2c63ea
     1、vncviewer.exe，不用切換中文
     2、可以在 UCLLIU.ini 裡設定 send_kind_3_noucl ，需強制 英/半 的軟體，逗號分格，例如 vncviewer.exe,teamviewer.exe
     3、自定詞庫、符號，選字分頁的問題，例如：,a，或 ,x ，有多頁時，可用 shift + space 換頁
