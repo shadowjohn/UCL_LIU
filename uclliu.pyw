@@ -428,7 +428,7 @@ def run_long():
   gamemode_btn.set_visible(True)
   config["DEFAULT"]["SHORT_MODE"]="0"
   type_label.set_size_request(int( float(config['DEFAULT']['ZOOM'])*100),int( float(config['DEFAULT']['ZOOM'])*40))
-  word_label.set_size_request(int( float(config['DEFAULT']['ZOOM'])*350),int( float(config['DEFAULT']['ZOOM'])*40))
+  word_label.set_size_request(int( float(config['DEFAULT']['ZOOM'])*385),int( float(config['DEFAULT']['ZOOM'])*40))
   saveConfig()
   
 saveConfig()    
@@ -1175,7 +1175,7 @@ def type_label_set_text(last_word_label_txt=""):
   return True
 def word_label_set_text():
   global word_label
-  global ucl_find_data 
+  global ucl_find_data   
   global play_ucl_label
   global is_has_more_page
   global GUI_FONT_20
@@ -1200,7 +1200,7 @@ def word_label_set_text():
     word_label.set_label(tmp)
     
     debug_print(("word_label lens: %d " % (len(tmp))));
-    
+    debug_print("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG")
     lt = len(tmp);
     word_label.modify_font(pango.FontDescription(GUI_FONT_20))
     '''
@@ -1221,7 +1221,12 @@ def word_label_set_text():
         word_label.set_visible(False)
       else:
         word_label.set_visible(True)
-      word_label.set_size_request(int( float(config['DEFAULT']['ZOOM'])*15*_len_word_label) ,int( float(config['DEFAULT']['ZOOM'])*40) )    
+      if is_has_more_page==False:
+        word_label.set_size_request(int( float(config['DEFAULT']['ZOOM'])*12*_len_word_label) ,int( float(config['DEFAULT']['ZOOM'])*40) )
+      else:
+        #有額外的分頁，加了...
+        debug_print("More page...")
+        word_label.set_size_request(int( float(config['DEFAULT']['ZOOM'])*13*_len_word_label) ,int( float(config['DEFAULT']['ZOOM'])*40) )    
         
     return True
   except:
@@ -1264,11 +1269,13 @@ def show_search():
   #真的要顯示了
   global play_ucl_label
   global ucl_find_data
+  global ucl_find_data_orin_arr
   global is_need_use_pinyi
   global is_has_more_page
   global same_sound_index
   global same_sound_last_word
   global debug_print
+  global same_sound_max_word
   same_sound_index = 0
   is_has_more_page = False
   same_sound_last_word=""
@@ -1308,13 +1315,18 @@ def show_search():
   elif c in uclcode["chardefs"]:
     #print("Debug V2")
     ucl_find_data = uclcode["chardefs"][c]
+    ucl_find_data_orin_arr = ucl_find_data
+    if len(ucl_find_data) > same_sound_max_word:
+      #Need page
+      ucl_find_data = ucl_find_data_orin_arr[same_sound_index:same_sound_max_word]  
+      is_has_more_page = True         
     word_label_set_text()
     return True
   else:
-    #print("Debug V3")
+    #debug_print("Debug V3")
     ucl_find_data=[]  
     #play_ucl_label=""  
-    ucl_find_data=[]
+    #ucl_find_data=[]
     word_label_set_text()
     return False  
   
@@ -1563,8 +1575,13 @@ def OnKeyboardEvent(event):
   global m_play_song
   global max_thread___playMusic_counts
   global step_thread___playMusic_counts
-  global flag_shift_down_microtime 
-  global hm   
+  global flag_shift_down_microtime
+  global same_sound_index 
+  global hm 
+  global is_has_more_page
+  global same_sound_max_word
+  global ucl_find_data_orin_arr
+     
   # From : https://stackoverflow.com/questions/20021457/playing-mp3-song-on-python
   # 1.26 版，加入打字音的功能
   try:
@@ -1904,11 +1921,34 @@ def OnKeyboardEvent(event):
     if event.MessageName == "key down" and event.Ascii==32 and flag_is_shift_down==True:
       # Press shift and space
       # switch 半/全
-      hf_btn_click(hf_btn)
-      flag_is_play_otherkey=True
-      flag_is_shift_down=False    
-      debug_print("Debug13")
-      return False            
+      # 2021-07-05 如果有下一頁， shift + space 改成換下頁哦
+      if my.is_string_like(word_label.get_label(),"...") == True:
+        debug_print("FFFFFFFIND WORDS...")
+        debug_print("ucl_find_data_orin_arr")
+        debug_print(ucl_find_data_orin_arr)        
+        debug_print("ucl_find_data")
+        debug_print(ucl_find_data)
+        debug_print("same_sound_index")
+        debug_print(same_sound_index)        
+        same_sound_index = same_sound_index+same_sound_max_word
+        if same_sound_index > len(ucl_find_data_orin_arr)-1:
+          same_sound_index = 0  
+        maxword = same_sound_index + same_sound_max_word
+        if maxword > len(ucl_find_data_orin_arr)-1:
+           maxword = len(ucl_find_data_orin_arr)           
+        ucl_find_data = ucl_find_data_orin_arr[same_sound_index:maxword]  
+        debug_print("after ucl_find_data")
+        debug_print(ucl_find_data)                               
+        word_label_set_text()        
+        return False                     
+      else:
+        hf_btn_click(hf_btn)
+        flag_is_play_otherkey=True
+        flag_is_shift_down=False    
+        debug_print("Debug13")
+        return False         
+        
+      
     if is_ucl():
       #debug_print("is ucl")    
       if event.MessageName == "key down" and flag_is_win_down == True : # win key
@@ -2000,15 +2040,34 @@ def OnKeyboardEvent(event):
           text = ucl_find_data[0]
           if same_sound_last_word=="":
             same_sound_last_word=text
-          #] my.utf8tobig5("好的")
-          
+          #] my.utf8tobig5("好的")          
           if is_need_use_pinyi==True:
             #使用同音字
             debug_print("Debug use pinyi")
             use_pinyi(same_sound_last_word)
           else:
-            senddata(text)
-            show_sp_to_label(text)
+            #在這作，如果有分頁，要切換分頁
+            #2021-07-05            
+            finds = my.array_unique(ucl_find_data)
+            #print("Debug data: %s " % data.encode("UTF-8"))
+            debug_print("Debug Finds: %d " % len(finds))
+            debug_print("Debug same_sound_index: %d " % same_sound_index)
+            debug_print("Debug same_sound_max_word: %d " % same_sound_max_word)  
+            maxword = same_sound_index + same_sound_max_word
+            # 2020-08-10 103 分頁異常，修正同音字少一字，最後分頁有機會顯示錯誤的問題
+            if maxword >= len(finds):
+              maxword = len(finds)
+              is_has_more_page = False
+            else:
+              is_has_more_page = True
+            ucl_find_data = finds[same_sound_index:maxword]
+            debug_print("DEBUG same_sound_index: %d " % same_sound_index)
+            same_sound_index=same_sound_index+same_sound_max_word
+             
+            if same_sound_index>=len(finds):
+              same_sound_index=0
+           
+            senddata(text)                
           debug_print("Debug4")
           return False 
         elif len(ucl_find_data)==0 and len(play_ucl_label)!=0:

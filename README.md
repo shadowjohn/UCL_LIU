@@ -15,7 +15,7 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2021-07-03 14:55
+<h3>最後更新日期：</h3>2021-07-05 01:06
 <br>
 <h3>版本：</h3>V 1.33<br>
 <br>
@@ -288,6 +288,7 @@
     病毒碼提交掃描：1.33
     1、vncviewer.exe，不用切換中文
     2、可以在 UCLLIU.ini 裡設定 send_kind_3_noucl ，需強制 英/半 的軟體，逗號分格
+    3、自定詞庫、符號，選字分頁的問題，例如：,a，或 ,x ，有多頁時，可用 shift + space 換頁
                  
 <br>
 <h3>開發工具：</h3>
@@ -472,5 +473,6 @@
   <li>(Done 2021-03-21)113、修正 rime 字根表有些字根是 ~ 開頭，如 備、刪</li>
   <li>(Done 2021-03-22)114、修正 英/全 在使用 ctrl+c、ctrl+v 這類的組合鍵異常的問題</li>
   <li>(Done 2021-07-03)115、增加send_kind_3_noucl設定，不需要使用肥米的軟體</li>
+  <li>(Done 2021-07-05)116、自定詞庫、符號，選字分頁的問題，例如：,a，有多頁時，可用 shift + space 換頁</li>
 </ul>
 <br>
