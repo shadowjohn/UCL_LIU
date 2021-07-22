@@ -2400,8 +2400,19 @@ class TrayIcon(gtk.StatusIcon):
       global menu_items
       global gamemode_btn
       global DEFAULT_OUTPUT_TYPE
-      global config
+      global config      
+      global uclen_btn
+      global uclen_btn_click
+      global hf_btn
+      global hf_btn_click
       #debug_print(dir(menu))
+      
+      #2021-07-22 當按下右下角肥時，原本如果是 肥 -> 英，全 -> 半 才不會檔到畫面
+      if is_ucl() == True:
+        uclen_btn_click(uclen_btn) 
+      if is_hf(None) == False:
+        hf_btn_click(hf_btn)
+               
       menu.set_visible(False)
       #menu = gtk.Menu()
       for i in range(0,len(menu_items)):
