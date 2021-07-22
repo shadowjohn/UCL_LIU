@@ -118,8 +118,11 @@ class kit:
         return base64.decodestring(data)
     def glob(self,pathdata):
         import glob
-        return glob.glob(pathdata)
+        return glob.glob(pathdata)    
     def array_remove_empty_and_trim(self,arr):
         arr = [x.strip(' ') for x in arr];
-        arr = filter(str.strip, arr);
-        return arr;
+        o = [];
+        for i in range(0,len(arr)):
+            if arr[i].strip()!='':
+                o.append(arr[i]); 
+        return o;

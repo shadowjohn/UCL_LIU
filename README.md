@@ -17,13 +17,13 @@
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
 <h3>最後更新日期：</h3>2021-07-22 11:02
 <br>
-<h3>版本：</h3>V 1.34<br>
+<h3>版本：</h3>V 1.35<br>
 <br>
 <h3>版權：</h3>
 　免錢的 MIT-License
 <br>
 <h3>下載位置：</h3>
-　　1.主程式(1.34 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
+　　1.主程式(1.35 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
 　　2.主程式(1.33 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.33/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.33/uclliu.exe</a><br>
 　　3.歷年版本：<a target="_blank" href="https://github.com/shadowjohn/UCL_LIU/tree/master/RELEASE">歷代版本</a><br>
 　　4.同音字庫：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt</a><br>
@@ -298,6 +298,9 @@
     3. 119、send_kind_1_paste、send_kind_2_big5 ... 出字方式的執行檔名，要 trim，避免使用者多打了空白、過濾重複值
     4. 120、當點右下角「肥」叫出選單，應該把「全」切換成「半」，以免檔到畫面。
                  
+    (2021-07-22) V1.35 版：
+    病毒碼提交掃描：1.35
+    1. 121、修正 array_remove_empty_and_trim 異常
 <br>
 <h3>開發工具：</h3>
   <ul>
@@ -486,5 +489,6 @@
   <li>(Done 2021-07-22)118、顯示短根，因為分頁的關係故障，如果不是透過選字，不會出現短根，例如：肥 ucl 空白，跟 ucl 0，按 ucl 0 才出現短根</li>
   <li>(Done 2021-07-22)119、send_kind_1_paste、send_kind_2_big5 ... 出字方式的執行檔名，要 trim，避免使用者多打了空白、過濾重複值</li>
   <li>(Done 2021-07-22)120、當點右下角「肥」叫出選單，應該把「全」切換成「半」，以免檔到畫面。</li>
+  <li>(Done 2021-07-22)121、修正 array_remove_empty_and_trim 異常</li>  
 </ul>
 <br>
