@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.33
+VERSION=1.34
 import portalocker
 import os
 import sys
@@ -2069,7 +2069,9 @@ def OnKeyboardEvent(event):
             if same_sound_index>=len(finds):
               same_sound_index=0
            
-            senddata(text)                
+            senddata(text)   
+            #2021-07-22 補 sp 出字
+            show_sp_to_label(text)             
           debug_print("Debug4")
           return False 
         elif len(ucl_find_data)==0 and len(play_ucl_label)!=0:
