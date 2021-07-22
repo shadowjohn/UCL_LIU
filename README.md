@@ -15,7 +15,7 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2021-07-22 11:02
+<h3>最後更新日期：</h3>2021-07-22 21:54
 <br>
 <h3>版本：</h3>V 1.35<br>
 <br>
@@ -299,7 +299,7 @@
     4. 120、當點右下角「肥」叫出選單，應該把「全」切換成「半」，以免檔到畫面。
                  
     (2021-07-22) V1.35 版：
-    病毒碼提交掃描：1.35
+    病毒碼提交掃描：1.35 https://www.microsoft.com/en-us/wdsi/submission/8b3ea446-54a3-4c86-8a8c-0ea18f6617c8
     1. 121、修正 array_remove_empty_and_trim 異常
 <br>
 <h3>開發工具：</h3>
