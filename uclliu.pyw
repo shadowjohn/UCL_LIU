@@ -285,9 +285,11 @@ if int(config['DEFAULT']['KEYBOARD_VOLUME']) > 100:
 #print(f_big5_arr)
 
 # array_unique
-f_arr = list(set(f_arr))
-f_big5_arr = list(set(f_big5_arr))
-f_pass_app = list(set(f_pass_app))
+# 2021-07-22 防止使用者在 f_arr 這些打多的逗號、空白
+f_arr = my.array_remove_empty_and_trim(list(set(f_arr)))
+f_big5_arr = my.array_remove_empty_and_trim(list(set(f_big5_arr)))
+f_pass_app = my.array_remove_empty_and_trim(list(set(f_pass_app)))
+
 #print(f_arr)
 #print(f_big5_arr)
 

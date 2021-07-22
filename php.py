@@ -119,3 +119,7 @@ class kit:
     def glob(self,pathdata):
         import glob
         return glob.glob(pathdata)
+    def array_remove_empty_and_trim(self,arr):
+        arr = [x.strip(' ') for x in arr];
+        arr = filter(str.strip, arr);
+        return arr;

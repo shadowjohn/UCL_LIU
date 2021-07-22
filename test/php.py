@@ -500,3 +500,8 @@ class kit:
         else:
           import urllib
           return urllib.quote(data);
+    def array_remove_empty_and_trim(self,arr):
+        arr = [x.strip(' ') for x in arr];
+        arr = filter(str.strip, arr);
+        return arr;
+        
