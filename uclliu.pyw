@@ -1078,6 +1078,21 @@ def toAlphaOrNonAlpha():
   
   new_position_x = _x
   new_position_y = _y
+  
+  # 每次都重刷 DB ?
+  myScreenStatus["screens"] = []
+  for i in range(0,myScreensObj.get_n_monitors()):
+    d = {
+      "x": myScreensObj.get_monitor_geometry(i)[0],
+      "y": myScreensObj.get_monitor_geometry(i)[1],
+      "w": myScreensObj.get_monitor_geometry(i)[2],
+      "h": myScreensObj.get_monitor_geometry(i)[3],
+      "area": (myScreensObj.get_monitor_geometry(i)[2] * myScreensObj.get_monitor_geometry(i)[3]),
+      "c_x": (myScreensObj.get_monitor_geometry(i)[0] + (myScreensObj.get_monitor_geometry(i)[2] / 2)),
+      "c_y": (myScreensObj.get_monitor_geometry(i)[1] + (myScreensObj.get_monitor_geometry(i)[3] / 2)),  
+    }
+    myScreenStatus["screens"].append(d);  
+  
   if _x  > (myScreenStatus["screens"][UCLGUI_CLOSEST_MONITOR()]["x"] + myScreenStatus["screens"][UCLGUI_CLOSEST_MONITOR()]["w"]) - _width:
     new_position_x = (myScreenStatus["screens"][UCLGUI_CLOSEST_MONITOR()]["x"] + myScreenStatus["screens"][UCLGUI_CLOSEST_MONITOR()]["w"])-_width-20    
     win.move( new_position_x,new_position_y)
