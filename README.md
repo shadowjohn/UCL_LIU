@@ -305,6 +305,7 @@
     (2021-07-27) V1.36 版：
     病毒碼提交掃描：1.36 
     https://www.microsoft.com/en-us/wdsi/submission/24eefe41-3b43-4324-bc31-b5a56a568bb4
+    https://www.microsoft.com/en-us/wdsi/submission/798cb938-a746-4e0c-acb6-09f6919e2029
     1. 123、開啟時，超出螢幕視窗範圍異常，改用各自螢幕範圍偵測
     2. 124、修正半途拔插螢幕、改變螢幕位置識別區
     
