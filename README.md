@@ -489,6 +489,7 @@
   <li>(Done 2021-07-22)118、顯示短根，因為分頁的關係故障，如果不是透過選字，不會出現短根，例如：肥 ucl 空白，跟 ucl 0，按 ucl 0 才出現短根</li>
   <li>(Done 2021-07-22)119、send_kind_1_paste、send_kind_2_big5 ... 出字方式的執行檔名，要 trim，避免使用者多打了空白、過濾重複值</li>
   <li>(Done 2021-07-22)120、當點右下角「肥」叫出選單，應該把「全」切換成「半」，以免檔到畫面。</li>
-  <li>(Done 2021-07-22)121、修正 array_remove_empty_and_trim 異常</li>  
+  <li>(Done 2021-07-22)121、修正 array_remove_empty_and_trim 異常</li>
+  <li>(Done 2021-07-27)123、開啟時，超出螢幕視窗範圍異常</li>  
 </ul>
 <br>

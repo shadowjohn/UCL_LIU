@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.35
+VERSION=1.36
 import portalocker
 import os
 import sys
@@ -223,14 +223,59 @@ INI_CONFIG_FILE = PWD + "\\UCLLIU.ini"
 #debug_print("screen width, height : %s , %s" % (screen_width,screen_height))
 #window = gtk.Window()
 #From : https://www.familylifemag.com/question/701406/how-do-i-get-monitor-resolution-in-python
+myScreensObj = gtk.gdk.Screen()
+myScreenStatus = {
+  "main_monitor" : 0, # 面積大的當作 main
+  "first_time_x": 0, # 系統初始位置，使用下面主螢幕中心點位置移至右下150x150
+  "first_time_y": 0,
+  "screens": [
+    # x,y,w,h,area, c_x,c_y
+  ]
+}
+debug_print("get_n_monitors(): %d\n" % (myScreensObj.get_n_monitors()));
+#debug_print(myScreensObj.get_monitor_geometry(0)); #gtk.gdk.Rectangle(1280, 0, 2560, 1080)
+#debug_print(myScreensObj.get_monitor_geometry(1)); #gtk.gdk.Rectangle(0, 59, 1280, 1024)
+
+for i in range(0,myScreensObj.get_n_monitors()):
+  d = {
+    "x": myScreensObj.get_monitor_geometry(i)[0],
+    "y": myScreensObj.get_monitor_geometry(i)[1],
+    "w": myScreensObj.get_monitor_geometry(i)[2],
+    "h": myScreensObj.get_monitor_geometry(i)[3],
+    "area": (myScreensObj.get_monitor_geometry(i)[2] * myScreensObj.get_monitor_geometry(i)[3]),
+    "c_x": (myScreensObj.get_monitor_geometry(i)[0] + (myScreensObj.get_monitor_geometry(i)[2] / 2)),
+    "c_y": (myScreensObj.get_monitor_geometry(i)[1] + (myScreensObj.get_monitor_geometry(i)[3] / 2)),  
+  }
+  myScreenStatus["screens"].append(d);
+  if i == 0:
+    myScreenStatus["main_monitor"] = i;
+    #調整第一次執行的中心位置
+    myScreenStatus["first_time_x"] = d["c_x"]+150
+    myScreenStatus["first_time_y"] = d["c_y"]+150    
+  else:
+    _is_bigger = True
+    for j in range(0,len(myScreenStatus["screens"])-1):
+      if myScreenStatus["screens"][j] > d["area"]:
+        _is_bigger = False;
+        break;
+    if _is_bigger == True:
+      myScreenStatus["main_monitor"]=i; # 最大螢幕易主
+      myScreenStatus["first_time_x"] = d["c_x"]+150
+      myScreenStatus["first_time_y"] = d["c_y"]+150
+      
+debug_print(my.json_encode(myScreenStatus));
 screen_width = gtk.gdk.screen_width()
 screen_height = gtk.gdk.screen_height()
+
+debug_print("screen_width: %d\n" % (screen_width));
+debug_print("screen_height: %d\n" % (screen_height));
+
 
   
 config = configparser.ConfigParser()
 config['DEFAULT'] = {
-                      "X": screen_width-700,
-                      "Y": int(screen_height*0.87),
+                      "X": myScreenStatus["first_time_x"],
+                      "Y": myScreenStatus["first_time_y"],
                       "ALPHA": "1", #嘸蝦米全顯示時時的初值
                       "SHORT_MODE": "0", #0:簡短畫面，或1:長畫面
                       "ZOOM": "1", #整體比例大小
@@ -985,7 +1030,29 @@ def find_ucl_in_uclcode_old(chinese_data):
     return "";
 
 #print(find_ucl_in_uclcode("肥"))
-#my.exit();      
+#my.exit();
+def UCLGUI_CLOSEST_MONITOR():
+  global myScreenStatus
+  #肥米靠近哪個螢幕
+  [ _x,_y ] = win.get_position()
+  [_width,_height] = win.get_size()
+  #肥米中心點
+  UCL_c_x = _x + ( _width / 2 );
+  UCL_c_y = _y + ( _height / 2 );
+  _UCL_Closest_Monitor_NO = 0; #哪一個螢幕            
+  _UCL_Closest_Monitor_Distinct = 0; #距離    
+  for i in range(0, len(myScreenStatus["screens"])):
+    if i == 0:
+      _UCL_Closest_Monitor_NO = i
+      #距離 = ((x1-x2)^2 + (y1-y2)^2) ** 0.5
+      _UCL_Closest_Monitor_Distinct = (  (UCL_c_x-myScreenStatus["screens"][i]["c_x"]) ** 2 + (UCL_c_y-myScreenStatus["screens"][i]["c_y"]) ** 2 ) ** 0.5; 
+    else:
+      _distinct = (  (UCL_c_x-myScreenStatus["screens"][i]["c_x"]) ** 2 + (UCL_c_y-myScreenStatus["screens"][i]["c_y"]) ** 2 ) ** 0.5;
+      if _distinct < _UCL_Closest_Monitor_Distinct:
+        _UCL_Closest_Monitor_Distinct = _distinct
+        _UCL_Closest_Monitor_NO = i
+  return _UCL_Closest_Monitor_NO      
+        
 def toAlphaOrNonAlpha():
   global uclen_btn
   global hf_btn
@@ -996,29 +1063,34 @@ def toAlphaOrNonAlpha():
   #2019-10-22 check screen size and uclliu position
   # 偵測肥米的位置，超出螢幕時，彈回
   #screen_width=user32.GetSystemMetrics(0)
-  #screen_height=user32.GetSystemMetrics(1)
-  
+  #screen_height=user32.GetSystemMetrics(1)  
   screen_width = gtk.gdk.screen_width()
-  screen_height = gtk.gdk.screen_height()
+  screen_height = gtk.gdk.screen_height()  
+  
+  #2021-07-27 改成偵測現在肥米離哪個螢幕中心點比較近，如果超過該螢幕限範圍回，要修正位置
+  #debug_print("UCL Closest Monitor: %s\n" % (UCLGUI_CLOSEST_MONITOR()))
+  #顯示該螢幕的 info
+  #debug_print(my.json_encode(myScreenStatus["screens"][UCLGUI_CLOSEST_MONITOR()]))
+  # {"area": 2764800, "h": 1080, "c_y": 540, "w": 2560, "c_x": 1280, "y": 0, "x": 0}
   
   [ _x,_y ] = win.get_position()
   [_width,_height] = win.get_size()
   
   new_position_x = _x
   new_position_y = _y
-  if _x  > screen_width - _width:
-    new_position_x = screen_width-_width-20    
+  if _x  > (myScreenStatus["screens"][UCLGUI_CLOSEST_MONITOR()]["x"] + myScreenStatus["screens"][UCLGUI_CLOSEST_MONITOR()]["w"]) - _width:
+    new_position_x = (myScreenStatus["screens"][UCLGUI_CLOSEST_MONITOR()]["x"] + myScreenStatus["screens"][UCLGUI_CLOSEST_MONITOR()]["w"])-_width-20    
     win.move( new_position_x,new_position_y)
-  if _y > screen_height - _height - 40:
-    new_position_y = screen_height-_height - 40 
+  if _y > (myScreenStatus["screens"][UCLGUI_CLOSEST_MONITOR()]["y"] + myScreenStatus["screens"][UCLGUI_CLOSEST_MONITOR()]["h"]) - _height:
+    new_position_y = (myScreenStatus["screens"][UCLGUI_CLOSEST_MONITOR()]["y"] + myScreenStatus["screens"][UCLGUI_CLOSEST_MONITOR()]["h"]) - _height - 60 
     win.move( new_position_x,new_position_y)
   
-  if _x < 0:
-    new_position_x = 0
+  if _x < myScreenStatus["screens"][UCLGUI_CLOSEST_MONITOR()]["x"]:
+    new_position_x = myScreenStatus["screens"][UCLGUI_CLOSEST_MONITOR()]["x"]+20;
     win.move( new_position_x,new_position_y)
-  if _y < 0:
-    new_position_y = 0
-    win.move( new_position_x,new_position_y)
+  if _y < myScreenStatus["screens"][UCLGUI_CLOSEST_MONITOR()]["y"]:
+    new_position_y = myScreenStatus["screens"][UCLGUI_CLOSEST_MONITOR()]["y"]+20
+    win.move( new_position_x,new_position_y)  
   
   #c = hf_btn.get_child()
   #hf_kind = c.get_label()
