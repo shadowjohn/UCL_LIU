@@ -15,16 +15,16 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2021-07-22 21:54
+<h3>最後更新日期：</h3>2021-07-27 13:14
 <br>
-<h3>版本：</h3>V 1.35<br>
+<h3>版本：</h3>V 1.36<br>
 <br>
 <h3>版權：</h3>
 　免錢的 MIT-License
 <br>
 <h3>下載位置：</h3>
-　　1.主程式(1.35 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
-　　2.主程式(1.33 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.33/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.33/uclliu.exe</a><br>
+　　1.主程式(1.36 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
+　　2.主程式(1.35 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.35/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.35/uclliu.exe</a><br>
 　　3.歷年版本：<a target="_blank" href="https://github.com/shadowjohn/UCL_LIU/tree/master/RELEASE">歷代版本</a><br>
 　　4.同音字庫：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt</a><br>
 　　5.打字聲音檔：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip</a> 下載後解開，0~9.wav 與 uclliu.exe 放一起即可
@@ -80,7 +80,7 @@
     17、出字模式選擇：<br>
 <kbd>
 <h3>感謝網友 klt 回報，提到使用 https://term.ptt.cc/ 無法正常出字，將出字選擇功能作成自定選擇</h3>
-</kbd>
+
 </kbd>
   
 <br>
@@ -301,6 +301,12 @@
     (2021-07-22) V1.35 版：
     病毒碼提交掃描：1.35 https://www.microsoft.com/en-us/wdsi/submission/8b3ea446-54a3-4c86-8a8c-0ea18f6617c8
     1. 121、修正 array_remove_empty_and_trim 異常
+    
+    (2021-07-27) V1.36 版：
+    病毒碼提交掃描：1.36 
+    https://www.microsoft.com/en-us/wdsi/submission/24eefe41-3b43-4324-bc31-b5a56a568bb4
+    1. 123、開啟時，超出螢幕視窗範圍異常，改用各自螢幕範圍偵測
+    
 <br>
 <h3>開發工具：</h3>
   <ul>
@@ -490,6 +496,6 @@
   <li>(Done 2021-07-22)119、send_kind_1_paste、send_kind_2_big5 ... 出字方式的執行檔名，要 trim，避免使用者多打了空白、過濾重複值</li>
   <li>(Done 2021-07-22)120、當點右下角「肥」叫出選單，應該把「全」切換成「半」，以免檔到畫面。</li>
   <li>(Done 2021-07-22)121、修正 array_remove_empty_and_trim 異常</li>
-  <li>(Done 2021-07-27)123、開啟時，超出螢幕視窗範圍異常</li>  
+  <li>(Done 2021-07-27)123、開啟時，超出螢幕視窗範圍異常，改用各自螢幕範圍偵測</li>  
 </ul>
 <br>
