@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.36
+VERSION=1.37
 import portalocker
 import os
 import sys
@@ -16,6 +16,7 @@ import configparser
 import thread
 import base64
 import random
+#import cairo
 # 播放打字音用
 #from pydub import AudioSegment
 #from pydub.playback import play
@@ -1060,6 +1061,10 @@ def toAlphaOrNonAlpha():
   global config
   global user32 
   global win
+  global menu
+  global menu_flag_isShow
+  global menu_flag_time
+  global menu_flag_isMouseOut
   #2019-10-22 check screen size and uclliu position
   # 偵測肥米的位置，超出螢幕時，彈回
   #screen_width=user32.GetSystemMetrics(0)
@@ -1124,6 +1129,28 @@ def toAlphaOrNonAlpha():
     #win.set_mnemonics_visible(True)
     win.set_keep_above(True)
     win.set_keep_below(False)
+  #print(dir(menu.window))
+  if menu_flag_isShow == True and menu.window!=None:    
+    menu.window.set_keep_above(True)
+    menu.window.set_keep_below(False)
+    #print(dir(menu.window.get_toplevel()))
+    #_t = menu.window.get_toplevel();
+    #if _t:
+    #print(dir(_t))
+    if my.time()-menu_flag_time>=6 and menu_flag_isMouseOut == True:
+      #menu.window.show(False)
+      menu.window.get_parent().set_keep_above(False)
+      menu.window.get_parent().set_keep_below(True)    
+      menu.set_visible(False)
+    #變淡
+    elif my.time()-menu_flag_time < 6 and menu_flag_isMouseOut == True:
+      alpha = (6-(my.time()-menu_flag_time)) / 6.0
+      debug_print(alpha)
+      menu.window.get_parent().set_opacity(alpha)
+      if alpha < 0.4:      
+        menu.window.get_parent().set_keep_above(False)
+        menu.window.get_parent().set_keep_below(True)    
+      #print(_t.fullscreen())    
 def toggle_ucl():
   global uclen_btn
   global play_ucl_label
@@ -2398,7 +2425,7 @@ class TrayIcon(gtk.StatusIcon):
     def __init__(self):
       global VERSION
       global PWD
-      global UCL_PIC_BASE64
+      global UCL_PIC_BASE64       
       gtk.StatusIcon.__init__(self)
       #self.set_from_icon_name('help-about')
       #debug_print(PWD+"\\UCLLIU.png")
@@ -2477,14 +2504,45 @@ class TrayIcon(gtk.StatusIcon):
       debug_print(kind)
       DEFAULT_OUTPUT_TYPE=kind
     def m_none(self,data=None):
-      return False
+      return False  
+    def motion_notify_event(self,data,event):
+      #print("GG")
+      #滑鼠在選單中...
+      #所以秒數可以一直加
+      #print(dir(event))
+      global menu
+      global menu_flag_time
+      global menu_flag_isMouseOut
+      menu_flag_time = my.time()
+      menu_flag_isMouseOut = False
+      #滑鼠在動啊...一直動就變明顯
+      menu.window.get_parent().set_opacity(1)
+      #print(dir(data))
+      w = menu.get_allocation().width
+      h = menu.get_allocation().height
+      #print([w,h])
+      if event.x < 5 or event.y < 5 or event.x > w-6 or event.y > h-6: 
+        menu_flag_isMouseOut = True      
+      return  
+    def leave_notify_event(self,data,event):
+      #滑鼠離開
+      global menu_flag_isMouseOut
+      menu_flag_isMouseOut = True
+      #print("GG")
+      return
+    #def area_draw(self, widget, cr):
+    #  cr.set_source_rgba(.2, .2, .2, 0.3)
+    #  cr.set_operator(cairo.OPERATOR_SOURCE)
+    #  cr.paint()
+    #  cr.set_operator(cairo.OPERATOR_OVER)
     def on_click(self,data,event): #data1 and data2 received by the connect action line 23
       #print ('self :', self)
       #print('data :',data)
       #print('event :',event)
       btn=event.button #Bby controlling this value (1-2-3 for left-middle-right) you can call other functions.
       #debug_print('event.button :',btn)
-      time=gtk.get_current_event_time() # required by the popup. No time - no popup.
+      #time=gtk.get_current_event_time() # required by the popup. No time - no popup.
+      
       #debug_print ('time:', time)
 
       global menu
@@ -2496,8 +2554,12 @@ class TrayIcon(gtk.StatusIcon):
       global uclen_btn_click
       global hf_btn
       global hf_btn_click
+      global menu_flag_isShow
+      global menu_flag_time
+      global menu_flag_isMouseOut
       #debug_print(dir(menu))
-      
+      #2021-07-29 按到右下角時，時間重置5秒
+      menu_flag_time = my.time()
       #2021-07-22 當按下右下角肥時，原本如果是 肥 -> 英，全 -> 半 才不會檔到畫面
       if is_ucl() == True:
         uclen_btn_click(uclen_btn) 
@@ -2512,6 +2574,7 @@ class TrayIcon(gtk.StatusIcon):
       menu_items.append(gtk.MenuItem("1.關於肥米輸入法"))
       menu.append( menu_items[len(menu_items)-1] )
       menu_items[len(menu_items)-1].connect("activate", self.m_about) #added by gv - it had nothing before
+      menu_items[len(menu_items)-1].connect("motion_notify_event", self.motion_notify_event)
       
       if gamemode_btn.get_label()=="正常模式":        
         menu_items.append(gtk.MenuItem("2.切換至「遊戲模式」"))
@@ -2519,10 +2582,12 @@ class TrayIcon(gtk.StatusIcon):
         menu_items.append(gtk.MenuItem("2.切換至「正常模式」"))
       menu.append( menu_items[len(menu_items)-1] )
       menu_items[len(menu_items)-1].connect("activate", self.m_game_switch) #added by gv - it had nothing before
+      menu_items[len(menu_items)-1].connect("motion_notify_event", self.motion_notify_event)
 
       menu_items.append(gtk.MenuItem("4.選擇出字模式"))
       menu.append( menu_items[len(menu_items)-1] )
       menu_items[len(menu_items)-1].connect("activate", self.m_none)
+      menu_items[len(menu_items)-1].connect("motion_notify_event", self.motion_notify_event)
       #print(dir(menu_items[len(menu_items)-1]))
       # From : https://www.twblogs.net/a/5beb3c312b717720b51efe87
       sub_menu = gtk.Menu()
@@ -2535,6 +2600,7 @@ class TrayIcon(gtk.StatusIcon):
       sub_menu_items.append(gtk.MenuItem("【%s】正常出字模式" % (is_o)))
       sub_menu.append( sub_menu_items[len(sub_menu_items)-1] )
       sub_menu_items[len(sub_menu_items)-1].connect("activate", self.m_output_type,"DEFAULT")
+      sub_menu_items[len(sub_menu_items)-1].connect("motion_notify_event", self.motion_notify_event)
       
       if DEFAULT_OUTPUT_TYPE=="BIG5":
         is_o = "●"
@@ -2543,6 +2609,7 @@ class TrayIcon(gtk.StatusIcon):
       sub_menu_items.append(gtk.MenuItem("【%s】BIG5模式" % (is_o)))
       sub_menu.append( sub_menu_items[len(sub_menu_items)-1] )
       sub_menu_items[len(sub_menu_items)-1].connect("activate", self.m_output_type,"BIG5")
+      sub_menu_items[len(sub_menu_items)-1].connect("motion_notify_event", self.motion_notify_event)
       
       if DEFAULT_OUTPUT_TYPE=="PASTE":
         is_o = "●"
@@ -2551,8 +2618,10 @@ class TrayIcon(gtk.StatusIcon):
       sub_menu_items.append(gtk.MenuItem("【%s】複製貼上模式" % (is_o)))
       sub_menu.append( sub_menu_items[len(sub_menu_items)-1] )
       sub_menu_items[len(sub_menu_items)-1].connect("activate", self.m_output_type,"PASTE")
+      sub_menu_items[len(sub_menu_items)-1].connect("motion_notify_event", self.motion_notify_event)
       
       menu_items[len(menu_items)-1].set_submenu(sub_menu)
+      menu_items[len(menu_items)-1].connect("motion_notify_event", self.motion_notify_event)
       #sub_menu.show_all()
       #sub_menu.popup(None, None, None, btn, 2)
       #menu_items[len(menu_items)-1].connect("activate", self.m_game_switch) #added by gv - it had nothing before
@@ -2561,48 +2630,115 @@ class TrayIcon(gtk.StatusIcon):
         menu_items.append(gtk.MenuItem("4.【●】使用 CTRL+SPACE 切換輸入法"))
         menu.append( menu_items[len(menu_items)-1] )
         menu_items[len(menu_items)-1].connect("activate", self.m_ctrlsp_switch)
+        menu_items[len(menu_items)-1].connect("motion_notify_event", self.motion_notify_event)
+        
       else:
         menu_items.append(gtk.MenuItem("4.【　】使用 CTRL+SPACE 切換輸入法"))
         menu.append( menu_items[len(menu_items)-1] )
         menu_items[len(menu_items)-1].connect("activate", self.m_ctrlsp_switch)
+        menu_items[len(menu_items)-1].connect("motion_notify_event", self.motion_notify_event)
       
       if config['DEFAULT']['SP'] == "1":
         menu_items.append(gtk.MenuItem("5.【●】顯示短根"))
         menu.append( menu_items[len(menu_items)-1] )
         menu_items[len(menu_items)-1].connect("activate", self.m_sp_switch)
+        menu_items[len(menu_items)-1].connect("motion_notify_event", self.motion_notify_event)
       else:
         menu_items.append(gtk.MenuItem("5.【　】顯示短根"))
         menu.append( menu_items[len(menu_items)-1] )
         menu_items[len(menu_items)-1].connect("activate", self.m_sp_switch)
+        menu_items[len(menu_items)-1].connect("motion_notify_event", self.motion_notify_event)
       
       if config['DEFAULT']['PLAY_SOUND_ENABLE'] == "1":
         menu_items.append(gtk.MenuItem("6.【●】打字音"))
         menu.append( menu_items[len(menu_items)-1] )
         menu_items[len(menu_items)-1].connect("activate", self.m_pm_switch)
+        menu_items[len(menu_items)-1].connect("motion_notify_event", self.motion_notify_event)
       else:
         menu_items.append(gtk.MenuItem("6.【　】打字音"))
         menu.append( menu_items[len(menu_items)-1] )
         menu_items[len(menu_items)-1].connect("activate", self.m_pm_switch)
+        menu_items[len(menu_items)-1].connect("motion_notify_event", self.motion_notify_event)
                         
       menu_items.append(gtk.MenuItem(""))
       menu.append( menu_items[len(menu_items)-1] )
+      menu_items[len(menu_items)-1].connect("motion_notify_event", self.motion_notify_event)
       
       menu_items.append(gtk.MenuItem("離開(Quit)"))
       menu.append( menu_items[len(menu_items)-1] )
       menu_items[len(menu_items)-1].connect("activate", self.m_quit)
+      menu_items[len(menu_items)-1].connect("motion_notify_event", self.motion_notify_event)
 
       #add space
       menu_items.append(gtk.MenuItem(""))
       menu.append( menu_items[len(menu_items)-1] )
-      menu_items.append(gtk.MenuItem(""))
-      menu.append( menu_items[len(menu_items)-1] )
-      menu_items.append(gtk.MenuItem(""))
-      
-      
+      menu_items[len(menu_items)-1].connect("motion_notify_event", self.motion_notify_event)
+
       menu.show_all()      
-      menu.popup(None, None, None, btn, 2) #button can be hardcoded (i.e 1) but time must be correct.      
+      
+      menu.popup(None, None, None, btn, 2) #button can be hardcoded (i.e 1) but time must be correct.
+      menu.connect("motion_notify_event", self.motion_notify_event)
+      #menu.window.get_parent().add_events(gtk.leave_notify_event);
+      menu.connect("leave_notify_event", self.leave_notify_event)
+      #win_menu = gtk.Window(type=gtk.WINDOW_POPUP)
+      #win_menu.set_keep_above(True)
+      ##win_menu.set_keep_below(False)
+      
+      #win_menu_vbox = gtk.VBox(False)
+      #win_menu_vbox.add(menu)
+      #win_menu.add(menu)
+      #win_menu.show_all()
+      
+            
       #menu.reposition()
+      #menu.window.set_opacity(0.8)            
+      #always on top
+      menu.window.set_decorations(False)
+      menu.window.set_keep_above(True)
+      menu.window.set_keep_below(False)
+      
+      
+      menu.window.get_parent().set_keep_above(True)
+      menu.window.get_parent().set_keep_below(False)
+      #print(menu.window.get_parent().get_data("title"))
+      #print(menu)
+      #print(dir(menu.window))
+      #menu.window.set_composited(True)
+      #print(str(menu.window.get_window_type()))
+      #print(dir(menu.window.get_properties()))
+      #print(menu.window.get_name())
+      #print("GGGG")
+      #print(menu.is_composited)
+      #menu.modify_bg(gtk.STATE_NORMAL, gtk.gdk.color_parse('#FF000022'))
+      #menu.window.show()
+      menu_flag_isShow = True
+      menu_flag_time = my.time()
+      #self.screen = menu.window.get_screen()
+      #colormap = self.screen.get_rgba_colormap()
+      menu.window.get_parent().set_opacity(1)
+      menu_flag_isMouseOut = False
+      [ _x,_y ] = menu.window.get_parent().get_position()
+      #print([ _x,_y ])
+      new_x = 0;
+      if _x<230:
+        new_x = _x+200;
+      else:
+        new_x = _x-100;
+        
+      new_y = 0;
+      if _y<200:
+        new_y = _y+150;
+      else:
+        new_y = _y-100;
+      
+      menu.window.get_parent().move( new_x, new_y )
+      #if (colormap is not None and self.screen.is_composited()):
+      #  print "yay"
+      #  menu.window.set_colormap(colormap)
+      #self.screen.set_app_paintable(True)
+      #menu.window.connect("draw", self.area_draw)
       #print(dir(menu))
+      #print(dir(menu.window))
 
   #message("Status Icon Left Clicked")
   #make_menu(event_button, event_time)
@@ -2610,9 +2746,13 @@ class TrayIcon(gtk.StatusIcon):
 #if my.is_file(PWD+"\\UCLLIU.png") == False:
 #  my.file_put_contents(PWD+"\\UCLLIU.png",my.base64_decode(UCL_PIC_BASE64))  
 menu_items = []
-menu = gtk.Menu()  
+menu = gtk.Menu() 
+menu_flag_isShow = False
+menu_flag_isMouseOut = False
+menu_flag_time = my.time() 
 tray = TrayIcon()
 
+#print(dir(tray))
 #icon.set_visible(True)
 # Create menu
 

@@ -29,6 +29,10 @@ class kit:
           return "/"    
     def strlen(self,x):
         return len(x)
+    def time(self):
+        # Return timestamp   
+        import time 
+        return int(time.time())
     def microtime(self):
         import time
         return round(time.time() * 1000)   

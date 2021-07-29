@@ -15,9 +15,9 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2021-07-27 14:03
+<h3>最後更新日期：</h3>2021-07-30 01:54
 <br>
-<h3>版本：</h3>V 1.36<br>
+<h3>版本：</h3>V 1.37<br>
 <br>
 <h3>版權：</h3>
 　免錢的 MIT-License
@@ -500,7 +500,8 @@
   <li>(Done 2021-07-22)121、修正 array_remove_empty_and_trim 異常</li>
   <li>(Done 2021-07-27)123、開啟時，超出螢幕視窗範圍異常，改用各自螢幕範圍偵測</li>
   <li>(Done 2021-07-27)124、修正半途拔插螢幕、改變螢幕位置識別區，輸入框位置自動修正</li>
-  <li>125、右下角選單會被摭檔</li>
-  <li>126、Ctrl + Space 模式，Shift + Space 按著 Shift 無法連續切換「全、半」</li>  
+  <li>(Done 2021-07-30)125、右下角選單會被摭檔</li>
+  <li>126、Ctrl + Space 模式，Shift + Space 按著 Shift 無法連續切換「全、半」</li>
+  <li>127、啟動後，可選擇預設 英/肥</li>  
 </ul>
 <br>
