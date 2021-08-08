@@ -15,16 +15,16 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2021-07-27 14:03
+<h3>最後更新日期：</h3>2021-08-08 23:19
 <br>
-<h3>版本：</h3>V 1.36<br>
+<h3>版本：</h3>V 1.37<br>
 <br>
 <h3>版權：</h3>
 　免錢的 MIT-License
 <br>
 <h3>下載位置：</h3>
-　　1.主程式(1.36 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
-　　2.主程式(1.35 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.35/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.35/uclliu.exe</a><br>
+　　1.主程式(1.37 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
+　　2.主程式(1.36 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.36/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.36/uclliu.exe</a><br>
 　　3.歷年版本：<a target="_blank" href="https://github.com/shadowjohn/UCL_LIU/tree/master/RELEASE">歷代版本</a><br>
 　　4.同音字庫：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt</a><br>
 　　5.打字聲音檔：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip</a> 下載後解開，0~9.wav 與 uclliu.exe 放一起即可
@@ -60,7 +60,8 @@
 　　　　y = 950 # 肥米輸入法最後在螢幕 y 軸位置<br>
 　　　　x = 1239 # 肥米輸入法最後在螢幕 x 軸位置<br>
 　　　　SP = 0 # 是否顯示短根， 0 或 1<br>
-　　　　PLAY_SOUND_ENABLE = 0 # 是否有打字音， 0 或 1<br>
+　　　　play_sound_enable = 0 # 是否有打字音， 0 或 1<br>
+        startup_default_ucl = 1 # 啟動時為「肥模式」，0 = 英模式，1 = 肥模式 
 　　16、環境設定(強列建議)：<br>
 <kbd>
 <img src="screenshot/install/1.png"><br>
@@ -111,76 +112,147 @@
 　　首次使用如果沒有liu.json，會自動進行 tab->cin->json的轉換，tab會自動查找C:\windows\Syswow64\liu-uni.tab 或 C:\\Program Files\\BoshiamyTIP\\liu-uni.tab 或 同目錄下的tab檔。<br>
 <br>
 <br>
-
-    (2018-03-22) V1.2 版，可支援 fcitx 裡的嘸蝦米表格：
-    fcitx-table-boshiamy，如要使用fcitx-table-boshiamy，下載 boshiamy.txt 改名成 fcitx_boshiamy.txt 跟主程式放一起，
-    就可以把fcitx_boshiamy.txt 轉成 liu.cin，再轉 liu.json 來使用。
-    我加了點程式碼，順手把日文的部分修正，原本打 a, = あ，但在 fcitx 要打 ja, 才會出 あ，如果只有打 a, 好像有些亂碼~_~
-    反正就修正了~
+    (2021-08-08) V1.37 版：
+    病毒碼提交掃描：1.37
     
-    (2018-03-27) V1.2 版：
-    修正「英/全」一些按鍵如 win、ctrl、enter 等問題
-    將 cintojson.py 整支重寫，改成此輸入法需要的部分，初始化 cin -> json 速度就不會像以前那麼慢了! 
+    1. 127、將簡、繁轉檔函式獨立成 stts.py
+    2. 128、打字音打太快當機問題修正
+    3. 129、打字音按著鍵會連續音消除
+    4. 130、打字音按鍵支援 space、enter、delete、backspace 聲音
+    5. 131、批踢踢實業坊 - Google Chrome 改成強制 paste 模式
+    6. 132、連 term.ptt.cc 不同瀏覽器標題不同
+        Chrome：批踢踢實業坊 - Google Chrome
+        Brave：批踢踢實業坊 - Brave
+        Edge：批踢踢實業坊 - 個人 - Microsoft? Edge
+        Firefox：批踢踢實業坊 — Mozilla Firefox
+    7. 126、Ctrl + Space 模式，Shift + Space 按著 Shift 無法連續切換「全、半」 # 約 2048 行
+    8. 133、加上預設啟動為英/半的參數 (startup_default_ucl=1)
+    9. 125、右下角選單會被摭檔
+        摭檔改使用 traybar.py、win32_adapter.py
+        # From : https://github.com/Infinidat/infi.systray    
+        # From : https://github.com/gevasiliou/PythonTests/blob/master/TrayAllClicksMenu.py
     
-    (2018-04-05) V1.3 版：
-    修正 putty 在 vim 時，打中文無法正常出字的問題
+    (2021-07-27) V1.36 版：
+    病毒碼提交掃描：1.36 
+    https://www.microsoft.com/en-us/wdsi/submission/24eefe41-3b43-4324-bc31-b5a56a568bb4
+    https://www.microsoft.com/en-us/wdsi/submission/798cb938-a746-4e0c-acb6-09f6919e2029
+    1. 123、開啟時，超出螢幕視窗範圍異常，改用各自螢幕範圍偵測
+    2. 124、修正半途拔插螢幕、改變螢幕位置識別區，輸入框位置自動修正
     
-    (2018-04-08) V1.4 版：
-    支援 Terry_Yong 的 泰瑞版小小輸入法，將 terry_yong.zip 解開，資料夾 mb 裡的 Boshiamy.txt 改名成 terry_boshiamy.txt 跟主程式放一起，
-    就可以把terry_boshiamy.txt 轉成 liu.cin，再轉 liu.json 來使用。
-    此版本筆者測試後，發現無日文，如果不需使用日文是勘用。
-
-    (2018-04-11) V1.5 版：
-    將「英/半」的半透明無置頂，改成置「底」，其他狀況「置頂」
-    改寫gtk.main() 改成 gtk.main_iteration(False) 來處理 UI 更新
-    (感謝老炳幫忙測置頂的bug)
+    (2021-07-22) V1.35 版：
+    病毒碼提交掃描：1.35 https://www.microsoft.com/en-us/wdsi/submission/8b3ea446-54a3-4c86-8a8c-0ea18f6617c8
+    1. 121、修正 array_remove_empty_and_trim 異常     
     
+    (2021-07-22) V1.34 版：
+    病毒碼提交掃描：1.34 https://www.microsoft.com/en-us/wdsi/submission/61c84515-3890-4e51-be52-ab24e8024c93
+    1. 117、當點右下角「肥」叫出選單，應該把「肥」切換成「英」，以免檔到畫面。
+    2. 118、顯示短根，因為分頁的關係故障，如果不是透過選字，不會出現短根，例如：肥 ucl 空白，跟 ucl 0，按 ucl 0 才出現短根
+    3. 119、send_kind_1_paste、send_kind_2_big5 ... 出字方式的執行檔名，要 trim，避免使用者多打了空白、過濾重複值
+    4. 120、當點右下角「肥」叫出選單，應該把「全」切換成「半」，以免檔到畫面。
+    
+    (2021-07-03) V1.33 版：
+    病毒碼提交掃描：1.33 https://www.microsoft.com/en-us/wdsi/submission/a85a1285-faeb-4bb7-a28d-2e850b2c63ea
+    1、vncviewer.exe，不用切換中文
+    2、可以在 UCLLIU.ini 裡設定 send_kind_3_noucl ，需強制 英/半 的軟體，逗號分格，例如 vncviewer.exe,teamviewer.exe
+    3、自定詞庫、符號，選字分頁的問題，例如：,a，或 ,x ，有多頁時，可用 shift + space 換頁
+    
+    (2021-03-22) V1.32 版：
+    病毒碼提交掃描：1.32 https://www.microsoft.com/en-us/wdsi/submission/5149f240-117d-48fe-8231-fbb9e1b43ecd
+    1、修正 英/全 在使用 ctrl+c、ctrl+v 這類的組合鍵異常的問題
+               
+    (2021-03-21) V1.31 版：
+    病毒碼提交掃描：1.31 https://www.microsoft.com/en-us/wdsi/submission/150a4bf2-f22c-4b3a-bfe0-f6e10dd5e2e3
+    1、修正 rime 字根表 liur_Trad.dict.yaml 轉 cin 漏字的問題
+    2、修正 rime 字根表有些字根是 ~ 開頭，如 備、刪
     (2018-04-21) 補充說明：
     因為最近在使用，發現肥米自己關閉，然後整個exe檔消失，查了一下發現被 Windows Defender 誤判為病毒了
     Trojan:Win32/Fuery.A!cl、HackToo:Win32/Keygen
     就把uclliu.exe上傳至微軟自清送驗~
     https://www.microsoft.com/en-us/wdsi/submission/70669843-8642-4b61-bdb2-561243f78af6
-    等了約1小時，就收到 Final determination : Not malware
+    等了約1小時，就收到 Final determination : Not malware     
     
-    (2018-05-05) V1.6 版：
-    (修正)右邊數字鍵的 . 直接輸出即可
-    (修正)移除uclliu_debug，改用 -d 即可進入 debug 模式
-    調整 UI 顯示字型大小
+    (2021-03-20) V1.30 版：
+    病毒碼提交掃描：1.30 https://www.microsoft.com/en-us/wdsi/submission/287899c5-5244-4a2f-a4e9-3c24f7ac3216
+    1、電馭叛客2077，按 shift 應該無效化，遊戲中不用切換中文
+    2、滑鼠事件造成lag與beep聲問題處理
+    3、CTRL+SPACE也可以切換輸入法
+    4、加入 metadata 應用程式詳細說明
+    5、pyaudio 改成要使用時才 import 細節
     
-    (2018-05-08) V1.7 版：
-    (修正)正常模式的字體初始時大小錯誤         
-
-    (2018-06-25) V1.8 版：
-    支援RIME afrink 分享的 liur_trad.dict.yaml 字根表
-
-    (2018-07-04) V1.9 版：
-    增加 ,,,x 與 ,,,z 的功能，在「肥」模式下，反白文字：
-    利用 ,,,x 可以將「文字→字根」，如「肥的好→ucl d gz」
-    利用 ,,,z 可以將「字根→文字」，如「ucl d gz→肥的好」
+    (2020-10-08) V1.29 版：
+    病毒碼提交掃描：1.29 https://www.microsoft.com/en-us/wdsi/submission/8d30cbe3-a2a0-47be-a5e0-7b00f5841e75
+    1、修正 exit 離開會當機的問題
+    2、修正自行編譯 pyhook 發佈失敗的問題
     
-    (2018-07-06) 補充說明：
-    微軟的　Windows Defender 更新後誤判程式是病毒，詳見：screenshot/uclliu_save1.png
-    已提交，判定為 Not malware ，真麻煩 :(
-
-    (2018-07-09) V1.10 版：
-    移除用不到的 win32com、win32com.client ，執行檔變小
-    加速、修正 ,,,x、,,,z 使用 thread 來出字，防止多按一個 z 或 x 的問題
-    修正 ,,,x 大小寫都可以使用 
+    (2020-10-03) V1.28 版：
+    1、修正分頁的內容，如：
+        分頁異常，範例：'hdfu 慢，最後一頁會無法回到第一頁
+        分頁異常，範例：'gtn 某，本來有三個字，只顯示了二個字的問題
+    2、修改 pango 字型，允許韓語字型 Malgun Gothic
+    <img src="screenshot/koera.png"><br>
     
-    (2018-07-12) V1.11 版：
-    可以使用 ,,,c、,,,t 來切換「簡體/繁體」輸入。<br>
-    感謝臺灣碼農的簡繁對照表 https://ithelp.ithome.com.tw/articles/10196695
+    (2020-07-01) V1.27 版：
+    病毒碼提交掃描：1.27 https://www.microsoft.com/en-us/wdsi/submission/e074cf5b-dc2c-40a2-9e6a-45360f497ea8
+    1、SP短字根，可以記憶到UCLLIU.ini
+    2、打字音的開關，可以記憶到UCLLIU.ini   
     
-    (2018-07-12) V1.12 版：
-    可紀錄最後 UI 擺放的位置在 C:\temp\UCLLIU.ini
-    增加使用 ,,,s 將肥米 UI 變窄
-    增加使用 ,,,l 將肥米 UI 變寬
-    增加使用 ,,,+ 將肥米 UI 變大
-    增加使用 ,,,- 將肥米 UI 變小
-    UCLLIU.ini 裡 ZOOM 可設定 0.1 ~ 1.0 來改變 肥 模式下透明度
+    (2020-05-24) V1.26 版：
+    病毒碼提交掃描：1.26 https://www.microsoft.com/en-us/wdsi/submission/1c376497-eabe-45f0-b100-36590351ca39
+    1、同目錄下 1.wav ~ 9.wav 為隨機打字音檔，目錄下任意 wav 都可以讀入
+    2、增加打字音勾選功能
+    3、可以在 UCLLIU.ini 中調整打字音量，KEYBOARD_VOLUME 0~50
+    4、打字聲音檔：https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip 下載後解開，0~9.wav 與 uclliu.exe 放一起即可
     
-    (2018-07-14) V1.13 版：
-    修正 kinza 瀏覽器裡 ptt 打字無法正常的問題
+    (2019-12-03) V1.25 版：
+    病毒碼提交掃描：1.25 https://www.microsoft.com/en-us/wdsi/submission/b7810d0b-cbf5-4710-adb9-bc2a7594d189
+    1、修正 Photoimpact 8、photoimpact X3 無法輸入中文的問題
+    2、(可開關)中文出字後，自動提示最短根
+    
+    (2019-10-26) V1.24 版：                                                                          
+    病毒碼提交掃描：1.24 https://www.microsoft.com/en-us/wdsi/submission/2d8f7570-fd3d-4c3e-9869-331f2f75565e
+    1、修正肥米雙螢幕時，可以在不同螢幕中拖移
+    
+    (2019-10-22) V1.23 版：
+    病毒碼提交掃描：1.23 https://www.microsoft.com/en-us/wdsi/submission/725eeb8a-22cc-42a4-aad2-55f55a4ac13a
+    1、修正肥米的視窗，不會超出螢幕
+    2、按著 Shift 框字時，不會改變 英/肥 的狀態
+    
+    (2019-10-20) V1.22 版：
+    病毒碼提交掃描：1.22 https://www.microsoft.com/en-us/wdsi/submission/1b5d942a-6d11-4d14-907a-3a3ba13b1d63
+    增加右下角 Trayicon 點開功能，允許使用正常出字、BIG5出字、貼上出字
+    使用貼上出字，可以修正 https://term.ptt.cc/ 無法正常輸入中文的問題
+    把 UCLLIU.lock 從 C:\temp 搬到與執行程式同階
+    <img src="screenshot/1_22.png">
+    
+    (2019-07-19) V1.21 版：
+    病毒碼提交掃描：1.21 https://www.microsoft.com/en-us/wdsi/submission/377fd3c3-f176-46bf-b532-4da5dddb9d60
+    在肥模式，輸入字大於 1 以上，按下 esc 鍵，只作刪除所有字根功能。        
+    
+    (2019-05-17) V1.20 版：
+    病毒碼提交掃描：1.20 https://www.microsoft.com/en-us/wdsi/submission/ad55d07c-5a7d-44fe-85f1-db7d3e779f3a    
+    讓使用者可以自定二種出字的方法。
+    修正元「點金靈」軟體無法出字的問題。
+    
+    (2019-04-25) V1.18、V1.19 版：
+    病毒碼提交掃描：1.18 https://www.microsoft.com/en-us/wdsi/submission/9de232c0-7640-4f9c-8a22-578aa3c218be
+    病毒碼提交掃描：1.19 https://www.microsoft.com/en-us/wdsi/submission/1d1895a2-ce1b-4099-b14e-3b5147f34836
+    支援微軟遠端連線，連外部主機時，本機強制使用「英/半」，不會一直彈出來煩。
+    支援Chrome遠端連線，連外部主機時，本機強制使用「英/半」，不會一直彈出來煩。
+    
+    (2019-04-13) V1.17 版：
+    病毒碼提交掃描：https://www.microsoft.com/en-us/wdsi/submission/a3f661ad-7684-42f5-ab5f-6b40e8cbeadd
+    支援小小輸入法臺灣包2018年版wuxiami.txt，http://fygul.blogspot.com/2018/05/yong-tw2018.html 裡linux包中的/tw/wuxiami.txt
+    支援opendesktop提供的萬國蝦米字根檔uniliu.txt，https://github.com/chinese-opendesktop/cin-tables (同fcitx_boshiamy.txt)
+    
+    (2019-03-21) V1.16 版：
+    病毒碼提交掃描：https://www.microsoft.com/en-us/wdsi/submission/f24a0ff0-4975-4ae6-b6c1-40f1d58f5de6
+    修正康和金好康看盤軟體出中文字的問題
+    修正將肥米放入Windows啟動排程，找不到 liu.json 的問題      
+   
+    (2019-03-06) V1.15 版：
+    病毒碼提交掃描：https://www.microsoft.com/en-us/wdsi/submission/99fc1c91-f672-4d69-9d2a-b50ab74fe8b2
+    CapsLock + Backspace 優先刪除 肥模式 打出來的字根
+    CapsLock + Shift 也是穿透
     
     (2019-03-02) V1.14 版：
     病毒碼提交掃描：https://www.microsoft.com/en-us/wdsi/submission/e5cb4092-479b-4188-9978-dea9db49b5ba
@@ -192,122 +264,71 @@
     自定詞庫有斷行的字詞時，能自動斷行
     CapsLook + 任意鍵直接穿透
     修正遊戲「缺氧」打中文字的問題
+        
+    (2018-07-14) V1.13 版：
+    修正 kinza 瀏覽器裡 ptt 打字無法正常的問題
     
-    (2019-03-06) V1.15 版：
-    病毒碼提交掃描：https://www.microsoft.com/en-us/wdsi/submission/99fc1c91-f672-4d69-9d2a-b50ab74fe8b2
-    CapsLock + Backspace 優先刪除 肥模式 打出來的字根
-    CapsLock + Shift 也是穿透
+    (2018-07-12) V1.12 版：
+    可紀錄最後 UI 擺放的位置在 C:\temp\UCLLIU.ini
+    增加使用 ,,,s 將肥米 UI 變窄
+    增加使用 ,,,l 將肥米 UI 變寬
+    增加使用 ,,,+ 將肥米 UI 變大
+    增加使用 ,,,- 將肥米 UI 變小
+    UCLLIU.ini 裡 ZOOM 可設定 0.1 ~ 1.0 來改變 肥 模式下透明度    
     
-    (2019-03-21) V1.16 版：
-    病毒碼提交掃描：https://www.microsoft.com/en-us/wdsi/submission/f24a0ff0-4975-4ae6-b6c1-40f1d58f5de6
-    修正康和金好康看盤軟體出中文字的問題
-    修正將肥米放入Windows啟動排程，找不到 liu.json 的問題      
+    (2018-07-12) V1.11 版：
+    可以使用 ,,,c、,,,t 來切換「簡體/繁體」輸入。<br>
+    感謝臺灣碼農的簡繁對照表 https://ithelp.ithome.com.tw/articles/10196695
+    
+    (2018-07-09) V1.10 版：
+    移除用不到的 win32com、win32com.client ，執行檔變小
+    加速、修正 ,,,x、,,,z 使用 thread 來出字，防止多按一個 z 或 x 的問題
+    修正 ,,,x 大小寫都可以使用 
+    
+    (2018-07-04) V1.9 版：
+    增加 ,,,x 與 ,,,z 的功能，在「肥」模式下，反白文字：
+    利用 ,,,x 可以將「文字→字根」，如「肥的好→ucl d gz」
+    利用 ,,,z 可以將「字根→文字」，如「ucl d gz→肥的好」    
+    (2018-07-06) 補充說明：
+    微軟的　Windows Defender 更新後誤判程式是病毒，詳見：screenshot/uclliu_save1.png
+    已提交，判定為 Not malware ，真麻煩 :(
+        
+    (2018-06-25) V1.8 版：
+    支援RIME afrink 分享的 liur_trad.dict.yaml 字根表
 
-    (2019-04-13) V1.17 版：
-    病毒碼提交掃描：https://www.microsoft.com/en-us/wdsi/submission/a3f661ad-7684-42f5-ab5f-6b40e8cbeadd
-    支援小小輸入法臺灣包2018年版wuxiami.txt，http://fygul.blogspot.com/2018/05/yong-tw2018.html 裡linux包中的/tw/wuxiami.txt
-    支援opendesktop提供的萬國蝦米字根檔uniliu.txt，https://github.com/chinese-opendesktop/cin-tables (同fcitx_boshiamy.txt)
+    (2018-05-08) V1.7 版：
+    (修正)正常模式的字體初始時大小錯誤         
 
-    (2019-04-25) V1.18、V1.19 版：
-    病毒碼提交掃描：1.18 https://www.microsoft.com/en-us/wdsi/submission/9de232c0-7640-4f9c-8a22-578aa3c218be
-    病毒碼提交掃描：1.19 https://www.microsoft.com/en-us/wdsi/submission/1d1895a2-ce1b-4099-b14e-3b5147f34836
-    支援微軟遠端連線，連外部主機時，本機強制使用「英/半」，不會一直彈出來煩。
-    支援Chrome遠端連線，連外部主機時，本機強制使用「英/半」，不會一直彈出來煩。
+    (2018-05-05) V1.6 版：
+    (修正)右邊數字鍵的 . 直接輸出即可
+    (修正)移除uclliu_debug，改用 -d 即可進入 debug 模式
+    調整 UI 顯示字型大小
+    
+    
+    (2018-04-11) V1.5 版：
+    將「英/半」的半透明無置頂，改成置「底」，其他狀況「置頂」
+    改寫gtk.main() 改成 gtk.main_iteration(False) 來處理 UI 更新
+    (感謝老炳幫忙測置頂的bug)    
+    
+    (2018-04-08) V1.4 版：
+    支援 Terry_Yong 的 泰瑞版小小輸入法，將 terry_yong.zip 解開，資料夾 mb 裡的 Boshiamy.txt 改名成 terry_boshiamy.txt 跟主程式放一起，
+    就可以把terry_boshiamy.txt 轉成 liu.cin，再轉 liu.json 來使用。
+    此版本筆者測試後，發現無日文，如果不需使用日文是勘用。             
 
-    (2019-05-17) V1.20 版：
-    病毒碼提交掃描：1.20 https://www.microsoft.com/en-us/wdsi/submission/ad55d07c-5a7d-44fe-85f1-db7d3e779f3a    
-    讓使用者可以自定二種出字的方法。
-    修正元「點金靈」軟體無法出字的問題。
+    (2018-04-05) V1.3 版：
+    修正 putty 在 vim 時，打中文無法正常出字的問題
+    
+    (2018-03-27) V1.2 版：
+    修正「英/全」一些按鍵如 win、ctrl、enter 等問題
+    將 cintojson.py 整支重寫，改成此輸入法需要的部分，初始化 cin -> json 速度就不會像以前那麼慢了!    
+    
+    (2018-03-22) V1.2 版，可支援 fcitx 裡的嘸蝦米表格：
+    fcitx-table-boshiamy，如要使用fcitx-table-boshiamy，下載 boshiamy.txt 改名成 fcitx_boshiamy.txt 跟主程式放一起，
+    就可以把fcitx_boshiamy.txt 轉成 liu.cin，再轉 liu.json 來使用。
+    我加了點程式碼，順手把日文的部分修正，原本打 a, = あ，但在 fcitx 要打 ja, 才會出 あ，如果只有打 a, 好像有些亂碼~_~
+    反正就修正了~
+    
 
-    (2019-07-19) V1.21 版：
-    病毒碼提交掃描：1.21 https://www.microsoft.com/en-us/wdsi/submission/377fd3c3-f176-46bf-b532-4da5dddb9d60
-    在肥模式，輸入字大於 1 以上，按下 esc 鍵，只作刪除所有字根功能。
-    
-    (2019-10-20) V1.22 版：
-    病毒碼提交掃描：1.22 https://www.microsoft.com/en-us/wdsi/submission/1b5d942a-6d11-4d14-907a-3a3ba13b1d63
-    增加右下角 Trayicon 點開功能，允許使用正常出字、BIG5出字、貼上出字
-    使用貼上出字，可以修正 https://term.ptt.cc/ 無法正常輸入中文的問題
-    把 UCLLIU.lock 從 C:\temp 搬到與執行程式同階
-    <img src="screenshot/1_22.png">
-    
-    (2019-10-22) V1.23 版：
-    病毒碼提交掃描：1.23 https://www.microsoft.com/en-us/wdsi/submission/725eeb8a-22cc-42a4-aad2-55f55a4ac13a
-    1、修正肥米的視窗，不會超出螢幕
-    2、按著 Shift 框字時，不會改變 英/肥 的狀態
-    
-    (2019-10-26) V1.24 版：                                                                          
-    病毒碼提交掃描：1.24 https://www.microsoft.com/en-us/wdsi/submission/2d8f7570-fd3d-4c3e-9869-331f2f75565e
-    1、修正肥米雙螢幕時，可以在不同螢幕中拖移
-    
-    (2019-12-03) V1.25 版：
-    病毒碼提交掃描：1.25 https://www.microsoft.com/en-us/wdsi/submission/b7810d0b-cbf5-4710-adb9-bc2a7594d189
-    1、修正 Photoimpact 8、photoimpact X3 無法輸入中文的問題
-    2、(可開關)中文出字後，自動提示最短根
-    
-    (2020-05-24) V1.26 版：
-    病毒碼提交掃描：1.26 https://www.microsoft.com/en-us/wdsi/submission/1c376497-eabe-45f0-b100-36590351ca39
-    1、同目錄下 1.wav ~ 9.wav 為隨機打字音檔，目錄下任意 wav 都可以讀入
-    2、增加打字音勾選功能
-    3、可以在 UCLLIU.ini 中調整打字音量，KEYBOARD_VOLUME 0~50
-    4、打字聲音檔：https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip 下載後解開，0~9.wav 與 uclliu.exe 放一起即可
-    
-    (2020-07-01) V1.27 版：
-    病毒碼提交掃描：1.27 https://www.microsoft.com/en-us/wdsi/submission/e074cf5b-dc2c-40a2-9e6a-45360f497ea8
-    1、SP短字根，可以記憶到UCLLIU.ini
-    2、打字音的開關，可以記憶到UCLLIU.ini
-    
-    (2020-10-03) V1.28 版：
-    1、修正分頁的內容，如：
-        分頁異常，範例：'hdfu 慢，最後一頁會無法回到第一頁
-        分頁異常，範例：'gtn 某，本來有三個字，只顯示了二個字的問題
-    2、修改 pango 字型，允許韓語字型 Malgun Gothic
-    <img src="screenshot/koera.png"><br>
-
-    (2020-10-08) V1.29 版：
-    病毒碼提交掃描：1.29 https://www.microsoft.com/en-us/wdsi/submission/8d30cbe3-a2a0-47be-a5e0-7b00f5841e75
-    1、修正 exit 離開會當機的問題
-    2、修正自行編譯 pyhook 發佈失敗的問題
-    
-    (2021-03-20) V1.30 版：
-    病毒碼提交掃描：1.30 https://www.microsoft.com/en-us/wdsi/submission/287899c5-5244-4a2f-a4e9-3c24f7ac3216
-    1、電馭叛客2077，按 shift 應該無效化，遊戲中不用切換中文
-    2、滑鼠事件造成lag與beep聲問題處理
-    3、CTRL+SPACE也可以切換輸入法
-    4、加入 metadata 應用程式詳細說明
-    5、pyaudio 改成要使用時才 import 細節
-    
-    (2021-03-21) V1.31 版：
-    病毒碼提交掃描：1.31 https://www.microsoft.com/en-us/wdsi/submission/150a4bf2-f22c-4b3a-bfe0-f6e10dd5e2e3
-    1、修正 rime 字根表 liur_Trad.dict.yaml 轉 cin 漏字的問題
-    2、修正 rime 字根表有些字根是 ~ 開頭，如 備、刪
-    
-    (2021-03-22) V1.32 版：
-    病毒碼提交掃描：1.32 https://www.microsoft.com/en-us/wdsi/submission/5149f240-117d-48fe-8231-fbb9e1b43ecd
-    1、修正 英/全 在使用 ctrl+c、ctrl+v 這類的組合鍵異常的問題
-    
-    (2021-07-03) V1.33 版：
-    病毒碼提交掃描：1.33 https://www.microsoft.com/en-us/wdsi/submission/a85a1285-faeb-4bb7-a28d-2e850b2c63ea
-    1、vncviewer.exe，不用切換中文
-    2、可以在 UCLLIU.ini 裡設定 send_kind_3_noucl ，需強制 英/半 的軟體，逗號分格，例如 vncviewer.exe,teamviewer.exe
-    3、自定詞庫、符號，選字分頁的問題，例如：,a，或 ,x ，有多頁時，可用 shift + space 換頁
-
-    (2021-07-22) V1.34 版：
-    病毒碼提交掃描：1.34 https://www.microsoft.com/en-us/wdsi/submission/61c84515-3890-4e51-be52-ab24e8024c93
-    1. 117、當點右下角「肥」叫出選單，應該把「肥」切換成「英」，以免檔到畫面。
-    2. 118、顯示短根，因為分頁的關係故障，如果不是透過選字，不會出現短根，例如：肥 ucl 空白，跟 ucl 0，按 ucl 0 才出現短根
-    3. 119、send_kind_1_paste、send_kind_2_big5 ... 出字方式的執行檔名，要 trim，避免使用者多打了空白、過濾重複值
-    4. 120、當點右下角「肥」叫出選單，應該把「全」切換成「半」，以免檔到畫面。
-                 
-    (2021-07-22) V1.35 版：
-    病毒碼提交掃描：1.35 https://www.microsoft.com/en-us/wdsi/submission/8b3ea446-54a3-4c86-8a8c-0ea18f6617c8
-    1. 121、修正 array_remove_empty_and_trim 異常
-    
-    (2021-07-27) V1.36 版：
-    病毒碼提交掃描：1.36 
-    https://www.microsoft.com/en-us/wdsi/submission/24eefe41-3b43-4324-bc31-b5a56a568bb4
-    https://www.microsoft.com/en-us/wdsi/submission/798cb938-a746-4e0c-acb6-09f6919e2029
-    1. 123、開啟時，超出螢幕視窗範圍異常，改用各自螢幕範圍偵測
-    2. 124、修正半途拔插螢幕、改變螢幕位置識別區，輸入框位置自動修正
     
 <br>
 <h3>開發工具：</h3>
@@ -339,12 +360,14 @@
     <li>pyinstaller 可搭配build.bat製作dist/uclliu.exe檔【pip install pyinstaller==3.4】</li>
     <li>psutil 用來判斷目前視窗跑什麼，如果是putty、pietty、pcman出字方式是貼上，【pip install psutil==5.8.0】</li>
     <li>configparser config UCLLIU.ini 需要用來解 ini 的工具【pip install configparser==4.0.2】</li>
+    <li>stts.py 用來簡、繁轉換的工具，感謝臺灣碼農先生</li>
     <li>(Third party) php.py 羽山比較熟php，所以在python裡實作很多php的函式</li>
     <li>(Third party) portalocker.py 防重複執行，會Lock <s>c:\temp\UCLLIU.lock</s> 1.20 版改成跟 UCLLIU.exe 同目錄下的 UCLLIU.lock</li>
     <li>(Third party) SendKeysCtypes.py 可以送出Unicode的SendKeys</li>
     <li>(Third party) liu_unitab2cin.py 可以將tab轉成cin的檔案，改成支援python2.7的寫法</li>
     <li>(Third party) cintojson.py 可以將cin轉成json的檔案，改成支援python2.7的寫法</li>
     <li>(Third party) cin\phone.cin 同音字表參考新酷音的傳統注音表:https://raw.githubusercontent.com/google/jscin/master/src/tables/phone.cin</li>
+    <li>(Third party) traybar.py、win32_adapter.py 右下角 trayicon 的作法 # From : https://github.com/Infinidat/infi.systray、# From : https://github.com/gevasiliou/PythonTests/blob/master/TrayAllClicksMenu.py</li>
     <li>字碼表亦可參考PIME裡的liu.json</li>
   </ul>
 <br>
@@ -500,7 +523,14 @@
   <li>(Done 2021-07-22)121、修正 array_remove_empty_and_trim 異常</li>
   <li>(Done 2021-07-27)123、開啟時，超出螢幕視窗範圍異常，改用各自螢幕範圍偵測</li>
   <li>(Done 2021-07-27)124、修正半途拔插螢幕、改變螢幕位置識別區，輸入框位置自動修正</li>
-  <li>125、右下角選單會被摭檔</li>
-  <li>126、Ctrl + Space 模式，Shift + Space 按著 Shift 無法連續切換「全、半」</li>  
+  <li>(Done 2021-08-08)125、右下角選單會被摭檔</li>
+  <li>(Done 2021-08-08)126、Ctrl + Space 模式，Shift + Space 按著 Shift 無法連續切換「全、半」</li>
+  <li>(Done 2021-08-08)127、將簡、繁轉檔函式獨立成 stts.py</li>
+  <li>(Done 2021-08-08)128、打字音打太快當機問題修正</li>
+  <li>(Done 2021-08-08)129、打字音按著鍵會連續音消除</li>
+  <li>(Done 2021-08-08)130、打字音按鍵支援 space、enter、delete、backspace 聲音</li>
+  <li>(Done 2021-08-08)131、批踢踢實業坊 - Google Chrome 改成強制 paste 模式</li>
+  <li>(Done 2021-08-08)132、連 term.ptt.cc 不同瀏覽器標題不同</li>
+  <li>(Done 2021-08-08)133、加上預設啟動為英/半的參數</li> 
 </ul>
 <br>
