@@ -1460,8 +1460,8 @@ def senddata(data):
   
   hwnd = win32gui.GetForegroundWindow()
   pid = win32process.GetWindowThreadProcessId(hwnd)
-  #debug_print("Title: -------------------------- ") #批踢踢實業坊 - Google Chrome
-  #debug_print(win32gui.GetWindowText(hwnd))
+  debug_print("Title: -------------------------- ") #批踢踢實業坊 - Google Chrome
+  debug_print(win32gui.GetWindowText(hwnd))
   program_title = win32gui.GetWindowText(hwnd)
   
   pp="";
@@ -1483,7 +1483,7 @@ def senddata(data):
     k = my.strtolower(k)
     exec_proc = my.strtolower(p.exe())
     # 2021-08-08 term.ptt.cc (批踢踢實業坊 - Google Chrome) 改成，強制 paste
-    if my.is_string_like(exec_proc,k) or DEFAULT_OUTPUT_TYPE == "PASTE" or program_title == "批踢踢實業坊 - Google Chrome":  
+    if my.is_string_like(exec_proc,k) or DEFAULT_OUTPUT_TYPE == "PASTE" or program_title == my.utf8tobig5(u"批踢踢實業坊 - Google Chrome"):  
       check_kind="1"      
       
       win32clipboard.OpenClipboard()
