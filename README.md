@@ -15,16 +15,16 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2021-07-27 14:03
+<h3>最後更新日期：</h3>2021-08-08 23:19
 <br>
-<h3>版本：</h3>V 1.36<br>
+<h3>版本：</h3>V 1.37<br>
 <br>
 <h3>版權：</h3>
 　免錢的 MIT-License
 <br>
 <h3>下載位置：</h3>
-　　1.主程式(1.36 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
-　　2.主程式(1.35 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.35/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.35/uclliu.exe</a><br>
+　　1.主程式(1.37 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
+　　2.主程式(1.36 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.36/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.36/uclliu.exe</a><br>
 　　3.歷年版本：<a target="_blank" href="https://github.com/shadowjohn/UCL_LIU/tree/master/RELEASE">歷代版本</a><br>
 　　4.同音字庫：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt</a><br>
 　　5.打字聲音檔：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip</a> 下載後解開，0~9.wav 與 uclliu.exe 放一起即可
@@ -60,7 +60,8 @@
 　　　　y = 950 # 肥米輸入法最後在螢幕 y 軸位置<br>
 　　　　x = 1239 # 肥米輸入法最後在螢幕 x 軸位置<br>
 　　　　SP = 0 # 是否顯示短根， 0 或 1<br>
-　　　　PLAY_SOUND_ENABLE = 0 # 是否有打字音， 0 或 1<br>
+　　　　play_sound_enable = 0 # 是否有打字音， 0 或 1<br>
+        startup_default_ucl = 1 # 啟動時為「肥模式」，0 = 英模式，1 = 肥模式 
 　　16、環境設定(強列建議)：<br>
 <kbd>
 <img src="screenshot/install/1.png"><br>
@@ -125,6 +126,11 @@
         Edge：批踢踢實業坊 - 個人 - Microsoft? Edge
         Firefox：批踢踢實業坊 — Mozilla Firefox
     7. 126、Ctrl + Space 模式，Shift + Space 按著 Shift 無法連續切換「全、半」 # 約 2048 行
+    8. 133、加上預設啟動為英/半的參數 (startup_default_ucl=1)
+    9. 125、右下角選單會被摭檔
+        摭檔改使用 traybar.py、win32_adapter.py
+        # From : https://github.com/Infinidat/infi.systray    
+        # From : https://github.com/gevasiliou/PythonTests/blob/master/TrayAllClicksMenu.py
     
     (2021-07-27) V1.36 版：
     病毒碼提交掃描：1.36 
@@ -354,12 +360,14 @@
     <li>pyinstaller 可搭配build.bat製作dist/uclliu.exe檔【pip install pyinstaller==3.4】</li>
     <li>psutil 用來判斷目前視窗跑什麼，如果是putty、pietty、pcman出字方式是貼上，【pip install psutil==5.8.0】</li>
     <li>configparser config UCLLIU.ini 需要用來解 ini 的工具【pip install configparser==4.0.2】</li>
+    <li>stts.py 用來簡、繁轉換的工具，感謝臺灣碼農先生</li>
     <li>(Third party) php.py 羽山比較熟php，所以在python裡實作很多php的函式</li>
     <li>(Third party) portalocker.py 防重複執行，會Lock <s>c:\temp\UCLLIU.lock</s> 1.20 版改成跟 UCLLIU.exe 同目錄下的 UCLLIU.lock</li>
     <li>(Third party) SendKeysCtypes.py 可以送出Unicode的SendKeys</li>
     <li>(Third party) liu_unitab2cin.py 可以將tab轉成cin的檔案，改成支援python2.7的寫法</li>
     <li>(Third party) cintojson.py 可以將cin轉成json的檔案，改成支援python2.7的寫法</li>
     <li>(Third party) cin\phone.cin 同音字表參考新酷音的傳統注音表:https://raw.githubusercontent.com/google/jscin/master/src/tables/phone.cin</li>
+    <li>(Third party) traybar.py、win32_adapter.py 右下角 trayicon 的作法 # From : https://github.com/Infinidat/infi.systray、# From : https://github.com/gevasiliou/PythonTests/blob/master/TrayAllClicksMenu.py</li>
     <li>字碼表亦可參考PIME裡的liu.json</li>
   </ul>
 <br>
@@ -515,13 +523,14 @@
   <li>(Done 2021-07-22)121、修正 array_remove_empty_and_trim 異常</li>
   <li>(Done 2021-07-27)123、開啟時，超出螢幕視窗範圍異常，改用各自螢幕範圍偵測</li>
   <li>(Done 2021-07-27)124、修正半途拔插螢幕、改變螢幕位置識別區，輸入框位置自動修正</li>
-  <li>125、右下角選單會被摭檔</li>
+  <li>(Done 2021-08-08)125、右下角選單會被摭檔</li>
   <li>(Done 2021-08-08)126、Ctrl + Space 模式，Shift + Space 按著 Shift 無法連續切換「全、半」</li>
   <li>(Done 2021-08-08)127、將簡、繁轉檔函式獨立成 stts.py</li>
   <li>(Done 2021-08-08)128、打字音打太快當機問題修正</li>
   <li>(Done 2021-08-08)129、打字音按著鍵會連續音消除</li>
   <li>(Done 2021-08-08)130、打字音按鍵支援 space、enter、delete、backspace 聲音</li>
   <li>(Done 2021-08-08)131、批踢踢實業坊 - Google Chrome 改成強制 paste 模式</li>
-  <li>(Done 2021-08-08)132、連 term.ptt.cc 不同瀏覽器標題不同</li> 
+  <li>(Done 2021-08-08)132、連 term.ptt.cc 不同瀏覽器標題不同</li>
+  <li>(Done 2021-08-08)133、加上預設啟動為英/半的參數</li> 
 </ul>
 <br>

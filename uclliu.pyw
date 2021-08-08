@@ -22,6 +22,9 @@ import random
 import pyaudio
 import audioop
 import wave
+
+#2021-08-08 新版右下角 traybar
+from traybar import SysTrayIcon
 paudio_player = pyaudio.PyAudio()
 # 播放打字音用
 #from pydub import AudioSegment
@@ -45,8 +48,12 @@ f_big5_arr = [ "zip32w","daqkingcon.exe","EWinner.exe" ]
 # 2021-07-03 vncviewer.exe 不需要肥米
 f_pass_app = [ "mstsc.exe","Cyberpunk2077.exe","vncviewer.exe" ]
 
+my = php.kit()
+PWD = os.path.dirname(os.path.realpath(sys.argv[0]))
+
 # 2019-10-20 增加出字模式
-UCL_PIC_BASE64 = "AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAMIOAADCDgAAAAAAAAAAAAD////////////////////////////////////////////////////////////////////////////////////////////////+/v7//Pz8//v7+//7+/v//f39////////////////////////////////////////////////////////////1s7B/1pVU/9PT0//Tk5Q/56rtP/Cua7/bGlp/2pqa/9tbGz/ampp/25xd//R2eL//////////////////////8O1of8kIyn/fYCD/0A0Lf9vgZD/kIJv/yUrMv9WUEr/FBcd/19eXv8fHR//q7zL///////////////////////CtKH/MDE4/6qwt/9zZFf/boCP/49/bf9VZXf/v7Ok/y0zP//T09P/QDcw/6q7yv//////////////////////w7Wj/yEcGv8pKy//OTUy/3GCkf+Pf23/VWV3/7+zo/8sMz//09PS/0A3MP+qu8r//////////////////////8KzoP84O0H/b2to/y4pJf9wgpH/j4Bt/1BfcP+1qpv/KjA7/8fHx/89NC//qrvK///////////////////////Cs6D/O0FM/9HS0f9IOi//boGQ/5KCcP8UFhn/Ly0p/w0PEv80MzP/FRcc/62+zP//////////////////////wrOh/zI1Ov9hXFT/AwAB/3GDk/+QgW//NkBK/6iqrP+trKz/qqqq/62vs//l6u///////////////////////76vnf8aFhb/Mzs+/0M9OP9wgpD/j39t/1Fhc//7//////////////////////////////////////////////+vnYv/QUtX/9ff3/96alv/bX+P/49/bf9RYHL/+/7/////////////v7Ko/5ifqf/7/v//////////////////inhn/19vgf//////fGpa/21/jv+Of23/UWBy//v+/////////////4Z0Yv9KWmv/+f3/////////////+/bv/1pNQv+Kmaf/samg/z01L/93iZn/n5B+/ygrMf93eXr/fHx8/3p4dv8vKib/eIqc//////////////////37+P/Mycf/5+rt/9HMxv+zs7X/3uPo/+zo4/+4trT/srKy/7Kysv+ysrL/tba5/+Tp7v//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="
+UCL_PIC_BASE64 = "AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAACUWAAAlFgAAAAAAAAAAAAD/////+Pf4//n6+//8+/n/4ebh/+3y8f////////////n69v/u9Ov/6u7o/+ru6P/q7+n/8vjy//7+////////+vTu/5W0e/+w1cv/1Na0/1mxPP9mvWL/0+bm/+fk0/+BwmD/YsVI/16+Rv9evkb/X8BG/2jGWP+01cX///////bu5v9wq0D/cbmQ/9jhyf+h1oP/Rq4t/5LAuv+xtIf/Qagu/4fMg/+d3I7/m9uO/5zXif9juzf/Vatp/+ny+f///f3/nbFt/1OoZP/t9v3/7O3Y/1StOf+LvbT/pKd5/06sU//i7ff/////////////////p7Z7/0WnSP/U5e3//////7/MkP9NqE7/2+Tv/+vt2P9Trjn/jL21/6Wnef9OrFP/4+73/////////////////8bCnv9kqmD/0uPo///////MyKr/Q4k1/22cbf+uza7/VK47/4y9tf+lp3n/TqxT/+Pu9//////////////////18e3/7fDv//7+////////zsKu/0WbKP9HqTD/TLM7/0CqMP+NvbX/pad5/06sVP/j7vf//////////////////////////////////////87Crf9IoTX/m76j/2auOv81sCT/jb22/6Wne/9FrzT/iNKC/5faiP+X2of/ldmG/5TWiv/G3NT////////////Owq3/R6Az/7zh2v/H0Kj/Ragr/4y9tf+mp3z/QK8l/1y6Rf9IsCT/QrUw/165Qv9AriH/jbap////////////zsKt/0miNv+St5X/erBj/0iqM/+MvbX/pad6/02rUP/S1tn/cZRC/1yydv/g2tH/Zacx/4u4qf///////////87Crv9InS7/VZtD/0edPf9EpjT/jL21/6Wnef9PrVT/3uDo/3SVRf9guHz/7+ff/2mqM/+Lt6n////////////Owq7/R50o/1WkTf+Gsoz/VK48/4y9tf+lp3n/T61U/97g6P90lUX/YLd8/+/n3/9pqjP/i7ep////////////zsKt/0egM/+z1tD/4uHR/1StOf+MvbX/pad6/06tUv/X3eD/cpZE/122ef/n49f/Z6oy/4u3qf///////////87Crf9CnSP/Yaha/3SlVf89pCf/jLy0/6Sne/8/sCb/ZMVQ/0qyKP9EujX/aMVN/0SxIv+Mtqn////////////b0MX/dppZ/2+mVv9uplb/bJ9d/67Jyf/LyrX/icJ2/4jId/+KyXn/ish5/4jId/+Hw3v/vtDO/////////////f39//n1+P/59Pf/+fT3//n1+P/8/P3///7///77/v/++/7//vv+//77/v/++/7//vv+///+////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="
+ICON_PATH = PWD + "\\icon.ico"
 DEFAULT_OUTPUT_TYPE = "DEFAULT"
 #BIG5
 #PASTE
@@ -54,7 +61,7 @@ DEFAULT_OUTPUT_TYPE = "DEFAULT"
 #import pywinauto             
 #pwa = pywinauto.keyboard
 
-my = php.kit()
+
 
 # 2021-08-08 將簡、繁轉換抽離成獨立 class
 mystts = stts.kit()
@@ -110,7 +117,6 @@ def md5_file(fileName):
 
 
 #PWD=my.pwd()   
-PWD = os.path.dirname(os.path.realpath(sys.argv[0]))
 #my.file_put_contents("c:\\temp\\aaa.txt",PWD);
 #debug_print(PWD)
 #sys.exit(0)
@@ -234,7 +240,8 @@ config['DEFAULT'] = {
                       "KEYBOARD_VOLUME": "30", #打字聲音量，0~100
                       "SP": "0", #短根
                       "CTRL_SP": "0", #使用CTRL+SPACE換肥米
-                      "PLAY_SOUND_ENABLE": "0" #打字音
+                      "PLAY_SOUND_ENABLE": "0", #打字音
+                      "STARTUP_DEFAULT_UCL": "1" #啟動時，預設為 肥，改為 0 則為 英
                     };
 if my.is_file(INI_CONFIG_FILE):
   _config = configparser.ConfigParser()
@@ -254,6 +261,7 @@ config['DEFAULT']['KEYBOARD_VOLUME'] = str(int(config['DEFAULT']['KEYBOARD_VOLUM
 config['DEFAULT']['SP'] = str(int(config['DEFAULT']['SP']));
 config['DEFAULT']['CTRL_SP'] = str(int(config['DEFAULT']['CTRL_SP']));
 config['DEFAULT']['PLAY_SOUND_ENABLE'] = str(int(config['DEFAULT']['PLAY_SOUND_ENABLE']));
+config['DEFAULT']['STARTUP_DEFAULT_UCL'] = str(int(config['DEFAULT']['STARTUP_DEFAULT_UCL']));
 
 # merge f_arr and f_big5_arr
 config['DEFAULT']['SEND_KIND_1_PASTE'] = my.trim(config['DEFAULT']['SEND_KIND_1_PASTE'])
@@ -316,6 +324,11 @@ if int(config['DEFAULT']['PLAY_SOUND_ENABLE'])<=0:
   config['DEFAULT']['PLAY_SOUND_ENABLE']="0"  
 else:
   config['DEFAULT']['PLAY_SOUND_ENABLE']="1"  
+
+if int(config['DEFAULT']['STARTUP_DEFAULT_UCL'])<=0:
+  config['DEFAULT']['STARTUP_DEFAULT_UCL']="0"  
+else:
+  config['DEFAULT']['STARTUP_DEFAULT_UCL']="1"    
 
 # GUI Font
 GLOBAL_FONT_FAMILY = "Mingliu,Malgun Gothic,roman" #roman
@@ -811,7 +824,7 @@ for i in range(0,len(wavs)):
     o_song[ wavs[i] ]["lastKey"]=8;
   elif o_song[ wavs[i] ]["mainname"] == "space" or o_song[ wavs[i] ]["mainname"] == "sp":
     o_song[ wavs[i] ]["lastKey"]=32;
-debug_print(my.json_encode(o_song))                      
+#debug_print(my.json_encode(o_song))                      
 #debug_print(PWD)
 #debug_print(list(m_song))
 #my.exit()
@@ -1156,18 +1169,23 @@ def is_simple():
   return simple_btn.get_visible()
       
 def gamemode_btn_click(self):
-  global gamemode_btn 
+  global gamemode_btn
+  global tray 
   if gamemode_btn.get_label()=="正常模式":
     gamemode_btn.set_label("遊戲模式")
     if uclen_btn.get_label() == "肥":
       uclen_btn_click(uclen_btn)    
   else:
     gamemode_btn.set_label("正常模式")
+  tray.reload_tray()
 def x_btn_click(self):
   print("Bye Bye");
   global tray
-  #global menu  
-  tray.set_visible(False)
+  #global menu
+  #2021-08-08 no need change tray ?
+  tray.systray.shutdown();
+  #print(dir(tray))  
+  #tray.set_visible(False)
   #menu.set_visible(False)
   ctypes.windll.user32.PostQuitMessage(0)
   #atexit.register(cleanup)
@@ -2406,31 +2424,154 @@ def message(data=None):
   msg.run()
   msg.destroy()
 
-# From : https://github.com/gevasiliou/PythonTests/blob/master/TrayAllClicksMenu.py
-class TrayIcon(gtk.StatusIcon):
+
+class TrayIcon():
+    systray = ""
     def __init__(self):
       global VERSION
       global PWD
       global UCL_PIC_BASE64
-      gtk.StatusIcon.__init__(self)
-      #self.set_from_icon_name('help-about')
-      #debug_print(PWD+"\\UCLLIU.png")
+      global my
+      global ICON_PATH
       # base64.b64decode
       # From : https://sourceforge.net/p/matplotlib/mailman/message/20449481/
-      raw_data = base64.decodestring(UCL_PIC_BASE64)
-      #debug_print(gtk.gdk.Pixbuf)
-      w = 16
-      h = 16
-      img_pixbuf = gtk.gdk.pixbuf_new_from_data(
-              raw_data, gtk.gdk.COLORSPACE_RGB, True, 8, w, h, w*4)
-
-      self.set_from_pixbuf(img_pixbuf)
-      self.set_tooltip("肥米輸入法：%s" % (VERSION))
-      self.set_has_tooltip(True)
-      self.set_visible(True)
-      self.connect("button-press-event", self.on_click)
-
-    def m_about(self,data=None):  # if i ommit the data=none section python complains about too much arguments passed on greetme
+      raw_data = base64.decodestring(UCL_PIC_BASE64)      
+      #if my.is_file(ICON_PATH) == False:
+      my.file_put_contents(ICON_PATH,raw_data,False)
+      self.reload_tray()  
+    def reload_tray(self):
+      global config
+      global ICON_PATH
+      global NOW_VOLUME
+      global DEFAULT_OUTPUT_TYPE           
+      menu_options = (
+          ("1.關於肥米輸入法", None, [self.m_about] ),
+          
+        )
+      if gamemode_btn.get_label()=="正常模式":
+        menu_options = menu_options + ((
+          ("2.切換至「遊戲模式」", None, [self.m_game_switch] ),
+          
+        ))                
+      else:
+        menu_options = menu_options + ((
+          ("2.切換至「正常模式」", None, [self.m_game_switch] ),
+          
+        ))                
+      #if is_play_music==True:
+      #  menu_options = menu_options + (("2.【●】打字音", None, [self.m_pm_switch]),)
+      #else:
+      #  menu_options = menu_options + (("2.【　】打字音", None, [self.m_pm_switch]),)
+      
+      # 接下來作打字音
+      '''
+      sound_level_list = ()
+      for i in range(0,11):        
+        v = i*10
+        real_v = i*100        
+        is_o = "　"
+        if NOW_VOLUME == real_v:
+          is_o = "●"
+        if i == 0:
+          sound_level_list = sound_level_list + (('【%s】靜音' % (is_o) , None, [self.m_change_volume,real_v] ),)
+        else:
+          sound_level_list = sound_level_list + (("【%s】%s %%" % (is_o,v), None, [self.m_change_volume,real_v]),)
+                                                     
+      menu_options = menu_options + ((
+                ('3.打字音大小', None, sound_level_list),))
+      '''
+      
+      ucl_send_kind_list = ()
+      is_o = ""
+      if DEFAULT_OUTPUT_TYPE=="DEFAULT":
+        is_o = "●"
+      else:
+        is_o = "　"
+      ucl_send_kind_list = ucl_send_kind_list + (('【%s】正常出字模式' % (is_o) , None, [self.m_output_type,"DEFAULT"] ),)      
+      
+      
+      if DEFAULT_OUTPUT_TYPE=="BIG5":
+        is_o = "●"
+      else:
+        is_o = "　"
+      ucl_send_kind_list = ucl_send_kind_list + (('【%s】BIG5模式' % (is_o) , None, [self.m_output_type,"BIG5"] ),)
+      
+      if DEFAULT_OUTPUT_TYPE=="PASTE":
+        is_o = "●"
+      else:
+        is_o = "　"
+      ucl_send_kind_list = ucl_send_kind_list + (('【%s】複製貼上模式' % (is_o) , None, [self.m_output_type,"PASTE"] ),)
+      
+        
+      menu_options = menu_options + ((
+                ('3.選擇出字模式', None, ucl_send_kind_list),))       
+      if config['DEFAULT']['CTRL_SP'] == "1":
+        menu_options = menu_options + ((
+          ("4.【●】使用 CTRL+SPACE 切換輸入法", None, [self.m_ctrlsp_switch] ),          
+        ))          
+      else:
+        menu_options = menu_options + ((
+          ("4.【　】使用 CTRL+SPACE 切換輸入法", None, [self.m_ctrlsp_switch] ),          
+        ))  
+      
+      if config['DEFAULT']['SP'] == "1":        
+        menu_options = menu_options + ((
+          ("5.【●】顯示短根", None, [self.m_sp_switch] ),
+          
+        ))   
+      else:              
+        menu_options = menu_options + ((
+          ("5.【　】顯示短根", None, [self.m_sp_switch] ),          
+        ))   
+        
+      if config['DEFAULT']['PLAY_SOUND_ENABLE'] == "1":
+        menu_options = menu_options + ((
+          ("6.【●】打字音", None, [self.m_pm_switch] ),          
+        ))           
+      else:
+        menu_options = menu_options + ((
+          ("6.【　】打字音", None, [self.m_pm_switch] ),          
+        ))      
+      if config['DEFAULT']['STARTUP_DEFAULT_UCL'] == "1":
+        menu_options = menu_options + ((
+          ("7.【●】啟動預設為「肥」模式", None, [self.m_sdu_switch] ),          
+        ))          
+      else:
+        menu_options = menu_options + ((
+          ("7.【　】啟動預設為「肥」模式", None, [self.m_sdu_switch] ),          
+        ))        
+        
+      menu_options = menu_options + (("8. 離開(Quit)", None, [self.m_quit]),)
+      if self.systray=="":
+        self.systray = SysTrayIcon(ICON_PATH, "肥米輸入法：%s" % (VERSION) , menu_options) #, on_quit=self.m_quit)
+        self.systray.start()
+      else:        
+        self.systray.update(menu_options=menu_options)
+    def m_sdu_switch(self,event,data=None):
+      #啟動時，預設為肥模式，或英模式
+      global config      
+      if config['DEFAULT']['STARTUP_DEFAULT_UCL'] == "0":
+         config['DEFAULT']['STARTUP_DEFAULT_UCL'] = "1"
+      else:
+         config['DEFAULT']['STARTUP_DEFAULT_UCL'] = "0"
+      #切換後，都要存設定
+      saveConfig()    
+      self.reload_tray()        
+    def m_output_type(self,event,kind="DEFAULT"):
+      global DEFAULT_OUTPUT_TYPE
+      debug_print(kind)
+      DEFAULT_OUTPUT_TYPE = kind[0]
+      self.reload_tray() 
+    def m_sp_switch(self,event,data=None):
+      global config
+      if config['DEFAULT']['SP'] == "0":        
+        config['DEFAULT']['SP']="1"
+      else:
+        config['DEFAULT']['SP']="0"
+      #切換後，都要存設定
+      saveConfig()
+      self.reload_tray()        
+    def m_about(self,event,data=None):  # if i ommit the data=none section python complains about too much arguments passed on greetme
       message = gtk.MessageDialog(type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK)
       message.set_position(gtk.WIN_POS_CENTER_ALWAYS)
       message.set_keep_above(True)
@@ -2453,6 +2594,67 @@ class TrayIcon(gtk.StatusIcon):
         type_label_set_text()
         toAlphaOrNonAlpha()
         #return False
+    def m_ctrlsp_switch(self,event,data=None):
+      global config
+      if config['DEFAULT']['CTRL_SP'] == "0":        
+        config['DEFAULT']['CTRL_SP']="1"
+      else:
+        config['DEFAULT']['CTRL_SP']="0"
+      #切換後，都要存設定
+      saveConfig()
+      self.reload_tray()                           
+    def m_game_switch(self,event,data=None):
+      global gamemode_btn_click
+      global gamemode_btn
+      gamemode_btn_click(gamemode_btn)   
+      self.reload_tray()       
+    def m_pm_switch(self,event,data=None):
+      global config
+      #is_play_music
+      if config['DEFAULT']['PLAY_SOUND_ENABLE'] == "0":
+         config['DEFAULT']['PLAY_SOUND_ENABLE'] = "1"
+      else:
+         config['DEFAULT']['PLAY_SOUND_ENABLE'] = "0"
+      #切換後，都要存設定
+      saveConfig()
+      self.reload_tray()       
+    def m_quit(self,event,data=None):
+      #self.systray.shutdown()      
+      x_btn_click(self) 
+      #self.reload_tray()  
+    def m_none(self,data=None):
+      return False
+    def m_change_volume(self,event,new_volume):
+      global NOW_VOLUME      
+      NOW_VOLUME = new_volume[0]      
+      #然後播一下新的聲音大小
+      play_sound()
+      self.reload_tray()    
+# From : https://github.com/gevasiliou/PythonTests/blob/master/TrayAllClicksMenu.py
+'''class TrayIcon_old(gtk.StatusIcon):
+    def __init__(self):
+      global VERSION
+      global PWD
+      global UCL_PIC_BASE64
+      gtk.StatusIcon.__init__(self)
+      #self.set_from_icon_name('help-about')
+      #debug_print(PWD+"\\UCLLIU.png")
+      # base64.b64decode
+      # From : https://sourceforge.net/p/matplotlib/mailman/message/20449481/
+      raw_data = base64.decodestring(UCL_PIC_BASE64)
+      #debug_print(gtk.gdk.Pixbuf)
+      w = 16
+      h = 16
+      img_pixbuf = gtk.gdk.pixbuf_new_from_data(
+              raw_data, gtk.gdk.COLORSPACE_RGB, True, 8, w, h, w*4)
+
+      self.set_from_pixbuf(img_pixbuf)
+      self.set_tooltip("肥米輸入法：%s" % (VERSION))
+      self.set_has_tooltip(True)
+      self.set_visible(True)
+      self.connect("button-press-event", self.on_click)
+
+    
     def m_sp_switch(self,data=None):
       global config
       if config['DEFAULT']['SP'] == "0":        
@@ -2478,10 +2680,15 @@ class TrayIcon(gtk.StatusIcon):
          config['DEFAULT']['PLAY_SOUND_ENABLE'] = "0"
       #切換後，都要存設定
       saveConfig()
-    def m_game_switch(self,data=None):
-      global gamemode_btn_click
-      global gamemode_btn
-      gamemode_btn_click(gamemode_btn)      
+    def m_sdu_switch(self,data=None):
+      #啟動時，預設為肥模式，或英模式
+      global config      
+      if config['DEFAULT']['STARTUP_DEFAULT_UCL'] == "0":
+         config['DEFAULT']['STARTUP_DEFAULT_UCL'] = "1"
+      else:
+         config['DEFAULT']['STARTUP_DEFAULT_UCL'] = "0"
+      #切換後，都要存設定
+      saveConfig()    
     def m_quit(self,data=None):
       self.set_visible(False)      
       x_btn_click(self)
@@ -2596,7 +2803,16 @@ class TrayIcon(gtk.StatusIcon):
         menu_items.append(gtk.MenuItem("6.【　】打字音"))
         menu.append( menu_items[len(menu_items)-1] )
         menu_items[len(menu_items)-1].connect("activate", self.m_pm_switch)
-                        
+      
+      if config['DEFAULT']['STARTUP_DEFAULT_UCL'] == "1":
+        menu_items.append(gtk.MenuItem("7.【●】啟動預設為「肥」模式"))
+        menu.append( menu_items[len(menu_items)-1] )
+        menu_items[len(menu_items)-1].connect("activate", self.m_sdu_switch)
+      else:
+        menu_items.append(gtk.MenuItem("7.【　】啟動預設為「肥」模式"))
+        menu.append( menu_items[len(menu_items)-1] )
+        menu_items[len(menu_items)-1].connect("activate", self.m_sdu_switch)
+                          
       menu_items.append(gtk.MenuItem(""))
       menu.append( menu_items[len(menu_items)-1] )
       
@@ -2619,11 +2835,14 @@ class TrayIcon(gtk.StatusIcon):
 
   #message("Status Icon Left Clicked")
   #make_menu(event_button, event_time)
+'''  
 # 生成肥圖片
 #if my.is_file(PWD+"\\UCLLIU.png") == False:
 #  my.file_put_contents(PWD+"\\UCLLIU.png",my.base64_decode(UCL_PIC_BASE64))  
-menu_items = []
-menu = gtk.Menu()  
+#menu_items = []
+#menu = gtk.Menu()  
+#tray = TrayIcon()
+# generator tray
 tray = TrayIcon()
 
 #icon.set_visible(True)
@@ -2649,7 +2868,9 @@ win.set_focus(None)
 #uclen_btn_click(uclen_btn)
 
 #set_interval(1)
-
+if config['DEFAULT']['STARTUP_DEFAULT_UCL'] == "0":
+  # 2021-08-08 使用者希望啟動時，為 英 模式
+  uclen_btn_click(uclen_btn)
 #gtk.main()
 updateGUI_Step = 0
 def updateGUI():
@@ -2664,7 +2885,8 @@ def updateGUI():
 while True:
   time.sleep(0.01)
   #debug_print("gg")
-  updateGUI()      
+  updateGUI()
+        
 pythoncom.PumpMessages()     
 
 #mainloop()
