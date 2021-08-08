@@ -119,6 +119,11 @@
     3. 129、打字音按著鍵會連續音消除
     4. 130、打字音按鍵支援 space、enter、delete、backspace 聲音
     5. 131、批踢踢實業坊 - Google Chrome 改成強制 paste 模式
+    6. 132、連 term.ptt.cc 不同瀏覽器標題不同
+        Chrome：批踢踢實業坊 - Google Chrome
+        Brave：批踢踢實業坊 - Brave
+        Edge：批踢踢實業坊 - 個人 - Microsoft? Edge
+        Firefox：批踢踢實業坊 — Mozilla Firefox
     
     (2021-07-27) V1.36 版：
     病毒碼提交掃描：1.36 
@@ -515,6 +520,7 @@
   <li>(Done 2021-08-08)128、打字音打太快當機問題修正</li>
   <li>(Done 2021-08-08)129、打字音按著鍵會連續音消除</li>
   <li>(Done 2021-08-08)130、打字音按鍵支援 space、enter、delete、backspace 聲音</li>
-  <li>(Done 2021-08-08)131、批踢踢實業坊 - Google Chrome 改成強制 paste 模式</li> 
+  <li>(Done 2021-08-08)131、批踢踢實業坊 - Google Chrome 改成強制 paste 模式</li>
+  <li>(Done 2021-08-08)132、連 term.ptt.cc 不同瀏覽器標題不同</li> 
 </ul>
 <br>
