@@ -116,7 +116,8 @@
 <br>
 <pre>
     (2021-08-08) V1.37 版：
-    病毒碼提交掃描：1.37 https://www.microsoft.com/en-us/wdsi/submission/62e6a4b7-b393-47d3-bbc9-f484a162da22    
+    病毒碼提交掃描：1.37 
+    https://www.microsoft.com/en-us/wdsi/submission/7c767f2e-0b1b-4f04-abe0-9b346fe426c6
     1. 127、將簡、繁轉檔函式獨立成 stts.py
     2. 128、打字音打太快當機問題修正
     3. 129、打字音按著鍵會連續音消除

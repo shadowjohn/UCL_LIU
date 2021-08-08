@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import ctypes
 import ctypes.wintypes
 import locale
@@ -84,6 +85,7 @@ LOCALE_ENCODING = locale.getpreferredencoding()
 
 
 def encode_for_locale(s):
+    #return s.encode('big5');
     """
     Encode text items for system locale. If encoding fails, fall back to ASCII.
     """
