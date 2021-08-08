@@ -1623,21 +1623,21 @@ def use_pinyi(data):
   word_label_set_text()
   #finds=my.str_replace(data," ",finds)
   #finds=my.str_replace("  "," ",finds)
-def OnMouseEvent(event):
-  global flag_is_shift_down
-  global flag_is_play_otherkey
-  global hm
-  #if flag_is_shift_down==True:
-    #如果同時按著 shift 時，滑鼠有操作就視窗按別的鍵 ok
-  if event.MessageName == "mouse left down" or event.MessageName == "mouse right down" :
-    #flag_is_shift_down=False
-    flag_is_play_otherkey=True
-    #debug_print(('MessageName: %s' % (event.MessageName)))
-    #debug_print(('Message: %s' % (event.Message))) 
-    #debug_print("Debug event MouseA")
-    #debug_print(flag_is_play_otherkey)
-    #hm.UnhookMouse()
-  return True
+#def OnMouseEvent(event):
+#  global flag_is_shift_down
+#  global flag_is_play_otherkey
+#  global hm
+#  #if flag_is_shift_down==True:
+#    #如果同時按著 shift 時，滑鼠有操作就視窗按別的鍵 ok
+#  if event.MessageName == "mouse left down" or event.MessageName == "mouse right down" :
+#    #flag_is_shift_down=False
+#    flag_is_play_otherkey=True
+#    #debug_print(('MessageName: %s' % (event.MessageName)))
+#    #debug_print(('Message: %s' % (event.Message))) 
+#    #debug_print("Debug event MouseA")
+#    #debug_print(flag_is_play_otherkey)
+#    #hm.UnhookMouse()
+#  return True
 
 # run always thread  
 # 2021-08-08 修正 打字音按著鍵會連續音消除
@@ -2045,7 +2045,8 @@ def OnKeyboardEvent(event):
       else:
         hf_btn_click(hf_btn)
         flag_is_play_otherkey=True
-        flag_is_shift_down=False    
+        #2021-08-08 修正 shift+space shift 按著，空白連按，無法連續切換
+        #flag_is_shift_down=False    
         debug_print("Debug13")
         return False         
         

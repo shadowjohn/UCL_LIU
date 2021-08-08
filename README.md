@@ -124,6 +124,7 @@
         Brave：批踢踢實業坊 - Brave
         Edge：批踢踢實業坊 - 個人 - Microsoft? Edge
         Firefox：批踢踢實業坊 — Mozilla Firefox
+    7. 126、Ctrl + Space 模式，Shift + Space 按著 Shift 無法連續切換「全、半」 # 約 2048 行
     
     (2021-07-27) V1.36 版：
     病毒碼提交掃描：1.36 
@@ -515,7 +516,7 @@
   <li>(Done 2021-07-27)123、開啟時，超出螢幕視窗範圍異常，改用各自螢幕範圍偵測</li>
   <li>(Done 2021-07-27)124、修正半途拔插螢幕、改變螢幕位置識別區，輸入框位置自動修正</li>
   <li>125、右下角選單會被摭檔</li>
-  <li>126、Ctrl + Space 模式，Shift + Space 按著 Shift 無法連續切換「全、半」</li>
+  <li>(Done 2021-08-08)126、Ctrl + Space 模式，Shift + Space 按著 Shift 無法連續切換「全、半」</li>
   <li>(Done 2021-08-08)127、將簡、繁轉檔函式獨立成 stts.py</li>
   <li>(Done 2021-08-08)128、打字音打太快當機問題修正</li>
   <li>(Done 2021-08-08)129、打字音按著鍵會連續音消除</li>
