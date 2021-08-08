@@ -15,7 +15,7 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2021-08-08 23:19
+<h3>最後更新日期：</h3>2021-08-09 01:48
 <br>
 <h3>版本：</h3>V 1.37<br>
 <br>
@@ -134,6 +134,7 @@
         摭檔改使用 traybar.py、win32_adapter.py
         # From : https://github.com/Infinidat/infi.systray    
         # From : https://github.com/gevasiliou/PythonTests/blob/master/TrayAllClicksMenu.py
+    10. 134、編譯階段移除用不到的pyd，可省一點點exe空間
     
     (2021-07-27) V1.36 版：
     病毒碼提交掃描：1.36 
@@ -534,6 +535,7 @@
   <li>(Done 2021-08-08)130、打字音按鍵支援 space、enter、delete、backspace 聲音</li>
   <li>(Done 2021-08-08)131、批踢踢實業坊 - Google Chrome 改成強制 paste 模式</li>
   <li>(Done 2021-08-08)132、連 term.ptt.cc 不同瀏覽器標題不同</li>
-  <li>(Done 2021-08-08)133、加上預設啟動為英/半的參數</li> 
+  <li>(Done 2021-08-08)133、加上預設啟動為英/半的參數</li>
+  <li>(Done 2021-08-09)134、編譯階段移除用不到的pyd，可省一點點exe空間</li> 
 </ul>
 <br>
