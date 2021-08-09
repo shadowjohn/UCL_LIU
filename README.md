@@ -117,7 +117,7 @@
 <pre>
     (2021-08-08) V1.37 版：
     病毒碼提交掃描：1.37 
-    https://www.microsoft.com/en-us/wdsi/submission/7c767f2e-0b1b-4f04-abe0-9b346fe426c6
+    https://www.microsoft.com/en-us/wdsi/submission/6401cdef-aea5-4490-a1f1-f9d511bd9b29
     1. 127、將簡、繁轉檔函式獨立成 stts.py
     2. 128、打字音打太快當機問題修正
     3. 129、打字音按著鍵會連續音消除
@@ -407,21 +407,21 @@
   <li>(Done)1、(嚴重)「送出字元」的方法，試了很多send key一直無法解決 send unicode的問題，暫時使用「剪貼簿」的Ctrl+V來實作貼上文字的功能</li>
   <li>(Done 2017-07-16)2、「英文全形」輸入時，有些組合鍵如 Alt+tab還尚未決定</li>
   <li>(Done)3、py2exe包成一支exe改用pyinstaller代替</li>
-  <li>4、尚有些按鍵會讓「英/肥」切來切去，暫未處理</li>
+  <li>(Done 2019-12-03)4、尚有些按鍵會讓「英/肥」切來切去，暫未處理</li>
   <li>(Done)5、離開程式的按鈕</li>
   <li>(Done)6、支援V鍵選第二個字</li>
   <li>(Done)7、「」【】這種框框應該也要支援</li>
   <li>(Done)8、sendkey時，判斷window id，如果該id是putty、pcman，改成shift+ins作文字貼上</li>
   <li>(Done)9、「英/半」時，加上調整opacity值，讓肥米變透明(Opacity 0.2)</li>
   <li>(Done)10、增加提示沒有liu.json時的錯誤警告</li>
-  <li>11、輸出字後，可以[提示簡根字]，以便提升打字速度</li>
+  <li>(Done 2019-12-03)11、輸出字後，可以[提示簡根字]，以便提升打字速度</li>
   <li>(Done 2017-07-18)12、同音字查詢，使用 pinyi.txt</li>
   <li>(Done 2017-07-12)13、寫一篇如何把tab->cin->json的教學(已有自動轉檔了)</li>
   <li>(Done)14、支援把tab跟UCLLIU放一起就可以自動使用、轉檔的功能</li>
   <li>15、缺碼查詢，如lom[、lom]</li>
   <li>(Done 2017-07-15)16、在「英/全」的模式時，無法按 Shift 切換回「肥/全」</li>
   <li>(Done 2017-07-31)17、在「肥/全」的「冒號、分號、空白」應該是要出全形字</li>
-  <li>18、tab->cin->json有點久，所以預計再加一個字根檔轉換中的進度畫面</li>
+  <li>(Done 2021-08-08)18、tab->cin->json有點久，所以預計再加一個字根檔轉換中的進度畫面</li>
   <li>(Done 2017-07-13)19、V鍵出字，有些字如果V是尾根，會有打不出來的問題，如「截」jaqv，會變成「戟」，「截」會完全打不出來。回(oov)，變成要打「ooo2」</li>
   <li>(Done 2017-07-13)20、修正打錯字根時，後面的字沒清掉的問題</li>
   <li>(Done 2017-07-13)21、修正用滑鼠點「肥/英」時，字根未清除的問題</li>
@@ -498,7 +498,7 @@
   <li>(Done 2019-10-22)92、當按著 Shift + 滑鼠框選時，不要改變輸入法的狀態【英/肥】切換</li>
   <li>(Done 2019-10-22)93、切換解析度時，如果肥米超過螢幕範圍時，自動回到螢幕右下角的位置</li>
   <li>(Done 2019-10-26)94、修正肥米雙螢幕時，可以在不同螢幕中拖移</li>
-  <li>95、Trayicon的zindex要作調整到置頂</li>
+  <li>(Done 2021-08-08)95、Trayicon的zindex要作調整到置頂</li>
   <li>(Done 2019-10-29)96、修正 Photoimpact 8、photoimpact X3 無法輸入中文的問題</li>
   <li>(Done 2019-12-03)97、中文出字後，自動提示最短根</li>
   <li>(Done 2020-05-24)98、增加打字聲音功能</li>
@@ -536,6 +536,8 @@
   <li>(Done 2021-08-08)131、批踢踢實業坊 - Google Chrome 改成強制 paste 模式</li>
   <li>(Done 2021-08-08)132、連 term.ptt.cc 不同瀏覽器標題不同</li>
   <li>(Done 2021-08-08)133、加上預設啟動為英/半的參數</li>
-  <li>(Done 2021-08-09)134、編譯階段移除用不到的pyd，可省一點點exe空間</li> 
+  <li>(Done 2021-08-09)134、編譯階段移除用不到的pyd，可省一點點exe空間</li>
+  <li>135、https://www.csie.ntu.edu.tw/~b92025/liu/ 裡的 liu-uni.tab 異常，利用 MD5 排除</li>
+  <li>136、注音查詢功能</li>   
 </ul>
 <br>
