@@ -15,16 +15,16 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2021-08-09 01:48
+<h3>最後更新日期：</h3>2021-08-11 16:36
 <br>
-<h3>版本：</h3>V 1.37<br>
+<h3>版本：</h3>V 1.38<br>
 <br>
 <h3>版權：</h3>
 　免錢的 MIT-License
 <br>
 <h3>下載位置：</h3>
-　　1.主程式(1.37 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
-　　2.主程式(1.36 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.36/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.36/uclliu.exe</a><br>
+　　1.主程式(1.38 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
+　　2.主程式(1.37 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.37/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.37/uclliu.exe</a><br>
 　　3.歷年版本：<a target="_blank" href="https://github.com/shadowjohn/UCL_LIU/tree/master/RELEASE">歷代版本</a><br>
 　　4.同音字庫：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt</a><br>
 　　5.打字聲音檔：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip</a> 下載後解開，0~9.wav 與 uclliu.exe 放一起即可
@@ -115,6 +115,11 @@
 <br>
 <br>
 <pre>
+    (2021-08-11) V1.38 版：
+    病毒碼提交掃描：1.38
+    1. 138、肥米輸入法如果使用中文路徑，右下角icon會出不來
+    2. 139、如果可以隱藏或不產生 icon.ico 檔 
+    
     (2021-08-08) V1.37 版：
     病毒碼提交掃描：1.37 
     https://www.microsoft.com/en-us/wdsi/submission/6401cdef-aea5-4490-a1f1-f9d511bd9b29
@@ -540,9 +545,9 @@
   <li>135、https://www.csie.ntu.edu.tw/~b92025/liu/ 裡的 liu-uni.tab 異常，利用 MD5 排除</li>
   <li>136、注音查詢功能</li>
   <li>137、相關字詞功能，如輸入：我，出現「們、的、...」</li>
-  <li>138、肥米輸入法如果使用中文路徑，右下角icon會出不來</li>
-  <li>139、如果可以隱藏或不產生 icon.ico 檔</li>
-  <li>140、程式exe檔自帶 logo</li>
-  <li>141、檢查與修正選了其他地區啟動肥米時，會造成crash</li>     
+  <li>(Done 2021-08-11)138、肥米輸入法如果使用中文路徑，右下角icon會出不來</li>
+  <li>(Done 2021-08-11)139、如果可以隱藏或不產生 icon.ico 檔</li>
+  <li>(Done 2021-08-11)140、程式exe檔自帶 logo</li>
+  <li>(Done 2021-08-11)141、檢查與修正選了其他地區啟動肥米時，會造成crash，經檢查沒有發生</li>     
 </ul>
 <br>

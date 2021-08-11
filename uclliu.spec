@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['uclliu.pyw'],
-             pathex=['C:\\Users\\John-Home\\Desktop\\UCL_LIU'],
+             pathex=['C:\\Users\\john.GIS\\Desktop\\UCLLIU'],
              binaries=[],
              datas=[],
              hiddenimports=[],
@@ -30,4 +30,4 @@ exe = EXE(pyz,
           upx=True,
           upx_exclude=[],
           runtime_tmpdir=None,
-          console=False , version='metadata.txt')
+          console=False , version='metadata.txt', icon='pic\\uclliu_logo.ico')
