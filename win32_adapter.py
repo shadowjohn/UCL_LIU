@@ -84,18 +84,14 @@ SZTIP_MAX_LENGTH = 128
 LOCALE_ENCODING = locale.getpreferredencoding()
 
 
-def encode_for_locale(s):
-    # Fix By FeatherMountain
-    # No need encode anything...
-    return s
+def encode_for_locale(s):        
     #return s.encode('big5');
     #"""
-    #Encode text items for system locale. If encoding fails, fall back to ASCII.
-    #"""
-    #try:
-    #    return s.encode(LOCALE_ENCODING, 'ignore')
-    #except (AttributeError, UnicodeDecodeError):
-    #    return s.decode('ascii', 'ignore').encode(LOCALE_ENCODING)
+    #Encode text items for system locale. If encoding fails, fall back to ASCII.    
+    try:
+        return s.encode(LOCALE_ENCODING, 'ignore')
+    except (AttributeError, UnicodeDecodeError):
+        return s.decode('ascii', 'ignore').encode(LOCALE_ENCODING)
 
 POINT = ctypes.wintypes.POINT
 RECT = ctypes.wintypes.RECT

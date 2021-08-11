@@ -8,6 +8,8 @@ import time
 import win32gui
 #import win32api
 #import win32con
+import php
+my = php.kit();
 class SysTrayIcon(object):
     """
     menu_options: tuple of tuples (menu text, menu icon path or None, function name)
@@ -198,21 +200,30 @@ class SysTrayIcon(object):
             self._hicon = 0
 
         # Try and find a custom icon
-        hicon = 0
+        hicon = 0             
         if self._icon is not None and os.path.isfile(self._icon):
             icon_flags = LR_LOADFROMFILE | LR_DEFAULTSIZE
-            icon = encode_for_locale(self._icon)
+            #icon = encode_for_locale(self._icon)
+            icon = self._icon
             hicon = self._hicon = LoadImage(0, icon, IMAGE_ICON, 0, 0, icon_flags)
+            #print(hicon)
+            if my.is_file(icon)==True:
+              try:
+                # Remove icon after load.
+                my.unlink(icon)
+                #pass
+              except:
+                pass
             #ico_x = win32api.GetSystemMetrics(win32con.SM_CXSMICON)
             #ico_y = win32api.GetSystemMetrics(win32con.SM_CYSMICON)
             #hicon = self._hicon = win32gui.LoadImage(0, icon, win32con.IMAGE_ICON, ico_x, ico_y,  win32con.LR_LOADFROMFILE)
             #print(win32con.IMAGE_ICON)
             #print(ico_y)
-            self._icon_shared = False
-
+            self._icon_shared = False        
         # Can't find icon file - using default shared icon
         if hicon == 0:
             self._hicon = LoadIcon(0, IDI_APPLICATION)
+            print(self._hicon)
             self._icon_shared = True
             self._icon = None
 
@@ -296,7 +307,8 @@ class SysTrayIcon(object):
                 InsertMenuItem(menu, 0, 1,  ctypes.byref(item))
 
     def _prep_menu_icon(self, icon):
-        icon = encode_for_locale(icon)
+        #icon = encode_for_locale(icon)
+        icon = icon
         # First load the icon.
         ico_x = GetSystemMetrics(SM_CXSMICON)
         ico_y = GetSystemMetrics(SM_CYSMICON)

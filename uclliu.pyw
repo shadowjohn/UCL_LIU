@@ -2438,20 +2438,26 @@ class TrayIcon():
     def __init__(self):
       global VERSION
       global PWD
-      global UCL_PIC_BASE64
+      #global UCL_PIC_BASE64
       global my
       global ICON_PATH
       # base64.b64decode
       # From : https://sourceforge.net/p/matplotlib/mailman/message/20449481/
       raw_data = base64.decodestring(UCL_PIC_BASE64)      
       #if my.is_file(ICON_PATH) == False:
-      my.file_put_contents(ICON_PATH,raw_data,False)
+      #2021-08-11
+      #生小圖，等會載入完就移除
+      try:
+        my.file_put_contents(ICON_PATH,raw_data,False)
+      except:
+        pass
       self.reload_tray()  
     def reload_tray(self):
       global config
       global ICON_PATH
       global NOW_VOLUME
-      global DEFAULT_OUTPUT_TYPE           
+      global DEFAULT_OUTPUT_TYPE
+      global UCL_PIC_BASE64           
       menu_options = (
           ("1.關於肥米輸入法", None, [self.m_about] ),          
         )
@@ -2548,7 +2554,10 @@ class TrayIcon():
         
       menu_options = menu_options + (("8. 離開(Quit)", None, [self.m_quit]),)
       if self.systray=="":
-        self.systray = SysTrayIcon(ICON_PATH, "肥米輸入法：%s" % (VERSION) , menu_options) #, on_quit=self.m_quit)
+        #ICON_PATH
+        #UCL_PIC_BASE64
+        #"data:image/png;base64,"
+        self.systray = SysTrayIcon(ICON_PATH, "肥米輸入法：%s" % (VERSION) , menu_options) #, on_quit=self.m_quit)        
         self.systray.start()
       else:        
         self.systray.update(menu_options=menu_options)
