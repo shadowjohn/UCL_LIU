@@ -61,7 +61,7 @@
 　　　　x = 1239 # 肥米輸入法最後在螢幕 x 軸位置<br>
 　　　　SP = 0 # 是否顯示短根， 0 或 1<br>
 　　　　play_sound_enable = 0 # 是否有打字音， 0 或 1<br>
-        startup_default_ucl = 1 # 啟動時為「肥模式」，0 = 英模式，1 = 肥模式 
+        startup_default_ucl = 1 # 程式啟動時為「肥模式」，0 = 英模式，1 = 肥模式 
 　　16、環境設定(強列建議)：<br>
 <kbd>
 <img src="screenshot/install/1.png"><br>
@@ -118,7 +118,8 @@
     (2021-08-11) V1.38 版：
     病毒碼提交掃描：1.38
     1. 138、肥米輸入法如果使用中文路徑，右下角icon會出不來
-    2. 139、如果可以隱藏或不產生 icon.ico 檔 
+    2. 139、如果可以隱藏或不產生 icon.ico 檔
+    3. 135、https://www.csie.ntu.edu.tw/~b92025/liu/ 裡的 liu-uni.tab 異常，利用 MD5 排除 
     
     (2021-08-08) V1.37 版：
     病毒碼提交掃描：1.37 
@@ -542,7 +543,7 @@
   <li>(Done 2021-08-08)132、連 term.ptt.cc 不同瀏覽器標題不同</li>
   <li>(Done 2021-08-08)133、加上預設啟動為英/半的參數</li>
   <li>(Done 2021-08-09)134、編譯階段移除用不到的pyd，可省一點點exe空間</li>
-  <li>135、https://www.csie.ntu.edu.tw/~b92025/liu/ 裡的 liu-uni.tab 異常，利用 MD5 排除</li>
+  <li>(Done 2021-08-20)135、https://www.csie.ntu.edu.tw/~b92025/liu/ 裡的 liu-uni.tab 異常，利用 MD5 排除</li>
   <li>136、注音查詢功能</li>
   <li>137、相關字詞功能，如輸入：我，出現「們、的、...」</li>
   <li>(Done 2021-08-11)138、肥米輸入法如果使用中文路徑，右下角icon會出不來</li>

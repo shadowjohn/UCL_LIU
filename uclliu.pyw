@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.37
+VERSION=1.38
 import portalocker
 import os
 import sys
@@ -766,6 +766,19 @@ if is_need_trans_tab==True:
       my.exit()
     #message.show()
     gtk.main()
+  # 2021-08-20 135、https://www.csie.ntu.edu.tw/~b92025/liu/ 裡的 liu-uni.tab 異常，利用 MD5 排除
+  if md5_file( ("%s\\liu-uni.tab" % (PWD)) )== "41c458e859524613ca5e958f3d809b86":
+    message = gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)
+    message.set_markup("此組字根檔 (b92025) 並非主字根檔 liu-uni.tab，不支援...");
+    response = message.run()
+    #debug_print(gtk.ResponseType.BUTTONS_OK)
+    if response == -5 or response == -4:
+      ctypes.windll.user32.PostQuitMessage(0)
+      #atexit.register(cleanup)
+      #os.killpg(0, signal.SIGKILL)
+      my.exit()
+    #message.show()
+    gtk.main()
   if md5_file( ("%s\\liu-uni.tab" % (PWD)) )== "260312958775300438497e366b277cb4":
     message = gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK)
     message.set_markup("此組字根檔並非正常的 liu-uni.tab，這個不支援...");
@@ -799,6 +812,7 @@ flag_shift_down_microtime=0
 flag_isCTRLSPACE=False
 play_ucl_label=""
 ucl_find_data=[]
+pinyi_version=0 #初版
 same_sound_data=[] #同音字表
 same_sound_index=0 #預設第零頁
 same_sound_max_word=6 #一頁最多五字
@@ -872,7 +886,9 @@ if my.is_file(PWD + "\\liu.json") == False:
   gtk.main()
   #my.exit()
 if my.is_file(PWD + "\\pinyi.txt")==True:
-  same_sound_data = my.explode("\n",my.trim(my.file_get_contents(PWD + "\\pinyi.txt")))  
+  same_sound_data = my.explode("\n",my.trim(my.file_get_contents(PWD + "\\pinyi.txt")))
+  if my.is_string_like(same_sound_data[0],"VERSION_0.01"):
+      pinyi_version = "0.01";
   
 uclcode = my.json_decode(my.file_get_contents(PWD + "\\liu.json"))
 
@@ -1615,12 +1631,21 @@ def use_pinyi(data):
   global same_sound_max_word
   global is_has_more_page
   global debug_print
+  global pinyi_version
   finds=""
-  for k in same_sound_data:
+  range_start = 0;
+  if pinyi_version == "0.01":
+    range_start = 2
+  for i in range(range_start,len(same_sound_data)):
+    k = same_sound_data[i]
     if my.is_string_like(k,data):
       #if k.startswith(u'\xe7\x9a\x84'):
       #  k = u[1:]
-      finds="%s%s " % (finds,my.trim(k))
+      if pinyi_version == "0.01":
+        m = my.explode(" ",my.trim(k))        
+        finds="%s%s " % (finds,my.implode(" ",m[1:]))
+      else:
+        finds="%s%s " % (finds,my.trim(k))
       #debug_print(k)
   finds=my.trim(finds);
   finds=my.explode(" ",finds)
@@ -1628,6 +1653,9 @@ def use_pinyi(data):
   #finds=finds[:] 
   #for k in finds:
   #  debug_print(k.encode("UTF-8"))
+  # 2021-08-20 如果是 pinyi_version = "0.01" 版，移除第一組
+  if pinyi_version == "0.01":
+    finds = finds[1:]
   finds = my.array_unique(finds)
   #debug_print("Debug data: %s " % data.encode("UTF-8"))
   debug_print("Debug Finds: %d " % len(finds))
