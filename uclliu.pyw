@@ -812,7 +812,7 @@ flag_shift_down_microtime=0
 flag_isCTRLSPACE=False
 play_ucl_label=""
 ucl_find_data=[]
-pinyi_version=0 #初版
+pinyi_version="0" #初版
 same_sound_data=[] #同音字表
 same_sound_index=0 #預設第零頁
 same_sound_max_word=6 #一頁最多五字
@@ -1398,6 +1398,7 @@ def show_search():
   global ucl_find_data
   global ucl_find_data_orin_arr
   global is_need_use_pinyi
+  global is_need_use_phone
   global is_has_more_page
   global same_sound_index
   global same_sound_last_word
@@ -1415,10 +1416,11 @@ def show_search():
   # 此部分可以修正 V 可以出第二字，還不錯
   # 2017-07-13 Fix when V is last code
   #debug_print("LAST V : %s" % (c[-1]))
-  is_need_use_pinyi=False  
+  is_need_use_pinyi=False
+  #is_need_use_phone=False  
   if c[0] == "'" and len(c)>1:
     c=c[1:]
-    is_need_use_pinyi=True
+    is_need_use_pinyi=True       
   if c not in uclcode["chardefs"] and c[-1]=='v' and c[:-1] in uclcode["chardefs"] and len(uclcode["chardefs"][c[:-1]])>=2 :
     #debug_print("Debug V1")
     ucl_find_data = uclcode["chardefs"][c[:-1]][1]   
@@ -1654,8 +1656,8 @@ def use_pinyi(data):
   #for k in finds:
   #  debug_print(k.encode("UTF-8"))
   # 2021-08-20 如果是 pinyi_version = "0.01" 版，移除第一組
-  if pinyi_version == "0.01":
-    finds = finds[1:]
+  #if pinyi_version == "0.01":
+  #  finds = finds[1:]
   finds = my.array_unique(finds)
   #debug_print("Debug data: %s " % data.encode("UTF-8"))
   debug_print("Debug Finds: %d " % len(finds))
@@ -1799,11 +1801,22 @@ def OnKeyboardEvent(event):
     #debug_print("Title: -------------------------- ") #批踢踢實業坊 - Google Chrome
     #debug_print(win32gui.GetWindowText(hwnd))
     
+    if event.MessageName == "key down":
+      if is_ucl() and my.strtolower(last_key[-2:])=="';":
+        type_label_set_text("注:")        
+        is_need_use_pinyi = False
+        is_need_use_phone = True
+        play_ucl_label=""
+        ucl_find_data=[]        
+        #word_label_set_text()
+        #word_label.set_label("")
+        toAlphaOrNonAlpha() 
+        return False   
     
     if event.MessageName == "key up":    
           
       last_key = last_key + chr(event.Ascii)
-      last_key = last_key[-10:]
+      last_key = last_key[-10:]   
       if my.strtolower(last_key[-4:])==",,,c":
         play_ucl_label=""
         ucl_find_data=[]
