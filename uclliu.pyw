@@ -1799,10 +1799,11 @@ def OnKeyboardEvent(event):
       return True
     
     #debug_print("Title: -------------------------- ") #批踢踢實業坊 - Google Chrome
-    #debug_print(win32gui.GetWindowText(hwnd))
-    
-    if event.MessageName == "key down":
+    #debug_print(win32gui.GetWindowText(hwnd))         
+  
+    if event.MessageName == "key up":    
       if is_ucl() and my.strtolower(last_key[-2:])=="';":
+        debug_print("key up 注:")
         type_label_set_text("注:")        
         is_need_use_pinyi = False
         is_need_use_phone = True
@@ -1811,10 +1812,7 @@ def OnKeyboardEvent(event):
         #word_label_set_text()
         #word_label.set_label("")
         toAlphaOrNonAlpha() 
-        return False   
-    
-    if event.MessageName == "key up":    
-          
+        return False            
       last_key = last_key + chr(event.Ascii)
       last_key = last_key[-10:]   
       if my.strtolower(last_key[-4:])==",,,c":
@@ -2260,12 +2258,27 @@ def OnKeyboardEvent(event):
           else:
             return True
       elif event.MessageName == "key down" and ( event.Ascii==58 or event.Ascii==59 or event.Ascii==123 or event.Ascii==125 or event.Ascii==40 or event.Ascii==41 or event.Ascii==43 or event.Ascii==126 or event.Ascii==33 or event.Ascii==64 or event.Ascii==35 or event.Ascii==36 or event.Ascii==37 or event.Ascii==94 or event.Ascii==38 or event.Ascii==42 or event.Ascii==95 or event.Ascii==60 or event.Ascii==62 or event.Ascii==63 or event.Ascii==34 or event.Ascii==124 or event.Ascii==47 or event.Ascii==45) : # : ;｛｝（）＋～！＠＃＄％＾＆＊＿＜＞？＂｜／－
+        debug_print("Debug for '; ")
+        debug_print("event.Ascii")
+        debug_print(event.Ascii)
+        debug_print(is_need_use_pinyi)
+        c = my.strtolower(play_ucl_label)
+        c = my.trim(c)
         #修正 肥/全 時，按分號、冒號只出半型的問題
         if is_hf(None)==False:        
           kac = event.Ascii        
           k = widen(chr(kac))
           senddata(k)
           debug_print("Debug22")
+          return False
+        elif event.Ascii==59 and c[0]=="'": # '; 的 ;
+          debug_print("Debug221_OK")
+          is_need_use_pinyi = False
+          is_need_use_phone = True
+          play_ucl_label=""
+          ucl_find_data=[]
+          type_label_set_text("注:")
+          toAlphaOrNonAlpha()
           return False
         else:
           debug_print("Debug22OK")
