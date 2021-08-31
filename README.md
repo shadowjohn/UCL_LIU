@@ -118,6 +118,7 @@
 <pre>
     (2021-08-31) V1.38 版：
     病毒碼提交掃描：1.38
+    https://www.microsoft.com/en-us/wdsi/submission/68bb7af9-532a-44e0-b9cb-e47e788c7378
     1. 138、肥米輸入法如果使用中文路徑，右下角icon會出不來
     2. 139、如果可以隱藏或不產生 icon.ico 檔
     3. 135、https://www.csie.ntu.edu.tw/~b92025/liu/ 裡的 liu-uni.tab 異常，利用 MD5 排除
