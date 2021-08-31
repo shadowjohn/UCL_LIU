@@ -30,4 +30,4 @@ exe = EXE(pyz,
           upx=True,
           upx_exclude=[],
           runtime_tmpdir=None,
-          console=False , version='metadata.txt')
+          console=False , version='metadata.txt', icon='pic\\uclliu_logo.ico')

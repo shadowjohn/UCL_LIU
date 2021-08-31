@@ -84,11 +84,10 @@ SZTIP_MAX_LENGTH = 128
 LOCALE_ENCODING = locale.getpreferredencoding()
 
 
-def encode_for_locale(s):
+def encode_for_locale(s):        
     #return s.encode('big5');
-    """
-    Encode text items for system locale. If encoding fails, fall back to ASCII.
-    """
+    #"""
+    #Encode text items for system locale. If encoding fails, fall back to ASCII.    
     try:
         return s.encode(LOCALE_ENCODING, 'ignore')
     except (AttributeError, UnicodeDecodeError):

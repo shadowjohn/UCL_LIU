@@ -15,16 +15,16 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2021-08-09 01:48
+<h3>最後更新日期：</h3>2021-08-11 16:36
 <br>
-<h3>版本：</h3>V 1.37<br>
+<h3>版本：</h3>V 1.38<br>
 <br>
 <h3>版權：</h3>
 　免錢的 MIT-License
 <br>
 <h3>下載位置：</h3>
-　　1.主程式(1.37 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
-　　2.主程式(1.36 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.36/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.36/uclliu.exe</a><br>
+　　1.主程式(1.38 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
+　　2.主程式(1.37 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.37/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.37/uclliu.exe</a><br>
 　　3.歷年版本：<a target="_blank" href="https://github.com/shadowjohn/UCL_LIU/tree/master/RELEASE">歷代版本</a><br>
 　　4.同音字庫：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt</a><br>
 　　5.打字聲音檔：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip</a> 下載後解開，0~9.wav 與 uclliu.exe 放一起即可
@@ -40,16 +40,17 @@
 　　5、未來使用的話，就把uclliu.exe、作好的字根檔liu.json帶著走，四處都能打肥米輸入法了<br>
 　　6、下載 pinyi.txt 與 uclliu.exe 放一起執行，同音字庫，如「'pns」，會出現「0你 1妳 2擬 3禰 4儗 5旎...」同音選擇。<br>
 　　(還是要再強調一次，不要用義守大學FTP裡的那個liu-uni.tab，建議可以安裝正版嘸蝦米後在C:\windows\Syswow64裡找到)<br>
-　　7、「正常模式」=「,,,unlock」：平常打字用。<br>
-　　8、「遊戲模式」=「,,,lock」：玩遊戲時用，如CS:GO，需要按著Shift消音走路。<br>
+    7、pinyi.txt 與 uclliu.exe 放一起，可以使用「';」切換成「注音模式」，如：ㄈㄟ/，會出現「0肥 1淝 2腓 3萉 4蜰」<br>
+　　8、「正常模式」=「,,,unlock」：平常打字用。<br>
+　　9、「遊戲模式」=「,,,lock」：玩遊戲時用，如CS:GO，需要按著Shift消音走路。<br>
 　　(如果忽然無法打字，也許就是進了「遊戲模式」請按「,,,unlock」解除。)<br>
-　　9、「查看目前版本」=「,,,version」 <br>
-　　10、「簡體／繁體」模式 「,,,c」「,,,t」 切換<br>
-　　11、UI 變窄「,,,s」 <br>
-　　12、UI 變寬「,,,l」 <br>
-　　13、UI 變大「,,,+」 <br>
-　　14、UI 變小「,,,-」 <br>
-　　15、UCLLIU.ini<br>
+　　10、「查看目前版本」=「,,,version」 <br>
+　　11、「簡體／繁體」模式 「,,,c」「,,,t」 切換<br>
+　　12、UI 變窄「,,,s」 <br>
+　　13、UI 變寬「,,,l」 <br>
+　　14、UI 變大「,,,+」 <br>
+　　15、UI 變小「,,,-」 <br>
+　　16、UCLLIU.ini<br>
 　　　　[DEFAULT]<br>
 　　　　short_mode = 0  # 是否為「短」版模式， 0 或 1<br>
 　　　　zoom = 0.90  # 縮放大小<br>
@@ -61,8 +62,8 @@
 　　　　x = 1239 # 肥米輸入法最後在螢幕 x 軸位置<br>
 　　　　SP = 0 # 是否顯示短根， 0 或 1<br>
 　　　　play_sound_enable = 0 # 是否有打字音， 0 或 1<br>
-        startup_default_ucl = 1 # 啟動時為「肥模式」，0 = 英模式，1 = 肥模式 
-　　16、環境設定(強列建議)：<br>
+        startup_default_ucl = 1 # 程式啟動時為「肥模式」，0 = 英模式，1 = 肥模式 
+　　17、環境設定(強列建議)：<br>
 <kbd>
 <img src="screenshot/install/1.png"><br>
   <h3>建議可以跟筆者一樣</h3>
@@ -115,6 +116,14 @@
 <br>
 <br>
 <pre>
+    (2021-08-31) V1.38 版：
+    病毒碼提交掃描：1.38
+    1. 138、肥米輸入法如果使用中文路徑，右下角icon會出不來
+    2. 139、如果可以隱藏或不產生 icon.ico 檔
+    3. 135、https://www.csie.ntu.edu.tw/~b92025/liu/ 裡的 liu-uni.tab 異常，利用 MD5 排除
+    4. 142、切換「肥/英」應該把後選字的記憶體清空 (約 1194 行)
+    5. 136、注音查詢功能 (需重新下載 https://github.com/shadowjohn/UCL_LIU/blob/master/dist/pinyi.txt) 
+    
     (2021-08-08) V1.37 版：
     病毒碼提交掃描：1.37 
     https://www.microsoft.com/en-us/wdsi/submission/6401cdef-aea5-4490-a1f1-f9d511bd9b29
@@ -537,12 +546,13 @@
   <li>(Done 2021-08-08)132、連 term.ptt.cc 不同瀏覽器標題不同</li>
   <li>(Done 2021-08-08)133、加上預設啟動為英/半的參數</li>
   <li>(Done 2021-08-09)134、編譯階段移除用不到的pyd，可省一點點exe空間</li>
-  <li>135、https://www.csie.ntu.edu.tw/~b92025/liu/ 裡的 liu-uni.tab 異常，利用 MD5 排除</li>
-  <li>136、注音查詢功能</li>
+  <li>(Done 2021-08-20)135、https://www.csie.ntu.edu.tw/~b92025/liu/ 裡的 liu-uni.tab 異常，利用 MD5 排除</li>
+  <li>(Done 2021-08-31)136、注音查詢功能</li>
   <li>137、相關字詞功能，如輸入：我，出現「們、的、...」</li>
-  <li>138、肥米輸入法如果使用中文路徑，右下角icon會出不來</li>
-  <li>139、如果可以隱藏或不產生 icon.ico 檔</li>
-  <li>140、程式exe檔自帶 logo</li>
-  <li>141、檢查與修正選了其他地區啟動肥米時，會造成crash</li>     
+  <li>(Done 2021-08-11)138、肥米輸入法如果使用中文路徑，右下角icon會出不來</li>
+  <li>(Done 2021-08-11)139、如果可以隱藏或不產生 icon.ico 檔</li>
+  <li>(Done 2021-08-11)140、程式exe檔自帶 logo</li>
+  <li>(Done 2021-08-11)141、檢查與修正選了其他地區啟動肥米時，會造成crash，經檢查沒有發生</li>
+  <li>(Done 2021-08-31)142、切換「肥/英」應該把後選字的記憶體清空 (約 1194 行)</li>       
 </ul>
 <br>
