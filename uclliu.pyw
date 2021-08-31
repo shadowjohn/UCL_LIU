@@ -83,6 +83,8 @@ def about_uclliu():
   _msg_text = ("肥米輸入法\n\n作者：羽山秋人 (http://3wa.tw)\n版本：%s" % VERSION)
   _msg_text += "\n\n熱鍵提示：\n\n"
   _msg_text += "「,,,VERSION」目前版本\n"
+  _msg_text += "「'ucl」同音字查詢\n"
+  _msg_text += "「';zo6」注音查詢\n"
   _msg_text += "「,,,UNLOCK」回到正常模式\n"
   _msg_text += "「,,,LOCK」進入遊戲模式\n"
   _msg_text += "「,,,C」簡體模式\n"
@@ -813,6 +815,12 @@ flag_isCTRLSPACE=False
 play_ucl_label=""
 ucl_find_data=[]
 pinyi_version="0" #初版
+uclcode_phone = {}  #注音文字儲這 "-3": ["爾","耳","洱","餌","邇","珥","駬","薾","鉺","峏","尒","栮"]
+is_need_use_phone=False
+phone_INDEX = ", - . / 0 1 2 3 4 5 6 7 8 9 ; a b c d e f g h i j k l m n o p q r s t u v w x y z"
+phone_DATA = "ㄝ ㄦ ㄡ ㄥ ㄢ ㄅ ㄉ ˇ ˋ ㄓ ˊ ˙ ㄚ ㄞ ㄤ ㄇ ㄖ ㄏ ㄎ ㄍ ㄑ ㄕ ㄘ ㄛ ㄨ ㄜ ㄠ ㄩ ㄙ ㄟ ㄣ ㄆ ㄐ ㄋ ㄔ ㄧ ㄒ ㄊ ㄌ ㄗ ㄈ"
+phone_INDEX = my.explode(" ",phone_INDEX)
+phone_DATA = my.explode(" ",phone_DATA)
 same_sound_data=[] #同音字表
 same_sound_index=0 #預設第零頁
 same_sound_max_word=6 #一頁最多五字
@@ -868,7 +876,31 @@ def widen(s):
   >>> 
   """
   return unicode(s).translate(WIDE_MAP)
-
+def load_phone(pinyi_filepath):
+  data = my.file_get_contents(pinyi_filepath)
+  data = my.trim(data.replace("\r",""))
+  output = {}
+  m = my.explode("\n",data)
+  if len(m)<3:
+    return
+  for i in range(3,len(m)):
+    d = my.explode(" ",m[i]);
+    output[d[0].decode("UTF-8")] = my.explode(" ",m[i])[1:]
+    for j in range(0,len(output[d[0]])):
+      output[d[0]][j] = output[d[0]][j].decode("UTF-8")  
+  return output
+def phone_to_en_num(phone_code):
+  #注音轉回英數
+  global phone_DATA
+  global phone_INDEX
+  phone_code = phone_code.decode("utf-8")
+  m = mystts.split_unicode_chrs(phone_code);
+  output = ""  
+  for i in range(0,my.strlen(m)):    
+    debug_print("WTFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")      
+    m[i] = phone_INDEX[phone_DATA.index(m[i])]
+    output = my.implode("",m)
+  return output 
 #def pleave(self, event):
 #  my.exit();
 
@@ -889,6 +921,9 @@ if my.is_file(PWD + "\\pinyi.txt")==True:
   same_sound_data = my.explode("\n",my.trim(my.file_get_contents(PWD + "\\pinyi.txt")))
   if my.is_string_like(same_sound_data[0],"VERSION_0.01"):
       pinyi_version = "0.01";
+      #載入uclcode_phone
+      uclcode_phone = load_phone(PWD + "\\pinyi.txt")
+      #debug_print(uclcode_phone)
   
 uclcode = my.json_decode(my.file_get_contents(PWD + "\\liu.json"))
 
@@ -1013,11 +1048,11 @@ def word_to_sp(data):
   output = output.replace("\n ","{ENTER}");  
   output = output.replace("\n","{ENTER}"); 
   return output 
-def show_sp_to_label(data):
+def show_sp_to_label(data,isForce=None):
   #顯示最簡字根到輸入結束框後
   global config
   global play_ucl_label
-  if config['DEFAULT']['SP']=="0":
+  if config['DEFAULT']['SP']=="0" and isForce is None:
     return
   sp = "簡根："+my.strtoupper(word_to_sp(data))
   #word_label.set_label(sp)
@@ -1163,6 +1198,15 @@ def toggle_ucl():
   global win
   global debug_print
   global GUI_FONT_22
+  global is_need_use_phone
+  global ucl_find_data
+  #2021-08-31 
+  #切換後，即關閉注音模式  
+  is_need_use_phone = False
+  is_need_use_pinyi = False  
+  #2021-08-31
+  #切換時，清空所有後選字
+  ucl_find_data=[]
   if uclen_btn.get_label()=="肥":
     uclen_btn.set_label("英")
     play_ucl_label=""
@@ -1177,7 +1221,7 @@ def toggle_ucl():
   uclen_label.modify_font(pango.FontDescription(GUI_FONT_22))
                                               
   #window_state_event_cb(None,None)
-  debug_print("window_state_event_cb(toggle_ucl)")
+  debug_print("window_state_event_cb(toggle_ucl)")  
   toAlphaOrNonAlpha()    
 def is_ucl():
   global uclen_btn  
@@ -1257,21 +1301,39 @@ def is_hf(self):
   return (kind=="半")
    
 # http://stackoverflow.com/questions/7050448/write-image-to-windows-clipboard-in-python-with-pil-and-win32clipboard
+def type_label_get_text():
+  global type_label
+  return type_label.get_label();
+def word_label_get_text():
+  global word_label
+  return word_label.get_label();
 def type_label_set_text(last_word_label_txt=""):
   global type_label
+  global word_label
   global play_ucl_label
   global debug_print
   global GUI_FONT_22
   global GUI_FONT_20
   global config
-  type_label.set_label(play_ucl_label)
+  global is_need_use_phone
+  #debug_print("type_label_set_text");
+  #debug_print(play_ucl_label);
+  type_label.set_label(play_ucl_label.decode("UTF-8"))
   type_label.modify_font(pango.FontDescription(GUI_FONT_22))
   if my.strlen(play_ucl_label) > 0:
     debug_print("ShowSearch")
-    show_search()
+    if is_need_use_phone == True:
+      #debug_print("RUN PHONE")
+      show_search("phone")
+    else:
+      show_search(None)
     pass
-  else:    
-    word_label.set_label("")
+  else:
+    if is_need_use_phone == True:
+      #pass
+      word_label.set_label("注:")
+    else:    
+      word_label.set_label("")
     word_label.modify_font(pango.FontDescription(GUI_FONT_20))
     pass
   # 如果 last_word_label_txt 不是空值，代表有簡根或其他用字
@@ -1392,7 +1454,7 @@ def uclcode_to_chinese(code):
     return ucl_find_data
   else:    
     return code 
-def show_search():
+def show_search(kind):
   #真的要顯示了
   global play_ucl_label
   global ucl_find_data
@@ -1404,12 +1466,14 @@ def show_search():
   global same_sound_last_word
   global debug_print
   global same_sound_max_word
+  global uclcode_phone
   same_sound_index = 0
   is_has_more_page = False
   same_sound_last_word=""
-  debug_print("ShowSearch1")
-  c = my.strtolower(play_ucl_label)
-  c = my.trim(c)
+  debug_print("ShowSearch1")  
+  debug_print("PPPPPPPPPPPPPPPPPPPPPP");
+  debug_print("kind");
+  debug_print(kind);
   #debug_print("ShowSearch2")
   #debug_print("C[-1]:%s" % c[-1])
   #debug_print("C[:-1]:%s" % c[:-1])  
@@ -1417,33 +1481,50 @@ def show_search():
   # 2017-07-13 Fix when V is last code
   #debug_print("LAST V : %s" % (c[-1]))
   is_need_use_pinyi=False
-  #is_need_use_phone=False  
+  #is_need_use_phone=False
+  c = ""   
+  WORDS_FROM = uclcode["chardefs"]; 
+  if kind == None:
+    c = my.strtolower(play_ucl_label)
+    c = my.trim(c)
+    pass
+  elif kind == "phone":
+    WORDS_FROM = uclcode_phone;
+    m = mystts.split_unicode_chrs(play_ucl_label.decode("utf-8"))    
+    for i in range(0,my.strlen(m)):    
+      debug_print("WTFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")      
+      m[i] = phone_INDEX[phone_DATA.index(m[i])]
+    c = my.implode("",m)
+  debug_print("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC")
+  debug_print(c)
+  
+  
   if c[0] == "'" and len(c)>1:
     c=c[1:]
     is_need_use_pinyi=True       
-  if c not in uclcode["chardefs"] and c[-1]=='v' and c[:-1] in uclcode["chardefs"] and len(uclcode["chardefs"][c[:-1]])>=2 :
+  if c not in WORDS_FROM and c[-1]=='v' and c[:-1] in WORDS_FROM and len(WORDS_FROM[c[:-1]])>=2 :
     #debug_print("Debug V1")
-    ucl_find_data = uclcode["chardefs"][c[:-1]][1]   
+    ucl_find_data = WORDS_FROM[c[:-1]][1]   
     word_label_set_text()
     return True
-  elif c not in uclcode["chardefs"] and c[-1]=='r' and c[:-1] in uclcode["chardefs"] and len(uclcode["chardefs"][c[:-1]])>=3 :
+  elif c not in WORDS_FROM and c[-1]=='r' and c[:-1] in WORDS_FROM and len(WORDS_FROM[c[:-1]])>=3 :
     #debug_print("Debug V1")
-    ucl_find_data = uclcode["chardefs"][c[:-1]][2]   
+    ucl_find_data = WORDS_FROM[c[:-1]][2]   
     word_label_set_text()
     return True
-  elif c not in uclcode["chardefs"] and c[-1]=='s' and c[:-1] in uclcode["chardefs"] and len(uclcode["chardefs"][c[:-1]])>=4 :
+  elif c not in WORDS_FROM and c[-1]=='s' and c[:-1] in WORDS_FROM and len(WORDS_FROM[c[:-1]])>=4 :
     #debug_print("Debug V1")
-    ucl_find_data = uclcode["chardefs"][c[:-1]][3]   
+    ucl_find_data = WORDS_FROM[c[:-1]][3]   
     word_label_set_text()
     return True
-  elif c not in uclcode["chardefs"] and c[-1]=='f' and c[:-1] in uclcode["chardefs"] and len(uclcode["chardefs"][c[:-1]])>=5 :
+  elif c not in WORDS_FROM and c[-1]=='f' and c[:-1] in WORDS_FROM and len(WORDS_FROM[c[:-1]])>=5 :
     #debug_print("Debug V1")
-    ucl_find_data = uclcode["chardefs"][c[:-1]][4]   
+    ucl_find_data = WORDS_FROM[c[:-1]][4]   
     word_label_set_text()
     return True
-  elif c in uclcode["chardefs"]:
+  elif c in WORDS_FROM:
     #debug_print("Debug V2")
-    ucl_find_data = uclcode["chardefs"][c]
+    ucl_find_data = WORDS_FROM[c]
     ucl_find_data_orin_arr = ucl_find_data
     if len(ucl_find_data) > same_sound_max_word:
       #Need page
@@ -1466,9 +1547,23 @@ def show_search():
 def play_ucl(thekey):
   global type_label
   global play_ucl_label
-  play_ucl_label = type_label.get_label();
-  # 不可以超過5個字
-  if len(play_ucl_label) < 5:
+  global is_need_use_phone
+  global pinyi_version  
+  global phone_INDEX
+  global phone_DATA
+  play_ucl_label = type_label.get_label();  
+  
+  #debug_print(len(play_ucl_label))
+  #debug_print(my.strlen(play_ucl_label))
+  #my.exit()
+  
+  if pinyi_version == "0.01" and is_need_use_phone == True and len(play_ucl_label.decode("utf-8")) < 4:
+    # 不可以超過5個字 注音查詢模式
+    _data = phone_DATA[phone_INDEX.index(thekey)]
+    play_ucl_label = "%s%s" % (play_ucl_label,_data)    
+    type_label_set_text()         
+  elif len(play_ucl_label) < 5:    
+    # 不可以超過5個字
     play_ucl_label = "%s%s" % (play_ucl_label,thekey)
     type_label_set_text()
   return True
@@ -1728,6 +1823,9 @@ def OnKeyboardEvent(event):
   global same_sound_max_word
   global ucl_find_data_orin_arr
   global lastKey # save keyboard last word for same keyin sound
+  global pinyi_version
+  global is_need_use_phone
+  global pinyi_version
      
   # From : https://stackoverflow.com/questions/20021457/playing-mp3-song-on-python
   # 1.26 版，加入打字音的功能
@@ -1799,20 +1897,27 @@ def OnKeyboardEvent(event):
       return True
     
     #debug_print("Title: -------------------------- ") #批踢踢實業坊 - Google Chrome
-    #debug_print(win32gui.GetWindowText(hwnd))         
-  
-    if event.MessageName == "key up":    
-      if is_ucl() and my.strtolower(last_key[-2:])=="';":
-        debug_print("key up 注:")
-        type_label_set_text("注:")        
-        is_need_use_pinyi = False
-        is_need_use_phone = True
-        play_ucl_label=""
-        ucl_find_data=[]        
-        #word_label_set_text()
-        #word_label.set_label("")
-        toAlphaOrNonAlpha() 
-        return False            
+    #debug_print(win32gui.GetWindowText(hwnd))
+    #debug_print("XXXXXXXXXXXXXXXXXXXXXXXX");
+    #debug_print(pinyi_version);
+    #debug_print(is_need_use_phone);
+    #debug_print(is_ucl());
+    if event.MessageName == "key up":                        
+      #if pinyi_version == "0.01" and is_ucl() and my.strtolower(last_key[-2:])=="';":
+      #  #debug_print("key up 注:")
+      #  #type_label_set_text("注:")        
+      #  is_need_use_pinyi = False
+      #  is_need_use_phone = True
+      #  play_ucl_label=""
+      #  ucl_find_data=[]        
+      #  #word_label_set_text()
+      #  #word_label.set_label("注:")
+      #  #toAlphaOrNonAlpha() 
+      #  return False
+      #debug_print("T1");
+      #debug_print(word_label_get_text()[0:2]);
+      #if pinyi_version == "0.01" and is_ucl() and word_label_get_text()[0:2] == "注:":
+      #  return False            
       last_key = last_key + chr(event.Ascii)
       last_key = last_key[-10:]   
       if my.strtolower(last_key[-4:])==",,,c":
@@ -1991,6 +2096,7 @@ def OnKeyboardEvent(event):
     # 增加，如果是肥模式，且輸入的字>=1以上，按下 esc 鍵，會把字消除  
     if event.MessageName == "key down" and is_ucl() == True and len(play_ucl_label) >=1 and event.Key == "Escape":
       #debug_print("2019-07-19 \n 增加，如果是肥模式，且輸入的字>=1以上，按下 esc 鍵，會把字消除)");
+      is_need_use_phone = False
       play_ucl_label = ""
       type_label_set_text()
       return False
@@ -2120,20 +2226,73 @@ def OnKeyboardEvent(event):
       #debug_print("is ucl")    
       if event.MessageName == "key down" and flag_is_win_down == True : # win key
         return True
-      #2018-05-05要考慮右邊數字鍵的 . 
-      if event.MessageName == "key down" and ( event.Ascii>=48 and event.Ascii <=57) or (event.Key=="Decimal" and event.Ascii==46) : #0~9 . 
-        if len(ucl_find_data)>=1 and int(chr(event.Ascii)) < len(ucl_find_data):
+      #2018-05-05要考慮右邊數字鍵的 .
+      #2021-08-31這裡是正常送字的部分
+      #debug_print("XXXXXXXXXXXXD")
+      #debug_print((phone_INDEX.index(chr(event.Ascii))>=0))
+      #if event.MessageName == "key down" and pinyi_version == "0.01" and is_need_use_phone == False and event.Ascii==59 and c[0]=="'": # '; 的 ;
+      if event.MessageName == "key up" and is_need_use_phone == False and pinyi_version == "0.01" and is_ucl() and my.strtolower(last_key[-2:])=="';":
+        debug_print("Debug221_OK")
+        is_need_use_pinyi = False
+        is_need_use_phone = True
+        play_ucl_label=""
+        ucl_find_data=[]
+        type_label_set_text("注:")
+        toAlphaOrNonAlpha()
+        return False            
+      if event.MessageName == "key down" and ( event.Ascii == 8 ): # ←      
+        if my.strlen(play_ucl_label.decode("UTF-8")) <= 0:                    
+          play_ucl_label=""
+          play_ucl("")
+          debug_print("Debug6")
+          return True
+        else:
+          play_ucl_label = play_ucl_label.decode("UTF-8")[:-1]
+          type_label_set_text()
+          debug_print("Debug5")        
+          return False
+      # 2021-08-31 orin 0~9        
+      # 是、非注音模式時   
+      if event.MessageName == "key down" and ( event.Ascii>=48 and event.Ascii <=57) or (event.Key=="Decimal" and event.Ascii==46) : #0~9 .
+      
+        LAST_CODE = "";
+        _is_sound_kick = False
+        if is_need_use_phone == True and pinyi_version == "0.01":                              
+          # From : https://stackoverflow.com/questions/4978787/how-to-split-a-string-into-a-list-of-characters-in-python  
+          LAST_CODE = list(phone_to_en_num(type_label.get_label()))
+          _s = [" ","6","3","4","7"]
+          #debug_print(_s)
+          #debug_print(LAST_CODE)
+          for i in range(0, len(_s)):
+            if _s[i] in LAST_CODE:
+              _is_sound_kick = True 
+         
+        if is_need_use_phone == False and len(ucl_find_data)>=1 and int(chr(event.Ascii)) < len(ucl_find_data):
           # send data        
           data = ucl_find_data[int(chr(event.Ascii))]
           #debug_print(ucl_find_data)
           
           senddata(data)
-          show_sp_to_label(data.decode('utf-8'))
+          show_sp_to_label(data.decode('utf-8'),None)
           #debug_print(data)
-          #快選用的
-          #debug_print(data)        
+          #快選用的   
           debug_print("Debug12")
           return False
+        elif pinyi_version == "0.01" and is_need_use_phone == True and len(ucl_find_data)>=1 and int(chr(event.Ascii)) < len(ucl_find_data) and _is_sound_kick == True:
+          #注音模式要多檢查使用者是不是已打了 space、二聲、三聲、四聲、輕音才出字
+          # send data        
+          data = ucl_find_data[int(chr(event.Ascii))]
+          #debug_print(ucl_find_data)
+          
+          senddata(data)
+          # 這裡要強制 show_sp
+          show_sp_to_label(data.decode('utf-8'),True)
+          #debug_print(data)
+          #快選用的   
+          debug_print("Debug12 phone")
+          # 2021-08-31 強制關注音
+          is_need_use_phone = False
+          return False 
         else:
           if len(event.Key) == 1 and is_hf(None)==False:
             #k = widen(event.Key)
@@ -2149,18 +2308,20 @@ def OnKeyboardEvent(event):
           #2018-05-05要考慮右邊數字鍵的 .
           # event.Ascii==46 or (event.Key=="Decimal" and event.Ascii==46)
           # 先出小點好了
-          if is_hf(None)==False and ( event.Ascii==49 or event.Ascii==50 or event.Ascii==51 or event.Ascii==52 or event.Ascii==53 or event.Ascii==54 or event.Ascii==55 or event.Ascii==56 or event.Ascii==57 or event.Ascii==47 or event.Ascii==42 or event.Ascii==45 or event.Ascii==43 or event.Ascii==48):
-            kac = event.Ascii        
-            k = widen(chr(kac))
-            #if event.Ascii==46:
-            #  senddata("a")
-            #else:
-            senddata(k)
-            debug_print("Debug100")
-            return False
-          else:  
-            return True                    
-      if event.MessageName == "key down" and ( (event.Ascii>=65 and event.Ascii <=90) or (event.Ascii>=97 and event.Ascii <=122) or event.Ascii==44 or event.Ascii==46 or event.Ascii==39 or event.Ascii==91 or event.Ascii==93):
+          if is_need_use_phone == False:
+            if is_hf(None)==False and ( event.Ascii==49 or event.Ascii==50 or event.Ascii==51 or event.Ascii==52 or event.Ascii==53 or event.Ascii==54 or event.Ascii==55 or event.Ascii==56 or event.Ascii==57 or event.Ascii==47 or event.Ascii==42 or event.Ascii==45 or event.Ascii==43 or event.Ascii==48):
+              kac = event.Ascii        
+              k = widen(chr(kac))
+              #if event.Ascii==46:
+              #  senddata("a")
+              #else:
+              senddata(k)
+              debug_print("Debug100")
+              return False
+            else:  
+              return True 
+               
+      if is_need_use_phone == False and event.MessageName == "key down" and ( (event.Ascii>=65 and event.Ascii <=90) or (event.Ascii>=97 and event.Ascii <=122) or event.Ascii==44 or event.Ascii==46 or event.Ascii==39 or event.Ascii==91 or event.Ascii==93):
         # 這裡應該是同時按著SHIFT的部分
         flag_is_play_otherkey=True
         if flag_is_shift_down==True:
@@ -2177,25 +2338,41 @@ def OnKeyboardEvent(event):
             debug_print("Debug9")
             return False
           debug_print("Debug8")
-          return True
+          return True                  
         else:
           # Play ucl
           #debug_print("Play UCL")
           #debug_print(thekey)
           play_ucl(chr(event.Ascii))
           debug_print("Debug7")
-          return False    
-      if event.MessageName == "key down" and ( event.Ascii == 8 ): # ←      
-        if my.strlen(play_ucl_label) <= 0:                    
-          play_ucl_label=""
-          play_ucl("")
-          debug_print("Debug6")
-          return True
+          return False          
+      # 2021-08-31
+      # normal and phone           
+      if pinyi_version == "0.01" and is_need_use_phone == True and event.MessageName == "key down" and ( (event.Ascii>=65 and event.Ascii <=90) or (event.Ascii>=97 and event.Ascii <=122) or (event.Ascii>=48 and event.Ascii <=57) or event.Ascii==44 or event.Ascii==46 or event.Ascii==47 or event.Ascii==59 or event.Ascii==45):
+        # 這裡應該是同時按著SHIFT的部分
+        flag_is_play_otherkey=True
+        if flag_is_shift_down==True:
+          if len(event.Key) == 1 and is_hf(None)==False:
+            #k = widen(event.Key)
+            kac = event.Ascii
+            if kac>=65 and kac<=90:
+              kac=kac+32
+            else:
+              kac=kac-32
+            k = widen(chr(kac))
+            debug_print("phone 2855 event.Key to Full:%s %s" % (event.Key,k))
+            senddata(k)
+            debug_print("Debug9 phone")
+            return False
+          debug_print("Debug8 phone")
+          return True                  
         else:
-          play_ucl_label = play_ucl_label[:-1]
-          type_label_set_text()
-          debug_print("Debug5")        
-          return False       
+          # Play ucl
+          #debug_print("Play UCL")
+          #debug_print(thekey)
+          play_ucl(chr(event.Ascii))
+          debug_print("Debug7 phone")
+          return False          
       if event.MessageName == "key down" and event.Key=="Space" and config['DEFAULT']['CTRL_SP']=="1": # check ctrl + space
           if flag_is_ctrl_down == True:
             toggle_ucl()
@@ -2236,8 +2413,12 @@ def OnKeyboardEvent(event):
            
             senddata(text)   
             #2021-07-22 補 sp 出字
-            show_sp_to_label(text)             
+            show_sp_to_label(text,None)                         
           debug_print("Debug4")
+          # 2021-08-31 這裡是按下 sp 出字，一樣把注音關了
+          if is_need_use_phone == True and pinyi_version == "0.01":
+            is_need_use_phone = False
+            show_sp_to_label(text,True)          
           return False 
         elif len(ucl_find_data)==0 and len(play_ucl_label)!=0:
           #無此字根時，按到空白鍵
@@ -2271,16 +2452,11 @@ def OnKeyboardEvent(event):
           senddata(k)
           debug_print("Debug22")
           return False
-        elif event.Ascii==59 and c[0]=="'": # '; 的 ;
-          debug_print("Debug221_OK")
-          is_need_use_pinyi = False
-          is_need_use_phone = True
-          play_ucl_label=""
-          ucl_find_data=[]
-          type_label_set_text("注:")
-          toAlphaOrNonAlpha()
-          return False
-        else:
+        else:          
+          #debug_print(is_need_use_phone)
+          if type_label.get_text()=="'" and pinyi_version == "0.01":
+            debug_print("Debug22OK phone")
+            return False
           debug_print("Debug22OK")
           return True     
       else:                  
@@ -2673,7 +2849,7 @@ class TrayIcon():
       self.reload_tray()                           
     def m_game_switch(self,event,data=None):
       global gamemode_btn_click
-      global gamemode_btn
+      global gamemode_btn      
       gamemode_btn_click(gamemode_btn)   
       self.reload_tray()       
     def m_pm_switch(self,event,data=None):
