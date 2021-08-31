@@ -896,8 +896,7 @@ def phone_to_en_num(phone_code):
   phone_code = phone_code.decode("utf-8")
   m = mystts.split_unicode_chrs(phone_code);
   output = ""  
-  for i in range(0,my.strlen(m)):    
-    debug_print("WTFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")      
+  for i in range(0,my.strlen(m)):              
     m[i] = phone_INDEX[phone_DATA.index(m[i])]
     output = my.implode("",m)
   return output 
@@ -1388,8 +1387,7 @@ def word_label_set_text():
       tmp = "%s ..." % (tmp)
     word_label.set_label(tmp)
     
-    debug_print(("word_label lens: %d " % (len(tmp))));
-    debug_print("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG")
+    debug_print(("word_label lens: %d " % (len(tmp))));    
     lt = len(tmp);
     word_label.modify_font(pango.FontDescription(GUI_FONT_20))
     '''
@@ -1470,10 +1468,7 @@ def show_search(kind):
   same_sound_index = 0
   is_has_more_page = False
   same_sound_last_word=""
-  debug_print("ShowSearch1")  
-  debug_print("PPPPPPPPPPPPPPPPPPPPPP");
-  debug_print("kind");
-  debug_print(kind);
+  #debug_print("ShowSearch1")        
   #debug_print("ShowSearch2")
   #debug_print("C[-1]:%s" % c[-1])
   #debug_print("C[:-1]:%s" % c[:-1])  
@@ -1492,12 +1487,9 @@ def show_search(kind):
     WORDS_FROM = uclcode_phone;
     m = mystts.split_unicode_chrs(play_ucl_label.decode("utf-8"))    
     for i in range(0,my.strlen(m)):    
-      debug_print("WTFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")      
+            
       m[i] = phone_INDEX[phone_DATA.index(m[i])]
-    c = my.implode("",m)
-  debug_print("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC")
-  debug_print(c)
-  
+    c = my.implode("",m)    
   
   if c[0] == "'" and len(c)>1:
     c=c[1:]
@@ -2075,7 +2067,7 @@ def OnKeyboardEvent(event):
         response = message.run()
         #toAlphaOrNonAlpha()
         debug_print("Show Version")
-        debug_print(response)
+        #debug_print(response)
         #debug_print(gtk.ResponseType.BUTTONS_OK)
         if response == -5 or response == -4:
           #message.hide()
@@ -2197,11 +2189,11 @@ def OnKeyboardEvent(event):
       if my.is_string_like(word_label.get_label(),"...") == True:
         debug_print("FFFFFFFIND WORDS...")
         debug_print("ucl_find_data_orin_arr")
-        debug_print(ucl_find_data_orin_arr)        
+        #debug_print(ucl_find_data_orin_arr)        
         debug_print("ucl_find_data")
-        debug_print(ucl_find_data)
+        #debug_print(ucl_find_data)
         debug_print("same_sound_index")
-        debug_print(same_sound_index)        
+        #debug_print(same_sound_index)        
         same_sound_index = same_sound_index+same_sound_max_word
         if same_sound_index > len(ucl_find_data_orin_arr)-1:
           same_sound_index = 0  
@@ -2210,7 +2202,7 @@ def OnKeyboardEvent(event):
            maxword = len(ucl_find_data_orin_arr)           
         ucl_find_data = ucl_find_data_orin_arr[same_sound_index:maxword]  
         debug_print("after ucl_find_data")
-        debug_print(ucl_find_data)                               
+        #debug_print(ucl_find_data)                               
         word_label_set_text()        
         return False                     
       else:
@@ -2298,7 +2290,7 @@ def OnKeyboardEvent(event):
             #k = widen(event.Key)
             kac = event.Ascii          
             k = widen(chr(kac))
-            debug_print("event.Key to Full:%s %s" % (event.Key,k))
+            #debug_print("event.Key to Full:%s %s" % (event.Key,k))
             senddata(k)
             debug_print("Debug11")
             return False
@@ -2439,10 +2431,10 @@ def OnKeyboardEvent(event):
           else:
             return True
       elif event.MessageName == "key down" and ( event.Ascii==58 or event.Ascii==59 or event.Ascii==123 or event.Ascii==125 or event.Ascii==40 or event.Ascii==41 or event.Ascii==43 or event.Ascii==126 or event.Ascii==33 or event.Ascii==64 or event.Ascii==35 or event.Ascii==36 or event.Ascii==37 or event.Ascii==94 or event.Ascii==38 or event.Ascii==42 or event.Ascii==95 or event.Ascii==60 or event.Ascii==62 or event.Ascii==63 or event.Ascii==34 or event.Ascii==124 or event.Ascii==47 or event.Ascii==45) : # : ;｛｝（）＋～！＠＃＄％＾＆＊＿＜＞？＂｜／－
-        debug_print("Debug for '; ")
-        debug_print("event.Ascii")
-        debug_print(event.Ascii)
-        debug_print(is_need_use_pinyi)
+        #debug_print("Debug for '; ")
+        #debug_print("event.Ascii")
+        #debug_print(event.Ascii)
+        #debug_print(is_need_use_pinyi)
         c = my.strtolower(play_ucl_label)
         c = my.trim(c)
         #修正 肥/全 時，按分號、冒號只出半型的問題
@@ -2548,7 +2540,7 @@ hm = pyHook.HookManager()
 #hm.UnhookMouse();
 # watch for all mouse events
 hm.KeyAll = OnKeyboardEvent
-debug_print(dir(hm))
+#debug_print(dir(hm))
 # set the hook
 hm.HookKeyboard()
 # wait forever
@@ -2803,7 +2795,7 @@ class TrayIcon():
       self.reload_tray()        
     def m_output_type(self,event,kind="DEFAULT"):
       global DEFAULT_OUTPUT_TYPE
-      debug_print(kind)
+      #debug_print(kind)
       DEFAULT_OUTPUT_TYPE = kind[0]
       self.reload_tray() 
     def m_sp_switch(self,event,data=None):
@@ -2827,7 +2819,7 @@ class TrayIcon():
       response = message.run()
       #toAlphaOrNonAlpha()
       debug_print("Show Version")
-      debug_print(response)
+      #debug_print(response)
       #debug_print(gtk.ResponseType.BUTTONS_OK)
       if response == -5 or response == -4:
         #message.hide()
