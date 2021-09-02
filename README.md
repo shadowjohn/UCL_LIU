@@ -123,8 +123,10 @@
     2. 139、如果可以隱藏或不產生 icon.ico 檔
     3. 135、https://www.csie.ntu.edu.tw/~b92025/liu/ 裡的 liu-uni.tab 異常，利用 MD5 排除
     4. 142、切換「肥/英」應該把後選字的記憶體清空 (約 1194 行)
-    5. 136、注音查詢功能 (需重新下載 https://github.com/shadowjohn/UCL_LIU/blob/master/dist/pinyi.txt) 
+    5. 136、注音查詢功能 (需重新下載 https://github.com/shadowjohn/UCL_LIU/blob/master/dist/pinyi.txt)
+    <br> 
     <img src="screenshot/phone.gif">
+    <br>
     肥米輸入法可以使用注音查字嘍
     
     (2021-08-08) V1.37 版：
