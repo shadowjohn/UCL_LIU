@@ -114,8 +114,8 @@
 　　<br>
 　　首次使用如果沒有liu.json，會自動進行 tab->cin->json的轉換，tab會自動查找C:\windows\Syswow64\liu-uni.tab 或 C:\\Program Files\\BoshiamyTIP\\liu-uni.tab 或 同目錄下的tab檔。<br>
 <br>
-<br>
-<kbd>
+</kbd>
+<pre>
     (2021-08-31) V1.38 版：
     病毒碼提交掃描：1.38
     https://www.microsoft.com/en-us/wdsi/submission/68bb7af9-532a-44e0-b9cb-e47e788c7378
@@ -124,11 +124,9 @@
     3. 135、https://www.csie.ntu.edu.tw/~b92025/liu/ 裡的 liu-uni.tab 異常，利用 MD5 排除
     4. 142、切換「肥/英」應該把後選字的記憶體清空 (約 1194 行)
     5. 136、注音查詢功能 (需重新下載 https://github.com/shadowjohn/UCL_LIU/blob/master/dist/pinyi.txt)
-    <br> 
-    <img src="screenshot/phone.gif">
-    <br>
-    肥米輸入法可以使用注音查字嘍
-    
+    <img src="screenshot/phone.gif" />
+    <div align="center">肥米輸入法可以使用注音查字嘍</div>
+  
     (2021-08-08) V1.37 版：
     病毒碼提交掃描：1.37 
     https://www.microsoft.com/en-us/wdsi/submission/6401cdef-aea5-4490-a1f1-f9d511bd9b29
@@ -345,7 +343,7 @@
     就可以把fcitx_boshiamy.txt 轉成 liu.cin，再轉 liu.json 來使用。
     我加了點程式碼，順手把日文的部分修正，原本打 a, = あ，但在 fcitx 要打 ja, 才會出 あ，如果只有打 a, 好像有些亂碼~_~
     反正就修正了~
-<kbd>    
+</pre>    
 
     
 <br>
