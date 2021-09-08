@@ -114,7 +114,7 @@
 　　<br>
 　　首次使用如果沒有liu.json，會自動進行 tab->cin->json的轉換，tab會自動查找C:\windows\Syswow64\liu-uni.tab 或 C:\\Program Files\\BoshiamyTIP\\liu-uni.tab 或 同目錄下的tab檔。<br>
 <br>
-<br>
+</kbd>
 <pre>
     (2021-08-31) V1.38 版：
     病毒碼提交掃描：1.38
@@ -123,8 +123,10 @@
     2. 139、如果可以隱藏或不產生 icon.ico 檔
     3. 135、https://www.csie.ntu.edu.tw/~b92025/liu/ 裡的 liu-uni.tab 異常，利用 MD5 排除
     4. 142、切換「肥/英」應該把後選字的記憶體清空 (約 1194 行)
-    5. 136、注音查詢功能 (需重新下載 https://github.com/shadowjohn/UCL_LIU/blob/master/dist/pinyi.txt) 
-    
+    5. 136、注音查詢功能 (需重新下載 https://github.com/shadowjohn/UCL_LIU/blob/master/dist/pinyi.txt)
+    <img src="screenshot/phone.gif" />
+    <div align="center">肥米輸入法可以使用注音查字嘍</div>
+  
     (2021-08-08) V1.37 版：
     病毒碼提交掃描：1.37 
     https://www.microsoft.com/en-us/wdsi/submission/6401cdef-aea5-4490-a1f1-f9d511bd9b29
