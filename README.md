@@ -2,6 +2,9 @@
 利用python+pyhook開發的仿蝦米，肥米輸入法<br>
 <br>
 <center>
+    <img src="screenshot/win11.gif">
+    測試在 win11 也能正常打字
+    <br><br>
   <img src="screenshot/ucl_2.png">
   <img src="screenshot/demo.gif"><br>
   https://youtu.be/ClSbkHDqkOs
