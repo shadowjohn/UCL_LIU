@@ -100,7 +100,7 @@
 　　<li>4、PIME liu.json</li>
 　　<li>5、fcitx 嘸蝦米表格，下載 boshiamy.txt 改名成 fcitx_boshiamy.txt 跟主程式放一起(可惜沒有日文字)</li>
 　　<li>6、泰瑞版小小輸入法，將 terry_yong.zip 解開，資料夾 mb 裡的 Boshiamy.txt 改名成 terry_boshiamy.txt 跟主程式放一起</li>
-　　<li>7、RIME afrink 整理的 liur_trad.dict.yaml，liur_trad.dict.yaml 跟主程式放一起</li>
+　　<li>7、RIME afrink 整理的 https://raw.githubusercontent.com/ianzhuo/irime-liur/master/liur_Trad.dict.yaml ，liur_trad.dict.yaml 跟主程式放一起</li>
 　　<li>8、支援opendesktop提供的萬國蝦米字根檔uniliu.txt， https://github.com/chinese-opendesktop/cin-tables ，同fcitx 嘸蝦米表格，將uniliu.txt 改名成 fcitx_boshiamy.txt 跟主程式放一起(可惜沒有日文字)</li>
 　　<li>9、支援小小輸入法臺灣包2018年版wuxiami.txt，http://fygul.blogspot.com/2018/05/yong-tw2018.html 裡linux包中的/tw/wuxiami.txt，將wuxiami.txt 跟主程式放一起</li>
 　　<li>10、支援 Bluebat 版 fcitx 嘸蝦米表格，下載 https://github.com/chinese-opendesktop/cin-tables/blob/master/boshiamy.cin 改名成 fcitx_boshiamy.txt 跟主程式放一起(可惜沒有日文字)</li>
