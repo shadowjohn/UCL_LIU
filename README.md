@@ -424,7 +424,7 @@ Ans：<br>
 　　第二個執行緒的用途主要是在「英/全」、「肥/半」或「肥/全」模式下，
 持續讓肥米一直更新視窗的高度，讓肥米輸入法的視窗，可以置頂，才不會被其他視窗蓋住。<br>
 當你切換視窗後，肥米會先被蓋住，但約 1 秒後肥米又會浮上來。<br>
-python裡有mostTop可以使用，但不是萬能，幾經測試後還是只能使用 set_keep_above、set_keep_below 來開關置頂高度<br>
+python裡有mostTop可以使用，但不是萬能，幾經測試後還是只能重複呼叫 set_keep_above、set_keep_below 來開關置頂高度，
 詳見 uclliu.pyw function updateGUI()、toAlphaOrNonAlpha() 約在 #3124、 行 #1183 行<br> 
 <br>
 2、為何有的軟體無法使用肥米輸入法，在該程式視窗時，完全無法觸發肥米輸入法？<br>
