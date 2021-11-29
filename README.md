@@ -43,7 +43,7 @@
 　　5、未來使用的話，就把uclliu.exe、作好的字根檔liu.json帶著走，四處都能打肥米輸入法了<br>
 　　6、下載 pinyi.txt 與 uclliu.exe 放一起執行，同音字庫，如「'pns」，會出現「0你 1妳 2擬 3禰 4儗 5旎...」同音選擇。<br>
 　　(還是要再強調一次，不要用義守大學FTP裡的那個liu-uni.tab，建議可以安裝正版嘸蝦米後在C:\windows\Syswow64裡找到)<br>
-    7、pinyi.txt 與 uclliu.exe 放一起，可以使用「';」切換成「注音模式」，如：ㄈㄟ/，會出現「0肥 1淝 2腓 3萉 4蜰」<br>
+　　7、pinyi.txt 與 uclliu.exe 放一起，可以使用「';」切換成「注音模式」，如：ㄈㄟ/，會出現「0肥 1淝 2腓 3萉 4蜰」<br>
 　　8、「正常模式」=「,,,unlock」：平常打字用。<br>
 　　9、「遊戲模式」=「,,,lock」：玩遊戲時用，如CS:GO，需要按著Shift消音走路。<br>
 　　(如果忽然無法打字，也許就是進了「遊戲模式」請按「,,,unlock」解除。)<br>
@@ -59,13 +59,13 @@
 　　　　zoom = 0.90  # 縮放大小<br>
 　　　　send_kind_1_paste = # 如 putty.exe,pcman 遇到此程程式，以 「複製、貼上」 方式出字 <br>
 　　　　send_kind_2_big5 = # 如 EWinner.exe 遇到此種程式，以 「big5」 方式出字 <br>
-        send_kind_3_noucl = vncviewer.exe,2077 遇到此程式，就無法切換 肥/半、肥/全<br>
+　　　　send_kind_3_noucl = vncviewer.exe,2077 遇到此程式，就無法切換 肥/半、肥/全<br>
 　　　　alpha = 1 # 透明度<br>
 　　　　y = 950 # 肥米輸入法最後在螢幕 y 軸位置<br>
 　　　　x = 1239 # 肥米輸入法最後在螢幕 x 軸位置<br>
 　　　　SP = 0 # 是否顯示短根， 0 或 1<br>
 　　　　play_sound_enable = 0 # 是否有打字音， 0 或 1<br>
-        startup_default_ucl = 1 # 程式啟動時為「肥模式」，0 = 英模式，1 = 肥模式 
+　　　　startup_default_ucl = 1 # 程式啟動時為「肥模式」，0 = 英模式，1 = 肥模式 
 　　17、環境設定(強列建議)：<br>
 <kbd>
 <img src="screenshot/install/1.png"><br>
