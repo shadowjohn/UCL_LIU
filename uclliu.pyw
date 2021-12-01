@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.38
+VERSION=1.39
 import portalocker
 import os
 import sys
@@ -240,6 +240,7 @@ config['DEFAULT'] = {
                       "X": myScreenStatus["first_time_x"],
                       "Y": myScreenStatus["first_time_y"],
                       "ALPHA": "1", #嘸蝦米全顯示時時的初值
+                      "NON_UCL_ALPHA": "0.2", #英數時的透明度
                       "SHORT_MODE": "0", #0:簡短畫面，或1:長畫面
                       "ZOOM": "1", #整體比例大小
                       "SEND_KIND_1_PASTE": "", #出字模式1
@@ -261,6 +262,7 @@ if my.is_file(INI_CONFIG_FILE):
 config['DEFAULT']['X'] = str(int(config['DEFAULT']['X']));
 config['DEFAULT']['Y'] = str(int(config['DEFAULT']['Y'])); 
 config['DEFAULT']['ALPHA'] = "%.2f" % ( float(config['DEFAULT']['ALPHA'] ));
+config['DEFAULT']['NON_UCL_ALPHA'] = "%.2f" % ( float(config['DEFAULT']['NON_UCL_ALPHA'] ));
 config['DEFAULT']['SHORT_MODE'] = str(int(config['DEFAULT']['SHORT_MODE']));
 config['DEFAULT']['ZOOM'] = "%.2f" % ( float(config['DEFAULT']['ZOOM'] ));
 config['DEFAULT']['SEND_KIND_1_PASTE'] = str(config['DEFAULT']['SEND_KIND_1_PASTE']);
@@ -307,6 +309,11 @@ if float(config['DEFAULT']['ALPHA'])>=1:
   config['DEFAULT']['ALPHA']="1"
 if float(config['DEFAULT']['ALPHA'])<=0.1:
   config['DEFAULT']['ALPHA']="0.1"
+
+if float(config['DEFAULT']['NON_UCL_ALPHA'])>=1:
+  config['DEFAULT']['NON_UCL_ALPHA']="1"
+if float(config['DEFAULT']['NON_UCL_ALPHA'])<=0:
+  config['DEFAULT']['NON_UCL_ALPHA']="0"  
   
 if int(config['DEFAULT']['SHORT_MODE'])>=1:
   config['DEFAULT']['SHORT_MODE']="1"
@@ -352,6 +359,7 @@ debug_print("UCLLIU.ini SETTING:")
 debug_print("X:%s" % (config["DEFAULT"]["X"]))
 debug_print("Y:%s" % (config["DEFAULT"]["Y"]))
 debug_print("ALPHA:%s" % (config["DEFAULT"]["ALPHA"]))
+debug_print("NON_UCL_ALPHA:%s" % (config["DEFAULT"]["NON_UCL_ALPHA"]))
 debug_print("SHORT_MODE:%s" % (config["DEFAULT"]["SHORT_MODE"]))
 debug_print("ZOOM:%s" % (config["DEFAULT"]["ZOOM"]))
 debug_print("SEND_KIND_1_PASTE:%s" % (config["DEFAULT"]["SEND_KIND_1_PASTE"]))
@@ -429,7 +437,7 @@ def play_sound():
   global m_play_song
   global max_thread___playMusic_counts
   global step_thread___playMusic_counts
-  global NOW_VOLUME
+  #global NOW_VOLUME
   global o_song
   global PWD
   global paudio_player
@@ -440,8 +448,9 @@ def play_sound():
   
   m_play_song.extend( [ random.choice(o_song.keys()) ])
   if len(o_song.keys())!=0 and step_thread___playMusic_counts < max_thread___playMusic_counts:
-    step_thread___playMusic_counts = step_thread___playMusic_counts + 1                  
-    
+    step_thread___playMusic_counts = step_thread___playMusic_counts + 1
+                      
+    NOW_VOLUME = (int(config['DEFAULT']['KEYBOARD_VOLUME'])) #音量
     thread.start_new_thread( thread___playMusic,(NOW_VOLUME,))
                             
 def run_short():
@@ -830,7 +839,7 @@ same_sound_max_word=6 #一頁最多五字
 is_has_more_page=False #是否還有下頁
 same_sound_last_word="" #lastword
 
-NOW_VOLUME = (int(config['DEFAULT']['KEYBOARD_VOLUME'])) #預設音量
+
 wavs = my.glob(PWD + "\\*.wav")
 #debug_print("PWD : %s" % (PWD))
 #debug_print(wavs)
@@ -1201,8 +1210,10 @@ def toAlphaOrNonAlpha():
   #hf_kind = c.get_label()
   #hf_kind = hf_btn.get_label()
   if uclen_btn.get_label()=="英" and hf_btn.get_label()=="半":
-    win.set_opacity(0.2)
+    #win.set_opacity(0.2)
     #win.set_mnemonics_visible(True)
+    #2021-12-01 增加 NON_UCL_ALPHA 來調整英數時的透明度
+    win.set_opacity( float(config["DEFAULT"]["NON_UCL_ALPHA"]) )
     win.set_keep_above(False)
     win.set_keep_below(True)    
   else:
@@ -2700,7 +2711,7 @@ class TrayIcon():
     def reload_tray(self):
       global config
       global ICON_PATH
-      global NOW_VOLUME
+      #global NOW_VOLUME
       global DEFAULT_OUTPUT_TYPE
       global UCL_PIC_BASE64           
       menu_options = (
@@ -2714,28 +2725,8 @@ class TrayIcon():
         menu_options = menu_options + ((
           ("2.切換至「正常模式」", None, [self.m_game_switch] ),          
         ))                
-      #if is_play_music==True:
-      #  menu_options = menu_options + (("2.【●】打字音", None, [self.m_pm_switch]),)
-      #else:
-      #  menu_options = menu_options + (("2.【　】打字音", None, [self.m_pm_switch]),)
       
-      # 接下來作打字音
-      '''
-      sound_level_list = ()
-      for i in range(0,11):        
-        v = i*10
-        real_v = i*100        
-        is_o = "　"
-        if NOW_VOLUME == real_v:
-          is_o = "●"
-        if i == 0:
-          sound_level_list = sound_level_list + (('【%s】靜音' % (is_o) , None, [self.m_change_volume,real_v] ),)
-        else:
-          sound_level_list = sound_level_list + (("【%s】%s %%" % (is_o,v), None, [self.m_change_volume,real_v]),)
-                                                     
-      menu_options = menu_options + ((
-                ('3.打字音大小', None, sound_level_list),))
-      '''
+      
       
       ucl_send_kind_list = ()
       is_o = ""
@@ -2759,8 +2750,8 @@ class TrayIcon():
       ucl_send_kind_list = ucl_send_kind_list + (('【%s】複製貼上模式' % (is_o) , None, [self.m_output_type,"PASTE"] ),)
       
         
-      menu_options = menu_options + ((
-                ('3.選擇出字模式', None, ucl_send_kind_list),))       
+      menu_options = menu_options + ((('3.選擇出字模式', None, ucl_send_kind_list),))       
+            
       if config['DEFAULT']['CTRL_SP'] == "1":
         menu_options = menu_options + ((
           ("4.【●】使用 CTRL+SPACE 切換輸入法", None, [self.m_ctrlsp_switch] ),          
@@ -2772,32 +2763,69 @@ class TrayIcon():
       
       if config['DEFAULT']['SP'] == "1":        
         menu_options = menu_options + ((
-          ("5.【●】顯示短根", None, [self.m_sp_switch] ),
+          ("6.【●】顯示短根", None, [self.m_sp_switch] ),
           
         ))   
       else:              
         menu_options = menu_options + ((
-          ("5.【　】顯示短根", None, [self.m_sp_switch] ),          
+          ("6.【　】顯示短根", None, [self.m_sp_switch] ),          
         ))   
-        
+      '''  
       if config['DEFAULT']['PLAY_SOUND_ENABLE'] == "1":
         menu_options = menu_options + ((
-          ("6.【●】打字音", None, [self.m_pm_switch] ),          
+          ("7.【●】打字音", None, [self.m_pm_switch] ),          
         ))           
       else:
         menu_options = menu_options + ((
-          ("6.【　】打字音", None, [self.m_pm_switch] ),          
+          ("7.【　】打字音", None, [self.m_pm_switch] ),          
         ))      
+      # 接下來作打字音
+      '''
+      _menu_play_sound_arr = ()
+      is_o = ""
+      if config['DEFAULT']['PLAY_SOUND_ENABLE'] == "1":
+        is_o = "●"
+      else:
+        is_o = "　"
+      _menu_play_sound_arr = _menu_play_sound_arr + (('【%s】打字音啟動' % (is_o) , None, [self.m_pm_switch] ),)
+      
+      #接下來是打字音量
+      for i in range(1,10):
+        is_o = "　"
+        if config['DEFAULT']['KEYBOARD_VOLUME'] == str(i*10):
+          is_o = "●"
+        _menu_play_sound_arr = _menu_play_sound_arr + (('【%s】%s %%' % (is_o,str(i*10)) , None, [self.m_pm_volume_switch,i*10] ),)
+      
+          
+      menu_options = menu_options + ((('7.打字音', None, _menu_play_sound_arr),))
+      
+      '''
+      sound_level_list = ()
+      for i in range(0,11):        
+        v = i*10
+        real_v = i*100        
+        is_o = "　"
+        if NOW_VOLUME == real_v:
+          is_o = "●"
+        if i == 0:
+          sound_level_list = sound_level_list + (('【%s】靜音' % (is_o) , None, [self.m_change_volume,real_v] ),)
+        else:
+          sound_level_list = sound_level_list + (("【%s】%s %%" % (is_o,v), None, [self.m_change_volume,real_v]),)
+                                                     
+      menu_options = menu_options + ((
+                ('3.打字音大小', None, sound_level_list),))
+      '''  
+        
       if config['DEFAULT']['STARTUP_DEFAULT_UCL'] == "1":
         menu_options = menu_options + ((
-          ("7.【●】啟動預設為「肥」模式", None, [self.m_sdu_switch] ),          
+          ("8.【●】啟動預設為「肥」模式", None, [self.m_sdu_switch] ),          
         ))          
       else:
         menu_options = menu_options + ((
-          ("7.【　】啟動預設為「肥」模式", None, [self.m_sdu_switch] ),          
+          ("8.【　】啟動預設為「肥」模式", None, [self.m_sdu_switch] ),          
         ))        
         
-      menu_options = menu_options + (("8. 離開(Quit)", None, [self.m_quit]),)
+      menu_options = menu_options + (("9. 離開(Quit)", None, [self.m_quit]),)
       if self.systray=="":
         #ICON_PATH
         #UCL_PIC_BASE64
@@ -2868,12 +2896,23 @@ class TrayIcon():
       gamemode_btn_click(gamemode_btn)   
       self.reload_tray()       
     def m_pm_switch(self,event,data=None):
+      #調整打字音開關
       global config
       #is_play_music
       if config['DEFAULT']['PLAY_SOUND_ENABLE'] == "0":
          config['DEFAULT']['PLAY_SOUND_ENABLE'] = "1"
       else:
          config['DEFAULT']['PLAY_SOUND_ENABLE'] = "0"
+      #切換後，都要存設定
+      saveConfig()
+      self.reload_tray()  
+    def m_pm_volume_switch(self,event,data=None):
+      #調整打字音日音量
+      global config
+      #is_play_music      
+      config['DEFAULT']['KEYBOARD_VOLUME'] = "%s" % (data[0])
+      #然後播一下新的聲音大小
+      play_sound()      
       #切換後，都要存設定
       saveConfig()
       self.reload_tray()       
@@ -2883,231 +2922,15 @@ class TrayIcon():
       #self.reload_tray()  
     def m_none(self,data=None):
       return False
-    def m_change_volume(self,event,new_volume):
-      global NOW_VOLUME      
-      NOW_VOLUME = new_volume[0]      
-      #然後播一下新的聲音大小
-      play_sound()
-      self.reload_tray()    
-# From : https://github.com/gevasiliou/PythonTests/blob/master/TrayAllClicksMenu.py
-'''class TrayIcon_old(gtk.StatusIcon):
-    def __init__(self):
-      global VERSION
-      global PWD
-      global UCL_PIC_BASE64
-      gtk.StatusIcon.__init__(self)
-      #self.set_from_icon_name('help-about')
-      #debug_print(PWD+"\\UCLLIU.png")
-      # base64.b64decode
-      # From : https://sourceforge.net/p/matplotlib/mailman/message/20449481/
-      raw_data = base64.decodestring(UCL_PIC_BASE64)
-      #debug_print(gtk.gdk.Pixbuf)
-      w = 16
-      h = 16
-      img_pixbuf = gtk.gdk.pixbuf_new_from_data(
-              raw_data, gtk.gdk.COLORSPACE_RGB, True, 8, w, h, w*4)
+    #def m_change_volume(self,event,new_volume):
+    #  global NOW_VOLUME      
+    #  NOW_VOLUME = new_volume[0]      
+    #  #然後播一下新的聲音大小
+    #  play_sound()
+    #  self.reload_tray()    
 
-      self.set_from_pixbuf(img_pixbuf)
-      self.set_tooltip("肥米輸入法：%s" % (VERSION))
-      self.set_has_tooltip(True)
-      self.set_visible(True)
-      self.connect("button-press-event", self.on_click)
-
-    
-    def m_sp_switch(self,data=None):
-      global config
-      if config['DEFAULT']['SP'] == "0":        
-        config['DEFAULT']['SP']="1"
-      else:
-        config['DEFAULT']['SP']="0"
-      #切換後，都要存設定
-      saveConfig()
-    def m_ctrlsp_switch(self,data=None):
-      global config
-      if config['DEFAULT']['CTRL_SP'] == "0":        
-        config['DEFAULT']['CTRL_SP']="1"
-      else:
-        config['DEFAULT']['CTRL_SP']="0"
-      #切換後，都要存設定
-      saveConfig()            
-    def m_pm_switch(self,data=None):
-      global config
-      #is_play_music
-      if config['DEFAULT']['PLAY_SOUND_ENABLE'] == "0":
-         config['DEFAULT']['PLAY_SOUND_ENABLE'] = "1"
-      else:
-         config['DEFAULT']['PLAY_SOUND_ENABLE'] = "0"
-      #切換後，都要存設定
-      saveConfig()
-    def m_sdu_switch(self,data=None):
-      #啟動時，預設為肥模式，或英模式
-      global config      
-      if config['DEFAULT']['STARTUP_DEFAULT_UCL'] == "0":
-         config['DEFAULT']['STARTUP_DEFAULT_UCL'] = "1"
-      else:
-         config['DEFAULT']['STARTUP_DEFAULT_UCL'] = "0"
-      #切換後，都要存設定
-      saveConfig()    
-    def m_quit(self,data=None):
-      self.set_visible(False)      
-      x_btn_click(self)
-    def m_output_type(self,data=None,kind="DEFAULT"):
-      global DEFAULT_OUTPUT_TYPE
-      debug_print(kind)
-      DEFAULT_OUTPUT_TYPE=kind
-    def m_none(self,data=None):
-      return False
-    def on_click(self,data,event): #data1 and data2 received by the connect action line 23
-      #print ('self :', self)
-      #debug_print('data :',data)
-      #debug_print('event :',event)
-      btn=event.button #Bby controlling this value (1-2-3 for left-middle-right) you can call other functions.
-      #debug_print('event.button :',btn)
-      time=gtk.get_current_event_time() # required by the popup. No time - no popup.
-      #debug_print ('time:', time)
-
-      global menu
-      global menu_items
-      global gamemode_btn
-      global DEFAULT_OUTPUT_TYPE
-      global config      
-      global uclen_btn
-      global uclen_btn_click
-      global hf_btn
-      global hf_btn_click
-      #debug_print(dir(menu))
-      
-      #2021-07-22 當按下右下角肥時，原本如果是 肥 -> 英，全 -> 半 才不會檔到畫面
-      if is_ucl() == True:
-        uclen_btn_click(uclen_btn) 
-      if is_hf(None) == False:
-        hf_btn_click(hf_btn)
-               
-      menu.set_visible(False)
-      #menu = gtk.Menu()
-      for i in range(0,len(menu_items)):
-        menu.remove(menu_items[i])
-      menu_items=[]
-      menu_items.append(gtk.MenuItem("1.關於肥米輸入法"))
-      menu.append( menu_items[len(menu_items)-1] )
-      menu_items[len(menu_items)-1].connect("activate", self.m_about) #added by gv - it had nothing before
-      
-      if gamemode_btn.get_label()=="正常模式":        
-        menu_items.append(gtk.MenuItem("2.切換至「遊戲模式」"))
-      else:
-        menu_items.append(gtk.MenuItem("2.切換至「正常模式」"))
-      menu.append( menu_items[len(menu_items)-1] )
-      menu_items[len(menu_items)-1].connect("activate", self.m_game_switch) #added by gv - it had nothing before
-
-      menu_items.append(gtk.MenuItem("4.選擇出字模式"))
-      menu.append( menu_items[len(menu_items)-1] )
-      menu_items[len(menu_items)-1].connect("activate", self.m_none)
-      #debug_print(dir(menu_items[len(menu_items)-1]))
-      # From : https://www.twblogs.net/a/5beb3c312b717720b51efe87
-      sub_menu = gtk.Menu()
-      sub_menu_items = []
-      is_o = ""
-      if DEFAULT_OUTPUT_TYPE=="DEFAULT":
-        is_o = "●"
-      else:
-        is_o = "　"      
-      sub_menu_items.append(gtk.MenuItem("【%s】正常出字模式" % (is_o)))
-      sub_menu.append( sub_menu_items[len(sub_menu_items)-1] )
-      sub_menu_items[len(sub_menu_items)-1].connect("activate", self.m_output_type,"DEFAULT")
-      
-      if DEFAULT_OUTPUT_TYPE=="BIG5":
-        is_o = "●"
-      else:
-        is_o = "　"
-      sub_menu_items.append(gtk.MenuItem("【%s】BIG5模式" % (is_o)))
-      sub_menu.append( sub_menu_items[len(sub_menu_items)-1] )
-      sub_menu_items[len(sub_menu_items)-1].connect("activate", self.m_output_type,"BIG5")
-      
-      if DEFAULT_OUTPUT_TYPE=="PASTE":
-        is_o = "●"
-      else:
-        is_o = "　"
-      sub_menu_items.append(gtk.MenuItem("【%s】複製貼上模式" % (is_o)))
-      sub_menu.append( sub_menu_items[len(sub_menu_items)-1] )
-      sub_menu_items[len(sub_menu_items)-1].connect("activate", self.m_output_type,"PASTE")
-      
-      menu_items[len(menu_items)-1].set_submenu(sub_menu)
-      #sub_menu.show_all()
-      #sub_menu.popup(None, None, None, btn, 2)
-      #menu_items[len(menu_items)-1].connect("activate", self.m_game_switch) #added by gv - it had nothing before
-      
-      if config['DEFAULT']['CTRL_SP'] == "1":
-        menu_items.append(gtk.MenuItem("4.【●】使用 CTRL+SPACE 切換輸入法"))
-        menu.append( menu_items[len(menu_items)-1] )
-        menu_items[len(menu_items)-1].connect("activate", self.m_ctrlsp_switch)
-      else:
-        menu_items.append(gtk.MenuItem("4.【　】使用 CTRL+SPACE 切換輸入法"))
-        menu.append( menu_items[len(menu_items)-1] )
-        menu_items[len(menu_items)-1].connect("activate", self.m_ctrlsp_switch)
-      
-      if config['DEFAULT']['SP'] == "1":
-        menu_items.append(gtk.MenuItem("5.【●】顯示短根"))
-        menu.append( menu_items[len(menu_items)-1] )
-        menu_items[len(menu_items)-1].connect("activate", self.m_sp_switch)
-      else:
-        menu_items.append(gtk.MenuItem("5.【　】顯示短根"))
-        menu.append( menu_items[len(menu_items)-1] )
-        menu_items[len(menu_items)-1].connect("activate", self.m_sp_switch)
-      
-      if config['DEFAULT']['PLAY_SOUND_ENABLE'] == "1":
-        menu_items.append(gtk.MenuItem("6.【●】打字音"))
-        menu.append( menu_items[len(menu_items)-1] )
-        menu_items[len(menu_items)-1].connect("activate", self.m_pm_switch)
-      else:
-        menu_items.append(gtk.MenuItem("6.【　】打字音"))
-        menu.append( menu_items[len(menu_items)-1] )
-        menu_items[len(menu_items)-1].connect("activate", self.m_pm_switch)
-      
-      if config['DEFAULT']['STARTUP_DEFAULT_UCL'] == "1":
-        menu_items.append(gtk.MenuItem("7.【●】啟動預設為「肥」模式"))
-        menu.append( menu_items[len(menu_items)-1] )
-        menu_items[len(menu_items)-1].connect("activate", self.m_sdu_switch)
-      else:
-        menu_items.append(gtk.MenuItem("7.【　】啟動預設為「肥」模式"))
-        menu.append( menu_items[len(menu_items)-1] )
-        menu_items[len(menu_items)-1].connect("activate", self.m_sdu_switch)
-                          
-      menu_items.append(gtk.MenuItem(""))
-      menu.append( menu_items[len(menu_items)-1] )
-      
-      menu_items.append(gtk.MenuItem("離開(Quit)"))
-      menu.append( menu_items[len(menu_items)-1] )
-      menu_items[len(menu_items)-1].connect("activate", self.m_quit)
-
-      #add space
-      menu_items.append(gtk.MenuItem(""))
-      menu.append( menu_items[len(menu_items)-1] )
-      menu_items.append(gtk.MenuItem(""))
-      menu.append( menu_items[len(menu_items)-1] )
-      menu_items.append(gtk.MenuItem(""))
-      
-      
-      menu.show_all()      
-      menu.popup(None, None, None, btn, 2) #button can be hardcoded (i.e 1) but time must be correct.      
-      #menu.reposition()
-      #debug_print(dir(menu))
-
-  #message("Status Icon Left Clicked")
-  #make_menu(event_button, event_time)
-'''  
-# 生成肥圖片
-#if my.is_file(PWD+"\\UCLLIU.png") == False:
-#  my.file_put_contents(PWD+"\\UCLLIU.png",my.base64_decode(UCL_PIC_BASE64))  
-#menu_items = []
-#menu = gtk.Menu()  
-#tray = TrayIcon()
 # generator tray
 tray = TrayIcon()
-
-#icon.set_visible(True)
-# Create menu
-
- 
 
 
 win.show_all()
