@@ -26,6 +26,9 @@ import wave
 #2021-08-08 新版右下角 traybar
 from traybar import SysTrayIcon
 paudio_player = None
+#2021-10-28 同時間只能一個執行緒播放
+is_sound_playing = False
+sound_playing_s = ""
 my = php.kit()
 PWD = os.path.dirname(os.path.realpath(sys.argv[0]))
 
@@ -950,6 +953,8 @@ def thread___playMusic(keyboard_volume):
   global paudio_player
   global o_song
   global m_play_song
+  global is_sound_playing
+  global sound_playing_s
   #global wave
   global step_thread___playMusic_counts   
   try:                   
@@ -994,14 +999,32 @@ def thread___playMusic(keyboard_volume):
                       rate = o_song[s]["wf"].getframerate(),
                       output = True)
         # 寫聲音檔輸出來播放
+        
         while True:
+          #if is_sound_playing == False:            
+          #  sound_playing_s = s
+          #  is_sound_playing = True
+          #elif is_sound_playing == True and sound_playing_s != s:
+          #  break;          
           d = o_song[s]["wf"].readframes(chunk)
           if d == "": 
             break      
           # 這是調整音量大小的方法
-          o_song[s]["data"].extend([ audioop.mul(d, 2, keyboard_volume / 100.0 ) ])                    
+          o_song[s]["data"].extend([ audioop.mul(d, 2, keyboard_volume / 100.0 ) ])
+        #if is_sound_playing == True and sound_playing_s == s:
+        #  sound_playing_s = ""
+        #  is_sound_playing = False                    
       for i in range(0,len(o_song[s]["data"])):
-        o_song[s]["paudio_stream"].write(o_song[s]["data"][i])
+        # 播放聲音的地方
+        if is_sound_playing == False:            
+          sound_playing_s = s
+          is_sound_playing = True
+        elif is_sound_playing == True and sound_playing_s != s:
+          break;          
+        o_song[s]["paudio_stream"].write(o_song[s]["data"][i])        
+      if is_sound_playing == True and sound_playing_s == s:
+         sound_playing_s = ""
+         is_sound_playing = False
     if step_thread___playMusic_counts > 0:
       step_thread___playMusic_counts = step_thread___playMusic_counts -1         
   except Exception as e:
