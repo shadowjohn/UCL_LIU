@@ -261,8 +261,8 @@ if my.is_file(INI_CONFIG_FILE):
       
 config['DEFAULT']['X'] = str(int(config['DEFAULT']['X']));
 config['DEFAULT']['Y'] = str(int(config['DEFAULT']['Y'])); 
-config['DEFAULT']['ALPHA'] = "%.2f" % ( float(config['DEFAULT']['ALPHA'] ));
-config['DEFAULT']['NON_UCL_ALPHA'] = "%.2f" % ( float(config['DEFAULT']['NON_UCL_ALPHA'] ));
+config['DEFAULT']['ALPHA'] = "%.1f" % ( float(config['DEFAULT']['ALPHA'] ));
+config['DEFAULT']['NON_UCL_ALPHA'] = "%.1f" % ( float(config['DEFAULT']['NON_UCL_ALPHA'] ));
 config['DEFAULT']['SHORT_MODE'] = str(int(config['DEFAULT']['SHORT_MODE']));
 config['DEFAULT']['ZOOM'] = "%.2f" % ( float(config['DEFAULT']['ZOOM'] ));
 config['DEFAULT']['SEND_KIND_1_PASTE'] = str(config['DEFAULT']['SEND_KIND_1_PASTE']);
@@ -388,6 +388,13 @@ def run_big_small(kind):
   global hf_btn
   global type_label
   global word_label
+  global play_ucl_label
+  global ucl_find_data
+  play_ucl_label=""
+  ucl_find_data=[]
+  type_label_set_text()
+  toAlphaOrNonAlpha()
+  
   kind = float(kind)
   if kind > 0:
     if float(config['DEFAULT']['ZOOM']) < 3:
@@ -458,21 +465,42 @@ def run_short():
   global word_label
   global type_label
   global gamemode_btn
+  global play_ucl_label
+  global ucl_find_data
+  
+  play_ucl_label=""
+  ucl_find_data=[]
+  type_label_set_text()
+  toAlphaOrNonAlpha()
+  
   word_label.set_visible(False)
   type_label.set_visible(False)
   gamemode_btn.set_visible(False)
   config["DEFAULT"]["SHORT_MODE"]="1"
+  
+  
   saveConfig()
 def run_long():
+  global config
   global word_label
   global type_label
   global gamemode_btn
+  global play_ucl_label
+  global ucl_find_data
+  
+  play_ucl_label=""
+  ucl_find_data=[]
+  type_label_set_text()
+  toAlphaOrNonAlpha()
+   
   word_label.set_visible(True)
   type_label.set_visible(True)
   gamemode_btn.set_visible(True)
-  config["DEFAULT"]["SHORT_MODE"]="0"
+  
   type_label.set_size_request(int( float(config['DEFAULT']['ZOOM'])*100),int( float(config['DEFAULT']['ZOOM'])*40))
   word_label.set_size_request(int( float(config['DEFAULT']['ZOOM'])*385),int( float(config['DEFAULT']['ZOOM'])*40))
+  
+  config["DEFAULT"]["SHORT_MODE"]="0"
   saveConfig()
   
 saveConfig()    
@@ -1979,17 +2007,17 @@ def OnKeyboardEvent(event):
           gamemode_btn_click(gamemode_btn)
       if my.strtolower(last_key[-4:])==",,,-":
         #run small
-        play_ucl_label=""
-        ucl_find_data=[]
-        type_label_set_text()
-        toAlphaOrNonAlpha()
+        #play_ucl_label=""
+        #ucl_find_data=[]
+        #type_label_set_text()
+        #toAlphaOrNonAlpha()
         run_big_small(-0.1)        
       if my.strtolower(last_key[-4:])==",,,+":
         #run big
-        play_ucl_label=""
-        ucl_find_data=[]
-        type_label_set_text()
-        toAlphaOrNonAlpha()
+        #play_ucl_label=""
+        #ucl_find_data=[]
+        #type_label_set_text()
+        #toAlphaOrNonAlpha()
         run_big_small(0.1)
       if my.strtolower(last_key[-4:])==",,,s":
         # run short
@@ -2707,7 +2735,7 @@ class TrayIcon():
         my.file_put_contents(ICON_PATH,raw_data,False)
       except:
         pass
-      self.reload_tray()  
+      self.reload_tray()            
     def reload_tray(self):
       global config
       global ICON_PATH
@@ -2752,14 +2780,49 @@ class TrayIcon():
         
       menu_options = menu_options + ((('3.選擇出字模式', None, ucl_send_kind_list),))       
             
+      #2021-12-01 加入畫面操作相關
+      _menu_ui_arr = ()
+      debug_print("SHORT_MODE:");
+      debug_print(config["DEFAULT"]["SHORT_MODE"]);
+      if config["DEFAULT"]["SHORT_MODE"] == "1":
+        _menu_ui_arr = _menu_ui_arr + (('【●】短版模式' , None, [self.m_run_long] ),)         
+      else:
+        _menu_ui_arr = _menu_ui_arr + (('【　】短版模式' , None, [self.m_run_short] ),)
+      
+      _menu_ui_arr = _menu_ui_arr + (('【,,,+】畫面加大' , None, [self.m_ui_plus] ),)
+      _menu_ui_arr = _menu_ui_arr + (('【,,,-】畫面縮小' , None, [self.m_ui_minus] ),)
+        
+      #英數時透明度
+      _menu_ui_en_alpha_arr = ()
+      for i in range(0,11):
+        is_o = "　"
+        if str(int(float(config['DEFAULT']['NON_UCL_ALPHA'])*10)) == str(i):
+          is_o = "●"      
+        _menu_ui_en_alpha_arr = _menu_ui_en_alpha_arr + (('【%s】%.1f %%' % ( is_o , (i/10.0)) , None, [self.m_change_en_alpha, "%.1f" % (i/10.0) ] ),)
+      _menu_ui_arr = _menu_ui_arr + ((('英數時透明度' , None, _menu_ui_en_alpha_arr ),))
+      
+      #肥模式透明度
+      _menu_ui_ucl_alpha_arr = ()
+      for i in range(0,11):
+        is_o = "　"
+        if str(int(float(config['DEFAULT']['ALPHA'])*10)) == str(i):
+          is_o = "●"      
+        _menu_ui_ucl_alpha_arr = _menu_ui_ucl_alpha_arr + (('【%s】%.1f %%' % ( is_o , (i/10.0)) , None, [self.m_change_ucl_alpha, "%.1f" % (i/10.0) ] ),)
+      _menu_ui_arr = _menu_ui_arr + ((('肥模式透明度' , None, _menu_ui_ucl_alpha_arr ),))        
+        
+      menu_options = menu_options + ((('4.畫面調整', None, _menu_ui_arr),))
+                  
+            
       if config['DEFAULT']['CTRL_SP'] == "1":
         menu_options = menu_options + ((
-          ("4.【●】使用 CTRL+SPACE 切換輸入法", None, [self.m_ctrlsp_switch] ),          
+          ("5.【●】使用 CTRL+SPACE 切換輸入法", None, [self.m_ctrlsp_switch] ),          
         ))          
       else:
         menu_options = menu_options + ((
-          ("4.【　】使用 CTRL+SPACE 切換輸入法", None, [self.m_ctrlsp_switch] ),          
+          ("5.【　】使用 CTRL+SPACE 切換輸入法", None, [self.m_ctrlsp_switch] ),          
         ))  
+      
+
       
       if config['DEFAULT']['SP'] == "1":        
         menu_options = menu_options + ((
@@ -2790,7 +2853,7 @@ class TrayIcon():
       _menu_play_sound_arr = _menu_play_sound_arr + (('【%s】打字音啟動' % (is_o) , None, [self.m_pm_switch] ),)
       
       #接下來是打字音量
-      for i in range(1,10):
+      for i in range(1,11):
         is_o = "　"
         if config['DEFAULT']['KEYBOARD_VOLUME'] == str(i*10):
           is_o = "●"
@@ -2901,6 +2964,8 @@ class TrayIcon():
       #is_play_music
       if config['DEFAULT']['PLAY_SOUND_ENABLE'] == "0":
          config['DEFAULT']['PLAY_SOUND_ENABLE'] = "1"
+         #選完打字音，啟動後，會噹一聲
+         play_sound()
       else:
          config['DEFAULT']['PLAY_SOUND_ENABLE'] = "0"
       #切換後，都要存設定
@@ -2922,6 +2987,32 @@ class TrayIcon():
       #self.reload_tray()  
     def m_none(self,data=None):
       return False
+    def m_run_long(self,event,data=None):
+      run_long()
+      self.reload_tray()       
+    def m_run_short(self,event,data=None):
+      run_short()
+      self.reload_tray() 
+    def m_ui_plus(self,event,data=None):
+      #畫面加大
+      run_big_small(0.1)
+      self.reload_tray()
+    def m_ui_minus(self,event,data=None):
+      #畫面縮小      
+      run_big_small(-0.1)
+      self.reload_tray()
+    def m_change_en_alpha(self,event,data=None):
+      #調整英數時的透明度
+      config['DEFAULT']['NON_UCL_ALPHA'] = "%.1f" % (float(data[0]))
+      toAlphaOrNonAlpha()
+      saveConfig()
+      self.reload_tray()
+    def m_change_ucl_alpha(self,event,data=None):
+      #調整UCL時的透明度
+      config['DEFAULT']['ALPHA'] = "%.1f" % (float(data[0]))
+      toAlphaOrNonAlpha()
+      saveConfig()
+      self.reload_tray()
     #def m_change_volume(self,event,new_volume):
     #  global NOW_VOLUME      
     #  NOW_VOLUME = new_volume[0]      
