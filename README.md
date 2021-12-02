@@ -121,7 +121,7 @@
 <pre>
     (2021-12-02) V1.39 版：
     病毒碼提交掃描：1.39
-
+    https://www.microsoft.com/en-us/wdsi/submission/4c0c1b31-8330-4837-81e5-8189f8a862fa
     1. 100、打字聲音可以調整大小聲
     2. 143、在全形模式時，右邊數字鍵 Num Lock、左邊 Scroll Lock 無法正常切換燈號       
     3. 144、英數時的透明度讓使用者自定
