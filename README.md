@@ -18,16 +18,16 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2021-08-31 17:10
+<h3>最後更新日期：</h3>2021-12-02 15:21
 <br>
-<h3>版本：</h3>V 1.38<br>
+<h3>版本：</h3>V 1.39<br>
 <br>
 <h3>版權：</h3>
 　免錢的 MIT-License
 <br>
 <h3>下載位置：</h3>
-　　1.主程式(1.38 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
-　　2.主程式(1.37 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.37/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.37/uclliu.exe</a><br>
+　　1.主程式(1.39 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
+　　2.主程式(1.38 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.38/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.38/uclliu.exe</a><br>
 　　3.歷年版本：<a target="_blank" href="https://github.com/shadowjohn/UCL_LIU/tree/master/RELEASE">歷代版本</a><br>
 　　4.同音字庫：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt</a><br>
 　　5.打字聲音：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip</a> 下載後解開，0~9.wav 與 uclliu.exe 放一起
@@ -119,6 +119,17 @@
 <br>
 </kbd>
 <pre>
+    (2021-12-02) V1.39 版：
+    病毒碼提交掃描：1.39
+    https://www.microsoft.com/en-us/wdsi/submission/4c0c1b31-8330-4837-81e5-8189f8a862fa
+    1. 100、打字聲音可以調整大小聲
+    2. 143、在全形模式時，右邊數字鍵 Num Lock、左邊 Scroll Lock 無法正常切換燈號       
+    3. 144、英數時的透明度讓使用者自定
+    4. 145、打字音只改用一個執行緒
+    5. 146、打字音量，可以在選單裡選擇
+    6. 147、短版模式、長版模式可以在選單裡選擇
+    7. 143、在英/全模式時，右邊數字鍵 Num Lock、上面 Scroll Lock 無法正常切換燈號        
+    
     (2021-08-31) V1.38 版：
     病毒碼提交掃描：1.38
     https://www.microsoft.com/en-us/wdsi/submission/68bb7af9-532a-44e0-b9cb-e47e788c7378
@@ -533,7 +544,7 @@ Ans：<br>
   <li>(Done 2019-12-03)97、中文出字後，自動提示最短根</li>
   <li>(Done 2020-05-24)98、增加打字聲音功能</li>
   <li>(Done 2020-05-25)99、修正打字過快時，開啟字打聲易當機的問題，設定最多同時五個線程</li>
-  <li>100、打字聲音可以調整大小聲</li>
+  <li>(Done 2021-12-01)100、打字聲音可以調整大小聲</li>
   <li>(Done 2020-07-01)101、SP短字根，可以記憶到UCLLIU.ini</li>
   <li>(Done 2020-07-01)102、打字音的開關，可以記憶到UCLLIU.ini</li>
   <li>(Done 2020-08-10)103、分頁異常，範例：'hdfu 慢，最後一頁會無法回到第一頁</li>
@@ -575,7 +586,10 @@ Ans：<br>
   <li>(Done 2021-08-11)140、程式exe檔自帶 logo</li>
   <li>(Done 2021-08-11)141、檢查與修正選了其他地區啟動肥米時，會造成crash，經檢查沒有發生</li>
   <li>(Done 2021-08-31)142、切換「肥/英」應該把後選字的記憶體清空 (約 1194 行)</li>
-  <li>143、在全形模式時，右邊數字鍵 Num Lock、左邊 Scroll Lock 無法正常切換燈號</li>       
-  <li>144、英數時的透明度讓使用者自定</li>
+  <li>(Done 2021-12-02)143、在英/全模式時，右邊數字鍵 Num Lock、上面 Scroll Lock 無法正常切換燈號</li>       
+  <li>(Done 2021-12-01)144、英數時的透明度讓使用者自定</li>
+  <li>(Done 2021-12-01)145、打字音只改用一個執行緒</li>
+  <li>(Done 2021-12-01)146、打字音量，可以在選單裡選擇</li>
+  <li>(Done 2021-12-01)147、短版模式、長版模式可以在選單裡選擇</li>
 </ul>
 <br>
