@@ -2798,7 +2798,7 @@ class TrayIcon():
         is_o = "　"
         if str(int(float(config['DEFAULT']['NON_UCL_ALPHA'])*10)) == str(i):
           is_o = "●"      
-        _menu_ui_en_alpha_arr = _menu_ui_en_alpha_arr + (('【%s】%.1f %%' % ( is_o , (i/10.0)) , None, [self.m_change_en_alpha, "%.1f" % (i/10.0) ] ),)
+        _menu_ui_en_alpha_arr = _menu_ui_en_alpha_arr + (('【%s】%d %%' % ( is_o , (i*10)) , None, [self.m_change_en_alpha, "%.1f" % (i/10.0) ] ),)
       _menu_ui_arr = _menu_ui_arr + ((('英數時透明度' , None, _menu_ui_en_alpha_arr ),))
       
       #肥模式透明度
@@ -2807,7 +2807,7 @@ class TrayIcon():
         is_o = "　"
         if str(int(float(config['DEFAULT']['ALPHA'])*10)) == str(i):
           is_o = "●"      
-        _menu_ui_ucl_alpha_arr = _menu_ui_ucl_alpha_arr + (('【%s】%.1f %%' % ( is_o , (i/10.0)) , None, [self.m_change_ucl_alpha, "%.1f" % (i/10.0) ] ),)
+        _menu_ui_ucl_alpha_arr = _menu_ui_ucl_alpha_arr + (('【%s】%d %%' % ( is_o , (i*10)) , None, [self.m_change_ucl_alpha, "%.1f" % (i/10.0) ] ),)
       _menu_ui_arr = _menu_ui_arr + ((('肥模式透明度' , None, _menu_ui_ucl_alpha_arr ),))        
         
       menu_options = menu_options + ((('4.畫面調整', None, _menu_ui_arr),))
