@@ -2522,6 +2522,10 @@ def OnKeyboardEvent(event):
       debug_print("flag_is_ctrl_down:"+str(flag_is_ctrl_down))
       debug_print("Debug3")  
       debug_print(event.KeyID)
+      # 2021-12-02 如果在英/全 模式，按 numlock、scroll lock 無法穿透的問題
+      if event.Key == "Numlock" or event.Key == "Scroll":
+        return True 
+      
       # 2018-03-27 此部分修正「英/全」時，按Ctrl A 無效的問題，或ctrl+esc等問題
       # 修正enter、winkey 在「英/全」的狀況
       if event.MessageName == "key down" and event.KeyID == 13:
