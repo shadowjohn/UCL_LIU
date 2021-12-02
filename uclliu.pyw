@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.38
+VERSION=1.39
 import portalocker
 import os
 import sys
@@ -13,6 +13,11 @@ import php
 import stts 
 import re
 import win32api
+
+# 2021-10-11 開啟輸入法時，強制轉英數
+#win32api.LoadKeyboardLayout('00000409',1) # to switch to english
+# From : https://pythonmana.com/2021/07/20210731145258781g.html
+#win32api.SendMessage(hwnd,WM_INPUTLANGCHANGEREQUEST,0,0x0409)
 import configparser
 #,,,z ,,,x 用thread去輸出字
 import thread
@@ -22,6 +27,9 @@ import random
 import pyaudio
 import audioop
 import wave
+
+import win32con
+from win32con import WM_INPUTLANGCHANGEREQUEST
 
 #2021-08-08 新版右下角 traybar
 from traybar import SysTrayIcon
@@ -161,7 +169,7 @@ import win32gui
 import win32process
 import psutil
 #import win32com
-import win32con
+
 #import win32com.client
 
 #2018-07-13 1.12版增加
@@ -344,6 +352,9 @@ GUI_FONT_18 = my.utf8tobig5("%s bold %d" % (GLOBAL_FONT_FAMILY,int(float(config[
 GUI_FONT_20 = my.utf8tobig5("%s bold %d" % (GLOBAL_FONT_FAMILY,int(float(config['DEFAULT']['ZOOM'])*20) ));
 GUI_FONT_22 = my.utf8tobig5("%s bold %d" % (GLOBAL_FONT_FAMILY,int(float(config['DEFAULT']['ZOOM'])*22) ));
 GUI_FONT_26 = my.utf8tobig5("%s bold %d" % (GLOBAL_FONT_FAMILY,int(float(config['DEFAULT']['ZOOM'])*26) ));
+
+# 最後一次選到的視窗是什麼
+LAST_WIN_TITLE = ""
 # print config setting
 debug_print("UCLLIU.ini SETTING:")
 debug_print("X:%s" % (config["DEFAULT"]["X"]))
@@ -1818,7 +1829,7 @@ def OnKeyboardEvent(event):
   global pinyi_version
   global is_need_use_phone
   global pinyi_version
-     
+  global LAST_WIN_TITLE   
   # From : https://stackoverflow.com/questions/20021457/playing-mp3-song-on-python
   # 1.26 版，加入打字音的功能
   # 1.37 版，打字音不會因為壓著一直響
@@ -1860,6 +1871,22 @@ def OnKeyboardEvent(event):
     
     hwnd = win32gui.GetForegroundWindow()  
     pid = win32process.GetWindowThreadProcessId(hwnd)
+    win_title = win32gui.GetWindowText(hwnd)
+    _is_need_change_system_english = False
+    if LAST_WIN_TITLE == "":
+      LAST_WIN_TITLE = win_title
+      _is_need_change_system_english = True
+    elif LAST_WIN_TITLE == win_title:
+      _is_need_change_system_english = False
+    else:
+      _is_need_change_system_english = True
+    #2021-10-11
+    # 視窗如果與上次不同，就切換成英文
+    # From : https://pythonmana.com/2021/07/20210731145258781g.html
+    if _is_need_change_system_english == True:
+      win32api.SendMessage(hwnd,WM_INPUTLANGCHANGEREQUEST,0,0x0409)
+            
+      
     pp="";
     if len(pid) >=2:
       pp=pid[1]
@@ -1883,7 +1910,7 @@ def OnKeyboardEvent(event):
           toggle_ucl()
         return True
     # chrome 遠端桌面也不需要肥米
-    if my.is_string_like(my.strtolower(win32gui.GetWindowText(hwnd)),"- chrome "):
+    if my.is_string_like(my.strtolower(win_title),"- chrome "):
       if is_ucl()==True:
         toggle_ucl()
       return True
