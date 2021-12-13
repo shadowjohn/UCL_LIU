@@ -23,7 +23,7 @@
 <h3>版本：</h3>V 1.39<br>
 <br>
 <h3>版權：</h3>
-　免錢的 MIT-License
+　完全免費的 MIT-License
 <br>
 <h3>下載位置：</h3>
 　　1.主程式(1.39 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
@@ -74,6 +74,10 @@
 <kbd>
 <img src="screenshot/install/2.png"><br>
   <h3>安裝一個「ENG語系」，點選【語言喜好設定】」，應該可以在控制台找到。</h3>
+</kbd>
+<kbd>
+<img src="screenshot/l_setting.png"><br>
+  <h3>如果找不到，就在搜尋列輸入「語言設定」</h3>
 </kbd>
 <kbd>
 <img src="screenshot/install/3.png"><br>
