@@ -590,5 +590,6 @@ Ans：<br>
   <li>(Done 2021-12-01)145、打字音只改用一個執行緒</li>
   <li>(Done 2021-12-01)146、打字音量，可以在選單裡選擇</li>
   <li>(Done 2021-12-01)147、短版模式、長版模式可以在選單裡選擇</li>
+  <li>148、左鍵點右下角的「肥」，也可以打開選單，參考：https://github.com/Infinidat/infi.systray/issues/35</li>
 </ul>
 <br>
