@@ -23,7 +23,7 @@
 <h3>版本：</h3>V 1.39<br>
 <br>
 <h3>版權：</h3>
-　免錢的 MIT-License
+　完全免費的 MIT-License
 <br>
 <h3>下載位置：</h3>
 　　1.主程式(1.39 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
@@ -76,11 +76,19 @@
   <h3>安裝一個「ENG語系」，點選【語言喜好設定】」，應該可以在控制台找到。</h3>
 </kbd>
 <kbd>
+<img src="screenshot/l_setting.png"><br>
+  <h3>如果找不到，就在搜尋列輸入「語言設定」</h3>
+</kbd>
+<kbd>
 <img src="screenshot/install/3.png"><br>
   <h3>
 一、國家與地區，要選「台灣」<br>
 二、新增語言：找到「English (United States)」加入，但【中文(台灣)要設為預設值】<br>
 三、平常打字時，就選「ENG」打起來就會很順手。<br>
+四、Windows更新後，新版的畫面稍有不同，建議可以參考此圖<br>
+<img src="screenshot/l_setting_1.png"></br>
+Windows 顯示語言：中文（台灣）<br>
+在新增完 English (Unitied States) 後，將 English 的順位上移到第一位，才不會一直被注音煩<br>
   </h3>
     17、出字模式選擇：<br>
 <kbd>
@@ -127,7 +135,8 @@
     3. 144、英數時的透明度讓使用者自定
     4. 145、打字音只改用一個執行緒
     5. 146、打字音量，可以在選單裡選擇
-    6. 147、短版模式、長版模式可以在選單裡選擇            
+    6. 147、短版模式、長版模式可以在選單裡選擇
+    <img src="screenshot/ucl_11.png">            
     
     (2021-08-31) V1.38 版：
     病毒碼提交掃描：1.38
