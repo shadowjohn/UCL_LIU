@@ -266,7 +266,11 @@ class SysTrayIcon(object):
         elif lparam == WM_RBUTTONUP:
             self._show_menu()
         elif lparam == WM_LBUTTONUP:
-            pass
+            # From : https://github.com/Infinidat/infi.systray/issues/35
+            # allow left click open menu
+            # fix issue : 148
+            self._show_menu()
+            #pass
         return True
 
     def _show_menu(self):

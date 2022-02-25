@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION=1.40
+VERSION="1.40"
 import portalocker
 import os
 import sys

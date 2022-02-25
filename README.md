@@ -127,8 +127,10 @@ Windows 顯示語言：中文（台灣）<br>
 <pre>
     (2022-02-26) V1.40 版：
     病毒碼提交掃描：1.40
-    https://www.microsoft.com/en-us/wdsi/submission/dc73bd10-099c-45a7-ba83-405725ac0818
-    1. 149、繁轉簡，有些字沒出現，如「嘆->叹」，参考：https://github.com/shadowjohn/UCL_LIU/issues/18
+    https://www.microsoft.com/en-us/wdsi/submission/4130bb80-2556-48e4-b68a-ec5d5afdcb2a    
+    1. 150、VERSION 原本 Float 改成 String
+    2. 148、左鍵點右下角的「肥」，也可以打開選單，參考：https://github.com/Infinidat/infi.systray/issues/35
+    3. 149、繁轉簡，有些字沒出現，如「嘆->叹」，参考：https://github.com/shadowjohn/UCL_LIU/issues/18
     stts.py 裡原先使用台灣碼農的繁簡對照表，發現有缺漏字(2553字)，改使用：hanziconv (2704字)
     https://github.com/berniey/hanziconv/blob/master/hanziconv/charmap.py
     
@@ -604,7 +606,8 @@ Ans：<br>
   <li>(Done 2021-12-01)145、打字音只改用一個執行緒</li>
   <li>(Done 2021-12-01)146、打字音量，可以在選單裡選擇</li>
   <li>(Done 2021-12-01)147、短版模式、長版模式可以在選單裡選擇</li>
-  <li>148、左鍵點右下角的「肥」，也可以打開選單，參考：https://github.com/Infinidat/infi.systray/issues/35</li>
+  <li>(Done 2022-02-26)148、左鍵點右下角的「肥」，也可以打開選單，參考：https://github.com/Infinidat/infi.systray/issues/35</li>
   <li>(Done 2022-02-26)149、繁轉簡，有些字沒出現，如「嘆->叹」，参考：https://github.com/shadowjohn/UCL_LIU/issues/18</li>
+  <li>(Done 2022-02-26)150、VERSION 原本 Float 改成 String</li>
 </ul>
 <br>
