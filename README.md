@@ -21,16 +21,16 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2022-02-26 12:54
+<h3>最後更新日期：</h3>2022-03-05 09:30
 <br>
-<h3>版本：</h3>V 1.40<br>
+<h3>版本：</h3>V 1.41<br>
 <br>
 <h3>版權：</h3>
 　完全免費的 MIT-License
 <br>
 <h3>下載位置：</h3>
-　　1.主程式(1.40 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
-　　2.主程式(1.39 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.39/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.39/uclliu.exe</a><br>
+　　1.主程式(1.41 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
+　　2.主程式(1.40 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.40/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.40/uclliu.exe</a><br>
 　　3.歷年版本：<a target="_blank" href="https://github.com/shadowjohn/UCL_LIU/tree/master/RELEASE">歷代版本</a><br>
 　　4.同音字庫：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt</a><br>
 　　5.打字聲音：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip</a> 下載後解開，0~9.wav 與 uclliu.exe 放一起
@@ -125,6 +125,10 @@ Windows 顯示語言：中文（台灣）<br>
   
 <br>
 <pre>
+    (2022-03-05) V1.41 版：
+    病毒碼提交掃描：1.41        
+    1. 151、新、舊繁簡對照表，補「拚(拼)」：hanziconv (2705字)
+    
     (2022-02-26) V1.40 版：
     病毒碼提交掃描：1.40
     https://www.microsoft.com/en-us/wdsi/submission/4130bb80-2556-48e4-b68a-ec5d5afdcb2a    
@@ -609,5 +613,6 @@ Ans：<br>
   <li>(Done 2022-02-26)148、左鍵點右下角的「肥」，也可以打開選單，參考：https://github.com/Infinidat/infi.systray/issues/35</li>
   <li>(Done 2022-02-26)149、繁轉簡，有些字沒出現，如「嘆->叹」，参考：https://github.com/shadowjohn/UCL_LIU/issues/18</li>
   <li>(Done 2022-02-26)150、VERSION 原本 Float 改成 String</li>
+  <li>(Done 2022-03-05)151、新、舊繁簡對照表，補「拚(拼)」，参考：https://3wa.tw/demo/htm/test_javascript.php?id=133</li>
 </ul>
 <br>
