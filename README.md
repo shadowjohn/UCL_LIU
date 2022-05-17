@@ -126,7 +126,8 @@ Windows 顯示語言：中文（台灣）<br>
 <br>
 <pre>
     (2022-03-05) V1.41 版：
-    病毒碼提交掃描：1.41        
+    病毒碼提交掃描：1.41
+    https://www.microsoft.com/en-us/wdsi/submission/ecbd9e8a-06b3-4af2-8047-ebb53ca721b2        
     1. 151、新、舊繁簡對照表，補「拚(拼)」：hanziconv (2705字)
     
     (2022-02-26) V1.40 版：
