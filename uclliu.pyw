@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION="1.41"
+VERSION="1.42"
 import portalocker
 import os
 import sys
@@ -1676,18 +1676,18 @@ def senddata(data):
     k = my.strtolower(k)
     exec_proc = my.strtolower(p.exe())
     # 2021-08-08 term.ptt.cc (批踢踢實業坊 - Google Chrome) 改成，強制 paste
-    if my.is_string_like(exec_proc,k) or DEFAULT_OUTPUT_TYPE == "PASTE" or program_title == my.utf8tobig5(u"批踢踢實業坊 - Google Chrome") or program_title == my.utf8tobig5(u"批踢踢實業坊 - Brave") or program_title == my.utf8tobig5(u"批踢踢實業坊 - 個人 - Microsoft? Edge") or program_title == my.utf8tobig5(u"批踢踢實業坊 — Mozilla Firefox"):  
+    if my.is_string_like(exec_proc,k) or DEFAULT_OUTPUT_TYPE == "PASTE" or program_title == my.utf8tobig5(u"批踢踢實業坊") or program_title == my.utf8tobig5(u"批踢踢實業坊 - Google Chrome") or program_title == my.utf8tobig5(u"批踢踢實業坊 - Brave") or program_title == my.utf8tobig5(u"批踢踢實業坊 - 個人 - Microsoft? Edge") or program_title == my.utf8tobig5(u"批踢踢實業坊 — Mozilla Firefox"):  
       check_kind="1"      
       
       win32clipboard.OpenClipboard()
       orin_clip=""
-      try:
-        orin_clip=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
-      except:
-        pass
-      win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, "")
-      win32clipboard.EmptyClipboard()
-      win32clipboard.CloseClipboard()
+      #try:
+      #  orin_clip=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
+      #except:
+      #  pass
+      #win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, "")
+      #win32clipboard.EmptyClipboard()
+      #win32clipboard.CloseClipboard()
             
       win32clipboard.OpenClipboard() 
       win32clipboard.EmptyClipboard()#這一行特別重要，經過實驗如果不加這一行的話會做動不正常
@@ -1724,10 +1724,10 @@ def senddata(data):
       #sys.setdefaultencoding('UTF-8')
       #也許要設delay...
       time.sleep(0.05)
-      win32clipboard.OpenClipboard()    
-      win32clipboard.EmptyClipboard()
-      win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip)
-      win32clipboard.CloseClipboard()            
+      #win32clipboard.OpenClipboard()    
+      #win32clipboard.EmptyClipboard()
+      #win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip)
+      #win32clipboard.CloseClipboard()            
       break
   for k in f_big5_arr:
     k = my.strtolower(k)
