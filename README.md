@@ -127,7 +127,7 @@ Windows 顯示語言：中文（台灣）<br>
 <pre>
     (2022-06-21) V1.42 版：
     病毒碼提交掃描：1.42
-            
+    https://www.microsoft.com/en-us/wdsi/submission/e82b3ada-c472-4156-b75e-e4ab87d1e48d            
     1. 在 Windows 11 時，修正 chrome、edge、brave 開 term.ptt.cc 無法正常打字的問題
     
     (2022-03-05) V1.41 版：
