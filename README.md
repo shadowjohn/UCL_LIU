@@ -621,5 +621,6 @@ Ans：<br>
   <li>(Done 2022-02-26)150、VERSION 原本 Float 改成 String</li>
   <li>(Done 2022-03-05)151、新、舊繁簡對照表，補「拚(拼)」，参考：https://3wa.tw/demo/htm/test_javascript.php?id=133</li>
   <li>(Done 2022-06-21)152、在 Windows 11 時，修正 chrome、edge、brave 開 term.ptt.cc 無法正常打字的問題</li>
+  <li>153、同音字查詢時，顯示順序優先問題，如：閒 'mue 不應該是「見」讀音優先，以「閒」出現順位較前面的優先</li>
 </ul>
 <br>
