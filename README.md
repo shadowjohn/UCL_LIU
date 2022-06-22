@@ -21,16 +21,16 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2022-03-05 09:30
+<h3>最後更新日期：</h3>2022-06-21 23:00
 <br>
-<h3>版本：</h3>V 1.41<br>
+<h3>版本：</h3>V 1.42<br>
 <br>
 <h3>版權：</h3>
 　完全免費的 MIT-License
 <br>
 <h3>下載位置：</h3>
-　　1.主程式(1.41 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
-　　2.主程式(1.40 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.40/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.40/uclliu.exe</a><br>
+　　1.主程式(1.42 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
+　　2.主程式(1.41 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.40/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.41/uclliu.exe</a><br>
 　　3.歷年版本：<a target="_blank" href="https://github.com/shadowjohn/UCL_LIU/tree/master/RELEASE">歷代版本</a><br>
 　　4.同音字庫：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt</a><br>
 　　5.打字聲音：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip</a> 下載後解開，0~9.wav 與 uclliu.exe 放一起
@@ -125,6 +125,11 @@ Windows 顯示語言：中文（台灣）<br>
   
 <br>
 <pre>
+    (2022-06-21) V1.42 版：
+    病毒碼提交掃描：1.42
+    https://www.microsoft.com/en-us/wdsi/submission/e82b3ada-c472-4156-b75e-e4ab87d1e48d            
+    1. 在 Windows 11 時，修正 chrome、edge、brave 開 term.ptt.cc 無法正常打字的問題
+    
     (2022-03-05) V1.41 版：
     病毒碼提交掃描：1.41
     https://www.microsoft.com/en-us/wdsi/submission/ecbd9e8a-06b3-4af2-8047-ebb53ca721b2        
@@ -429,7 +434,7 @@ Windows 顯示語言：中文（台灣）<br>
     <li>4、安裝【p27/pygtk-all-in-one-2.24.1.win32-py2.7.msi】</li>
     <li>5、安裝【p27/pywin32-221.win32-py2.7.exe】</li>
     <li>6、至windows cmd，下指令【pip install psutil==5.8.0】</li>
-    <li>7、至windows cmd，下指令【pip install pyinstaller==3.4】</li>
+    <li>7、至windows cmd，下指令【pip install pyinstaller==3.4】(如果裝失敗，下面的先裝，並更新 pip 後再回頭裝看看，應該可以成功)</li>
     <li>8、至windows cmd，下指令【pip install configparser==4.0.2】</li>
     <li>9、至windows cmd，下指令【pip install pyaudio==0.2.11】</li>
     <li>10、將買來的嘸蝦米，找到 liu-uni.tab，dist裡提供的pinyi.txt 與主檔 uclliu.pyw 放在一起</li>
@@ -615,5 +620,6 @@ Ans：<br>
   <li>(Done 2022-02-26)149、繁轉簡，有些字沒出現，如「嘆->叹」，参考：https://github.com/shadowjohn/UCL_LIU/issues/18</li>
   <li>(Done 2022-02-26)150、VERSION 原本 Float 改成 String</li>
   <li>(Done 2022-03-05)151、新、舊繁簡對照表，補「拚(拼)」，参考：https://3wa.tw/demo/htm/test_javascript.php?id=133</li>
+  <li>(Done 2022-06-21)152、在 Windows 11 時，修正 chrome、edge、brave 開 term.ptt.cc 無法正常打字的問題</li>
 </ul>
 <br>
