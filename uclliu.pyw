@@ -1806,7 +1806,7 @@ def use_pinyi(data):
         #finds="%s%s " % (finds,my.implode(" ",m[1:]))
         _mSearch.append({ "index": m[1:].index(data) , "data":my.implode(" ",m[1:])});
       else:
-        _mSearch.append({ "index": m[1:].index(data) , "data":my.trim(k)});
+        _mSearch.append({ "index": my.trim(k).index(data) , "data":my.trim(k)});
         #finds="%s%s " % (finds,my.trim(k))
       #debug_print(k)
   
