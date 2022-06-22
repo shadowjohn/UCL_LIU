@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION="1.42"
+VERSION="1.43"
 import portalocker
 import os
 import sys
@@ -1547,11 +1547,12 @@ def show_search(kind):
     pass
   elif kind == "phone":
     WORDS_FROM = uclcode_phone;
-    m = mystts.split_unicode_chrs(play_ucl_label.decode("utf-8"))    
+    m = mystts.split_unicode_chrs(play_ucl_label.decode("utf-8"))
+    
     for i in range(0,my.strlen(m)):    
             
       m[i] = phone_INDEX[phone_DATA.index(m[i])]
-    c = my.implode("",m)    
+    c = my.implode("",m)      
   
   if c[0] == "'" and len(c)>1:
     c=c[1:]
@@ -1787,6 +1788,14 @@ def use_pinyi(data):
   range_start = 0;
   if pinyi_version == "0.01":
     range_start = 2
+    
+  # 這裡是處理同音字的部分
+  # finds 是指同音字有哪些字
+  # 2022-06-22 klt 版有提到，如「閒 'mou」，應該是找發音接近，而非「見」的資料
+  # 深思熟慮後，改成優先找最接近的字排序
+  # 排序方法：https://3wa.tw/mypaper/index.php?uid=shadow&mode=view&id=2093
+  _mSearch = []          
+          
   for i in range(range_start,len(same_sound_data)):
     k = same_sound_data[i]
     if my.is_string_like(k,data):
@@ -1794,10 +1803,19 @@ def use_pinyi(data):
       #  k = u[1:]
       if pinyi_version == "0.01":
         m = my.explode(" ",my.trim(k))        
-        finds="%s%s " % (finds,my.implode(" ",m[1:]))
+        #finds="%s%s " % (finds,my.implode(" ",m[1:]))
+        _mSearch.append({ "index": m[1:].index(data) , "data":my.implode(" ",m[1:])});
       else:
-        finds="%s%s " % (finds,my.trim(k))
+        _mSearch.append({ "index": m[1:].index(data) , "data":my.trim(k)});
+        #finds="%s%s " % (finds,my.trim(k))
       #debug_print(k)
+  
+  # 由小至大排序
+  _mSearchSorted = sorted(_mSearch,key=lambda gg: gg["index"],reverse=False);
+  # merge _mSearchSorted to finds
+  for i in range(0, len(_mSearchSorted)):
+    finds="%s%s " % (finds,_mSearchSorted[i]["data"])
+  
   finds=my.trim(finds);
   finds=my.explode(" ",finds)
   #debug_print(finds)
