@@ -127,7 +127,7 @@ Windows 顯示語言：中文（台灣）<br>
 <pre>
     (2022-06-24) V1.44 版：
     病毒碼提交掃描：1.44    
-                
+    https://www.microsoft.com/en-us/wdsi/submission/ac35171b-9d2f-4418-b8e7-2207f93635e3            
     1. 154、修正使用 Opera 上 term.ptt.cc 無法打中文的問題
     
     (2022-06-22) V1.43 版：
