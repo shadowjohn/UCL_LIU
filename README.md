@@ -21,16 +21,16 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2022-06-22 13:47
+<h3>最後更新日期：</h3>2022-06-24 00:20
 <br>
-<h3>版本：</h3>V 1.43<br>
+<h3>版本：</h3>V 1.44<br>
 <br>
 <h3>版權：</h3>
 　完全免費的 MIT-License
 <br>
 <h3>下載位置：</h3>
-　　1.主程式(1.43 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
-　　2.主程式(1.42 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.42/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.42/uclliu.exe</a><br>
+　　1.主程式(1.44 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
+　　2.主程式(1.43 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.43/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.43/uclliu.exe</a><br>
 　　3.歷年版本：<a target="_blank" href="https://github.com/shadowjohn/UCL_LIU/tree/master/RELEASE">歷代版本</a><br>
 　　4.同音字庫：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt</a><br>
 　　5.打字聲音：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip</a> 下載後解開，0~9.wav 與 uclliu.exe 放一起
@@ -125,6 +125,11 @@ Windows 顯示語言：中文（台灣）<br>
   
 <br>
 <pre>
+    (2022-06-24) V1.44 版：
+    病毒碼提交掃描：1.44    
+                
+    1. 154、修正使用 Opera 上 term.ptt.cc 無法打中文的問題
+    
     (2022-06-22) V1.43 版：
     病毒碼提交掃描：1.43    
     https://www.microsoft.com/en-us/wdsi/submission/904ff1d5-169c-4190-a676-405df0f8bbaf            
@@ -627,5 +632,6 @@ Ans：<br>
   <li>(Done 2022-03-05)151、新、舊繁簡對照表，補「拚(拼)」，参考：https://3wa.tw/demo/htm/test_javascript.php?id=133</li>
   <li>(Done 2022-06-21)152、在 Windows 11 時，修正 chrome、edge、brave 開 term.ptt.cc 無法正常打字的問題</li>
   <li>(Done 2022-06-22)153、同音字查詢時，顯示順序優先問題，如：閒 'mue 不應該是「見」讀音優先，以「閒」出現順位較前面的優先</li>
+  <li>(Done 2022-06-22)154、修正使用 Opera 上 term.ptt.cc 無法打中文的問題</li>
 </ul>
 <br>
