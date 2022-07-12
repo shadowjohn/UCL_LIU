@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION="1.44"
+VERSION="1.45"
 import portalocker
 import os
 import sys
@@ -1962,7 +1962,8 @@ def OnKeyboardEvent(event):
           toggle_ucl()
         return True
     # chrome 遠端桌面也不需要肥米
-    if my.is_string_like(my.strtolower(win32gui.GetWindowText(hwnd)),"- chrome "):
+    # 2022-07-12 修正是 遠端桌面，才不需要肥米
+    if my.is_string_like(my.strtolower(win32gui.GetWindowText(hwnd)),"- chrome 遠端桌面"):
       if is_ucl()==True:
         toggle_ucl()
       return True
