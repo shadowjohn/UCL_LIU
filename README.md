@@ -126,6 +126,8 @@ Windows 顯示語言：中文（台灣）<br>
 <br>
 <pre>
     (2022-08-09) V1.46 版：
+	病毒碼提交掃描：1.46
+	https://www.microsoft.com/en-us/wdsi/submission/e1ae841b-4c16-4608-bf57-5a2afa9d4a0e
 	1. 156、肥米的 UI 有機會沉到 taskbar 以下
 	
     (2022-06-24) V1.45 版：
