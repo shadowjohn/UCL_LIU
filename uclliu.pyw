@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION="1.45"
+VERSION = "1.46"
 import portalocker
 import os
 import sys
@@ -13,6 +13,9 @@ import php
 import stts 
 import re
 import win32api
+# 2022-08-09 參考 https://stackoverflow.com/questions/4357258/how-to-get-the-height-of-windows-taskbar-using-python-pyqt-win32
+# 可以取得工作列高度
+from win32api import GetMonitorInfo, MonitorFromPoint
 import configparser
 #,,,z ,,,x 用thread去輸出字
 import thread
@@ -1158,6 +1161,11 @@ def find_ucl_in_uclcode_old(chinese_data):
 
 #debug_print(find_ucl_in_uclcode("肥"))
 #my.exit();
+def UCLGUI_GET_TASKBAR_HEIGHT():
+  monitor_info = GetMonitorInfo(MonitorFromPoint((0,0)))
+  monitor_area = monitor_info.get("Monitor")
+  work_area = monitor_info.get("Work")
+  return (monitor_area[3]-work_area[3])
 def UCLGUI_CLOSEST_MONITOR():
   global myScreenStatus
   #肥米靠近哪個螢幕
@@ -1223,8 +1231,9 @@ def toAlphaOrNonAlpha():
   if _x  > (myScreenStatus["screens"][UCLGUI_CLOSEST_MONITOR()]["x"] + myScreenStatus["screens"][UCLGUI_CLOSEST_MONITOR()]["w"]) - _width:
     new_position_x = (myScreenStatus["screens"][UCLGUI_CLOSEST_MONITOR()]["x"] + myScreenStatus["screens"][UCLGUI_CLOSEST_MONITOR()]["w"])-_width-20    
     win.move( new_position_x,new_position_y)
-  if _y > (myScreenStatus["screens"][UCLGUI_CLOSEST_MONITOR()]["y"] + myScreenStatus["screens"][UCLGUI_CLOSEST_MONITOR()]["h"]) - _height:
-    new_position_y = (myScreenStatus["screens"][UCLGUI_CLOSEST_MONITOR()]["y"] + myScreenStatus["screens"][UCLGUI_CLOSEST_MONITOR()]["h"]) - _height - 60 
+  taskbar_height = UCLGUI_GET_TASKBAR_HEIGHT()
+  if _y > (myScreenStatus["screens"][UCLGUI_CLOSEST_MONITOR()]["y"] + myScreenStatus["screens"][UCLGUI_CLOSEST_MONITOR()]["h"]) - _height - taskbar_height:
+    new_position_y = (myScreenStatus["screens"][UCLGUI_CLOSEST_MONITOR()]["y"] + myScreenStatus["screens"][UCLGUI_CLOSEST_MONITOR()]["h"]) - _height - 20 - taskbar_height
     win.move( new_position_x,new_position_y)
   
   if _x < myScreenStatus["screens"][UCLGUI_CLOSEST_MONITOR()]["x"]:
