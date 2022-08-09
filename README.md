@@ -130,6 +130,7 @@ Windows 顯示語言：中文（台灣）<br>
 	
     (2022-06-24) V1.45 版：
     病毒碼提交掃描：1.45
+    https://www.microsoft.com/en-us/wdsi/submission/d303712c-cb9a-4f99-8b50-59347b1222b2
     1. 155、瀏覽器開 https://chrome.google.com/ 無法正常打中文的問題
     
     (2022-06-24) V1.44 版：
