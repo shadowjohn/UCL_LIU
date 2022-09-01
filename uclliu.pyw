@@ -974,12 +974,15 @@ uclcode_r = {}
 #only short key
 for k in uclcode["chardefs"]:
    for kk in range(0,len(uclcode["chardefs"][k])):
-     _word = uclcode["chardefs"][k][kk]     
+     _word = uclcode["chardefs"][k][kk]
+     temp_k = k
+     if kk>0:
+       temp_k = unicode(str(k)+str(kk))
      if _word not in uclcode_r:
-       uclcode_r[_word] = k
+       uclcode_r[_word] = temp_k
      else:
-       if len(k) < len(uclcode_r[_word]):
-         uclcode_r[_word] = k
+       if len(temp_k) < len(uclcode_r[_word]):
+         uclcode_r[_word] = temp_k
 
 
 def thread___playMusic(keyboard_volume):
