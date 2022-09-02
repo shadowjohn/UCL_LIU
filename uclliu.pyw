@@ -29,8 +29,6 @@ import wave
 #2021-08-08 新版右下角 traybar
 from traybar import SysTrayIcon
 
-
-
 paudio_player = None
 #2021-10-28 同時間只能一個執行緒播放
 is_sound_playing = False
@@ -61,9 +59,8 @@ f_big5_arr = [ "zip32w","daqkingcon.exe","EWinner.exe" ]
 # 2021-07-03 vncviewer.exe 不需要肥米
 f_pass_app = [ "mstsc.exe","Cyberpunk2077.exe","vncviewer.exe" ]
 
-
-
 # 2019-10-20 增加出字模式
+# 這是右下角 肥 的 icon
 UCL_PIC_BASE64 = "AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAACUWAAAlFgAAAAAAAAAAAAD/////+Pf4//n6+//8+/n/4ebh/+3y8f////////////n69v/u9Ov/6u7o/+ru6P/q7+n/8vjy//7+////////+vTu/5W0e/+w1cv/1Na0/1mxPP9mvWL/0+bm/+fk0/+BwmD/YsVI/16+Rv9evkb/X8BG/2jGWP+01cX///////bu5v9wq0D/cbmQ/9jhyf+h1oP/Rq4t/5LAuv+xtIf/Qagu/4fMg/+d3I7/m9uO/5zXif9juzf/Vatp/+ny+f///f3/nbFt/1OoZP/t9v3/7O3Y/1StOf+LvbT/pKd5/06sU//i7ff/////////////////p7Z7/0WnSP/U5e3//////7/MkP9NqE7/2+Tv/+vt2P9Trjn/jL21/6Wnef9OrFP/4+73/////////////////8bCnv9kqmD/0uPo///////MyKr/Q4k1/22cbf+uza7/VK47/4y9tf+lp3n/TqxT/+Pu9//////////////////18e3/7fDv//7+////////zsKu/0WbKP9HqTD/TLM7/0CqMP+NvbX/pad5/06sVP/j7vf//////////////////////////////////////87Crf9IoTX/m76j/2auOv81sCT/jb22/6Wne/9FrzT/iNKC/5faiP+X2of/ldmG/5TWiv/G3NT////////////Owq3/R6Az/7zh2v/H0Kj/Ragr/4y9tf+mp3z/QK8l/1y6Rf9IsCT/QrUw/165Qv9AriH/jbap////////////zsKt/0miNv+St5X/erBj/0iqM/+MvbX/pad6/02rUP/S1tn/cZRC/1yydv/g2tH/Zacx/4u4qf///////////87Crv9InS7/VZtD/0edPf9EpjT/jL21/6Wnef9PrVT/3uDo/3SVRf9guHz/7+ff/2mqM/+Lt6n////////////Owq7/R50o/1WkTf+Gsoz/VK48/4y9tf+lp3n/T61U/97g6P90lUX/YLd8/+/n3/9pqjP/i7ep////////////zsKt/0egM/+z1tD/4uHR/1StOf+MvbX/pad6/06tUv/X3eD/cpZE/122ef/n49f/Z6oy/4u3qf///////////87Crf9CnSP/Yaha/3SlVf89pCf/jLy0/6Sne/8/sCb/ZMVQ/0qyKP9EujX/aMVN/0SxIv+Mtqn////////////b0MX/dppZ/2+mVv9uplb/bJ9d/67Jyf/LyrX/icJ2/4jId/+KyXn/ish5/4jId/+Hw3v/vtDO/////////////f39//n1+P/59Pf/+fT3//n1+P/8/P3///7///77/v/++/7//vv+//77/v/++/7//vv+///+////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="
 ICON_PATH = PWD + "\\icon.ico"
 DEFAULT_OUTPUT_TYPE = "DEFAULT"
@@ -90,8 +87,6 @@ myopencc = OpenCC('s2t')
 
 # Debug 模式
 is_DEBUG_mode = False
-
-
 
 message = ("\nUCLLIU 肥米輸入法\nBy 羽山秋人(http://3wa.tw)\nVersion: %s\n\n若要使用 Debug 模式：uclliu.exe -d\n" % (VERSION));
 
@@ -250,8 +245,6 @@ screen_height = gtk.gdk.screen_height()
 
 debug_print("screen_width: %d\n" % (screen_width));
 debug_print("screen_height: %d\n" % (screen_height));
-
-
   
 config = configparser.ConfigParser()
 config['DEFAULT'] = {
@@ -1122,7 +1115,7 @@ def thread___x(data):
     #debug_print(len(m));
     for i in range(0,len(m)):
       #轉小寫
-      ucl_split_code = my.strtolower(m[i])      
+      ucl_split_code = my.strtolower(m[i])
       output += uclcode_to_chinese(ucl_split_code)
     if kLine != len(menter)-1:      
       output+="{ENTER}"
@@ -1184,9 +1177,8 @@ def show_sp_to_label(data,isForce=None):
   type_label_set_text(sp)     
 def thread___z(data):
   #debug_print("thread___z: ")
-  #debug_print(data);
-  
-  senddata(data) 
+  #debug_print(data);  
+  senddata(data)
        
 def find_ucl_in_uclcode(chinese_data):
   #用中文反找蝦碼(V1.10版寫法)
@@ -1579,7 +1571,7 @@ def uclcode_to_chinese(code):
   #global debug_print
   global _vrsfw_arr  
   c = code
-  c = my.trim(c)    
+  c = my.trim(c)
   if c == "":
     return ""
   # 如果最末碼是 1234567... 嘗試轉換 vrsfw...
@@ -1738,8 +1730,6 @@ def senddata(data):
   #簡繁轉換  
   if is_simple():    
     data = mystts.trad2simple(data)
-      
-    
   
   same_sound_index = 0 #回到第零頁
   is_has_more_page = False #回到沒有分頁
@@ -2196,34 +2186,38 @@ def OnKeyboardEvent(event):
         toAlphaOrNonAlpha()                   
         orin_clip=""
         try:
+          # 備份原本剪貼簿的內容，有可能文字，圖片之類的吧?
           win32clipboard.OpenClipboard()
           orin_clip=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
         except:
           pass
         try:
+          # 清掉剪貼簿內容
           win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, "")
           win32clipboard.EmptyClipboard()
           win32clipboard.CloseClipboard()
         except:
           pass
+        # 利用 ctrl + c 複製目前遊標框選的文字
         SendKeysCtypes.SendKeys("^C",pause=0.05)
         try:
           win32clipboard.OpenClipboard()
           #try:
           time.sleep(0.05)
-          selectData = win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
+          selectData = win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT) # 從剪貼簿裡抓出內容
+          win32clipboard.CloseClipboard() # 抓完關掉剪貼簿
           #debug_print("#2200 selectData:");
           #debug_print(selectData);
-          #簡轉繁 # 似乎不能單純用 simple2trad，不然 家 -> 傢，后->後
-          #改用 opencc改
-          # From : https://yanwei-liu.medium.com/python%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86-%E5%9B%9B-%E7%B9%81%E7%B0%A1%E8%BD%89%E6%8F%9B%E5%88%A9%E5%99%A8opencc-74021cbc6de3          
+          # 1.47 版，使用 opencc改 修正「簡轉繁」
+          # 簡轉繁 # 似乎不能單純用 simple2trad，不然 家 -> 傢，后->後
+          # From : https://yanwei-liu.medium.com/python%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86-%E5%9B%9B-%E7%B9%81%E7%B0%A1%E8%BD%89%E6%8F%9B%E5%88%A9%E5%99%A8opencc-74021cbc6de3
+          # selectData = mystts.simple2trad(selectData) #舊版的 stts 寫法
           
-          #selectData = mystts.simple2trad(selectData)                 
           selectData = myopencc.convert(selectData)
-          selectData = word_to_sp(selectData)                   
+          selectData = word_to_sp(selectData)
           
           #debug_print("#2200 after simple2trad:");
-          #debug_print(selectData);          
+          #debug_print(selectData);
           
           thread.start_new_thread( thread___z, (selectData, ))
         except:
@@ -2233,7 +2227,7 @@ def OnKeyboardEvent(event):
         try:
           win32clipboard.OpenClipboard()    
           win32clipboard.EmptyClipboard()
-          win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip)
+          win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip) #還原原本剪貼簿內容
           win32clipboard.CloseClipboard()
         except:
           pass
