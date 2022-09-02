@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION = "1.46"
+VERSION = "1.47"
 import portalocker
 import os
 import sys
@@ -28,6 +28,9 @@ import wave
 
 #2021-08-08 新版右下角 traybar
 from traybar import SysTrayIcon
+
+
+
 paudio_player = None
 #2021-10-28 同時間只能一個執行緒播放
 is_sound_playing = False
@@ -77,6 +80,11 @@ mystts = stts.kit()
 
 reload(sys)
 sys.setdefaultencoding('UTF-8')
+
+#2022-09-02 改用 opencc 簡繁轉換
+# 嘗試修正 ,,,z 在轉 簡字回字碼，有些語句如 「小当家->小當傢，天后->天後」這種問題
+#from opencc import OpenCC
+#myopencc = OpenCC('s2t')
 
 # Debug 模式
 is_DEBUG_mode = False
@@ -970,19 +978,41 @@ if my.is_file(PWD + "\\pinyi.txt")==True:
 uclcode = my.json_decode(my.file_get_contents(PWD + "\\liu.json"))
 
 uclcode_r = {}
+uclcode_rr = {}
 #然後把 chardefs 的字碼，變成對照字根，可以加速 ,,,z、,,,x 反查的速度
 #only short key
+_vrsfw_arr = ['v','r','s','f','w','l','c','b','k','j','je','jr','js','jf','jw','jl','jc','jb','jk','rj','re','rr']
 for k in uclcode["chardefs"]:
+   #2022-09-01 感謝 Benson9954029 提出修正
    for kk in range(0,len(uclcode["chardefs"][k])):
      _word = uclcode["chardefs"][k][kk]
      temp_k = k
-     if kk>0:
+     if kk > 0: # and kk-1 < len(_vrsfw_arr):       
+       # 如 娚-> gqd2
+       #debug_print("str(kk) : "+str(kk));
        temp_k = unicode(str(k)+str(kk))
+       # 如 娚-> gqd2 -> gqdr
+       #temp_k = unicode(str(k)+str(_vrsfw_arr[kk-1]))
+       #debug_print("temp_k : "+temp_k);
+       #debug_print("str(k) : "+str(k));
+       #debug_print("str(kk) : "+str(kk));
+       #sys.exit();
+       #temp_k : gai1
+       #str(k) : gai
+       #str(kk) : 1
      if _word not in uclcode_r:
        uclcode_r[_word] = temp_k
+       uclcode_rr[temp_k] = _word
      else:
        if len(temp_k) < len(uclcode_r[_word]):
-         uclcode_r[_word] = temp_k
+         uclcode_r[_word] = temp_k         
+         uclcode_rr[temp_k] = _word
+     #debug_print(_word + ", " + uclcode_r[_word]);  # 媮, gai
+     #debug_print(temp_k + ", " + uclcode_rr[temp_k]);  # gai, 媮
+     #my.exit()
+     #if _word == '夬' or _word == '搉':
+     #    debug_print(uclcode_r[_word] + ":"+ _word)
+#my.exit()        
 
 
 def thread___playMusic(keyboard_volume):
@@ -1085,22 +1115,30 @@ def thread___x(data):
     #debug_print(len(m));
     for i in range(0,len(m)):
       #轉小寫
-      ucl_split_code = my.strtolower(m[i])
-      output += uclcode_to_chinese(ucl_split_code)      
+      ucl_split_code = my.strtolower(m[i])      
+      output += uclcode_to_chinese(ucl_split_code)
     if kLine != len(menter)-1:      
       output+="{ENTER}"
   senddata(output)  
+
+
 def word_to_sp(data):
-  #中文轉最簡字根
+  #中文字串轉最簡字根
   #回傳字根文字
   #中文轉字根 thread  
-  selectData=data; #my.trim(data);
-  selectData=selectData.replace("\r","");
+  #debug_print("word_to_sp: ")
+  #debug_print(data)
+  selectData = data; #my.trim(data);
+  selectData = selectData.replace("\r","");
   menter = my.explode("\n",selectData);
+  
   output = "";
   for kLine in range(0,len(menter)):
     output_arr = []
+    #debug_print(u"切斷前："+unicode(menter[kLine]));
     m = mystts.split_unicode_chrs(menter[kLine]);
+    #debug_print(u"切斷後：");
+    #debug_print(m);
     for k in range(0,len(m)):
       _uclcode = find_ucl_in_uclcode(m[k]);
       if _uclcode!="":
@@ -1117,50 +1155,75 @@ def show_sp_to_label(data,isForce=None):
   #顯示最簡字根到輸入結束框後
   global config
   global play_ucl_label
+  global _vrsfw_arr
   if config['DEFAULT']['SP']=="0" and isForce is None:
     return
-  sp = "簡根："+my.strtoupper(word_to_sp(data))
+  # 2022-09-02 如果末字是數字，可調整為 VRSFW
+  #debug_print("show_sp_to_label...");
+  #debug_print(data);
+  
+  _sp_data = my.strtoupper(word_to_sp(data))
+  
+  #debug_print("_sp_data[:-1]: "+_sp_data[:-1]);
+  #debug_print("_sp_data[-1]: "+_sp_data[-1]);
+  if len(_sp_data) > 0 and unicode(_sp_data[-1]).isnumeric() and int(_sp_data[-1])>=1 and int(_sp_data[-1])<=5:
+    # 如果預選字，如 「GQD 動 舅 娚」的 kk 在 1 或 2 (舅、娚)，就會變 GQD1 GQD2     
+    # 如為數字，加上 反 VRSFW 功能
+    _tmp_sp_data = _sp_data[:-1] + my.strtoupper(_vrsfw_arr[int(_sp_data[-1])-1]) 
+    _sp_data = _tmp_sp_data + " 或 " + _sp_data 
+  sp = "簡根：" + _sp_data 
   #word_label.set_label(sp)
   #word_label.modify_font(pango.FontDescription(GUI_FONT_18))
   type_label_set_text(sp)     
 def thread___z(data):
-  output = word_to_sp(data)                   
-  senddata(output) 
+  #debug_print("thread___z: ")
+  #debug_print(data);
+  
+  senddata(data) 
        
 def find_ucl_in_uclcode(chinese_data):
   #用中文反找蝦碼(V1.10版寫法)
   global uclcode_r
+  global _vrsfw_arr
+  #debug_print(u"用中文反找蝦碼(V1.10版寫法)");  
+  chinese_data = unicode(chinese_data);
   if chinese_data in uclcode_r:
-    return uclcode_r[chinese_data];
+    #debug_print("chinese_data : " + unicode(chinese_data));
+    #debug_print("uclcode_r[chinese_data] : " + unicode(uclcode_r[chinese_data]));
+    # 如果字碼末字是數字，轉回 vrswf...
+    _found_word = uclcode_r[chinese_data];
+    #if len(_found_word) > 0 and unicode(_found_word[-1]).isnumeric() and int(_found_word[-1])>=1 and int(_found_word[-1])<=5:
+    #  _found_word = _found_word[:-1] + _vrsfw_arr[int(_found_word[-1])-1]
+    return _found_word 
   else:
     return chinese_data;
      
-def find_ucl_in_uclcode_old(chinese_data):
-  #用中文反找蝦碼(V1.9版寫法)
-  finds = []  
-  for k in uclcode["chardefs"]:
-    if chinese_data in uclcode["chardefs"][k]:
-      index = uclcode["chardefs"][k].index(chinese_data)
-      finds.append(k+"_"+str(index))
-  finds.sort(key=len, reverse=False)
-  
-  shorts_arr = []
-  shorts_len = 999;
-  for k in finds:
-    if len(shorts_arr)==0 or len(k) <=shorts_len :
-      if len(k) == shorts_len:
-        shorts_arr.append(k)
-        shorts_len = len(k)
-      else:
-        shorts_arr = []
-        shorts_arr.append(k)
-        shorts_len = len(k)
-  shorts_arr = sorted(shorts_arr, key = lambda x: int(x.split("_")[1]))
-  if len(shorts_arr) >= 1:
-    d = shorts_arr[0].split("_")
-    return d[0]        
-  else:
-    return "";
+#def find_ucl_in_uclcode_old(chinese_data):
+#  #用中文反找蝦碼(V1.9版寫法)
+#  finds = []  
+#  for k in uclcode["chardefs"]:
+#    if chinese_data in uclcode["chardefs"][k]:
+#      index = uclcode["chardefs"][k].index(chinese_data)
+#      finds.append(k+"_"+str(index))
+#  finds.sort(key=len, reverse=False)
+#  
+#  shorts_arr = []
+#  shorts_len = 999;
+#  for k in finds:
+#    if len(shorts_arr)==0 or len(k) <=shorts_len :
+#      if len(k) == shorts_len:
+#        shorts_arr.append(k)
+#        shorts_len = len(k)
+#      else:
+#        shorts_arr = []
+#        shorts_arr.append(k)
+#        shorts_len = len(k)
+#  shorts_arr = sorted(shorts_arr, key = lambda x: int(x.split("_")[1]))
+#  if len(shorts_arr) >= 1:
+#    d = shorts_arr[0].split("_")
+#    return d[0]        
+#  else:
+#    return "";
 
 #debug_print(find_ucl_in_uclcode("肥"))
 #my.exit();
@@ -1497,12 +1560,24 @@ def word_label_set_text():
     word_label.modify_font(pango.FontDescription(GUI_FONT_18))  
     return True
 def uclcode_to_chinese(code):
+  # 字根 轉 中文字
+  global uclcode_rr
+  if code in uclcode_rr:
+    #debug_print("use : uclcode_to_chinese ... uclcode_rr");
+    return uclcode_rr[code]
+  #return code
+  # 繼續走下面流程
+  #debug_print(u"use : uclcode_to_chinese ... 繼續走下面流程");
   global ucl_find_data
-  global debug_print  
+  #global debug_print
+  global _vrsfw_arr  
   c = code
-  c = my.trim(c)
+  c = my.trim(c)    
   if c == "":
     return ""
+  # 如果最末碼是 1234567... 嘗試轉換 vrsfw...
+  #if len(c)>=2 and unicode(c[-1]).isnumeric() and int(c[-1])>=1 and int(c[-1]) < 10:
+  #  c = c[:-1] + _vrsfw_arr[int(c[-1])-1]
   #debug_print(c)
   if c not in uclcode["chardefs"] and c[-1]=='v' and c[:-1] in uclcode["chardefs"] and len(uclcode["chardefs"][c[:-1]])>=2 :
     #debug_print("Debug V1")
@@ -1519,6 +1594,10 @@ def uclcode_to_chinese(code):
   elif c not in uclcode["chardefs"] and c[-1]=='f' and c[:-1] in uclcode["chardefs"] and len(uclcode["chardefs"][c[:-1]])>=5 :
     #debug_print("Debug V1")
     ucl_find_data = uclcode["chardefs"][c[:-1]][4]       
+    return ucl_find_data
+  elif c not in uclcode["chardefs"] and c[-1]=='w' and c[:-1] in uclcode["chardefs"] and len(uclcode["chardefs"][c[:-1]])>=6 :
+    #debug_print("Debug V1")
+    ucl_find_data = uclcode["chardefs"][c[:-1]][5]       
     return ucl_find_data
   elif c in uclcode["chardefs"]:
     #debug_print("Debug V2")
@@ -2125,10 +2204,21 @@ def OnKeyboardEvent(event):
           win32clipboard.OpenClipboard()
           #try:
           time.sleep(0.05)
-          selectData=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
-          #簡轉繁
+          selectData = win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
+          #debug_print("#2200 selectData:");
+          #debug_print(selectData);
+          #簡轉繁 # 似乎不能單純用 simple2trad，不然 家 -> 傢，后->後
+          #改用 opencc
+          # From : https://yanwei-liu.medium.com/python%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86-%E5%9B%9B-%E7%B9%81%E7%B0%A1%E8%BD%89%E6%8F%9B%E5%88%A9%E5%99%A8opencc-74021cbc6de3          
+          
           selectData = mystts.simple2trad(selectData)       
-                          
+          # 發現python2.7會漏字，沒有完全完成，之後再修吧~_~凸
+          #selectData = myopencc.convert(selectData) 
+          selectData = word_to_sp(selectData)                   
+          
+          #debug_print("#2200 after simple2trad:");
+          #debug_print(selectData);          
+          
           thread.start_new_thread( thread___z, (selectData, ))
         except:
           pass
