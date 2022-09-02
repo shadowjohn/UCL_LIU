@@ -127,6 +127,7 @@ Windows 顯示語言：中文（台灣）<br>
 <pre>
     (2022-09-02) v1.47 版：
     病毒碼提交掃描：1.47
+	https://www.microsoft.com/en-us/wdsi/submission/5f594d53-98b7-477f-b1bd-4574726dbcaa
     1. 157、簡根出字內容提示修正 感謝 Benson9954029 提交修正程式碼
       From: https://github.com/shadowjohn/UCL_LIU/pull/25
     2. 158、,,,z 在轉「所以我说那个酱汁呢，小当家你是在哭哦」，簡轉繁時，「家」會變「傢」的問題，或是「天后->天後」，嘗試用 opencc改 解決
