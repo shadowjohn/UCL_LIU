@@ -83,8 +83,10 @@ sys.setdefaultencoding('UTF-8')
 
 #2022-09-02 改用 opencc 簡繁轉換
 # 嘗試修正 ,,,z 在轉 簡字回字碼，有些語句如 「小当家->小當傢，天后->天後」這種問題
-#from opencc import OpenCC
-#myopencc = OpenCC('s2t')
+from opencc import OpenCC
+myopencc = OpenCC('s2t')
+
+
 
 # Debug 模式
 is_DEBUG_mode = False
@@ -120,6 +122,10 @@ def debug_print(data):
   global is_DEBUG_mode
   if is_DEBUG_mode == True:
     print(data)
+
+#debug_print("sys.argv[1]: ")
+#debug_print(sys.argv[1])
+#my.exit()
     
 def md5_file(fileName):
     """Compute md5 hash of the specified file"""
@@ -207,6 +213,7 @@ myScreenStatus = {
   ]
 }
 debug_print("get_n_monitors(): %d\n" % (myScreensObj.get_n_monitors()));
+#print(my.json_encode(myopencc.convert(u"所以我说那个酱汁呢，小当家你是在哭哦")))
 #debug_print(myScreensObj.get_monitor_geometry(0)); #gtk.gdk.Rectangle(1280, 0, 2560, 1080)
 #debug_print(myScreensObj.get_monitor_geometry(1)); #gtk.gdk.Rectangle(0, 59, 1280, 1024)
 
@@ -2208,12 +2215,11 @@ def OnKeyboardEvent(event):
           #debug_print("#2200 selectData:");
           #debug_print(selectData);
           #簡轉繁 # 似乎不能單純用 simple2trad，不然 家 -> 傢，后->後
-          #改用 opencc
+          #改用 opencc改
           # From : https://yanwei-liu.medium.com/python%E8%87%AA%E7%84%B6%E8%AA%9E%E8%A8%80%E8%99%95%E7%90%86-%E5%9B%9B-%E7%B9%81%E7%B0%A1%E8%BD%89%E6%8F%9B%E5%88%A9%E5%99%A8opencc-74021cbc6de3          
           
-          selectData = mystts.simple2trad(selectData)       
-          # 發現python2.7會漏字，沒有完全完成，之後再修吧~_~凸
-          #selectData = myopencc.convert(selectData) 
+          #selectData = mystts.simple2trad(selectData)                 
+          selectData = myopencc.convert(selectData)
           selectData = word_to_sp(selectData)                   
           
           #debug_print("#2200 after simple2trad:");
