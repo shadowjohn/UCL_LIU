@@ -21,16 +21,16 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2022-08-09 23:39
+<h3>最後更新日期：</h3>2022-09-02 21:54
 <br>
-<h3>版本：</h3>V 1.46<br>
+<h3>版本：</h3>V 1.47<br>
 <br>
 <h3>版權：</h3>
 　完全免費的 MIT-License
 <br>
 <h3>下載位置：</h3>
-　　1.主程式(1.46 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
-　　2.主程式(1.45 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.45/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.45/uclliu.exe</a><br>
+　　1.主程式(1.47 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
+　　2.主程式(1.46 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.46/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.46/uclliu.exe</a><br>
 　　3.歷年版本：<a target="_blank" href="https://github.com/shadowjohn/UCL_LIU/tree/master/RELEASE">歷代版本</a><br>
 　　4.同音字庫：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt</a><br>
 　　5.打字聲音：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip</a> 下載後解開，0~9.wav 與 uclliu.exe 放一起
@@ -125,10 +125,21 @@ Windows 顯示語言：中文（台灣）<br>
   
 <br>
 <pre>
+    (2022-09-02) v1.47 版：
+    病毒碼提交掃描：1.47
+	https://www.microsoft.com/en-us/wdsi/submission/5f594d53-98b7-477f-b1bd-4574726dbcaa
+    1. 157、簡根出字內容提示修正 感謝 Benson9954029 提交修正程式碼
+      From: https://github.com/shadowjohn/UCL_LIU/pull/25
+    2. 158、,,,z 在轉「所以我说那个酱汁呢，小当家你是在哭哦」，簡轉繁時，「家」會變「傢」的問題，或是「天后->天後」，嘗試用 opencc改 解決
+      加入 OpenCC改，協助 簡轉繁 
+      From: https://github.com/yichen0831/opencc-python
+      內容來自 pip2 install opencc 後 C:\Python27\Lib\site-packages\opencc	
+    3. 159、,,,z 在取框選文字後，關閉剪貼簿			
+	
     (2022-08-09) V1.46 版：
-	病毒碼提交掃描：1.46
-	https://www.microsoft.com/en-us/wdsi/submission/e1ae841b-4c16-4608-bf57-5a2afa9d4a0e
-	1. 156、肥米的 UI 有機會沉到 taskbar 以下
+    病毒碼提交掃描：1.46
+    https://www.microsoft.com/en-us/wdsi/submission/e1ae841b-4c16-4608-bf57-5a2afa9d4a0e
+    1. 156、肥米的 UI 有機會沉到 taskbar 以下
 	
     (2022-06-24) V1.45 版：
     病毒碼提交掃描：1.45
@@ -442,7 +453,8 @@ Windows 顯示語言：中文（台灣）<br>
     <li>(Third party) liu_unitab2cin.py 可以將tab轉成cin的檔案，改成支援python2.7的寫法</li>
     <li>(Third party) cintojson.py 可以將cin轉成json的檔案，改成支援python2.7的寫法</li>
     <li>(Third party) cin\phone.cin 同音字表參考新酷音的傳統注音表:https://raw.githubusercontent.com/google/jscin/master/src/tables/phone.cin</li>
-    <li>(Third party) traybar.py、win32_adapter.py 右下角 trayicon 的作法 # From : https://github.com/Infinidat/infi.systray、# From : https://github.com/gevasiliou/PythonTests/blob/master/TrayAllClicksMenu.py</li>
+    <li>(Third party) traybar.py、win32_adapter.py 右下角 trayicon 的作法 # From : https://github.com/Infinidat/infi.systray # From : https://github.com/gevasiliou/PythonTests/blob/master/TrayAllClicksMenu.py</li>
+	<li>(Third party) opencc改 協助 ,,,z 簡轉繁的作法 # From : pip2 install opencc、https://github.com/yichen0831/opencc-python</li>
     <li>字碼表亦可參考PIME裡的liu.json</li>
   </ul>
 <br>
@@ -464,6 +476,7 @@ Windows 顯示語言：中文（台灣）<br>
     <li><s>13、執行肥米時【python uclliu.pyw -d】可以進入 debug模式，讓 log 訊息在命令提示窗中呈現</s></li>
     <li>14、pyhook 可以自行編譯，參考心得：【https://3wa.tw/mypaper/index.php?mode=view&id=1709】</li>
     <li>15、如 pyhook 使用自行編譯，可能會遇到【No module named pkgutil】，參考修正心得：【https://3wa.tw/mypaper/index.php?uid=shadow&mode=view&id=1708】</li>
+	<li>16、opencc改，如果直接使用 pip install opencc，在 pyinstaller 後無法正常使用，所以羽山直接把 s2t(簡轉繁)、載入 dictionary 檔案的作法，直接改寫到 opencc.py 裡，二個開檔的地方先匯出成文字檔，輸出成檔案(0_json.txt、1_json.txt)看內容是什麼後寫回，這樣 pyinstaller 就能正常了</li>
   </ul>
 <br>
 <br>
@@ -645,5 +658,8 @@ Ans：<br>
   <li>(Done 2022-06-22)154、修正使用 Opera 上 term.ptt.cc 無法打中文的問題</li>
   <li>(Done 2022-07-12)155、瀏覽器開 https://chrome.google.com/ 無法正常打中文的問題</li>
   <li>(Done 2022-08-09)156、肥米的 UI 有機會沉到 taskbar 以下</li>
+  <li>(Done 2022-09-02)157、簡根出字內容提示修正 感謝 Benson9954029 提交修正程式碼</li>
+  <li>(Done 2022-09-02)158、,,,z 在轉「所以我说那个酱汁呢，小当家你是在哭哦」，簡轉繁時，「家」會變「傢」的問題，或是「天后->天後」，嘗試用 opencc改 解決</li>
+  <li>(Done 2022-09-02)159、,,,z 在取框選文字後，關閉剪貼簿	</li>
 </ul>
 <br>

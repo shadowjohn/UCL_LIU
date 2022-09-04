@@ -161,9 +161,12 @@ class kit:
         self._mTC_TDATA = list(self._TC_TDATA.strip().replace("\n",""));
     def split_unicode_chrs(self,text):
       return [ chr for chr in self._unicode_chr_splitter( text ) if chr ]        
-    def simple2trad(self,data):            
+    def simple2trad(self,data):
+      #_pass_arr = ['家']      
       mdata = self.split_unicode_chrs(data)        
       for k in range(0,len(mdata)):
+        #if mdata[k] in _pass_arr:
+        #  mdata[k]
         if mdata[k] in self._mTC_CDATA:
           idx = self._mTC_CDATA.index(mdata[k])
           mdata[k] = self._mTC_TDATA[idx]  
