@@ -130,7 +130,7 @@ Windows 顯示語言：中文（台灣）<br>
 	https://www.microsoft.com/en-us/wdsi/submission/5f594d53-98b7-477f-b1bd-4574726dbcaa
     1. 157、簡根出字內容提示修正 感謝 Benson9954029 提交修正程式碼
       From: https://github.com/shadowjohn/UCL_LIU/pull/25
-    2. 158、,,,z 在轉「所以我说那个酱汁呢，小当家你是在哭哦」，簡轉繁時，「家」會變「傢」的問題，或是「天后->天後」，嘗試用 opencc改 解決
+    2. 158、,,,z 在轉「所以我说那个酱汁呢，小当家你是在...」，簡轉繁時，「家」會變「傢」的問題，或是「天后->天後」，嘗試用 opencc改 解決
       加入 OpenCC改，協助 簡轉繁 
       From: https://github.com/yichen0831/opencc-python
       內容來自 pip2 install opencc 後 C:\Python27\Lib\site-packages\opencc	
@@ -659,7 +659,7 @@ Ans：<br>
   <li>(Done 2022-07-12)155、瀏覽器開 https://chrome.google.com/ 無法正常打中文的問題</li>
   <li>(Done 2022-08-09)156、肥米的 UI 有機會沉到 taskbar 以下</li>
   <li>(Done 2022-09-02)157、簡根出字內容提示修正 感謝 Benson9954029 提交修正程式碼</li>
-  <li>(Done 2022-09-02)158、,,,z 在轉「所以我说那个酱汁呢，小当家你是在哭哦」，簡轉繁時，「家」會變「傢」的問題，或是「天后->天後」，嘗試用 opencc改 解決</li>
+  <li>(Done 2022-09-02)158、,,,z 在轉「所以我说那个酱汁呢，小当家你是在...」，簡轉繁時，「家」會變「傢」的問題，或是「天后->天後」，嘗試用 opencc改 解決</li>
   <li>(Done 2022-09-02)159、,,,z 在取框選文字後，關閉剪貼簿	</li>
 </ul>
 <br>
