@@ -126,8 +126,10 @@ Windows 顯示語言：中文（台灣）<br>
 <br>
 <pre>
 	(2022-09-18) v1.48 版：
-    病毒碼提交掃描：1.48	
+    病毒碼提交掃描：1.48
+	https://www.microsoft.com/en-us/wdsi/submission/2fed6acb-ae30-48d4-85ee-44de1b4c8bbc	
     1. 160、修正 f_pass_app 以小寫字比對，修正 uclliu.ini send_kind_3_noucl 裡 Cyberpunk2077.exe 沒比對到的問題
+	2. 161、更新說明網址 http://3wa.tw 為 https://3wa.tw
 	
     (2022-09-02) v1.47 版：
     病毒碼提交掃描：1.47
@@ -666,5 +668,6 @@ Ans：<br>
   <li>(Done 2022-09-02)158、,,,z 在轉「所以我说那个酱汁呢，小当家你是在...」，簡轉繁時，「家」會變「傢」的問題，或是「天后->天後」，嘗試用 opencc改 解決</li>
   <li>(Done 2022-09-02)159、,,,z 在取框選文字後，關閉剪貼簿	</li>
   <li>(Done 2022-09-18)160、修正 f_pass_app 以小寫字比對，修正 uclliu.ini send_kind_3_noucl 裡 Cyberpunk2077.exe 沒比對到的問題</li>
+  <li>(Done 2022-09-18)161、更新說明網址 http://3wa.tw 為 https://3wa.tw</li>
 </ul>
 <br>
