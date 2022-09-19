@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION = "1.47"
+VERSION = "1.48"
 import portalocker
 import os
 import sys
@@ -57,7 +57,7 @@ f_big5_arr = [ "zip32w","daqkingcon.exe","EWinner.exe" ]
 # 不使用肥米的 app
 # 2021-03-19 2077 也不能使用肥米
 # 2021-07-03 vncviewer.exe 不需要肥米
-f_pass_app = [ "mstsc.exe","Cyberpunk2077.exe","vncviewer.exe" ]
+f_pass_app = [ "mstsc.exe","cyberpunk2077.exe","vncviewer.exe" ]
 
 # 2019-10-20 增加出字模式
 # 這是右下角 肥 的 icon
@@ -88,10 +88,10 @@ myopencc = OpenCC('s2t')
 # Debug 模式
 is_DEBUG_mode = False
 
-message = ("\nUCLLIU 肥米輸入法\nBy 羽山秋人(http://3wa.tw)\nVersion: %s\n\n若要使用 Debug 模式：uclliu.exe -d\n" % (VERSION));
+message = ("\nUCLLIU 肥米輸入法\nBy 羽山秋人(https://3wa.tw)\nVersion: %s\n\n若要使用 Debug 模式：uclliu.exe -d\n" % (VERSION));
 
 def about_uclliu():
-  _msg_text = ("肥米輸入法\n\n作者：羽山秋人 (http://3wa.tw)\n版本：%s" % VERSION)
+  _msg_text = ("肥米輸入法\n\n作者：羽山秋人 (https://3wa.tw)\n版本：%s" % VERSION)
   _msg_text += "\n\n熱鍵提示：\n\n"
   _msg_text += "「,,,VERSION」目前版本\n"
   _msg_text += "「'ucl」同音字查詢\n"
@@ -208,7 +208,7 @@ myScreenStatus = {
   ]
 }
 debug_print("get_n_monitors(): %d\n" % (myScreensObj.get_n_monitors()));
-#print(my.json_encode(myopencc.convert(u"所以我说那个酱汁呢，小当家你是在哭哦")))
+#print(my.json_encode(myopencc.convert(u"所以我说那个酱汁呢，小当家你是在...")))
 #debug_print(myScreensObj.get_monitor_geometry(0)); #gtk.gdk.Rectangle(1280, 0, 2560, 1080)
 #debug_print(myScreensObj.get_monitor_geometry(1)); #gtk.gdk.Rectangle(0, 59, 1280, 1024)
 
@@ -2044,7 +2044,8 @@ def OnKeyboardEvent(event):
     #print ("HWND:")
     #print (win32gui.GetWindowText(hwnd))
     
-    for k in f_pass_app:        
+    for k in f_pass_app:
+      k = my.strtolower(k)
       if my.is_string_like(exec_proc,k):
         if is_ucl()==True:
           toggle_ucl()

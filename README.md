@@ -21,16 +21,16 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2022-09-02 21:54
+<h3>最後更新日期：</h3>2022-09-18 22:37
 <br>
-<h3>版本：</h3>V 1.47<br>
+<h3>版本：</h3>V 1.48<br>
 <br>
 <h3>版權：</h3>
 　完全免費的 MIT-License
 <br>
 <h3>下載位置：</h3>
-　　1.主程式(1.47 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
-　　2.主程式(1.46 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.46/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.46/uclliu.exe</a><br>
+　　1.主程式(1.48 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
+　　2.主程式(1.47 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.47/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.47/uclliu.exe</a><br>
 　　3.歷年版本：<a target="_blank" href="https://github.com/shadowjohn/UCL_LIU/tree/master/RELEASE">歷代版本</a><br>
 　　4.同音字庫：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt</a><br>
 　　5.打字聲音：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip</a> 下載後解開，0~9.wav 與 uclliu.exe 放一起
@@ -125,6 +125,12 @@ Windows 顯示語言：中文（台灣）<br>
   
 <br>
 <pre>
+	(2022-09-18) v1.48 版：
+    病毒碼提交掃描：1.48
+	https://www.microsoft.com/en-us/wdsi/submission/2fed6acb-ae30-48d4-85ee-44de1b4c8bbc	
+    1. 160、修正 f_pass_app 以小寫字比對，修正 uclliu.ini send_kind_3_noucl 裡 Cyberpunk2077.exe 沒比對到的問題
+	2. 161、更新說明網址 http://3wa.tw 為 https://3wa.tw
+	
     (2022-09-02) v1.47 版：
     病毒碼提交掃描：1.47
 	https://www.microsoft.com/en-us/wdsi/submission/5f594d53-98b7-477f-b1bd-4574726dbcaa
@@ -661,5 +667,7 @@ Ans：<br>
   <li>(Done 2022-09-02)157、簡根出字內容提示修正 感謝 Benson9954029 提交修正程式碼</li>
   <li>(Done 2022-09-02)158、,,,z 在轉「所以我说那个酱汁呢，小当家你是在...」，簡轉繁時，「家」會變「傢」的問題，或是「天后->天後」，嘗試用 opencc改 解決</li>
   <li>(Done 2022-09-02)159、,,,z 在取框選文字後，關閉剪貼簿	</li>
+  <li>(Done 2022-09-18)160、修正 f_pass_app 以小寫字比對，修正 uclliu.ini send_kind_3_noucl 裡 Cyberpunk2077.exe 沒比對到的問題</li>
+  <li>(Done 2022-09-18)161、更新說明網址 http://3wa.tw 為 https://3wa.tw</li>
 </ul>
 <br>
