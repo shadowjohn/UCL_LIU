@@ -125,11 +125,12 @@ Windows 顯示語言：中文（台灣）<br>
   
 <br>
 <pre>
-	(2022-09-18) v1.48 版：
+    (2022-09-18) v1.48 版：
     病毒碼提交掃描：1.48
 	https://www.microsoft.com/en-us/wdsi/submission/2fed6acb-ae30-48d4-85ee-44de1b4c8bbc	
     1. 160、修正 f_pass_app 以小寫字比對，修正 uclliu.ini send_kind_3_noucl 裡 Cyberpunk2077.exe 沒比對到的問題
-	2. 161、更新說明網址 http://3wa.tw 為 https://3wa.tw
+            上禮拜看完 Netflix《電馭叛客：邊緣行者》，回夜城回味一下，發現肥米會被觸發，原來是比對啟動程序大、小寫的關係，順手修正
+    2. 161、更新說明網址 http://3wa.tw 為 https://3wa.tw
 	
     (2022-09-02) v1.47 版：
     病毒碼提交掃描：1.47
