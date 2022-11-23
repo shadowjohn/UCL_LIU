@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION = "1.48"
+VERSION = "1.49"
 import portalocker
 import os
 import sys
@@ -208,7 +208,7 @@ myScreenStatus = {
   ]
 }
 debug_print("get_n_monitors(): %d\n" % (myScreensObj.get_n_monitors()));
-#print(my.json_encode(myopencc.convert(u"所以我说那个酱汁呢，小当家你是在...")))
+#print(my.json_encode(myopencc.convert("所以我说那个酱汁呢，小当家你是在...")))
 #debug_print(myScreensObj.get_monitor_geometry(0)); #gtk.gdk.Rectangle(1280, 0, 2560, 1080)
 #debug_print(myScreensObj.get_monitor_geometry(1)); #gtk.gdk.Rectangle(0, 59, 1280, 1024)
 
@@ -1135,9 +1135,9 @@ def word_to_sp(data):
   output = "";
   for kLine in range(0,len(menter)):
     output_arr = []
-    #debug_print(u"切斷前："+unicode(menter[kLine]));
+    #debug_print("切斷前："+unicode(menter[kLine]));
     m = mystts.split_unicode_chrs(menter[kLine]);
-    #debug_print(u"切斷後：");
+    #debug_print("切斷後：");
     #debug_print(m);
     for k in range(0,len(m)):
       _uclcode = find_ucl_in_uclcode(m[k]);
@@ -2868,15 +2868,15 @@ class TrayIcon():
       global DEFAULT_OUTPUT_TYPE
       global UCL_PIC_BASE64           
       menu_options = (
-          ("1.關於肥米輸入法", None, [self.m_about] ),          
+          (unicode("1.關於肥米輸入法"), None, [self.m_about] ),          
         )
       if gamemode_btn.get_label()=="正常模式":
         menu_options = menu_options + ((
-          ("2.切換至「遊戲模式」", None, [self.m_game_switch] ),          
+          (unicode("2.切換至「遊戲模式」"), None, [self.m_game_switch] ),          
         ))                
       else:
         menu_options = menu_options + ((
-          ("2.切換至「正常模式」", None, [self.m_game_switch] ),          
+          (unicode("2.切換至「正常模式」"), None, [self.m_game_switch] ),          
         ))                
       
       
@@ -2887,35 +2887,35 @@ class TrayIcon():
         is_o = "●"
       else:
         is_o = "　"
-      ucl_send_kind_list = ucl_send_kind_list + (('【%s】正常出字模式' % (is_o) , None, [self.m_output_type,"DEFAULT"] ),)      
+      ucl_send_kind_list = ucl_send_kind_list + ((unicode('【%s】正常出字模式' % (is_o)) , None, [self.m_output_type,"DEFAULT"] ),)      
       
       
       if DEFAULT_OUTPUT_TYPE=="BIG5":
         is_o = "●"
       else:
         is_o = "　"
-      ucl_send_kind_list = ucl_send_kind_list + (('【%s】BIG5模式' % (is_o) , None, [self.m_output_type,"BIG5"] ),)
+      ucl_send_kind_list = ucl_send_kind_list + ((unicode('【%s】BIG5模式' % (is_o)) , None, [self.m_output_type,"BIG5"] ),)
       
       if DEFAULT_OUTPUT_TYPE=="PASTE":
         is_o = "●"
       else:
         is_o = "　"
-      ucl_send_kind_list = ucl_send_kind_list + (('【%s】複製貼上模式' % (is_o) , None, [self.m_output_type,"PASTE"] ),)
+      ucl_send_kind_list = ucl_send_kind_list + ((unicode('【%s】複製貼上模式' % (is_o)) , None, [self.m_output_type,"PASTE"] ),)
       
         
-      menu_options = menu_options + ((('3.選擇出字模式', None, ucl_send_kind_list),))       
+      menu_options = menu_options + (((unicode('3.選擇出字模式'), None, ucl_send_kind_list),))       
             
       #2021-12-01 加入畫面操作相關
       _menu_ui_arr = ()
       debug_print("SHORT_MODE:");
       debug_print(config["DEFAULT"]["SHORT_MODE"]);
       if config["DEFAULT"]["SHORT_MODE"] == "1":
-        _menu_ui_arr = _menu_ui_arr + (('【●】短版模式' , None, [self.m_run_long] ),)         
+        _menu_ui_arr = _menu_ui_arr + ((unicode('【●】短版模式') , None, [self.m_run_long] ),)         
       else:
-        _menu_ui_arr = _menu_ui_arr + (('【　】短版模式' , None, [self.m_run_short] ),)
+        _menu_ui_arr = _menu_ui_arr + ((unicode('【　】短版模式') , None, [self.m_run_short] ),)
       
-      _menu_ui_arr = _menu_ui_arr + (('【,,,+】畫面加大' , None, [self.m_ui_plus] ),)
-      _menu_ui_arr = _menu_ui_arr + (('【,,,-】畫面縮小' , None, [self.m_ui_minus] ),)
+      _menu_ui_arr = _menu_ui_arr + ((unicode('【,,,+】畫面加大') , None, [self.m_ui_plus] ),)
+      _menu_ui_arr = _menu_ui_arr + ((unicode('【,,,-】畫面縮小') , None, [self.m_ui_minus] ),)
         
       #英數時透明度
       _menu_ui_en_alpha_arr = ()
@@ -2923,8 +2923,8 @@ class TrayIcon():
         is_o = "　"
         if str(int(float(config['DEFAULT']['NON_UCL_ALPHA'])*10)) == str(i):
           is_o = "●"      
-        _menu_ui_en_alpha_arr = _menu_ui_en_alpha_arr + (('【%s】%d %%' % ( is_o , (i*10)) , None, [self.m_change_en_alpha, "%.1f" % (i/10.0) ] ),)
-      _menu_ui_arr = _menu_ui_arr + ((('英數時透明度' , None, _menu_ui_en_alpha_arr ),))
+        _menu_ui_en_alpha_arr = _menu_ui_en_alpha_arr + ((unicode('【%s】%d %%' % ( is_o , (i*10))) , None, [self.m_change_en_alpha, "%.1f" % (i/10.0) ] ),)
+      _menu_ui_arr = _menu_ui_arr + (((unicode('英數時透明度') , None, _menu_ui_en_alpha_arr ),))
       
       #肥模式透明度
       _menu_ui_ucl_alpha_arr = ()
@@ -2932,40 +2932,40 @@ class TrayIcon():
         is_o = "　"
         if str(int(float(config['DEFAULT']['ALPHA'])*10)) == str(i):
           is_o = "●"      
-        _menu_ui_ucl_alpha_arr = _menu_ui_ucl_alpha_arr + (('【%s】%d %%' % ( is_o , (i*10)) , None, [self.m_change_ucl_alpha, "%.1f" % (i/10.0) ] ),)
-      _menu_ui_arr = _menu_ui_arr + ((('肥模式透明度' , None, _menu_ui_ucl_alpha_arr ),))        
+        _menu_ui_ucl_alpha_arr = _menu_ui_ucl_alpha_arr + ((unicode('【%s】%d %%' % ( is_o , (i*10))) , None, [self.m_change_ucl_alpha, "%.1f" % (i/10.0) ] ),)
+      _menu_ui_arr = _menu_ui_arr + (((unicode('肥模式透明度') , None, _menu_ui_ucl_alpha_arr ),))        
         
-      menu_options = menu_options + ((('4.畫面調整', None, _menu_ui_arr),))
+      menu_options = menu_options + (((unicode('4.畫面調整'), None, _menu_ui_arr),))
                   
             
       if config['DEFAULT']['CTRL_SP'] == "1":
         menu_options = menu_options + ((
-          ("5.【●】使用 CTRL+SPACE 切換輸入法", None, [self.m_ctrlsp_switch] ),          
+          (unicode("5.【●】使用 CTRL+SPACE 切換輸入法"), None, [self.m_ctrlsp_switch] ),          
         ))          
       else:
         menu_options = menu_options + ((
-          ("5.【　】使用 CTRL+SPACE 切換輸入法", None, [self.m_ctrlsp_switch] ),          
+          (unicode("5.【　】使用 CTRL+SPACE 切換輸入法"), None, [self.m_ctrlsp_switch] ),          
         ))  
       
 
       
       if config['DEFAULT']['SP'] == "1":        
         menu_options = menu_options + ((
-          ("6.【●】顯示短根", None, [self.m_sp_switch] ),
+          (unicode("6.【●】顯示短根"), None, [self.m_sp_switch] ),
           
         ))   
       else:              
         menu_options = menu_options + ((
-          ("6.【　】顯示短根", None, [self.m_sp_switch] ),          
+          (unicode("6.【　】顯示短根"), None, [self.m_sp_switch] ),          
         ))   
       '''  
       if config['DEFAULT']['PLAY_SOUND_ENABLE'] == "1":
         menu_options = menu_options + ((
-          ("7.【●】打字音", None, [self.m_pm_switch] ),          
+          (unicode("7.【●】打字音"), None, [self.m_pm_switch] ),          
         ))           
       else:
         menu_options = menu_options + ((
-          ("7.【　】打字音", None, [self.m_pm_switch] ),          
+          (unicode("7.【　】打字音"), None, [self.m_pm_switch] ),          
         ))      
       # 接下來作打字音
       '''
@@ -2975,17 +2975,17 @@ class TrayIcon():
         is_o = "●"
       else:
         is_o = "　"
-      _menu_play_sound_arr = _menu_play_sound_arr + (('【%s】打字音啟動' % (is_o) , None, [self.m_pm_switch] ),)
+      _menu_play_sound_arr = _menu_play_sound_arr + ((unicode('【%s】打字音啟動' % (is_o)) , None, [self.m_pm_switch] ),)
       
       #接下來是打字音量
       for i in range(1,11):
         is_o = "　"
         if config['DEFAULT']['KEYBOARD_VOLUME'] == str(i*10):
           is_o = "●"
-        _menu_play_sound_arr = _menu_play_sound_arr + (('【%s】%s %%' % (is_o,str(i*10)) , None, [self.m_pm_volume_switch,i*10] ),)
+        _menu_play_sound_arr = _menu_play_sound_arr + ((unicode('【%s】%s %%' % (is_o,str(i*10))) , None, [self.m_pm_volume_switch,i*10] ),)
       
           
-      menu_options = menu_options + ((('7.打字音', None, _menu_play_sound_arr),))
+      menu_options = menu_options + (((unicode('7.打字音'), None, _menu_play_sound_arr),))
       
       '''
       sound_level_list = ()
@@ -2996,29 +2996,29 @@ class TrayIcon():
         if NOW_VOLUME == real_v:
           is_o = "●"
         if i == 0:
-          sound_level_list = sound_level_list + (('【%s】靜音' % (is_o) , None, [self.m_change_volume,real_v] ),)
+          sound_level_list = sound_level_list + ((unicode('【%s】靜音' % (is_o)) , None, [self.m_change_volume,real_v] ),)
         else:
-          sound_level_list = sound_level_list + (("【%s】%s %%" % (is_o,v), None, [self.m_change_volume,real_v]),)
+          sound_level_list = sound_level_list + ((unicode("【%s】%s %%" % (is_o,v)), None, [self.m_change_volume,real_v]),)
                                                      
       menu_options = menu_options + ((
-                ('3.打字音大小', None, sound_level_list),))
+                (unicode('3.打字音大小'), None, sound_level_list),))
       '''  
         
       if config['DEFAULT']['STARTUP_DEFAULT_UCL'] == "1":
         menu_options = menu_options + ((
-          ("8.【●】啟動預設為「肥」模式", None, [self.m_sdu_switch] ),          
+          (unicode("8.【●】啟動預設為「肥」模式"), None, [self.m_sdu_switch] ),          
         ))          
       else:
         menu_options = menu_options + ((
-          ("8.【　】啟動預設為「肥」模式", None, [self.m_sdu_switch] ),          
+          (unicode("8.【　】啟動預設為「肥」模式"), None, [self.m_sdu_switch] ),          
         ))        
         
-      menu_options = menu_options + (("9. 離開(Quit)", None, [self.m_quit]),)
+      menu_options = menu_options + ((unicode("9. 離開(Quit)"), None, [self.m_quit]),)
       if self.systray=="":
         #ICON_PATH
         #UCL_PIC_BASE64
         #"data:image/png;base64,"
-        self.systray = SysTrayIcon(ICON_PATH, "肥米輸入法：%s" % (VERSION) , menu_options) #, on_quit=self.m_quit)        
+        self.systray = SysTrayIcon(ICON_PATH, unicode("肥米輸入法：%s" % (VERSION)) , menu_options) #, on_quit=self.m_quit)        
         self.systray.start()
       else:        
         self.systray.update(menu_options=menu_options)

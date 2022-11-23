@@ -21,16 +21,16 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2022-09-18 22:37
+<h3>最後更新日期：</h3>2022-11-23 23:10
 <br>
-<h3>版本：</h3>V 1.48<br>
+<h3>版本：</h3>V 1.49<br>
 <br>
 <h3>版權：</h3>
 　完全免費的 MIT-License
 <br>
 <h3>下載位置：</h3>
-　　1.主程式(1.48 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
-　　2.主程式(1.47 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.47/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.47/uclliu.exe</a><br>
+	1.主程式(1.49 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>　　
+　　2.主程式(1.48 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.48/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.48/uclliu.exe</a><br>
 　　3.歷年版本：<a target="_blank" href="https://github.com/shadowjohn/UCL_LIU/tree/master/RELEASE">歷代版本</a><br>
 　　4.同音字庫：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt</a><br>
 　　5.打字聲音：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip</a> 下載後解開，0~9.wav 與 uclliu.exe 放一起
@@ -125,6 +125,9 @@ Windows 顯示語言：中文（台灣）<br>
   
 <br>
 <pre>
+    (2022-11-23) v1.49 版：
+	1. 163、英文版 Win11 右下角選字中文字顯示異常
+
     (2022-09-18) v1.48 版：
     病毒碼提交掃描：1.48
 	https://www.microsoft.com/en-us/wdsi/submission/2fed6acb-ae30-48d4-85ee-44de1b4c8bbc	
@@ -508,6 +511,12 @@ python裡有mostTop可以使用，但不是萬能，幾經測試後還是只能�
 Ans：<br>
 　　有可能是您當前在使用的視窗，執行的身分是「系統管理員」，嘗試關閉肥米輸入法，然後也使用「系統管理員」執行「肥米輸入法」，就可以正常使用。
 <br>
+3、為何在英文版 windows 11 右下角選單會異常無法出現中文字？<br>
+Ans：<br>
+　　針對此部分，目前已知解法，是更新「肥米輸入法在 1.49 版」，【依下面圖片所示，設定→時間與語言→系統管理語言設定→變更系統地區設定】，☆勾選「Beta：使用 Unicode UTF-8 提供全球語言支援」，重開機應該就能正常。<br>
+	連 Windows11 自己都在 Beta...肯定是 bug 吧 XD，不過也算是找到修正的辦法<br>
+	<img src="uclliu_save_1.49_1.png">
+　　<img src="screenshot/uclliu_save_1.49.png">
 <br>
 <h3>ToDo：</h3>
 <ul>
@@ -672,6 +681,6 @@ Ans：<br>
   <li>(Done 2022-09-18)160、修正 f_pass_app 以小寫字比對，修正 uclliu.ini send_kind_3_noucl 裡 Cyberpunk2077.exe 沒比對到的問題</li>
   <li>(Done 2022-09-18)161、更新說明網址 http://3wa.tw 為 https://3wa.tw</li>
   <li>162、(評估中)自定詞，超過一個字以上，不需顯示簡根</li>
-  <li>163、英文版 Win11 右下角選字中文字顯示異常</li>
+  <li>(Done 2022-11-23)163、英文版 Win11 右下角選字中文字顯示異常</li>
 </ul>
 <br>

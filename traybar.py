@@ -51,7 +51,9 @@ class SysTrayIcon(object):
         window_class_name = window_class_name or ("SysTrayIconPy-%s" % (str(uuid.uuid4())))
 
         self._default_menu_index = (default_menu_index or 0)
-        self._window_class_name = encode_for_locale(window_class_name)
+        self._window_class_name = window_class_name 
+        # By FeatherMountain, duuno encode 3small
+        #encode_for_locale(window_class_name)
         self._message_dict = {RegisterWindowMessage("TaskbarCreated"): self._restart,
                               WM_DESTROY: self._destroy,
                               WM_CLOSE: self._destroy,
@@ -176,7 +178,7 @@ class SysTrayIcon(object):
                 self._menu_actions_by_id.add((self._next_action_id, option_action))
                 result.append(menu_option + (self._next_action_id,))
             elif isinstance(option_action,list):
-                #¤@¯ë¥\¯à
+                #Ð´@Ð¿Ñ‹Ðµ\Ð¿Ñ€
                 self._menu_actions_by_id.add((self._next_action_id, option_action[0]  ))
                 self._menu_actions_by_params[self._next_action_id] = option_action                                 
                 
@@ -292,7 +294,7 @@ class SysTrayIcon(object):
                        None)
         PostMessage(self._hwnd, WM_NULL, 0, 0)
 
-    def _create_menu(self, menu, menu_options):
+    def _create_menu(self, menu, menu_options):        
         for option_text, option_icon, option_action, option_id in menu_options[::-1]:
             if option_icon:
                 option_icon = self._prep_menu_icon(option_icon)
