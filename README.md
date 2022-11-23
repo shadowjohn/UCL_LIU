@@ -515,7 +515,7 @@ Ans：<br>
 Ans：<br>
 　　針對此部分，目前已知解法，是更新「肥米輸入法在 1.49 版」，【依下面圖片所示，設定→時間與語言→系統管理語言設定→變更系統地區設定】，☆勾選「Beta：使用 Unicode UTF-8 提供全球語言支援」，重開機應該就能正常。<br>
 	連 Windows11 自己都在 Beta...肯定是 bug 吧 XD，不過也算是找到修正的辦法<br>
-	<img src="uclliu_save_1.49_1.png">
+	<img src="screenshot/uclliu_save_1.49_1.png">
 　　<img src="screenshot/uclliu_save_1.49.png">
 <br>
 <h3>ToDo：</h3>
