@@ -3,6 +3,8 @@ import ctypes
 import ctypes.wintypes
 import locale
 import sys
+from ctypes import windll
+LOCATE_CHCP = windll.kernel32.GetConsoleOutputCP()
 
 RegisterWindowMessage = ctypes.windll.user32.RegisterWindowMessageA
 LoadCursor = ctypes.windll.user32.LoadCursorA
@@ -81,7 +83,11 @@ elif ctypes.sizeof(ctypes.c_longlong) == ctypes.sizeof(ctypes.c_void_p):
     LRESULT = ctypes.c_longlong
 
 SZTIP_MAX_LENGTH = 128
-LOCALE_ENCODING = locale.getpreferredencoding()
+if LOCATE_CHCP == 65001:
+    LOCALE_ENCODING = "utf8" #locale.getpreferredencoding()
+else:
+    # win10 default
+    LOCALE_ENCODING = locale.getpreferredencoding()
 
 
 def encode_for_locale(s):        
