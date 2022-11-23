@@ -91,7 +91,7 @@ def encode_for_locale(s):
     try:
         return s.encode(LOCALE_ENCODING, 'ignore')
     except (AttributeError, UnicodeDecodeError):
-        return s.decode('ascii', 'ignore').encode(LOCALE_ENCODING)
+        return s; #.decode('ascii', 'ignore').encode(LOCALE_ENCODING)
 
 POINT = ctypes.wintypes.POINT
 RECT = ctypes.wintypes.RECT
@@ -123,8 +123,32 @@ class MENUITEMINFO(ctypes.Structure):
                 ("dwItemData", ctypes.c_void_p),
                 ("dwTypeData", ctypes.c_char_p),
                 ("cch", ctypes.c_uint),
-                ("hbmpItem", HANDLE),
+                ("hbmpItem", HANDLE)
                ]
+# from : https://stackoverflow.com/questions/52336257/python-programmatically-change-console-font-size/52340670#52340670
+LF_FACESIZE = 32
+STD_OUTPUT_HANDLE = -11
+class COORD(ctypes.Structure):
+    _fields_ = [("X", ctypes.c_short), ("Y", ctypes.c_short)]
+class CONSOLE_FONT_INFOEX(ctypes.Structure):
+    _fields_ = [("cbSize", ctypes.c_ulong),
+                ("nFont", ctypes.c_ulong),
+                ("dwFontSize", COORD),
+                ("FontFamily", ctypes.c_uint),
+                ("FontWeight", ctypes.c_uint),
+                ("FaceName", ctypes.c_wchar * LF_FACESIZE)]
+font = CONSOLE_FONT_INFOEX()
+font.cbSize = ctypes.sizeof(CONSOLE_FONT_INFOEX)
+font.nFont = 12
+font.dwFontSize.X = 11
+font.dwFontSize.Y = 18
+font.FontFamily = 54
+font.FontWeight = 400
+font.FaceName = "Microsoft JhengHei"
+
+handle = ctypes.windll.kernel32.GetStdHandle(STD_OUTPUT_HANDLE)
+ctypes.windll.kernel32.SetCurrentConsoleFontEx(
+        handle, ctypes.c_long(False), ctypes.pointer(font))
 
 class NOTIFYICONDATA(ctypes.Structure):
     _fields_ = [("cbSize", ctypes.c_uint),
@@ -150,6 +174,7 @@ def PackMENUITEMINFO(text=None, hbmpItem=None, wID=None, hSubMenu=None):
     res = MENUITEMINFO()
     res.cbSize = ctypes.sizeof(res)
     res.fMask = 0
+    #res.FaceName = "Microsoft JhengHei"
     if hbmpItem is not None:
         res.fMask |= MIIM_BITMAP
         res.hbmpItem = hbmpItem

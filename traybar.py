@@ -294,7 +294,16 @@ class SysTrayIcon(object):
                        None)
         PostMessage(self._hwnd, WM_NULL, 0, 0)
 
-    def _create_menu(self, menu, menu_options):        
+    def _create_menu(self, menu, menu_options):
+        font = CONSOLE_FONT_INFOEX()
+        font.cbSize = ctypes.sizeof(CONSOLE_FONT_INFOEX)
+        font.nFont = 12
+        font.dwFontSize.X = 11
+        font.dwFontSize.Y = 18
+        font.FontFamily = 54
+        font.FontWeight = 400
+        font.FaceName = "Microsoft JhengHei"
+        ctypes.pointer(font)
         for option_text, option_icon, option_action, option_id in menu_options[::-1]:
             if option_icon:
                 option_icon = self._prep_menu_icon(option_icon)

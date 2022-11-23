@@ -26,6 +26,16 @@ import pyaudio
 import audioop
 import wave
 
+#2022-11-23 get chcp
+# From : https://stackoverflow.com/questions/66137468/how-to-get-the-codepage-currently-used-in-local-computer
+from ctypes import windll
+import locale
+LOCATE_CHCP = windll.kernel32.GetConsoleOutputCP()
+LOCALE_ENCODING = locale.getpreferredencoding()
+if LOCATE_CHCP == 65001:
+    os.environ["PYTHONIOENCODING"] = "utf-8"
+#print("CHCP: %s" % (LOCATE_CHCP))
+
 #2021-08-08 新版右下角 traybar
 from traybar import SysTrayIcon
 
@@ -115,8 +125,16 @@ elif sys.argv[1]=="-d":
 
 def debug_print(data):
   global is_DEBUG_mode
-  if is_DEBUG_mode == True:
-    print(data)
+  global LOCATE_CHCP
+  global LOCALE_ENCODING
+  if is_DEBUG_mode == True:    
+    if LOCATE_CHCP == 65001:
+        try:
+            print(data.decode('ascii', 'ignore').encode(LOCALE_ENCODING))
+        except:
+            pass
+    else:
+        print(data)
 
 #debug_print("sys.argv[1]: ")
 #debug_print(sys.argv[1])
