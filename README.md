@@ -672,5 +672,6 @@ Ans：<br>
   <li>(Done 2022-09-18)160、修正 f_pass_app 以小寫字比對，修正 uclliu.ini send_kind_3_noucl 裡 Cyberpunk2077.exe 沒比對到的問題</li>
   <li>(Done 2022-09-18)161、更新說明網址 http://3wa.tw 為 https://3wa.tw</li>
   <li>162、(評估中)自定詞，超過一個字以上，不需顯示簡根</li>
+  <li>163、英文版 Win11 右下角選字中文字顯示異常</li>
 </ul>
 <br>
