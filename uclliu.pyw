@@ -2901,15 +2901,15 @@ class TrayIcon():
       global DEFAULT_OUTPUT_TYPE
       global UCL_PIC_BASE64           
       menu_options = (
-          ("1.關於肥米輸入法", None, [self.m_about] ),          
+          (my18.auto("1.關於肥米輸入法"), None, [self.m_about] ),          
         )
       if gamemode_btn.get_label()=="正常模式":
         menu_options = menu_options + ((
-          ("2.切換至「遊戲模式」", None, [self.m_game_switch] ),          
+          (my18.auto("2.切換至「遊戲模式」"), None, [self.m_game_switch] ),          
         ))                
       else:
         menu_options = menu_options + ((
-          ("2.切換至「正常模式」", None, [self.m_game_switch] ),          
+          (my18.auto("2.切換至「正常模式」"), None, [self.m_game_switch] ),          
         ))                
       
       
@@ -2920,35 +2920,35 @@ class TrayIcon():
         is_o = my18.auto("●")
       else:
         is_o = my18.auto("　")
-      ucl_send_kind_list = ucl_send_kind_list + (('【%s】正常出字模式' % (is_o) , None, [self.m_output_type,"DEFAULT"] ),)      
+      ucl_send_kind_list = ucl_send_kind_list + (('%s%s%s%s' % (my18.auto("【"),is_o,my18.auto("】"),my18.auto("正常出字模式")) , None, [self.m_output_type,"DEFAULT"] ),)      
       
       
       if DEFAULT_OUTPUT_TYPE=="BIG5":
         is_o = my18.auto("●")
       else:
         is_o = my18.auto("　")
-      ucl_send_kind_list = ucl_send_kind_list + (('【%s】BIG5模式' % (is_o) , None, [self.m_output_type,"BIG5"] ),)
+      ucl_send_kind_list = ucl_send_kind_list + (('%s%s%s%s' % (my18.auto("【"),is_o,my18.auto("】"),my18.auto("BIG5模式")) , None, [self.m_output_type,"BIG5"] ),)
       
       if DEFAULT_OUTPUT_TYPE=="PASTE":
         is_o = my18.auto("●")
       else:
         is_o = my18.auto("　")
-      ucl_send_kind_list = ucl_send_kind_list + (('【%s】複製貼上模式' % (is_o) , None, [self.m_output_type,"PASTE"] ),)
+      ucl_send_kind_list = ucl_send_kind_list + (('%s%s%s%s' % (my18.auto("【"),is_o,my18.auto("】"),my18.auto("複製貼上模式")) , None, [self.m_output_type,"PASTE"] ),)
       
         
-      menu_options = menu_options + ((('3.選擇出字模式', None, ucl_send_kind_list),))       
+      menu_options = menu_options + (((my18.auto("3.選擇出字模式"), None, ucl_send_kind_list),))       
             
       #2021-12-01 加入畫面操作相關
       _menu_ui_arr = ()
       debug_print("SHORT_MODE:");
       debug_print(config["DEFAULT"]["SHORT_MODE"]);
       if config["DEFAULT"]["SHORT_MODE"] == "1":
-        _menu_ui_arr = _menu_ui_arr + (('【●】短版模式' , None, [self.m_run_long] ),)         
+        _menu_ui_arr = _menu_ui_arr + ((my18.auto('【●】短版模式') , None, [self.m_run_long] ),)         
       else:
-        _menu_ui_arr = _menu_ui_arr + (('【　】短版模式' , None, [self.m_run_short] ),)
+        _menu_ui_arr = _menu_ui_arr + ((my18.auto('【　】短版模式') , None, [self.m_run_short] ),)
       
-      _menu_ui_arr = _menu_ui_arr + (('【,,,+】畫面加大' , None, [self.m_ui_plus] ),)
-      _menu_ui_arr = _menu_ui_arr + (('【,,,-】畫面縮小' , None, [self.m_ui_minus] ),)
+      _menu_ui_arr = _menu_ui_arr + ((my18.auto('【,,,+】畫面加大') , None, [self.m_ui_plus] ),)
+      _menu_ui_arr = _menu_ui_arr + ((my18.auto('【,,,-】畫面縮小') , None, [self.m_ui_minus] ),)
         
       #英數時透明度
       _menu_ui_en_alpha_arr = ()
@@ -2956,8 +2956,8 @@ class TrayIcon():
         is_o = my18.auto("　")
         if str(int(float(config['DEFAULT']['NON_UCL_ALPHA'])*10)) == str(i):
           is_o = my18.auto("●")
-        _menu_ui_en_alpha_arr = _menu_ui_en_alpha_arr + (('【%s】%d %%' % ( is_o , (i*10)) , None, [self.m_change_en_alpha, "%.1f" % (i/10.0) ] ),)
-      _menu_ui_arr = _menu_ui_arr + ((('英數時透明度' , None, _menu_ui_en_alpha_arr ),))
+        _menu_ui_en_alpha_arr = _menu_ui_en_alpha_arr + (('%s%s%s%d %%' % ( my18.auto("【"),is_o,my18.auto("】") , (i*10)) , None, [self.m_change_en_alpha, "%.1f" % (i/10.0) ] ),)
+      _menu_ui_arr = _menu_ui_arr + (((my18.auto("英數時透明度") , None, _menu_ui_en_alpha_arr ),))
       
       #肥模式透明度
       _menu_ui_ucl_alpha_arr = ()
@@ -2965,31 +2965,31 @@ class TrayIcon():
         is_o = my18.auto("　")
         if str(int(float(config['DEFAULT']['ALPHA'])*10)) == str(i):
           is_o = my18.auto("●")
-        _menu_ui_ucl_alpha_arr = _menu_ui_ucl_alpha_arr + (('【%s】%d %%' % ( is_o , (i*10)) , None, [self.m_change_ucl_alpha, "%.1f" % (i/10.0) ] ),)
-      _menu_ui_arr = _menu_ui_arr + ((('肥模式透明度' , None, _menu_ui_ucl_alpha_arr ),))        
+        _menu_ui_ucl_alpha_arr = _menu_ui_ucl_alpha_arr + (('%s%s%s%d %%' % ( my18.auto("【"),is_o , my18.auto("】"),(i*10)) , None, [self.m_change_ucl_alpha, "%.1f" % (i/10.0) ] ),)
+      _menu_ui_arr = _menu_ui_arr + (((my18.auto("肥模式透明度") , None, _menu_ui_ucl_alpha_arr ),))        
         
-      menu_options = menu_options + ((('4.畫面調整', None, _menu_ui_arr),))
+      menu_options = menu_options + (((my18.auto("4.畫面調整"), None, _menu_ui_arr),))
                   
             
       if config['DEFAULT']['CTRL_SP'] == "1":
         menu_options = menu_options + ((
-          ("5.【●】使用 CTRL+SPACE 切換輸入法", None, [self.m_ctrlsp_switch] ),          
+          (my18.auto("5.【●】使用 CTRL+SPACE 切換輸入法"), None, [self.m_ctrlsp_switch] ),          
         ))          
       else:
         menu_options = menu_options + ((
-          ("5.【　】使用 CTRL+SPACE 切換輸入法", None, [self.m_ctrlsp_switch] ),          
+          (my18.auto("5.【　】使用 CTRL+SPACE 切換輸入法"), None, [self.m_ctrlsp_switch] ),          
         ))  
       
 
       
       if config['DEFAULT']['SP'] == "1":        
         menu_options = menu_options + ((
-          ("6.【●】顯示短根", None, [self.m_sp_switch] ),
+          (my18.auto("6.【●】顯示短根"), None, [self.m_sp_switch] ),
           
         ))   
       else:              
         menu_options = menu_options + ((
-          ("6.【　】顯示短根", None, [self.m_sp_switch] ),          
+          (my18.auto("6.【　】顯示短根"), None, [self.m_sp_switch] ),          
         ))   
       '''  
       if config['DEFAULT']['PLAY_SOUND_ENABLE'] == "1":
