@@ -2920,20 +2920,20 @@ class TrayIcon():
         is_o = my18.auto("●")
       else:
         is_o = my18.auto("　")
-      ucl_send_kind_list = ucl_send_kind_list + (('%s%s%s%s' % (my18.auto("【"),is_o,my18.auto("】"),my18.auto("正常出字模式")) , None, [self.m_output_type,"DEFAULT"] ),)      
+      ucl_send_kind_list = ucl_send_kind_list + (('%s%s%s %s' % (my18.auto("【"),is_o,my18.auto("】"),my18.auto("正常出字模式")) , None, [self.m_output_type,"DEFAULT"] ),)      
       
       
       if DEFAULT_OUTPUT_TYPE=="BIG5":
         is_o = my18.auto("●")
       else:
         is_o = my18.auto("　")
-      ucl_send_kind_list = ucl_send_kind_list + (('%s%s%s%s' % (my18.auto("【"),is_o,my18.auto("】"),my18.auto("BIG5模式")) , None, [self.m_output_type,"BIG5"] ),)
+      ucl_send_kind_list = ucl_send_kind_list + (('%s%s%s %s' % (my18.auto("【"),is_o,my18.auto("】"),my18.auto("BIG5模式")) , None, [self.m_output_type,"BIG5"] ),)
       
       if DEFAULT_OUTPUT_TYPE=="PASTE":
         is_o = my18.auto("●")
       else:
         is_o = my18.auto("　")
-      ucl_send_kind_list = ucl_send_kind_list + (('%s%s%s%s' % (my18.auto("【"),is_o,my18.auto("】"),my18.auto("複製貼上模式")) , None, [self.m_output_type,"PASTE"] ),)
+      ucl_send_kind_list = ucl_send_kind_list + (('%s%s%s %s' % (my18.auto("【"),is_o,my18.auto("】"),my18.auto("複製貼上模式")) , None, [self.m_output_type,"PASTE"] ),)
       
         
       menu_options = menu_options + (((my18.auto("3.選擇出字模式"), None, ucl_send_kind_list),))       
@@ -2956,7 +2956,7 @@ class TrayIcon():
         is_o = my18.auto("　")
         if str(int(float(config['DEFAULT']['NON_UCL_ALPHA'])*10)) == str(i):
           is_o = my18.auto("●")
-        _menu_ui_en_alpha_arr = _menu_ui_en_alpha_arr + (('%s%s%s%d %%' % ( my18.auto("【"),is_o,my18.auto("】") , (i*10)) , None, [self.m_change_en_alpha, "%.1f" % (i/10.0) ] ),)
+        _menu_ui_en_alpha_arr = _menu_ui_en_alpha_arr + (('%s%s%s %d %%' % ( my18.auto("【"),is_o,my18.auto("】") , (i*10)) , None, [self.m_change_en_alpha, "%.1f" % (i/10.0) ] ),)
       _menu_ui_arr = _menu_ui_arr + (((my18.auto("英數時透明度") , None, _menu_ui_en_alpha_arr ),))
       
       #肥模式透明度
@@ -2965,7 +2965,7 @@ class TrayIcon():
         is_o = my18.auto("　")
         if str(int(float(config['DEFAULT']['ALPHA'])*10)) == str(i):
           is_o = my18.auto("●")
-        _menu_ui_ucl_alpha_arr = _menu_ui_ucl_alpha_arr + (('%s%s%s%d %%' % ( my18.auto("【"),is_o , my18.auto("】"),(i*10)) , None, [self.m_change_ucl_alpha, "%.1f" % (i/10.0) ] ),)
+        _menu_ui_ucl_alpha_arr = _menu_ui_ucl_alpha_arr + (('%s%s%s %d %%' % ( my18.auto("【"),is_o , my18.auto("】"),(i*10)) , None, [self.m_change_ucl_alpha, "%.1f" % (i/10.0) ] ),)
       _menu_ui_arr = _menu_ui_arr + (((my18.auto("肥模式透明度") , None, _menu_ui_ucl_alpha_arr ),))        
         
       menu_options = menu_options + (((my18.auto("4.畫面調整"), None, _menu_ui_arr),))
@@ -3008,14 +3008,14 @@ class TrayIcon():
         is_o = my18.auto("●")
       else:
         is_o = my18.auto("　")
-      _menu_play_sound_arr = _menu_play_sound_arr + (('%s%s%s%s' % (my18.auto("【"),is_o,my18.auto("】"),my18.auto("打字音啟動")) , None, [self.m_pm_switch] ),)
+      _menu_play_sound_arr = _menu_play_sound_arr + (('%s%s%s %s' % (my18.auto("【"),is_o,my18.auto("】"),my18.auto("打字音啟動")) , None, [self.m_pm_switch] ),)
       
       #接下來是打字音量
       for i in range(1,11):
         is_o = my18.auto("　")
         if config['DEFAULT']['KEYBOARD_VOLUME'] == str(i*10):
           is_o = my18.auto("●")
-        _menu_play_sound_arr = _menu_play_sound_arr + (('%s%s%s%s %%' % (my18.auto("【"),is_o,my18.auto("】"),str(i*10)) , None, [self.m_pm_volume_switch,i*10] ),)
+        _menu_play_sound_arr = _menu_play_sound_arr + (('%s%s%s %s %%' % (my18.auto("【"),is_o,my18.auto("】"),str(i*10)) , None, [self.m_pm_volume_switch,i*10] ),)
       
           
       menu_options = menu_options + (((my18.auto("7.打字音"), None, _menu_play_sound_arr),))
