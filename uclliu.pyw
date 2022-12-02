@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION = "1.48"
+VERSION = "1.49"
 import portalocker
 import os
 import sys
@@ -36,12 +36,19 @@ sound_playing_s = ""
 my = php.kit()
 PWD = os.path.dirname(os.path.realpath(sys.argv[0]))
 
+#if "a" in []:
+#	#print("TEST")
+#sys.exit(0)
+
 #paudio_player = pyaudio.PyAudio()
 # 播放打字音用
 #from pydub import AudioSegment
 #from pydub.playback import play
 
-
+# 2022-12-02
+# 強制使用 CP950 CHCP CP950
+# From : https://stackoverflow.com/questions/55899664/is-there-a-way-to-change-the-console-code-page-from-within-python
+os.system("chcp CP950");
 
 # Fix exit crash problem
 # 改用 
@@ -116,7 +123,10 @@ elif sys.argv[1]=="-d":
 def debug_print(data):
   global is_DEBUG_mode
   if is_DEBUG_mode == True:
-    print(data)
+    try:
+      print(data)
+    except:
+      pass
 
 #debug_print("sys.argv[1]: ")
 #debug_print(sys.argv[1])
@@ -1723,6 +1733,9 @@ def senddata(data):
   global f_big5_arr
   #2019-10-20 增加出字強制選擇
   global DEFAULT_OUTPUT_TYPE
+  debug_print("senddata")
+  debug_print(data)
+  debug_print(data)
   #for i in range(0,len(mTC_TDATA)):
   #  debug_print(mTC_TDATA[i]);
   #my.exit(); 
@@ -1761,6 +1774,7 @@ def senddata(data):
   
   # 這是貼上模式
   for k in f_arr:
+    #debug_print("check_kind==f_arr")
     #break;
     k = my.strtolower(k)
     exec_proc = my.strtolower(p.exe())
@@ -1818,6 +1832,7 @@ def senddata(data):
       #win32clipboard.CloseClipboard()            
       break
   for k in f_big5_arr:
+    #debug_print("check_kind==f_big5_arr")
     k = my.strtolower(k)
     if my.is_string_like(my.strtolower(p.exe()),k) or DEFAULT_OUTPUT_TYPE == "BIG5":
       debug_print("Debug_f_big5_arr")
@@ -1850,7 +1865,11 @@ def senddata(data):
     #debug_print("CP950")
     #2019-03-02 
     #修正斷行、空白、自定詞庫等功能
-    _str = data.decode("UTF-8")
+    #debug_print("check_kind==0")
+    _str = data.decode("UTF-8") #UTF-8
+    
+    #_str = _str.encode("big5").encode("big5")
+ 
     _str = my.str_replace(" ","{SPACE}",_str)
     _str = my.str_replace("(","{(}",_str)
     _str = my.str_replace(")","{)}",_str)

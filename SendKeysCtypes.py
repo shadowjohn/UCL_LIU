@@ -663,7 +663,7 @@ def main():
     
     keys = parse_keys(actions)
     for k in keys:
-        print(k)
+        #print(k)
         k.Run()
         time.sleep(.1)
 
@@ -686,14 +686,14 @@ def main():
         ]
 
     for s in test_strings:
-        print(repr(s))
+        #print(repr(s))
         keys = parse_keys(s, with_newlines = True)
-        print(keys)
+        #print(keys)
 
         for k in keys:
             k.Run()
             time.sleep(.1)
-        print()
+        #print()
 
 if __name__ == "__main__":
 
