@@ -48,7 +48,16 @@ PWD = os.path.dirname(os.path.realpath(sys.argv[0]))
 # 2022-12-02
 # 強制使用 CP950 CHCP CP950
 # From : https://stackoverflow.com/questions/55899664/is-there-a-way-to-change-the-console-code-page-from-within-python
-os.system("chcp CP950");
+# 似乎沒啥用
+#os.system("chcp 950");
+#import locale
+#LOCALE_ENCODING = locale.getpreferredencoding()
+#print("LOCALE_ENCODING: %s" % (LOCALE_ENCODING))
+# 改用 i18n
+import myi18n
+my18 = myi18n.kit()
+#print my18.auto('test')
+#sys.exit()
 
 # Fix exit crash problem
 # 改用 
@@ -2908,22 +2917,22 @@ class TrayIcon():
       ucl_send_kind_list = ()
       is_o = ""
       if DEFAULT_OUTPUT_TYPE=="DEFAULT":
-        is_o = "●"
+        is_o = my18.auto("●")
       else:
-        is_o = "　"
+        is_o = my18.auto("　")
       ucl_send_kind_list = ucl_send_kind_list + (('【%s】正常出字模式' % (is_o) , None, [self.m_output_type,"DEFAULT"] ),)      
       
       
       if DEFAULT_OUTPUT_TYPE=="BIG5":
-        is_o = "●"
+        is_o = my18.auto("●")
       else:
-        is_o = "　"
+        is_o = my18.auto("　")
       ucl_send_kind_list = ucl_send_kind_list + (('【%s】BIG5模式' % (is_o) , None, [self.m_output_type,"BIG5"] ),)
       
       if DEFAULT_OUTPUT_TYPE=="PASTE":
-        is_o = "●"
+        is_o = my18.auto("●")
       else:
-        is_o = "　"
+        is_o = my18.auto("　")
       ucl_send_kind_list = ucl_send_kind_list + (('【%s】複製貼上模式' % (is_o) , None, [self.m_output_type,"PASTE"] ),)
       
         
@@ -2944,18 +2953,18 @@ class TrayIcon():
       #英數時透明度
       _menu_ui_en_alpha_arr = ()
       for i in range(0,11):
-        is_o = "　"
+        is_o = my18.auto("　")
         if str(int(float(config['DEFAULT']['NON_UCL_ALPHA'])*10)) == str(i):
-          is_o = "●"      
+          is_o = my18.auto("●")
         _menu_ui_en_alpha_arr = _menu_ui_en_alpha_arr + (('【%s】%d %%' % ( is_o , (i*10)) , None, [self.m_change_en_alpha, "%.1f" % (i/10.0) ] ),)
       _menu_ui_arr = _menu_ui_arr + ((('英數時透明度' , None, _menu_ui_en_alpha_arr ),))
       
       #肥模式透明度
       _menu_ui_ucl_alpha_arr = ()
       for i in range(0,11):
-        is_o = "　"
+        is_o = my18.auto("　")
         if str(int(float(config['DEFAULT']['ALPHA'])*10)) == str(i):
-          is_o = "●"      
+          is_o = my18.auto("●")
         _menu_ui_ucl_alpha_arr = _menu_ui_ucl_alpha_arr + (('【%s】%d %%' % ( is_o , (i*10)) , None, [self.m_change_ucl_alpha, "%.1f" % (i/10.0) ] ),)
       _menu_ui_arr = _menu_ui_arr + ((('肥模式透明度' , None, _menu_ui_ucl_alpha_arr ),))        
         
@@ -2996,20 +3005,20 @@ class TrayIcon():
       _menu_play_sound_arr = ()
       is_o = ""
       if config['DEFAULT']['PLAY_SOUND_ENABLE'] == "1":
-        is_o = "●"
+        is_o = my18.auto("●")
       else:
-        is_o = "　"
-      _menu_play_sound_arr = _menu_play_sound_arr + (('【%s】打字音啟動' % (is_o) , None, [self.m_pm_switch] ),)
+        is_o = my18.auto("　")
+      _menu_play_sound_arr = _menu_play_sound_arr + (('%s%s%s%s' % (my18.auto("【"),is_o,my18.auto("】"),my18.auto("打字音啟動")) , None, [self.m_pm_switch] ),)
       
       #接下來是打字音量
       for i in range(1,11):
-        is_o = "　"
+        is_o = my18.auto("　")
         if config['DEFAULT']['KEYBOARD_VOLUME'] == str(i*10):
-          is_o = "●"
+          is_o = my18.auto("●")
         _menu_play_sound_arr = _menu_play_sound_arr + (('【%s】%s %%' % (is_o,str(i*10)) , None, [self.m_pm_volume_switch,i*10] ),)
       
           
-      menu_options = menu_options + ((('7.打字音', None, _menu_play_sound_arr),))
+      menu_options = menu_options + (((my18.auto("7.打字音"), None, _menu_play_sound_arr),))
       
       '''
       sound_level_list = ()
@@ -3018,7 +3027,7 @@ class TrayIcon():
         real_v = i*100        
         is_o = "　"
         if NOW_VOLUME == real_v:
-          is_o = "●"
+          is_o = my18.auto("●")
         if i == 0:
           sound_level_list = sound_level_list + (('【%s】靜音' % (is_o) , None, [self.m_change_volume,real_v] ),)
         else:
@@ -3037,12 +3046,12 @@ class TrayIcon():
           ("8.【　】啟動預設為「肥」模式", None, [self.m_sdu_switch] ),          
         ))        
         
-      menu_options = menu_options + (("9. 離開(Quit)", None, [self.m_quit]),)
+      menu_options = menu_options + ((my18.auto("9. 離開(Quit)"), None, [self.m_quit]),)
       if self.systray=="":
         #ICON_PATH
         #UCL_PIC_BASE64
         #"data:image/png;base64,"
-        self.systray = SysTrayIcon(ICON_PATH, "肥米輸入法：%s" % (VERSION) , menu_options) #, on_quit=self.m_quit)        
+        self.systray = SysTrayIcon(ICON_PATH, "%s %s" % (my18.auto("肥米輸入法："),VERSION) , menu_options) #, on_quit=self.m_quit)        
         self.systray.start()
       else:        
         self.systray.update(menu_options=menu_options)
