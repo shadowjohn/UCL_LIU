@@ -1184,6 +1184,11 @@ def show_sp_to_label(data,isForce=None):
   sp = "簡根：" + _sp_data 
   #word_label.set_label(sp)
   #word_label.modify_font(pango.FontDescription(GUI_FONT_18))
+  # Issue : 162、(評估中)自定詞，超過一個字以上，不需顯示簡根
+  # 字根有包含 { 就不顯示
+  # 自定字根，通常是多字，多字就會包含 {SPACE}
+  if my.is_string_like(_sp_data,"{"):
+    return
   type_label_set_text(sp)     
 def thread___z(data):
   #debug_print("thread___z: ")
