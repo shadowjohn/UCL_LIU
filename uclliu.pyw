@@ -3015,7 +3015,7 @@ class TrayIcon():
         is_o = my18.auto("　")
         if config['DEFAULT']['KEYBOARD_VOLUME'] == str(i*10):
           is_o = my18.auto("●")
-        _menu_play_sound_arr = _menu_play_sound_arr + (('【%s】%s %%' % (is_o,str(i*10)) , None, [self.m_pm_volume_switch,i*10] ),)
+        _menu_play_sound_arr = _menu_play_sound_arr + (('%s%s%s%s %%' % (my18.auto("【"),is_o,my18.auto("】"),str(i*10)) , None, [self.m_pm_volume_switch,i*10] ),)
       
           
       menu_options = menu_options + (((my18.auto("7.打字音"), None, _menu_play_sound_arr),))
@@ -3039,11 +3039,11 @@ class TrayIcon():
         
       if config['DEFAULT']['STARTUP_DEFAULT_UCL'] == "1":
         menu_options = menu_options + ((
-          ("8.【●】啟動預設為「肥」模式", None, [self.m_sdu_switch] ),          
+          (my18.auto("8.【●】啟動預設為「肥」模式"), None, [self.m_sdu_switch] ),          
         ))          
       else:
         menu_options = menu_options + ((
-          ("8.【　】啟動預設為「肥」模式", None, [self.m_sdu_switch] ),          
+          (my18.auto("8.【　】啟動預設為「肥」模式"), None, [self.m_sdu_switch] ),          
         ))        
         
       menu_options = menu_options + ((my18.auto("9. 離開(Quit)"), None, [self.m_quit]),)
