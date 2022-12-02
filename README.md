@@ -21,7 +21,7 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2022-09-18 22:37
+<h3>最後更新日期：</h3>2022-12-02 14:15
 <br>
 <h3>版本：</h3>V 1.48<br>
 <br>
@@ -29,8 +29,8 @@
 　完全免費的 MIT-License
 <br>
 <h3>下載位置：</h3>
-　　1.主程式(1.48 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
-　　2.主程式(1.47 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.47/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.47/uclliu.exe</a><br>
+　　1.主程式(1.49 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
+　　2.主程式(1.48 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.48/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.48/uclliu.exe</a><br>
 　　3.歷年版本：<a target="_blank" href="https://github.com/shadowjohn/UCL_LIU/tree/master/RELEASE">歷代版本</a><br>
 　　4.同音字庫：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt</a><br>
 　　5.打字聲音：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip</a> 下載後解開，0~9.wav 與 uclliu.exe 放一起
@@ -117,14 +117,26 @@
 Windows 顯示語言：中文（台灣）<br>
 在新增完 English (Unitied States) 後，將 English 的順位上移到第一位，才不會一直被注音煩<br>
   </h3>
-    17、出字模式選擇：<br>
-<kbd>
-<h3>感謝網友 klt 回報，提到使用 https://term.ptt.cc/ 無法正常出字，將出字選擇功能作成自定選擇</h3>
-
-</kbd>
-  
+    18、出字模式選擇：<br>
+	<kbd>
+		<h3>感謝網友 klt 回報，提到使用 https://term.ptt.cc/ 無法正常出字，將出字選擇功能作成自定選擇</h3>	
+	</kbd>
+	19、出字模式選擇：<br>
+	<kbd>
+		<h3>感謝網友 Chuanhuan 回報，提到在外國版的 Win11 右下角選單中文字無法正常顯示</h3>
+		<img src="screenshot/uclliu_save_1.49.png">
+		修正方式暫時沒有好方法，加入 myi18n.py 若系統非 cp950，則在右下角選單，自動切換成英文選單
+	</kbd>
 <br>
 <pre>
+	(2022-09-18) v1.49 版：
+	病毒碼提交掃描：1.49
+	
+	1. 162、自定詞，超過一個字以上，不需顯示簡根
+	2. 163、英文版 Win11 右下角選字中文字顯示異常
+	修正方式暫時沒有好方法，加入 myi18n.py 若系統非 cp950，則在右下角選單，自動切換成英文選單
+	<img src="screenshot/uclliu_save_1.49.png">
+	
     (2022-09-18) v1.48 版：
     病毒碼提交掃描：1.48
 	https://www.microsoft.com/en-us/wdsi/submission/2fed6acb-ae30-48d4-85ee-44de1b4c8bbc	
@@ -672,6 +684,6 @@ Ans：<br>
   <li>(Done 2022-09-18)160、修正 f_pass_app 以小寫字比對，修正 uclliu.ini send_kind_3_noucl 裡 Cyberpunk2077.exe 沒比對到的問題</li>
   <li>(Done 2022-09-18)161、更新說明網址 http://3wa.tw 為 https://3wa.tw</li>
   <li>(Done 2022-12-02)162、(評估中)自定詞，超過一個字以上，不需顯示簡根</li>
-  <li>163、英文版 Win11 右下角選字中文字顯示異常</li>
+  <li>(Done 2022-12-02)163、英文版 Win11 右下角選字中文字顯示異常</li>
 </ul>
 <br>
