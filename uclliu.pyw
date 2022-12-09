@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION = "1.49"
+VERSION = "1.50"
 import portalocker
 import os
 import sys
@@ -1781,7 +1781,7 @@ def senddata(data):
   #debug_print("PP:%s" % (pp))
   debug_print("PP:%s" % (pp))
   p=psutil.Process(pp)
-  
+  exec_proc = my.strtolower(my.basename(p.exe()))
   debug_print("ProcessP:%s" % (p))
   
   check_kind="0"
@@ -1790,12 +1790,11 @@ def senddata(data):
   for k in f_arr:
     #debug_print("check_kind==f_arr")
     #break;
-    k = my.strtolower(k)
-    exec_proc = my.strtolower(p.exe())
+    k = my.strtolower(k)    
     # 2021-08-08 term.ptt.cc (批踢踢實業坊 - Google Chrome) 改成，強制 paste
     if my.is_string_like(exec_proc,k) or DEFAULT_OUTPUT_TYPE == "PASTE" or program_title == my.utf8tobig5(u"批踢踢實業坊") or program_title == my.utf8tobig5(u"批踢踢實業坊 - Google Chrome") or program_title == my.utf8tobig5(u"批踢踢實業坊 - Brave") or program_title == my.utf8tobig5(u"批踢踢實業坊 - 個人 - Microsoft? Edge") or program_title == my.utf8tobig5(u"批踢踢實業坊 — Mozilla Firefox") or program_title == my.utf8tobig5(u"批踢踢實業坊 - Opera"):  
       check_kind="1"            
-      win32clipboard.OpenClipboard()
+      #win32clipboard.OpenClipboard()
       orin_clip=""
       #try:
       #  orin_clip=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
@@ -1848,7 +1847,7 @@ def senddata(data):
   for k in f_big5_arr:
     #debug_print("check_kind==f_big5_arr")
     k = my.strtolower(k)
-    if my.is_string_like(my.strtolower(p.exe()),k) or DEFAULT_OUTPUT_TYPE == "BIG5":
+    if my.is_string_like(exec_proc,k) or DEFAULT_OUTPUT_TYPE == "BIG5":
       debug_print("Debug_f_big5_arr")
       #SendKeysCtypes.SendKeys(my.utf8tobig5(data),pause=0)
       check_kind="2"
@@ -1880,14 +1879,29 @@ def senddata(data):
     #2019-03-02 
     #修正斷行、空白、自定詞庫等功能
     #debug_print("check_kind==0")
-    _str = data.decode("UTF-8") #UTF-8
-    
+
+    #_str = data.decode("UTF-8") #UTF-8    
     #_str = _str.encode("big5").encode("big5")
- 
+    # 這裡是正常出字
+
+    _str = unicode(data) 
     _str = my.str_replace(" ","{SPACE}",_str)
     _str = my.str_replace("(","{(}",_str)
     _str = my.str_replace(")","{)}",_str)
     _str = my.str_replace("\n","{ENTER}",_str)
+
+    # 164、Neovim(nvim-qt)，輸入「停」會變「\」
+    #debug_print("senddata exec_proc: ")
+    #debug_print(exec_proc)
+    #debug_print("senddata _str: ")
+    #debug_print(_str)
+    if exec_proc == "nvim-qt.exe" and my.is_string_like(_str ,"停"):
+      win32clipboard.OpenClipboard() 
+      win32clipboard.EmptyClipboard()#這一行特別重要，經過實驗如果不加這一行的話會做動不正常
+      win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, data)
+      win32clipboard.CloseClipboard()
+      SendKeysCtypes.SendKeys("^r{+}",pause=0)
+      return
     SendKeysCtypes.SendKeys(_str,pause=0)
     #reload(sys)
     #sys.setdefaultencoding('UTF-8')
