@@ -131,6 +131,7 @@ Windows 顯示語言：中文（台灣）<br>
 <pre>
 	(2022-12-10) v1.50 版：
 	病毒碼提交掃描：1.50
+	https://www.microsoft.com/en-us/wdsi/submission/cee634bb-e4c3-401e-a302-7b2bf66b8f45
 	1. 164、Neovim(nvim-qt)，輸入「停」會變「\」
 
 	(2022-12-02) v1.49 版：
