@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION = "1.50"
+VERSION = "1.51"
 import portalocker
 import os
 import sys
@@ -1466,7 +1466,7 @@ def type_label_get_text():
 def word_label_get_text():
   global word_label
   return word_label.get_label();
-def type_label_set_text(last_word_label_txt=""):
+def type_label_set_text(last_word_label_txt="",showOnly=False):
   global type_label
   global word_label
   global play_ucl_label
@@ -1483,20 +1483,33 @@ def type_label_set_text(last_word_label_txt=""):
     debug_print("ShowSearch")
     if is_need_use_phone == True:
       #debug_print("RUN PHONE")
-      show_search("phone")
+      # 只有在發音時，才要 show_search      
+      if showOnly == False:
+        show_search("phone")
     else:
       show_search(None)
     pass
   else:
     if is_need_use_phone == True:
       #pass
+      # 注音模式時，是藍色 label
+      type_label.modify_fg(gtk.STATE_NORMAL, gtk.gdk.Color("#007fff"))
+      word_label.modify_fg(gtk.STATE_NORMAL, gtk.gdk.Color("#007fff"))
+      # 注音輸入模式時，輸入區長度固定為 130
+      if config["DEFAULT"]["SHORT_MODE"]=="0":
+        type_label.set_size_request(int( float(config['DEFAULT']['ZOOM'])*130) ,int( float(config['DEFAULT']['ZOOM'])*40) )
       word_label.set_label("注:")
     else:    
+      # 非注音時，是黑色
+      if config["DEFAULT"]["SHORT_MODE"]=="0":
+        # 非注音模式，回到預設的長度
+        type_label.set_size_request(int( float(config['DEFAULT']['ZOOM'])*100) ,int( float(config['DEFAULT']['ZOOM'])*40) )
+      type_label.modify_fg(gtk.STATE_NORMAL, gtk.gdk.Color("#000000"))
+      word_label.modify_fg(gtk.STATE_NORMAL, gtk.gdk.color_parse('black'))
       word_label.set_label("")
     word_label.modify_font(pango.FontDescription(GUI_FONT_20))
     pass
-  # 如果 last_word_label_txt 不是空值，代表有簡根或其他用字
-  word_label.modify_fg(gtk.STATE_NORMAL, gtk.gdk.color_parse('black'))
+  # 如果 last_word_label_txt 不是空值，代表有簡根或其他用字  
   if last_word_label_txt != "":
     word_label.set_label( last_word_label_txt )
     word_label.modify_fg(gtk.STATE_NORMAL, gtk.gdk.Color("#007fff"))
@@ -1720,6 +1733,7 @@ def play_ucl(thekey):
   global pinyi_version  
   global phone_INDEX
   global phone_DATA
+  global ucl_find_data
   play_ucl_label = type_label.get_label();  
   
   #debug_print(len(play_ucl_label))
@@ -1728,9 +1742,98 @@ def play_ucl(thekey):
   
   if pinyi_version == "0.01" and is_need_use_phone == True and len(play_ucl_label.decode("utf-8")) < 4:
     # 不可以超過5個字 注音查詢模式
-    _data = phone_DATA[phone_INDEX.index(thekey)]
-    play_ucl_label = "%s%s" % (play_ucl_label,_data)    
-    type_label_set_text()         
+    # 這裡是新版的 pinyi
+    # issue 165、注音輸入模式，「ㄒㄧㄤ」襄，選不到
+    # issue 166、注音輸入模式，輸入的注音順序要防呆、置換
+    #這裡是注音模式
+    #ㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙㄧㄨㄩㄚㄛㄜㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦ
+    # From : https://zh.wikipedia.org/wiki/%E6%B3%A8%E9%9F%B3%E7%AC%A6%E8%99%9F
+    # 聲母
+    phone_level_0 = [u"ㄅ",u"ㄆ",u"ㄇ",u"ㄈ",u"ㄉ",u"ㄊ",u"ㄋ",u"ㄌ",u"ㄍ",u"ㄎ",u"ㄏ",u"ㄐ",u"ㄑ",u"ㄒ",u"ㄓ",u"ㄔ",u"ㄕ",u"ㄖ",u"ㄗ",u"ㄘ",u"ㄙ"]
+    # 介音
+    phone_level_1 = [u"ㄧ",u"ㄨ",u"ㄩ"]
+    # 韻母
+    phone_level_2 = [u"ㄚ",u"ㄛ",u"ㄜ",u"ㄝ",u"ㄞ",u"ㄟ",u"ㄠ",u"ㄡ",u"ㄢ",u"ㄣ",u"ㄤ",u"ㄥ",u"ㄦ"]
+    # 發音
+    phone_level_3 = [u" ",u"ˊ",u"ˇ",u"ˋ",u"˙"]
+    # 在此限制注音輸入的順序或代換          
+    # debug_print("Debug7 phone char_alreay_keyin: %s" % (unicode(play_ucl_label)))
+    # Debug7 phone char_alreay_keyin: ㄨㄛ
+
+    # 這裡是錯的
+    # test = mystts.split_unicode_chrs(play_ucl_label)
+    # debug_print(test) # --> ['\xe3', '\x84', '\xa8', '\xe3', '\x84', '\x9b']    
+
+    # 這裡是對的，切開已輸入過的內容
+    #test = mystts.split_unicode_chrs(unicode(play_ucl_label))
+    #debug_print(test) # --> [u'\u3128', u'\u311b']
+
+    # 這是使用者輸入的ㄅㄆㄇ
+    _data = unicode(phone_DATA[phone_INDEX.index(thekey)])
+    debug_print("Debug 11 _data 使用者輸入 : %s" % (_data))
+    debug_print("Debug 11 play_ucl_label 已打的字 : %s" % (unicode(play_ucl_label)))
+    # 在此作防呆    
+    # 如果已送出發音查詢，就不能再加字
+    if len(ucl_find_data)!=0:
+      debug_print(u"Debug 11 ... 如果已送出發音查詢，就不能再加字")
+      # 但如果 thekey 是 0~9 當作選字
+      debug_print(thekey)
+      # 當發音是一聲，才會發生這件事
+      if my.is_string_like(unicode(thekey),mystts.split_unicode_chrs("0123456789")) and int(thekey)<=len(ucl_find_data):
+        data = ucl_find_data[int(thekey)]
+        senddata(data)
+        ucl_find_data = []
+        show_sp_to_label(data.decode('utf-8'),True)
+        # 強制關注音
+        is_need_use_phone = False
+      return False
+    # 不能重複字
+    if play_ucl_label != "" and my.is_string_like(play_ucl_label,_data):
+      debug_print(u"Debug 11 ... 不能重複字")
+      return False
+    # 如果字尾已是發音，就不能再加字
+    if play_ucl_label != "" and my.in_array(unicode(play_ucl_label)[-1],phone_level_3):
+      debug_print(u"Debug 11 ... 如果字尾已是發音，就不能再加字")
+      return False
+    # 聲母只能在第一    
+    if my.in_array(_data,phone_level_0) and len(unicode(play_ucl_label))>=1 and my.in_array(unicode(play_ucl_label)[0:1],phone_level_0):
+      debug_print(u"Debug 11 ... 已經有輸入其他聲母了")
+      play_ucl_label = unicode(play_ucl_label)[1:]
+      play_ucl_label = "%s%s" % (_data,play_ucl_label)
+      ucl_find_data = []
+    elif my.in_array(_data,phone_level_0) and len(unicode(play_ucl_label))>=1 and my.in_array(unicode(play_ucl_label)[0:1],phone_level_0)==False:
+      debug_print(u"Debug 11 ... 有輸入字，但沒有聲母")
+      play_ucl_label = "%s%s" % (_data,play_ucl_label)
+      ucl_find_data = []
+    elif my.in_array(_data,phone_level_1) and len(unicode(play_ucl_label))>=1 and my.is_string_like(unicode(play_ucl_label),phone_level_1)==True:
+      debug_print(u"Debug 11 ... 輸入介音，但原來已輸入過介音了，置換掉新介音")
+      _already_keyin_split = mystts.split_unicode_chrs(unicode(play_ucl_label))
+      for i in range(0,len(_already_keyin_split)):
+        if my.is_string_like(_already_keyin_split[i],phone_level_1):
+          _already_keyin_split[i]=_data
+      play_ucl_label = my.implode("",_already_keyin_split)
+      ucl_find_data = []
+    elif my.in_array(_data,phone_level_1) and len(unicode(play_ucl_label))>=1 and my.is_string_like(unicode(play_ucl_label),phone_level_2)==True:
+      debug_print(u"Debug 11 ... 輸入介音，但已輸入過韻母，把韻母往後移")
+      play_ucl_label = "%s%s%s" % (unicode(play_ucl_label)[0:-1],_data,unicode(play_ucl_label)[-1])
+      ucl_find_data = []
+    elif my.in_array(_data,phone_level_2) and len(unicode(play_ucl_label))>=1 and my.is_string_like(unicode(play_ucl_label),phone_level_2)==True:
+      debug_print(u"Debug 11 ... 輸入韻母，但已輸入過韻母，置換韻母")
+      _already_keyin_split = mystts.split_unicode_chrs(unicode(play_ucl_label))
+      for i in range(0,len(_already_keyin_split)):
+        if my.is_string_like(_already_keyin_split[i],phone_level_2):
+          _already_keyin_split[i]=_data
+      play_ucl_label = my.implode("",_already_keyin_split)
+      ucl_find_data = []
+    else:  
+      play_ucl_label = "%s%s" % (play_ucl_label,_data)        
+      ucl_find_data = []
+    # 只有在輸出 發音 ，showOnly 才改成 False
+    if my.in_array(_data,phone_level_3):
+      type_label_set_text()
+    else:
+      type_label_set_text(showOnly=True)
+    
   elif len(play_ucl_label) < 5:    
     # 不可以超過5個字
     play_ucl_label = "%s%s" % (play_ucl_label,thekey)
@@ -1749,7 +1852,7 @@ def senddata(data):
   global DEFAULT_OUTPUT_TYPE
   debug_print("senddata")
   debug_print(data)
-  debug_print(data)
+  #debug_print(data)
   #for i in range(0,len(mTC_TDATA)):
   #  debug_print(mTC_TDATA[i]);
   #my.exit(); 
@@ -2320,6 +2423,8 @@ def OnKeyboardEvent(event):
       #debug_print("2019-07-19 \n 增加，如果是肥模式，且輸入的字>=1以上，按下 esc 鍵，會把字消除)");
       is_need_use_phone = False
       play_ucl_label = ""
+      # issue 167、按 Esc 消除字，但也要同時消除已查到的待選字，如: ucl 打完後，直接按 esc 但按 space 仍會出現肥
+      ucl_find_data=[]
       type_label_set_text()
       return False
     if event.MessageName == "key down" and (event.KeyID == 91 or event.KeyID == 92):
@@ -2470,6 +2575,12 @@ def OnKeyboardEvent(event):
           return True
         else:
           play_ucl_label = play_ucl_label.decode("UTF-8")[:-1]
+          if is_need_use_phone == True:
+            # 這裡是指，按了注音，又按 Backspace 的事件
+            # 要清掉 word_label
+            type_label_set_text("注:",showOnly=True)            
+            ucl_find_data=[]
+            return False
           type_label_set_text()
           debug_print("Debug5")        
           return False
@@ -2591,7 +2702,7 @@ def OnKeyboardEvent(event):
         else:
           # Play ucl
           #debug_print("Play UCL")
-          #debug_print(thekey)
+          #debug_print(thekey)          
           play_ucl(chr(event.Ascii))
           debug_print("Debug7 phone")
           return False          
@@ -2643,8 +2754,18 @@ def OnKeyboardEvent(event):
             show_sp_to_label(text,True)          
           return False 
         elif len(ucl_find_data)==0 and len(play_ucl_label)!=0:
+          debug_print("Debug phone 11 is_need_use_phone: %s " % (is_need_use_phone))
+          debug_print("Debug phone 11 event.Ascii: %s " % (event.Ascii))
+          if is_need_use_phone == True and event.Ascii == 32:
+            # 這裡是指，注音模式下，有打字，按了空音
+            debug_print("Debug phone 11")
+            #play_ucl(chr(event.Ascii))
+            # 加入發音            
+            type_label_set_text()
+            return False
+
           #無此字根時，按到空白鍵
-          debug_print("Debug11")
+          debug_print("Debug16")
           play_ucl_label=""
           ucl_find_data=[]
           type_label_set_text()
