@@ -23,14 +23,14 @@
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
 <h3>最後更新日期：</h3>2022-12-10 13:30
 <br>
-<h3>版本：</h3>V 1.50<br>
+<h3>版本：</h3>V 1.51<br>
 <br>
 <h3>版權：</h3>
 　完全免費的 MIT-License
 <br>
 <h3>下載位置：</h3>
-　　1.主程式(1.50 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
-　　2.主程式(1.49 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.49/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.49/uclliu.exe</a><br>
+　　1.主程式(1.51 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
+　　2.主程式(1.50 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.50/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.50/uclliu.exe</a><br>
 　　3.歷年版本：<a target="_blank" href="https://github.com/shadowjohn/UCL_LIU/tree/master/RELEASE">歷代版本</a><br>
 　　4.同音字庫：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt</a><br>
 　　5.打字聲音：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip</a> 下載後解開，0~9.wav 與 uclliu.exe 放一起
@@ -129,6 +129,12 @@ Windows 顯示語言：中文（台灣）<br>
 	</kbd>
 <br>
 <pre>
+	(2022-12-18) v1.51 版：
+	病毒碼提交掃描：1.51
+    1. 165、注音輸入模式，「ㄒㄧㄤ」襄，選不到
+    2. 166、注音輸入模式，輸入的注音順序要防呆、置換
+    3. 167、按 Esc 消除字，但也要同時消除已查到的待選字，如: ucl 打完後，直接按 esc 但按 space 仍會出現肥
+
 	(2022-12-10) v1.50 版：
 	病毒碼提交掃描：1.50
 	https://www.microsoft.com/en-us/wdsi/submission/cee634bb-e4c3-401e-a302-7b2bf66b8f45
@@ -690,6 +696,8 @@ Ans：<br>
   <li>(Done 2022-12-02)162、(評估中)自定詞，超過一個字以上，不需顯示簡根</li>
   <li>(Done 2022-12-02)163、英文版 Win11 右下角選字中文字顯示異常</li>
   <li>(Done 2022-12-10)164、Neovim(nvim-qt)，輸入「停」會變「\」</li>
-  <li>165、注音輸入模式，「ㄒㄧㄤ」襄，選不到</li>
+  <li>(Done 2022-12-18)165、注音輸入模式，「ㄒㄧㄤ」襄，選不到</li>
+  <li>(Done 2022-12-18)166、注音輸入模式，輸入的注音順序要防呆、置換</li>
+  <li>(Done 2022-12-18)167、按 Esc 消除字，但也要同時消除已查到的待選字，如: ucl 打完後，直接按 esc 但按 space 仍會出現肥</li>
 </ul>
 <br>

@@ -103,10 +103,17 @@ class kit:
             out_list.append(val)
         return out_list
     def is_string_like(self,data,find_string):
-        if data.find(find_string) == -1:
+        if type(find_string) == list:          
+          for i in range(0,len(find_string)-1):
+            if data.find(find_string[i]) != -1:
+              return True
           return False
         else:
-          return True    
+          # 原來的 string
+          if data.find(find_string) == -1:
+            return False
+          else:
+            return True    
     def python_version(self):
         import sys
         if sys.version_info[0] > 2:
