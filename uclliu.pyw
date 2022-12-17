@@ -1772,11 +1772,7 @@ def play_ucl(thekey):
     _data = unicode(phone_DATA[phone_INDEX.index(thekey)])
     debug_print("Debug 11 _data 使用者輸入 : %s" % (_data))
     debug_print("Debug 11 play_ucl_label 已打的字 : %s" % (unicode(play_ucl_label)))
-    # 在此作防呆
-    # 不能重複字
-    if play_ucl_label != "" and my.is_string_like(play_ucl_label,_data):
-      debug_print(u"Debug 11 ... 不能重複字")
-      return False
+    # 在此作防呆    
     # 如果已送出發音查詢，就不能再加字
     if len(ucl_find_data)!=0:
       debug_print(u"Debug 11 ... 如果已送出發音查詢，就不能再加字")
@@ -1790,6 +1786,10 @@ def play_ucl(thekey):
         show_sp_to_label(data.decode('utf-8'),True)
         # 強制關注音
         is_need_use_phone = False
+      return False
+    # 不能重複字
+    if play_ucl_label != "" and my.is_string_like(play_ucl_label,_data):
+      debug_print(u"Debug 11 ... 不能重複字")
       return False
     # 如果字尾已是發音，就不能再加字
     if play_ucl_label != "" and my.in_array(unicode(play_ucl_label)[-1],phone_level_3):
