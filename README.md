@@ -131,6 +131,7 @@ Windows 顯示語言：中文（台灣）<br>
 <pre>
 	(2023-01-20) v1.52 版：
 	病毒碼提交掃描：1.52
+	https://www.microsoft.com/en-us/wdsi/submission/22968587-5c7a-45aa-8727-cf6757a445bc
 	1. 168、Rimworld RimWorldWin64.exe 以複製貼上方式上字
 	2. 169、Neovim(nvim-qt)裡，「停」、「作」無法正常出字的問題修正(感謝 Benson9954029 提交修正程式碼)
 	
