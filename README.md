@@ -29,8 +29,8 @@
 　完全免費的 MIT-License
 <br>
 <h3>下載位置：</h3>
-　　1.主程式(1.51 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
-　　2.主程式(1.50 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.50/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.50/uclliu.exe</a><br>
+　　1.主程式(1.52 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
+　　2.主程式(1.51 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.51/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.51/uclliu.exe</a><br>
 　　3.歷年版本：<a target="_blank" href="https://github.com/shadowjohn/UCL_LIU/tree/master/RELEASE">歷代版本</a><br>
 　　4.同音字庫：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt</a><br>
 　　5.打字聲音：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip</a> 下載後解開，0~9.wav 與 uclliu.exe 放一起
@@ -132,6 +132,7 @@ Windows 顯示語言：中文（台灣）<br>
 	(2023-01-20) v1.52 版：
 	病毒碼提交掃描：1.52
 	1. 168、Rimworld RimWorldWin64.exe 以複製貼上方式上字
+	2. 169、Neovim(nvim-qt)裡，「停」、「作」無法正常出字的問題修正(感謝 Benson9954029 提交修正程式碼)
 	
 	(2022-12-18) v1.51 版：
 	病毒碼提交掃描：1.51
@@ -705,5 +706,6 @@ Ans：<br>
   <li>(Done 2022-12-18)166、注音輸入模式，輸入的注音順序要防呆、置換</li>
   <li>(Done 2022-12-18)167、按 Esc 消除字，但也要同時消除已查到的待選字，如: ucl 打完後，直接按 esc 但按 space 仍會出現肥</li>
   <li>(Done 2023-01-12)168、Rimworld RimWorldWin64.exe 以複製貼上方式上字</li>
+  <li>(Done 2023-01-19)169、Neovim(nvim-qt)裡，「停」、「作」無法正常出字的問題修正(感謝 Benson9954029 提交修正程式碼)</li>
 </ul>
 <br>
