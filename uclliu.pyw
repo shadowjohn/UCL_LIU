@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION = "1.51"
+VERSION = "1.52"
 import portalocker
 import os
 import sys
@@ -68,7 +68,7 @@ my18 = myi18n.kit()
 # https://superuser.com/questions/1120624/run-script-on-any-selected-text
 
 # 額外出字處理的 app
-f_arr = [ "putty","pietty","pcman","xyplorer","kinza.exe","oxygennotincluded.exe","iedit.exe","iedit_.exe" ]
+f_arr = [ "putty","pietty","pcman","xyplorer","kinza.exe","oxygennotincluded.exe","iedit.exe","iedit_.exe","rimworldwin64.exe" ]
 f_big5_arr = [ "zip32w","daqkingcon.exe","EWinner.exe" ]
 # 不使用肥米的 app
 # 2021-03-19 2077 也不能使用肥米
