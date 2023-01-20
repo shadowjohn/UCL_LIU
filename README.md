@@ -21,9 +21,9 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2022-12-10 13:30
+<h3>最後更新日期：</h3>2023-01-20 09:39
 <br>
-<h3>版本：</h3>V 1.51<br>
+<h3>版本：</h3>V 1.52<br>
 <br>
 <h3>版權：</h3>
 　完全免費的 MIT-License
@@ -129,6 +129,10 @@ Windows 顯示語言：中文（台灣）<br>
 	</kbd>
 <br>
 <pre>
+	(2023-01-20) v1.52 版：
+	病毒碼提交掃描：1.52
+	1. 168、Rimworld RimWorldWin64.exe 以複製貼上方式上字
+	
 	(2022-12-18) v1.51 版：
 	病毒碼提交掃描：1.51
 	https://www.microsoft.com/en-us/wdsi/submission/03c484f4-d931-4abe-acff-31e5c84cd807
