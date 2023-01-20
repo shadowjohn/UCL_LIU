@@ -1998,7 +1998,7 @@ def senddata(data):
     #debug_print(exec_proc)
     #debug_print("senddata _str: ")
     #debug_print(_str)
-    if exec_proc == "nvim-qt.exe" and my.is_string_like(_str ,"停"):
+    if exec_proc == "nvim-qt.exe" and (my.is_string_like(_str ,"停") or my.is_string_like(_str , "作")):
       win32clipboard.OpenClipboard() 
       win32clipboard.EmptyClipboard()#這一行特別重要，經過實驗如果不加這一行的話會做動不正常
       win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, data)
