@@ -28,7 +28,10 @@
 <h3>版權：</h3>
 　完全免費的 MIT-License
 <br>
+<center>
+</center>
 <h3>下載位置：</h3>
+<h3>～～提醒：如果遇到無法使用肥米的視窗，請關閉肥米輸入法，按右鍵，改用「系統管理員身分執行肥米輸入法」，應該就可以克服!!～～</h3>
 　　1.主程式(1.52 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
 　　2.主程式(1.51 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.51/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.51/uclliu.exe</a><br>
 　　3.歷年版本：<a target="_blank" href="https://github.com/shadowjohn/UCL_LIU/tree/master/RELEASE">歷代版本</a><br>
