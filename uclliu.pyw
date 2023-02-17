@@ -278,6 +278,7 @@ config['DEFAULT'] = {
                       "SEND_KIND_3_NOUCL":"", #Force no UCL
                       "KEYBOARD_VOLUME": "30", #打字聲音量，0~100
                       "SP": "0", #短根
+                      "SHOW_PHONE_CODE": "0", #顯示注音讀音
                       "CTRL_SP": "0", #使用CTRL+SPACE換肥米
                       "PLAY_SOUND_ENABLE": "0", #打字音
                       "STARTUP_DEFAULT_UCL": "1" #啟動時，預設為 肥，改為 0 則為 英
@@ -299,6 +300,7 @@ config['DEFAULT']['SEND_KIND_1_PASTE'] = str(config['DEFAULT']['SEND_KIND_1_PAST
 config['DEFAULT']['SEND_KIND_2_BIG5'] = str(config['DEFAULT']['SEND_KIND_2_BIG5']);
 config['DEFAULT']['KEYBOARD_VOLUME'] = str(int(config['DEFAULT']['KEYBOARD_VOLUME']));
 config['DEFAULT']['SP'] = str(int(config['DEFAULT']['SP']));
+config['DEFAULT']['SHOW_PHONE_CODE'] = str(int(config['DEFAULT']['SHOW_PHONE_CODE']));
 config['DEFAULT']['CTRL_SP'] = str(int(config['DEFAULT']['CTRL_SP']));
 config['DEFAULT']['PLAY_SOUND_ENABLE'] = str(int(config['DEFAULT']['PLAY_SOUND_ENABLE']));
 config['DEFAULT']['STARTUP_DEFAULT_UCL'] = str(int(config['DEFAULT']['STARTUP_DEFAULT_UCL']));
@@ -358,7 +360,12 @@ if float(config['DEFAULT']['ZOOM'])<=0.1:
 if int(config['DEFAULT']['SP'])<=0:
   config['DEFAULT']['SP']="0"  
 else:
-  config['DEFAULT']['SP']="1"  
+  config['DEFAULT']['SP']="1"
+
+if int(config['DEFAULT']['SHOW_PHONE_CODE'])<=0:
+  config['DEFAULT']['SHOW_PHONE_CODE']="0"  
+else:
+  config['DEFAULT']['SHOW_PHONE_CODE']="1"
   
 if int(config['DEFAULT']['CTRL_SP'])<=0:
   config['DEFAULT']['CTRL_SP']="0"  
@@ -376,7 +383,7 @@ else:
   config['DEFAULT']['STARTUP_DEFAULT_UCL']="1"    
 
 # GUI Font
-GLOBAL_FONT_FAMILY = "Mingliu,Malgun Gothic,roman" #roman
+GLOBAL_FONT_FAMILY = "Mingliu,Serif,Malgun Gothic,roman" #roman
 GUI_FONT_12 = my.utf8tobig5("%s %d" % (GLOBAL_FONT_FAMILY,int( float(config['DEFAULT']['ZOOM'])*12) ));
 GUI_FONT_14 = my.utf8tobig5("%s bold %d" % (GLOBAL_FONT_FAMILY,int(float(config['DEFAULT']['ZOOM'])*14) ));
 GUI_FONT_16 = my.utf8tobig5("%s bold %d" % (GLOBAL_FONT_FAMILY,int(float(config['DEFAULT']['ZOOM'])*16) ));
@@ -395,6 +402,7 @@ debug_print("ZOOM:%s" % (config["DEFAULT"]["ZOOM"]))
 debug_print("SEND_KIND_1_PASTE:%s" % (config["DEFAULT"]["SEND_KIND_1_PASTE"]))
 debug_print("SEND_KIND_2_BIG5:%s" % (config["DEFAULT"]["SEND_KIND_2_BIG5"]))
 debug_print("SP:%s" % (config["DEFAULT"]["SP"]))
+debug_print("SHOW_PHONE_CODE:%s" % (config["DEFAULT"]["SHOW_PHONE_CODE"]))
 
 def saveConfig():
   global config
@@ -489,7 +497,7 @@ def play_sound():
                       
     NOW_VOLUME = (int(config['DEFAULT']['KEYBOARD_VOLUME'])) #音量
     thread.start_new_thread( thread___playMusic,(NOW_VOLUME,))
-                            
+
 def run_short():
   global config
   global word_label
@@ -532,7 +540,7 @@ def run_long():
   
   config["DEFAULT"]["SHORT_MODE"]="0"
   saveConfig()
-  
+
 saveConfig()    
 #check if exists tab cin json
 is_need_trans_tab = False
