@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION = "1.52"
+VERSION = "1.53"
 import portalocker
 import os
 import sys
@@ -1884,16 +1884,21 @@ def senddata(data):
   #debug_print("PP:%s" % (pp))
   debug_print("PP:%s" % (pp))
   p=psutil.Process(pp)
+  #debug_print("Send step: 1")
+  #debug_print("Send step: 1 p.exe(): %s" % (p.exe()))
   exec_proc = my.strtolower(my.basename(p.exe()))
-  debug_print("ProcessP:%s" % (p))
-  
+  #debug_print("Send step: 2")
+  #debug_print("ProcessP:%s" % (p))
+  #debug_print("Send step: 3")  
   check_kind="0"
-  
+  #debug_print("exec_proc: %s" %(exec_proc))
+  #debug_print("Send step: 4")
   # 這是貼上模式
   for k in f_arr:
     #debug_print("check_kind==f_arr")
     #break;
-    k = my.strtolower(k)    
+    k = my.strtolower(k)  
+	
     # 2021-08-08 term.ptt.cc (批踢踢實業坊 - Google Chrome) 改成，強制 paste
     if my.is_string_like(exec_proc,k) or DEFAULT_OUTPUT_TYPE == "PASTE" or program_title == my.utf8tobig5(u"批踢踢實業坊") or program_title == my.utf8tobig5(u"批踢踢實業坊 - Google Chrome") or program_title == my.utf8tobig5(u"批踢踢實業坊 - Brave") or program_title == my.utf8tobig5(u"批踢踢實業坊 - 個人 - Microsoft? Edge") or program_title == my.utf8tobig5(u"批踢踢實業坊 — Mozilla Firefox") or program_title == my.utf8tobig5(u"批踢踢實業坊 - Opera"):  
       check_kind="1"            
@@ -1918,6 +1923,9 @@ def senddata(data):
       #SendKeysCtypes.SendKeys("+{INSERT}",pause=0)
       if k == "oxygennotincluded.exe":
         #2019-02-10 修正 缺氧 無法輸入中文的問題
+        SendKeysCtypes.SendKeys("^v",pause=0)
+      elif k == "iedit_.exe":
+        #2019-10-29 修正 PhotoImpact x3 無法輸入中文的問題		
         SendKeysCtypes.SendKeys("^v",pause=0)
       elif k == "iedit_.exe":
         #2019-10-29 修正 PhotoImpact x3 無法輸入中文的問題

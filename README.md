@@ -21,9 +21,9 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2023-01-20 09:39
+<h3>最後更新日期：</h3>2023-02-17 13:14
 <br>
-<h3>版本：</h3>V 1.52<br>
+<h3>版本：</h3>V 1.53<br>
 <br>
 <h3>版權：</h3>
 　完全免費的 MIT-License
@@ -32,8 +32,8 @@
 </center>
 <h3>下載位置：</h3>
 <h3>～～提醒：如果遇到無法使用肥米的視窗，請關閉肥米輸入法，按右鍵，改用「系統管理員身分執行肥米輸入法」，應該就可以克服!!～～</h3>
-　　1.主程式(1.52 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
-　　2.主程式(1.51 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.51/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.51/uclliu.exe</a><br>
+　　1.主程式(1.53 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
+　　2.主程式(1.52 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.51/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.52/uclliu.exe</a><br>
 　　3.歷年版本：<a target="_blank" href="https://github.com/shadowjohn/UCL_LIU/tree/master/RELEASE">歷代版本</a><br>
 　　4.同音字庫：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt</a><br>
 　　5.打字聲音：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip</a> 下載後解開，0~9.wav 與 uclliu.exe 放一起
@@ -132,6 +132,10 @@ Windows 顯示語言：中文（台灣）<br>
 	</kbd>
 <br>
 <pre>
+	(2023-02-17) v1.53 版：
+	病毒碼提交掃描：1.53
+	1. 170、修正「設定->應用程式與功能」裡「搜尋清單程式」輸入文字無法正確出字的問題
+	
 	(2023-01-20) v1.52 版：
 	病毒碼提交掃描：1.52
 	https://www.microsoft.com/en-us/wdsi/submission/22968587-5c7a-45aa-8727-cf6757a445bc
@@ -711,5 +715,6 @@ Ans：<br>
   <li>(Done 2022-12-18)167、按 Esc 消除字，但也要同時消除已查到的待選字，如: ucl 打完後，直接按 esc 但按 space 仍會出現肥</li>
   <li>(Done 2023-01-12)168、Rimworld RimWorldWin64.exe 以複製貼上方式上字</li>
   <li>(Done 2023-01-19)169、Neovim(nvim-qt)裡，「停」、「作」無法正常出字的問題修正(感謝 Benson9954029 提交修正程式碼)</li>
+  <li>(Done 2023-02-17)170、修正「設定->應用程式與功能」裡「搜尋清單程式」輸入文字無法正確出字的問題</li>
 </ul>
 <br>
