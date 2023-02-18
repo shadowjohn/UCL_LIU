@@ -140,7 +140,7 @@ class kit:
           _output = os.path.basename(path)
         else:
           m = self.explode(self.SP(),path)
-          _output = m[self.count(m)-1]
+          _output = m[len(m)-1]
         return _output            
     def mainname(self,path):
         import os
