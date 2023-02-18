@@ -894,6 +894,7 @@ play_ucl_label=""
 ucl_find_data=[]
 pinyi_version="0" #初版
 uclcode_phone = {}  #注音文字儲這 "-3": ["爾","耳","洱","餌","邇","珥","駬","薾","鉺","峏","尒","栮"]
+re_uclcode_phone = {}  #注音文字儲這 "爾": ["ㄦˇ"]
 is_need_use_phone=False
 phone_INDEX = ", - . / 0 1 2 3 4 5 6 7 8 9 ; a b c d e f g h i j k l m n o p q r s t u v w x y z"
 phone_DATA = "ㄝ ㄦ ㄡ ㄥ ㄢ ㄅ ㄉ ˇ ˋ ㄓ ˊ ˙ ㄚ ㄞ ㄤ ㄇ ㄖ ㄏ ㄎ ㄍ ㄑ ㄕ ㄘ ㄛ ㄨ ㄜ ㄠ ㄩ ㄙ ㄟ ㄣ ㄆ ㄐ ㄋ ㄔ ㄧ ㄒ ㄊ ㄌ ㄗ ㄈ"
@@ -967,8 +968,69 @@ def load_phone(pinyi_filepath):
     for j in range(0,len(output[d[0]])):
       output[d[0]][j] = output[d[0]][j].decode("UTF-8")  
   return output
+def re_load_phone(_uclcode_phone):
+  # 有點慢，考慮放到 thread 跑
+  #把
+  #uclcode_phone = {}  #注音文字儲這 "-3": ["爾","耳","洱","餌","邇","珥","駬","薾","鉺","峏","尒","栮"]
+  #轉成
+  #re_uclcode_phone = {}  #注音文字儲這 "爾": ["ㄦˇ"]
+  #global re_uclcode_phone
+  output = {}
+  for k in uclcode_phone:
+    #debug_print(k)
+    #debug_print(uclcode_phone[k])
+    #wj/
+    #[u'\u901a', u'\u606b', u'\u84ea', u'\u75cc', u'\u70b5', u'\u71a5', u'\u72ea']    
+    #my.exit()
+    # k = wj/
+    for kv in uclcode_phone[k]:
+      #kv = kv
+      #debug_print(kv); #通
+      #my.exit()
+      #if kv not in output:
+      if output.has_key(kv) == False:
+        output[kv] = []
+      # 取得 注音 wj/ -> ㄊㄨˊ
+      #debug_print(k)
+      #my.exit()        
+      k_phone = phone_en_to_code(k)      
+      #debug_print(k_phone)
+      #my.exit()      
+      if k_phone not in output[kv]:        
+        output[kv].append(k_phone)
+    #debug_print(output)    
+    #my.exit()
+  #my.exit() 
+  #pass
+  #debug_print(output[u"肥"][0]) # 出 ㄈㄟˊ
+  #my.exit()
+  #re_uclcode_phone = output
+  return output  
+#debug_print((re_uclcode_phone=={})) # 得 True
+#my.exit()
+#a = {}
+#debug_print(a.has_key("abc"))
+#my.exit()
+def phone_en_to_code(_en):
+  #注音的英數，轉注音，如 -3 -> ㄦˇ
+  global phone_DATA
+  global phone_INDEX
+  # 已轉陣列
+  #phone_INDEX = [, - . / 0 1 2 3 4 5 6 7 8 9 ; a b c d e f g h i j k l m n o p q r s t u v w x y z]
+  #phone_DATA =  [ㄝ ㄦ ㄡ ㄥ ㄢ ㄅ ㄉ ˇ ˋ ㄓ ˊ ˙ ㄚ ㄞ ㄤ ㄇ ㄖ ㄏ ㄎ ㄍ ㄑ ㄕ ㄘ ㄛ ㄨ ㄜ ㄠ ㄩ ㄙ ㄟ ㄣ ㄆ ㄐ ㄋ ㄔ ㄧ ㄒ ㄊ ㄌ ㄗ ㄈ]
+  #m = mystts.split_unicode_chrs(_en);
+  m = list(_en);
+  output = ""
+  for i in range(0,len(m)):              
+    m[i] = phone_DATA[phone_INDEX.index(m[i])]
+  output = my.implode("",m)
+  output = unicode(output)
+  return output 
+#debug_print("phone_en_to_code(\"-3\"): %s" % unicode(phone_en_to_code("-3"))) # 出「ㄦˇ」OK  
+#debug_print("phone_en_to_code(\"wj/\"): %s" % unicode(phone_en_to_code("wj/"))) # phone_en_to_code("wj/"): ㄊㄨㄥ
+#my.exit();
 def phone_to_en_num(phone_code):
-  #注音轉回英數
+  #注音轉回英數 ㄦˇ -> -3
   global phone_DATA
   global phone_INDEX
   phone_code = phone_code.decode("utf-8")
@@ -976,7 +1038,7 @@ def phone_to_en_num(phone_code):
   output = ""  
   for i in range(0,my.strlen(m)):              
     m[i] = phone_INDEX[phone_DATA.index(m[i])]
-    output = my.implode("",m)
+  output = my.implode("",m)  
   return output 
 #def pleave(self, event):
 #  my.exit();
@@ -998,8 +1060,11 @@ if my.is_file(PWD + "\\pinyi.txt")==True:
   same_sound_data = my.explode("\n",my.trim(my.file_get_contents(PWD + "\\pinyi.txt")))
   if my.is_string_like(same_sound_data[0],"VERSION_0.01"):
       pinyi_version = "0.01";
-      #載入uclcode_phone
+      # 載入uclcode_phone
       uclcode_phone = load_phone(PWD + "\\pinyi.txt")
+      # 稍慢 +2 sec
+      #thread.start_new_thread( re_load_phone, (uclcode_phone, ))
+      re_uclcode_phone = re_load_phone(uclcode_phone)
       #debug_print(uclcode_phone)
   
 uclcode = my.json_decode(my.file_get_contents(PWD + "\\liu.json"))
@@ -1062,7 +1127,7 @@ def thread___playMusic(keyboard_volume):
       # https://stackoverflow.com/questions/36664121/modify-volume-while-streaming-with-pyaudio
       chunk = 2048
       #s = random.choice(m_song)
-      #print(my.json_encode(m_play_song))                    
+      #debug_print(my.json_encode(m_play_song))                    
       #m_play_song = m_play_song[ : 2]
       #s = m_play_song.pop(0) #m_play_song[0]   
   
@@ -1076,8 +1141,8 @@ def thread___playMusic(keyboard_volume):
           #debug_print(o_song[key]["lastKey"])
           if o_song[key]["lastKey"]!=None and o_song[key]["lastKey"] == lastKey:
             s = key
-            #print("s")
-            #print(s)  
+            #debug_print("s")
+            #debug_print(s)  
             break;     
       if s == "":
         _arr = []
@@ -1178,6 +1243,31 @@ def word_to_sp(data):
   output = output.replace("\n ","{ENTER}");  
   output = output.replace("\n","{ENTER}"); 
   return output 
+def show_phone_to_label(data,isForce=None):
+  #顯示注音到輸入結束框後
+  #2023-02-18 
+  #Issue. 171、網友 Allen 希望肥米打出文字後，可以提示「注音怎麼念」
+  global config
+  global play_ucl_label
+  global re_uclcode_phone  
+  if config['DEFAULT']['SHOW_PHONE_CODE']=="0" and isForce is None:
+    return
+  # 將傳入的 data 文字，取得注音念法
+  m_phone_code = []
+  if re_uclcode_phone.has_key(data):
+    m_phone_code = re_uclcode_phone[data] # 如 data = 肥，取得 ["ㄈㄟˊ"]
+  
+  # 未知的讀音
+  if len(m_phone_code)==0:
+    return
+  _str_read_phone = my.implode("或",m_phone_code)
+  orin_label_text = word_label_get_text()
+  if orin_label_text == "":
+    #沒設簡根
+    type_label_set_text("音:%s" % (_str_read_phone))
+  else:
+    type_label_set_text("%s,音:%s" % (orin_label_text,_str_read_phone))
+
 def show_sp_to_label(data,isForce=None):
   #顯示最簡字根到輸入結束框後
   global config
@@ -1197,8 +1287,8 @@ def show_sp_to_label(data,isForce=None):
     # 如果預選字，如 「GQD 動 舅 娚」的 kk 在 1 或 2 (舅、娚)，就會變 GQD1 GQD2     
     # 如為數字，加上 反 VRSFW 功能
     _tmp_sp_data = _sp_data[:-1] + my.strtoupper(_vrsfw_arr[int(_sp_data[-1])-1]) 
-    _sp_data = _tmp_sp_data + " 或 " + _sp_data 
-  sp = "簡根：" + _sp_data 
+    _sp_data = _tmp_sp_data + "或" + _sp_data 
+  sp = "簡:" + _sp_data 
   #word_label.set_label(sp)
   #word_label.modify_font(pango.FontDescription(GUI_FONT_18))
   # Issue : 162、(評估中)自定詞，超過一個字以上，不需顯示簡根
@@ -1481,12 +1571,18 @@ def type_label_set_text(last_word_label_txt="",showOnly=False):
   global debug_print
   global GUI_FONT_22
   global GUI_FONT_20
+  global GUI_FONT_18
+  global GUI_FONT_16
+  global GUI_FONT_14
+  global GUI_FONT_12
   global config
   global is_need_use_phone
   #debug_print("type_label_set_text");
   #debug_print(play_ucl_label);
+  
   type_label.set_label(play_ucl_label.decode("UTF-8"))
-  type_label.modify_font(pango.FontDescription(GUI_FONT_22))
+  type_label.modify_font(pango.FontDescription(GUI_FONT_22))  
+  
   if my.strlen(play_ucl_label) > 0:
     debug_print("ShowSearch")
     if is_need_use_phone == True:
@@ -1515,12 +1611,19 @@ def type_label_set_text(last_word_label_txt="",showOnly=False):
       type_label.modify_fg(gtk.STATE_NORMAL, gtk.gdk.Color("#000000"))
       word_label.modify_fg(gtk.STATE_NORMAL, gtk.gdk.color_parse('black'))
       word_label.set_label("")
-    word_label.modify_font(pango.FontDescription(GUI_FONT_20))
+    word_label.modify_font(pango.FontDescription(GUI_FONT_20))            
+    
     pass
   # 如果 last_word_label_txt 不是空值，代表有簡根或其他用字  
   if last_word_label_txt != "":
+    #2023-02-18 加入，如「的」(簡:D,音:ㄉㄦ˙或ㄉㄧˊ或ㄉㄧˋ...)
+    debug_print("my.strlen(last_word_label_txt): %d" % (my.strlen(last_word_label_txt)))
+    if my.strlen(last_word_label_txt)>14:
+      word_label.modify_font(pango.FontDescription(GUI_FONT_16))
+  
     word_label.set_label( last_word_label_txt )
     word_label.modify_fg(gtk.STATE_NORMAL, gtk.gdk.Color("#007fff"))
+    
   #如果是短米，自動看幾個字展長
   if config["DEFAULT"]["SHORT_MODE"]=="1":
     _tape_label = type_label.get_label()
@@ -1792,6 +1895,8 @@ def play_ucl(thekey):
         senddata(data)
         ucl_find_data = []
         show_sp_to_label(data.decode('utf-8'),True)
+        #注
+        show_phone_to_label(data.decode('utf-8'),None)
         # 強制關注音
         is_need_use_phone = False
       return False
@@ -2623,6 +2728,8 @@ def OnKeyboardEvent(event):
           
           senddata(data)
           show_sp_to_label(data.decode('utf-8'),None)
+          #注
+          show_phone_to_label(data.decode('utf-8'),None)
           #debug_print(data)
           #快選用的   
           debug_print("Debug12")
@@ -2636,6 +2743,9 @@ def OnKeyboardEvent(event):
           senddata(data)
           # 這裡要強制 show_sp
           show_sp_to_label(data.decode('utf-8'),True)
+          #注
+          show_phone_to_label(data.decode('utf-8'),None)
+          
           #debug_print(data)
           #快選用的   
           debug_print("Debug12 phone")
@@ -2762,12 +2872,16 @@ def OnKeyboardEvent(event):
            
             senddata(text)   
             #2021-07-22 補 sp 出字
-            show_sp_to_label(text,None)                         
+            show_sp_to_label(text,None)
+            #注
+            show_phone_to_label(text,None)                         
           debug_print("Debug4")
           # 2021-08-31 這裡是按下 sp 出字，一樣把注音關了
           if is_need_use_phone == True and pinyi_version == "0.01":
             is_need_use_phone = False
-            show_sp_to_label(text,True)          
+            show_sp_to_label(text,True)
+            #注
+            show_phone_to_label(text,None)          
           return False 
         elif len(ucl_find_data)==0 and len(play_ucl_label)!=0:
           debug_print("Debug phone 11 is_need_use_phone: %s " % (is_need_use_phone))
@@ -3130,9 +3244,7 @@ class TrayIcon():
         menu_options = menu_options + ((
           (my18.auto("5.【　】使用 CTRL+SPACE 切換輸入法"), None, [self.m_ctrlsp_switch] ),          
         ))  
-      
-
-      
+            
       if config['DEFAULT']['SP'] == "1":        
         menu_options = menu_options + ((
           (my18.auto("6.【●】顯示短根"), None, [self.m_sp_switch] ),
@@ -3141,15 +3253,26 @@ class TrayIcon():
       else:              
         menu_options = menu_options + ((
           (my18.auto("6.【　】顯示短根"), None, [self.m_sp_switch] ),          
+        ))
+        
+      if config['DEFAULT']['SHOW_PHONE_CODE'] == "1":        
+        menu_options = menu_options + ((
+          (my18.auto("7.【●】顯示提示注音"), None, [self.m_show_phone_code_switch] ),
+          
         ))   
+      else:              
+        menu_options = menu_options + ((
+          (my18.auto("7.【　】顯示提示注音"), None, [self.m_show_phone_code_switch] ),          
+        )) 
+                   
       '''  
       if config['DEFAULT']['PLAY_SOUND_ENABLE'] == "1":
         menu_options = menu_options + ((
-          ("7.【●】打字音", None, [self.m_pm_switch] ),          
+          ("8.【●】打字音", None, [self.m_pm_switch] ),          
         ))           
       else:
         menu_options = menu_options + ((
-          ("7.【　】打字音", None, [self.m_pm_switch] ),          
+          ("8.【　】打字音", None, [self.m_pm_switch] ),          
         ))      
       # 接下來作打字音
       '''
@@ -3169,7 +3292,7 @@ class TrayIcon():
         _menu_play_sound_arr = _menu_play_sound_arr + (('%s%s%s %s %%' % (my18.auto("【"),is_o,my18.auto("】"),str(i*10)) , None, [self.m_pm_volume_switch,i*10] ),)
       
           
-      menu_options = menu_options + (((my18.auto("7.打字音"), None, _menu_play_sound_arr),))
+      menu_options = menu_options + (((my18.auto("8.打字音"), None, _menu_play_sound_arr),))
       
       '''
       sound_level_list = ()
@@ -3190,14 +3313,14 @@ class TrayIcon():
         
       if config['DEFAULT']['STARTUP_DEFAULT_UCL'] == "1":
         menu_options = menu_options + ((
-          (my18.auto("8.【●】啟動預設為「肥」模式"), None, [self.m_sdu_switch] ),          
+          (my18.auto("9.【●】啟動預設為「肥」模式"), None, [self.m_sdu_switch] ),          
         ))          
       else:
         menu_options = menu_options + ((
-          (my18.auto("8.【　】啟動預設為「肥」模式"), None, [self.m_sdu_switch] ),          
+          (my18.auto("9.【　】啟動預設為「肥」模式"), None, [self.m_sdu_switch] ),          
         ))        
         
-      menu_options = menu_options + ((my18.auto("9. 離開(Quit)"), None, [self.m_quit]),)
+      menu_options = menu_options + ((my18.auto("10. 離開(Quit)"), None, [self.m_quit]),)
       if self.systray=="":
         #ICON_PATH
         #UCL_PIC_BASE64
@@ -3229,7 +3352,16 @@ class TrayIcon():
         config['DEFAULT']['SP']="0"
       #切換後，都要存設定
       saveConfig()
-      self.reload_tray()        
+      self.reload_tray()   
+    def m_show_phone_code_switch(self,event,data=None):
+      global config
+      if config['DEFAULT']['SHOW_PHONE_CODE'] == "0":        
+        config['DEFAULT']['SHOW_PHONE_CODE']="1"
+      else:
+        config['DEFAULT']['SHOW_PHONE_CODE']="0"
+      #切換後，都要存設定
+      saveConfig()
+      self.reload_tray()       
     def m_about(self,event,data=None):  # if i ommit the data=none section python complains about too much arguments passed on greetme
       message = gtk.MessageDialog(type=gtk.MESSAGE_INFO, buttons=gtk.BUTTONS_OK)
       message.set_position(gtk.WIN_POS_CENTER_ALWAYS)
