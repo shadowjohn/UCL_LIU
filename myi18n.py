@@ -46,13 +46,15 @@ class kit:
         "5.【　】使用 CTRL+SPACE 切換輸入法":"5. [   ] Switch Input Method By CTRL+SPACE",
         "6.【●】顯示短根":"6. [ o ] Diplay [SP] Shortest Character",
         "6.【　】顯示短根":"6. [   ] Diplay [SP] Shortest Character",
+        "7.【●】顯示提示注音":"7. [ o ] Diplay [Prompt phonetic]",
+        "7.【　】顯示提示注音":"6. [   ] Diplay [Prompt phonetic]",
         "】":" ]",
         "【":"[ ",
         "●":"o",
         "　":"   ",
-        "7.打字音":"7. Typing sound",
+        "8.打字音":"8. Typing sound",
         "肥米輸入法：":"UCLLIU Input Method: ",
-        "8.【●】啟動預設為「肥」模式":"8. [ o ] Boot default to \"UCL\" mode",
-        "8.【　】啟動預設為「肥」模式":"8. [   ] Boot default to \"UCL\" mode",
-        "9. 離開(Quit)":"9. Quit"        
+        "9.【●】啟動預設為「肥」模式":"9. [ o ] Boot default to \"UCL\" mode",
+        "9.【　】啟動預設為「肥」模式":"9. [   ] Boot default to \"UCL\" mode",
+        "10. 離開(Quit)":"9. Quit"        
     }
