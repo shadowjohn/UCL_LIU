@@ -2592,7 +2592,24 @@ def OnKeyboardEvent(event):
       return True
     if event.MessageName == "key down" and event.Key != "Capital":
       flag_is_play_capslock_otherkey=True
+      # Issue 175、當使用者按 Win+L 登出系統，再次登入 Windows 會無法正常打字
+      if flag_is_win_down == True and event.Key == "L":
+        # 強制改回 Release Win Key
+        debug_print("Issue 175 Force Release Win Key")
+        flag_is_win_down = False
+        return False
       debug_print("Debug event F")
+      #debug_print("is ucl??")    
+      #debug_print(is_ucl())    
+      #debug_print("DDDDFFFF event.Key: "+str(event.Key))
+      #debug_print("flag_is_shift_down:"+str(flag_is_shift_down))
+      #debug_print("flag_is_ctrl_down:"+str(flag_is_ctrl_down))
+      #debug_print("flag_is_capslock_down:"+str(flag_is_capslock_down))
+      #debug_print("flag_is_play_capslock_otherkey:"+str(flag_is_play_capslock_otherkey))
+      #debug_print("flag_is_win_down:"+str(flag_is_win_down))
+      #debug_print("flag_is_play_otherkey:"+str(flag_is_play_otherkey))
+      #debug_print("flag_isCTRLSPACE:"+str(flag_isCTRLSPACE))        
+      
     if event.MessageName == "key up" and event.Key == "Capital":
       flag_is_capslock_down=False
       flag_is_play_capslock_otherkey=False
