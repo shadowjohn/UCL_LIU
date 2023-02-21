@@ -1964,7 +1964,7 @@ def senddata(data):
   #2019-10-20 增加出字強制選擇
   global DEFAULT_OUTPUT_TYPE
   debug_print("senddata")
-  debug_print(data)
+  debug_print(unicode(data))
   #debug_print(data)
   #for i in range(0,len(mTC_TDATA)):
   #  debug_print(mTC_TDATA[i]);
@@ -2024,10 +2024,11 @@ def senddata(data):
       #win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, "")
       #win32clipboard.EmptyClipboard()
       #win32clipboard.CloseClipboard()
-            
+      debug_print("The paste mode...")      
       win32clipboard.OpenClipboard() 
       win32clipboard.EmptyClipboard()#這一行特別重要，經過實驗如果不加這一行的話會做動不正常
-      win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, data)
+      # 176、貼上模式時，如 'pns空白2 的擬，會變成 鏦的問題 (感謝 ym 回報問題)
+      win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, unicode(data))
       win32clipboard.CloseClipboard()
       #https://win32com.goermezer.de/microsoft/windows/controlling-applications-via-sendkeys.html
       #shell.SendKeys("+{INSERT}", 0)
@@ -2122,7 +2123,8 @@ def senddata(data):
     if exec_proc == "nvim-qt.exe" and (my.is_string_like(_str ,"停") or my.is_string_like(_str , "作")):
       win32clipboard.OpenClipboard() 
       win32clipboard.EmptyClipboard()#這一行特別重要，經過實驗如果不加這一行的話會做動不正常
-      win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, data)
+      # 176、貼上模式時，如 'pns空白2 的擬，會變成 鏦的問題 (感謝 ym 回報問題)
+      win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, unicode(data))
       win32clipboard.CloseClipboard()
       SendKeysCtypes.SendKeys("^r{+}",pause=0)
       return
