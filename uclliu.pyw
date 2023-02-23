@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION = "1.53"
+VERSION = "1.54"
 import portalocker
 import os
 import sys
@@ -1964,7 +1964,7 @@ def senddata(data):
   #2019-10-20 增加出字強制選擇
   global DEFAULT_OUTPUT_TYPE
   debug_print("senddata")
-  debug_print(data)
+  debug_print(unicode(data))
   #debug_print(data)
   #for i in range(0,len(mTC_TDATA)):
   #  debug_print(mTC_TDATA[i]);
@@ -2024,10 +2024,11 @@ def senddata(data):
       #win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, "")
       #win32clipboard.EmptyClipboard()
       #win32clipboard.CloseClipboard()
-            
+      debug_print("The paste mode...")      
       win32clipboard.OpenClipboard() 
       win32clipboard.EmptyClipboard()#這一行特別重要，經過實驗如果不加這一行的話會做動不正常
-      win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, data)
+      # 176、貼上模式時，如 'pns空白2 的擬，會變成 鏦的問題 (感謝 ym 回報問題)
+      win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, unicode(data))
       win32clipboard.CloseClipboard()
       #https://win32com.goermezer.de/microsoft/windows/controlling-applications-via-sendkeys.html
       #shell.SendKeys("+{INSERT}", 0)
@@ -2122,7 +2123,8 @@ def senddata(data):
     if exec_proc == "nvim-qt.exe" and (my.is_string_like(_str ,"停") or my.is_string_like(_str , "作")):
       win32clipboard.OpenClipboard() 
       win32clipboard.EmptyClipboard()#這一行特別重要，經過實驗如果不加這一行的話會做動不正常
-      win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, data)
+      # 176、貼上模式時，如 'pns空白2 的擬，會變成 鏦的問題 (感謝 ym 回報問題)
+      win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, unicode(data))
       win32clipboard.CloseClipboard()
       SendKeysCtypes.SendKeys("^r{+}",pause=0)
       return
@@ -2592,7 +2594,24 @@ def OnKeyboardEvent(event):
       return True
     if event.MessageName == "key down" and event.Key != "Capital":
       flag_is_play_capslock_otherkey=True
+      # Issue 175、當使用者按 Win+L 登出系統，再次登入 Windows 會無法正常打字
+      if flag_is_win_down == True and event.Key == "L":
+        # 強制改回 Release Win Key
+        debug_print("Issue 175 Force Release Win Key")
+        flag_is_win_down = False
+        return False
       debug_print("Debug event F")
+      #debug_print("is ucl??")    
+      #debug_print(is_ucl())    
+      #debug_print("DDDDFFFF event.Key: "+str(event.Key))
+      #debug_print("flag_is_shift_down:"+str(flag_is_shift_down))
+      #debug_print("flag_is_ctrl_down:"+str(flag_is_ctrl_down))
+      #debug_print("flag_is_capslock_down:"+str(flag_is_capslock_down))
+      #debug_print("flag_is_play_capslock_otherkey:"+str(flag_is_play_capslock_otherkey))
+      #debug_print("flag_is_win_down:"+str(flag_is_win_down))
+      #debug_print("flag_is_play_otherkey:"+str(flag_is_play_otherkey))
+      #debug_print("flag_isCTRLSPACE:"+str(flag_isCTRLSPACE))        
+      
     if event.MessageName == "key up" and event.Key == "Capital":
       flag_is_capslock_down=False
       flag_is_play_capslock_otherkey=False
