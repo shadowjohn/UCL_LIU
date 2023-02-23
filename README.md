@@ -134,6 +134,7 @@ Windows 顯示語言：中文（台灣）<br>
 <pre>
 	(2023-02-21) v1.54 版：
 	病毒碼提交掃描：1.54
+	https://www.microsoft.com/en-us/wdsi/submission/8b235a03-e2da-4a59-bd8e-70290960441e
 	1. 175、當使用者按 Win+L 登出系統，再次登入 Windows 會無法正常打字 (感謝 hrcspkla 回報問題)
 	2. 176、貼上模式時，如 'pns空白2 的擬，會變成 鏦的問題 (感謝 ym 回報問題)
 	
