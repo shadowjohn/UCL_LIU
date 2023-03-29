@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION = "1.54"
+VERSION = "1.55"
 import portalocker
 import os
 import sys
@@ -36,6 +36,7 @@ sound_playing_s = ""
 my = php.kit()
 PWD = os.path.dirname(os.path.realpath(sys.argv[0]))
 
+import clip
 #if "a" in []:
 #	#print("TEST")
 #sys.exit(0)
@@ -197,6 +198,45 @@ import psutil
 #import win32com
 import win32con
 #import win32com.client
+
+
+#2023-03-29 判斷作業系統版本
+# Issue 177、Win11 裡的 notepad 如果不改字型為 MingLiu 無法正常出字，改成強制複製貼上修正
+def isWin11():
+  # From : https://stackoverflow.com/questions/68899983/get-current-windows-11-release-in-python
+  # From : https://www.digitalocean.com/community/tutorials/python-system-command-os-subprocess-call
+  # From : https://stackoverflow.com/questions/68899983/get-current-windows-11-release-in-python  這個可以
+  #if sys.getwindowsversion().build > 20000:
+  # 失敗
+  data = ""
+  try:
+    data = my.system("C:\\Windows\\System32\\wbem\\WMIC.exe os get name");
+  except e:
+    debug_print(e)
+  #debug_print("GGG %s" % (data))
+  if my.is_string_like(data,"Windows 11"):
+    return True
+  else:
+    return False
+import platform
+os_version = platform.release()
+
+if isWin11():
+  os_version = "11"
+#sys.exit()  
+# 在此可以確定使用者是 win7 win10 win11  
+# os_version 7 8 10 11
+debug_print("os_version: %s" % (os_version))
+#debug_print("sys.getwindowsversion().build: %s" % (sys.getwindowsversion().build))
+
+
+#2023-03-10 在肥米啟動後，將優先性「priority」設為高，避免有些暫用cpu高的程式啟動後，肥米打字會卡
+#參考:https://stackoverflow.com/questions/1023038/change-process-priority-in-python-cross-platform
+p = psutil.Process(os.getpid())
+#print("nice: %s" % (p.nice())) # default 32
+#p.nice(psutil.HIGH_PRIORITY_CLASS) # 這樣會變 128
+p.nice(256)
+#print("nice: %s" % (p.nice()))
 
 #2018-07-13 1.12版增加
 #檢查 C:\temp\UCLLIU.ini 初始化設定檔
@@ -1961,6 +2001,7 @@ def senddata(data):
   global debug_print
   global f_arr
   global f_big5_arr
+  global os_version
   #2019-10-20 增加出字強制選擇
   global DEFAULT_OUTPUT_TYPE
   debug_print("senddata")
@@ -2007,6 +2048,72 @@ def senddata(data):
   #debug_print("exec_proc: %s" %(exec_proc))
   #debug_print("Send step: 4")
   # 這是貼上模式
+  
+  # 2023-03-29 Win11 特產
+  # 如果是 windows 11 且使用 notepad.exe
+  # 如果 notepad 裡使用的字型是 MingLiU 或 MingLiU_HKSCS 就可以正常出字，反之只能用複製貼上出字才能正常@@?
+  if os_version=="11" and exec_proc == "notepad.exe":
+    #debug_print(exec_proc); => notepad.exe
+    debug_print("WTFFFFF win11 notepad need paste");
+    orin_clip=""
+    #clipID = 0 #win32clipboard.EnumClipboardFormats(0)[0]
+    #win32clipboard.OpenClipboard() 
+    # 打开系统剪贴板
+    
+
+    # 在剪贴板中写入文本数据
+    #ctypes.windll.user32.EmptyClipboard()
+    #ctypes.windll.user32.SetClipboardData(1, ctypes.c_wchar_p('Hello, clipboard!'))
+
+    # 关闭系统剪贴板
+    #ctypes.windll.user32.CloseClipboard()
+    
+    try:      
+      
+      
+      #ctypes.windll.user32.OpenClipboard(None)
+      #ctypes.windll.user32.GetClipboardData(1)
+      # Todo 似乎 binary or image copy 無法使用，先這樣吧      
+      orin_clip = clip.get()
+      #debug_print("orin_clip %s " % (orin_clip))
+      #ctypes.windll.user32.CloseClipboard()   
+      #win32clipboard.CloseClipboard()
+      #win32clipboard.OpenClipboard()
+      #orin_clip=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
+      #win32clipboard.CloseClipboard()   
+      pass
+    except:
+      debug_print("error copy")            
+      pass
+    #ctypes.windll.user32.OpenClipboard(None)
+    #orin_clip = ctypes.windll.user32.GetClipboardData()
+    #ctypes.windll.user32.CloseClipboard()   
+    
+    win32clipboard.OpenClipboard()     
+    win32clipboard.EmptyClipboard()#這一行特別重要，經過實驗如果不加這一行的話會做動不正常
+    win32clipboard.CloseClipboard() 
+    # 176、貼上模式時，如 'pns空白2 的擬，會變成 鏦的問題 (感謝 ym 回報問題)
+    #ctypes.windll.user32.OpenClipboard(None)
+    #ctypes.windll.user32.SetClipboardData(0, unicode(data))
+    win32clipboard.OpenClipboard()     
+    win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, unicode(data))       
+    win32clipboard.CloseClipboard() 
+    SendKeysCtypes.SendKeys("^v",pause=0)
+    if orin_clip is not None:
+      clip.put(orin_clip)
+    #ctypes.windll.user32.OpenClipboard(None)
+    #ctypes.windll.user32.SetClipboardData(1, orin_clip)
+    #ctypes.windll.user32.CloseClipboard()   
+    
+    #time.sleep(0.05)
+    #win32clipboard.OpenClipboard() 
+    #win32clipboard.EmptyClipboard()
+    #if len(orin_clip)<1000:
+    #  debug_print(len(orin_clip))
+    #  win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip) 
+    #win32clipboard.CloseClipboard()   
+    return
+  
   for k in f_arr:
     #debug_print("check_kind==f_arr")
     #break;
@@ -2067,7 +2174,8 @@ def senddata(data):
       #win32clipboard.OpenClipboard()    
       #win32clipboard.EmptyClipboard()
       #win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip)
-      #win32clipboard.CloseClipboard()            
+      #win32clipboard.CloseClipboard()   
+      return      
       break
   for k in f_big5_arr:
     #debug_print("check_kind==f_big5_arr")
@@ -2094,7 +2202,8 @@ def senddata(data):
       win32clipboard.OpenClipboard()    
       win32clipboard.EmptyClipboard()
       win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip)
-      win32clipboard.CloseClipboard()         
+      win32clipboard.CloseClipboard()       
+      return      
       break
             
   if check_kind=="0":

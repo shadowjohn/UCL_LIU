@@ -21,9 +21,9 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2023-02-21 10:43
+<h3>最後更新日期：</h3>2023-03-29 10:58
 <br>
-<h3>版本：</h3>V 1.54<br>
+<h3>版本：</h3>V 1.55<br>
 <br>
 <h3>版權：</h3>
 　完全免費的 MIT-License
@@ -32,8 +32,8 @@
 </center>
 <h3>下載位置：</h3>
 <h3>～～提醒：如果遇到無法使用肥米的視窗，請關閉肥米輸入法，按右鍵，改用「系統管理員身分執行肥米輸入法」，應該就可以克服!!～～</h3>
-　　1.主程式(1.54 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
-　　2.主程式(1.53 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.53/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.53/uclliu.exe</a><br>
+　　1.主程式(1.55 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
+　　2.主程式(1.54 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.54/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.54/uclliu.exe</a><br>
 　　3.歷年版本：<a target="_blank" href="https://github.com/shadowjohn/UCL_LIU/tree/master/RELEASE">歷代版本</a><br>
 　　4.同音字庫：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt</a><br>
 　　5.打字聲音：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip</a> 下載後解開，0~9.wav 與 uclliu.exe 放一起
@@ -132,6 +132,11 @@ Windows 顯示語言：中文（台灣）<br>
 	</kbd>
 <br>
 <pre>
+	(2023-03-29) v1.55 版：
+	病毒碼提交掃描：1.55	
+	1. 177、Win11 裡的 notepad 如果不改字型為 MingLiu 無法正常出字，改成強制複製貼上修正 (感謝 ym 回報問題)
+	
+	
 	(2023-02-21) v1.54 版：
 	病毒碼提交掃描：1.54
 	https://www.microsoft.com/en-us/wdsi/submission/8b235a03-e2da-4a59-bd8e-70290960441e
@@ -733,5 +738,6 @@ Ans：<br>
   <li>174、增加「符號快選」功能，可以選愛心、黑桃等</li>
   <li>(Done 2023-02-21)175、當使用者按 Win+L 登出系統，再次登入 Windows 會無法正常打字 (感謝 hrcspkla 回報問題)</li>
   <li>(Done 2023-02-21)176、貼上模式時，如 'pns空白2 的擬，會變成 鏦的問題 (感謝 ym 回報問題)</li>
+  <li>(Done 2023-03-29)177、Win11 裡的 notepad 如果不改字型為 MingLiu 無法正常出字，改成強制複製貼上修正 (感謝 ym 回報問題)</li>  
 </ul>
 <br>

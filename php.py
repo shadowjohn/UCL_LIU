@@ -150,3 +150,13 @@ class kit:
     def rand(self,start_int,end_int):
         import random
         return random.randint(start_int,end_int)
+    def system(self,cmd):
+        #From : https://stackoverflow.com/questions/43593348/winerror-6-the-handle-is-invalid-from-python-check-output-spawn-in-electron-app/43606682#43606682
+        import os
+        try:
+            from subprocess import DEVNULL
+        except ImportError:
+            DEVNULL = os.open(os.devnull, os.O_RDWR)
+        import subprocess
+        returned_output = subprocess.check_output(cmd, stdin=DEVNULL, stderr=DEVNULL)
+        return returned_output
