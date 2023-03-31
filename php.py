@@ -158,5 +158,9 @@ class kit:
         except ImportError:
             DEVNULL = os.open(os.devnull, os.O_RDWR)
         import subprocess
-        returned_output = subprocess.check_output(cmd, stdin=DEVNULL, stderr=DEVNULL)
+        #openai 教的，這招可以隱藏視窗
+        #Issue 178、隱藏查找 windows 版本時，外部指令顯示視窗問題
+        startupinfo = subprocess.STARTUPINFO() 
+        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        returned_output = subprocess.check_output(cmd, stdin=DEVNULL, stderr=DEVNULL, startupinfo=startupinfo)
         return returned_output
