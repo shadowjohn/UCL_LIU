@@ -2068,26 +2068,14 @@ def senddata(data):
     # 关闭系统剪贴板
     #ctypes.windll.user32.CloseClipboard()
     
-    try:      
-      
-      
-      #ctypes.windll.user32.OpenClipboard(None)
-      #ctypes.windll.user32.GetClipboardData(1)
-      # Todo 似乎 binary or image copy 無法使用，先這樣吧      
-      orin_clip = clip.get()
-      #debug_print("orin_clip %s " % (orin_clip))
-      #ctypes.windll.user32.CloseClipboard()   
-      #win32clipboard.CloseClipboard()
-      #win32clipboard.OpenClipboard()
-      #orin_clip=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
-      #win32clipboard.CloseClipboard()   
-      pass
-    except:
-      debug_print("error copy")            
-      pass
-    #ctypes.windll.user32.OpenClipboard(None)
-    #orin_clip = ctypes.windll.user32.GetClipboardData()
-    #ctypes.windll.user32.CloseClipboard()   
+    #try:                        
+    #  # Todo 似乎 binary or image copy 無法使用，先這樣吧      
+    #  orin_clip = clip.get()      
+    #  pass
+    #except:
+    #  debug_print("error copy")            
+    #  pass
+    
     
     win32clipboard.OpenClipboard()     
     win32clipboard.EmptyClipboard()#這一行特別重要，經過實驗如果不加這一行的話會做動不正常
@@ -2095,23 +2083,15 @@ def senddata(data):
     # 176、貼上模式時，如 'pns空白2 的擬，會變成 鏦的問題 (感謝 ym 回報問題)
     #ctypes.windll.user32.OpenClipboard(None)
     #ctypes.windll.user32.SetClipboardData(0, unicode(data))
-    win32clipboard.OpenClipboard()     
+    win32clipboard.OpenClipboard()
+    win32clipboard.EmptyClipboard()
     win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, unicode(data))       
     win32clipboard.CloseClipboard() 
     SendKeysCtypes.SendKeys("^v",pause=0)
-    if orin_clip is not None:
-      clip.put(orin_clip)
-    #ctypes.windll.user32.OpenClipboard(None)
-    #ctypes.windll.user32.SetClipboardData(1, orin_clip)
-    #ctypes.windll.user32.CloseClipboard()   
     
-    #time.sleep(0.05)
-    #win32clipboard.OpenClipboard() 
-    #win32clipboard.EmptyClipboard()
-    #if len(orin_clip)<1000:
-    #  debug_print(len(orin_clip))
-    #  win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip) 
-    #win32clipboard.CloseClipboard()   
+    #if orin_clip is not None:
+    #  clip.put(orin_clip)
+    
     return
   
   for k in f_arr:
@@ -2529,11 +2509,11 @@ def OnKeyboardEvent(event):
         type_label_set_text()
         toAlphaOrNonAlpha() 
         orin_clip=""
-        try:
-          win32clipboard.OpenClipboard()
-          orin_clip=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
-        except:
-          pass
+        #try:
+        #  win32clipboard.OpenClipboard()
+        #  orin_clip=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
+        #except:
+        #  pass
         try:
           win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, "")
           win32clipboard.EmptyClipboard()
@@ -2553,13 +2533,13 @@ def OnKeyboardEvent(event):
         #  pass
         #也許要設delay...
         time.sleep(0.05)
-        try:
-          win32clipboard.OpenClipboard()    
-          win32clipboard.EmptyClipboard()
-          win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip)
-          win32clipboard.CloseClipboard()           
-        except:
-          pass
+        #try:
+        #  win32clipboard.OpenClipboard()    
+        #  win32clipboard.EmptyClipboard()
+        #  win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip)
+        #  win32clipboard.CloseClipboard()           
+        #except:
+        #  pass
         return False   
       if my.strtolower(last_key[-4:])==",,,z" and is_ucl():
         # 將框選的文字，轉成嘸蝦米的字
@@ -2568,15 +2548,16 @@ def OnKeyboardEvent(event):
         type_label_set_text()
         toAlphaOrNonAlpha()                   
         orin_clip=""
-        try:
-          # 備份原本剪貼簿的內容，有可能文字，圖片之類的吧?
-          win32clipboard.OpenClipboard()
-          orin_clip=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
-        except:
-          pass
+        #try:
+        #  # 備份原本剪貼簿的內容，有可能文字，圖片之類的吧?
+        #  win32clipboard.OpenClipboard()
+        #  orin_clip=win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT)
+        #except:
+        #  pass
         try:
           # 清掉剪貼簿內容
-          win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, "")
+          win32clipboard.OpenClipboard()
+          #win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, "")
           win32clipboard.EmptyClipboard()
           win32clipboard.CloseClipboard()
         except:
@@ -2586,7 +2567,7 @@ def OnKeyboardEvent(event):
         try:
           win32clipboard.OpenClipboard()
           #try:
-          time.sleep(0.05)
+          #time.sleep(0.05)
           selectData = win32clipboard.GetClipboardData(win32con.CF_UNICODETEXT) # 從剪貼簿裡抓出內容
           win32clipboard.CloseClipboard() # 抓完關掉剪貼簿
           #debug_print("#2200 selectData:");
@@ -2607,13 +2588,13 @@ def OnKeyboardEvent(event):
           pass
         #也許要設delay...
         time.sleep(0.05)
-        try:
-          win32clipboard.OpenClipboard()    
-          win32clipboard.EmptyClipboard()
-          win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip) #還原原本剪貼簿內容
-          win32clipboard.CloseClipboard()
-        except:
-          pass
+        #try:
+        #  win32clipboard.OpenClipboard()    
+        #  win32clipboard.EmptyClipboard()
+        #  win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, orin_clip) #還原原本剪貼簿內容
+        #  win32clipboard.CloseClipboard()
+        #except:
+        #  pass
         return False             
       if my.strtolower(last_key[-9:])==",,,unlock":          
         last_key = ""               
