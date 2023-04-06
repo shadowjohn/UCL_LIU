@@ -2050,49 +2050,56 @@ def senddata(data):
   # 這是貼上模式
   
   # 2023-03-29 Win11 特產
-  # 如果是 windows 11 且使用 notepad.exe
+  # 如果是 windows 11 且使用 notepad.exe 且版本是 11.2302.26.0
   # 如果 notepad 裡使用的字型是 MingLiU 或 MingLiU_HKSCS 就可以正常出字，反之只能用複製貼上出字才能正常@@?
   if os_version=="11" and exec_proc == "notepad.exe":
-    #debug_print(exec_proc); => notepad.exe
-    debug_print("WTFFFFF win11 notepad need paste");
-    orin_clip=""
-    #clipID = 0 #win32clipboard.EnumClipboardFormats(0)[0]
-    #win32clipboard.OpenClipboard() 
-    # 打开系统剪贴板
-    
+    #且是特定版本才行
+    _properties = my.getFileProperties(p.exe())
+    '''
+    {'FileVersion': '11.2302.26.0', 'FixedFileInfo': {u'FileFlagsMask': 63, u'FileType': 1, u'FileVersionMS': 723198, u'FileVersionLS': 1703936, u'Signature': -17890115, u'FileSubtype': 0, u'FileFlags': 0, u'ProductVersionLS': 1703936, u'FileDate': None, u'ProductVersionMS': 723198, u'FileOS': 4, u'StrucVersion': 65536}, 'StringFileInfo': {'LegalCopyright': None, 'InternalName': None, 'FileVersion': None, 'CompanyName': None, 'PrivateBuild': None, 'LegalTrademarks': None, 'Comments': None, 'ProductName': None, 'SpecialBuild': None, 'ProductVersion': None, 'FileDescription': None, 'OriginalFilename': None}}
+    '''
+    if _properties["FileVersion"] is not None and ( _properties["FileVersion"] == "11.2302.26.0" or _properties["FileVersionMS"] == 723198 ):
+        #debug_print(_properties)
+        #debug_print(exec_proc); => notepad.exe
+        #debug_print("WTFFFFF win11 notepad need paste");
+        orin_clip=""
+        #clipID = 0 #win32clipboard.EnumClipboardFormats(0)[0]
+        #win32clipboard.OpenClipboard() 
+        # 打开系统剪贴板
+        
 
-    # 在剪贴板中写入文本数据
-    #ctypes.windll.user32.EmptyClipboard()
-    #ctypes.windll.user32.SetClipboardData(1, ctypes.c_wchar_p('Hello, clipboard!'))
+        # 在剪贴板中写入文本数据
+        #ctypes.windll.user32.EmptyClipboard()
+        #ctypes.windll.user32.SetClipboardData(1, ctypes.c_wchar_p('Hello, clipboard!'))
 
-    # 关闭系统剪贴板
-    #ctypes.windll.user32.CloseClipboard()
-    
-    #try:                        
-    #  # Todo 似乎 binary or image copy 無法使用，先這樣吧      
-    #  orin_clip = clip.get()      
-    #  pass
-    #except:
-    #  debug_print("error copy")            
-    #  pass
-    
-    
-    win32clipboard.OpenClipboard()     
-    win32clipboard.EmptyClipboard()#這一行特別重要，經過實驗如果不加這一行的話會做動不正常
-    win32clipboard.CloseClipboard() 
-    # 176、貼上模式時，如 'pns空白2 的擬，會變成 鏦的問題 (感謝 ym 回報問題)
-    #ctypes.windll.user32.OpenClipboard(None)
-    #ctypes.windll.user32.SetClipboardData(0, unicode(data))
-    win32clipboard.OpenClipboard()
-    win32clipboard.EmptyClipboard()
-    win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, unicode(data))       
-    win32clipboard.CloseClipboard() 
-    SendKeysCtypes.SendKeys("^v",pause=0)
-    
-    #if orin_clip is not None:
-    #  clip.put(orin_clip)
-    
-    return
+        # 关闭系统剪贴板
+        #ctypes.windll.user32.CloseClipboard()
+        
+        #try:                        
+        #  # Todo 似乎 binary or image copy 無法使用，先這樣吧      
+        #  orin_clip = clip.get()      
+        #  pass
+        #except:
+        #  debug_print("error copy")            
+        #  pass
+        
+        
+        win32clipboard.OpenClipboard()     
+        win32clipboard.EmptyClipboard()#這一行特別重要，經過實驗如果不加這一行的話會做動不正常
+        win32clipboard.CloseClipboard() 
+        # 176、貼上模式時，如 'pns空白2 的擬，會變成 鏦的問題 (感謝 ym 回報問題)
+        #ctypes.windll.user32.OpenClipboard(None)
+        #ctypes.windll.user32.SetClipboardData(0, unicode(data))
+        win32clipboard.OpenClipboard()
+        win32clipboard.EmptyClipboard()
+        win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, unicode(data))       
+        win32clipboard.CloseClipboard() 
+        SendKeysCtypes.SendKeys("^v",pause=0)
+        
+        #if orin_clip is not None:
+        #  clip.put(orin_clip)
+        
+        return
   
   for k in f_arr:
     #debug_print("check_kind==f_arr")
