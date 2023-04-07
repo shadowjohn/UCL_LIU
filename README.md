@@ -139,7 +139,8 @@ Windows 顯示語言：中文（台灣）<br>
 <br>
 <pre>
 	(2023-04-06) v1.55 版：
-	病毒碼提交掃描：1.55	
+	病毒碼提交掃描：1.55
+	https://www.microsoft.com/en-us/wdsi/submission/328cc8ac-1cbd-4a3a-beb7-aa1d22ae22ff
 	1. 177、Win11 裡的 notepad 如果不改字型為 MingLiu 無法正常出字，改成強制複製貼上修正 (感謝 ym 回報問題)
     2. 178、隱藏查找 windows 版本時，外部指令顯示視窗問題
     2. 179、當按下 ,,,x、,,,z 如果使用者設簡體字，就以簡體字模式轉出，反正就正體字
