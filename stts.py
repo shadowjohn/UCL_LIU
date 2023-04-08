@@ -172,8 +172,9 @@ class kit:
           mdata[k] = self._mTC_TDATA[idx]  
       data = "".join(mdata)
       return data
-    def trad2simple(self,data):      
-      mdata = self.split_unicode_chrs(data)        
+    def trad2simple(self,data):
+      # 179
+      mdata = self.split_unicode_chrs(unicode(data))
       for k in range(0,len(mdata)):
         if mdata[k] in self._mTC_TDATA:
           idx = self._mTC_TDATA.index(mdata[k])

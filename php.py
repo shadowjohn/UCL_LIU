@@ -150,3 +150,56 @@ class kit:
     def rand(self,start_int,end_int):
         import random
         return random.randint(start_int,end_int)
+    def system(self,cmd):
+        #From : https://stackoverflow.com/questions/43593348/winerror-6-the-handle-is-invalid-from-python-check-output-spawn-in-electron-app/43606682#43606682
+        import os
+        try:
+            from subprocess import DEVNULL
+        except ImportError:
+            DEVNULL = os.open(os.devnull, os.O_RDWR)
+        import subprocess
+        #openai 教的，這招可以隱藏視窗
+        #Issue 178、隱藏查找 windows 版本時，外部指令顯示視窗問題
+        startupinfo = subprocess.STARTUPINFO() 
+        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        returned_output = subprocess.check_output(cmd, stdin=DEVNULL, stderr=DEVNULL, startupinfo=startupinfo)
+        return returned_output        
+    def getFileProperties(self,fname):
+        import win32api
+        """
+        From : https://stackoverflow.com/questions/580924/how-to-access-a-files-properties-on-windows
+        Read all properties of the given file return them as a dictionary.
+        """
+        propNames = ('Comments', 'InternalName', 'ProductName',
+            'CompanyName', 'LegalCopyright', 'ProductVersion',
+            'FileDescription', 'LegalTrademarks', 'PrivateBuild',
+            'FileVersion', 'OriginalFilename', 'SpecialBuild')
+
+        props = {'FixedFileInfo': None, 'StringFileInfo': None, 'FileVersion': None}
+
+        try:
+            # backslash as parm returns dictionary of numeric info corresponding to VS_FIXEDFILEINFO struc
+            fixedInfo = win32api.GetFileVersionInfo(fname, '\\')
+            props['FixedFileInfo'] = fixedInfo
+            props['FileVersion'] = "%d.%d.%d.%d" % (fixedInfo['FileVersionMS'] / 65536,
+                    fixedInfo['FileVersionMS'] % 65536, fixedInfo['FileVersionLS'] / 65536,
+                    fixedInfo['FileVersionLS'] % 65536)
+
+            # \VarFileInfo\Translation returns list of available (language, codepage)
+            # pairs that can be used to retreive string info. We are using only the first pair.
+            lang, codepage = win32api.GetFileVersionInfo(fname, '\\VarFileInfo\\Translation')[0]
+
+            # any other must be of the form \StringfileInfo\%04X%04X\parm_name, middle
+            # two are language/codepage pair returned from above
+
+            strInfo = {}
+            for propName in propNames:
+                strInfoPath = u'\\StringFileInfo\\%04X%04X\\%s' % (lang, codepage, propName)
+                ## print str_info
+                strInfo[propName] = win32api.GetFileVersionInfo(fname, strInfoPath)
+
+            props['StringFileInfo'] = strInfo
+        except:
+            pass
+
+        return props
