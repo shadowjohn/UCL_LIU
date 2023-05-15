@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION = "1.55"
+VERSION = "1.56"
 import portalocker
 import os
 import sys
@@ -2058,7 +2058,10 @@ def senddata(data):
     '''
     {'FileVersion': '11.2302.26.0', 'FixedFileInfo': {u'FileFlagsMask': 63, u'FileType': 1, u'FileVersionMS': 723198, u'FileVersionLS': 1703936, u'Signature': -17890115, u'FileSubtype': 0, u'FileFlags': 0, u'ProductVersionLS': 1703936, u'FileDate': None, u'ProductVersionMS': 723198, u'FileOS': 4, u'StrucVersion': 65536}, 'StringFileInfo': {'LegalCopyright': None, 'InternalName': None, 'FileVersion': None, 'CompanyName': None, 'PrivateBuild': None, 'LegalTrademarks': None, 'Comments': None, 'ProductName': None, 'SpecialBuild': None, 'ProductVersion': None, 'FileDescription': None, 'OriginalFilename': None}}
     '''
-    if _properties["FileVersion"] is not None and ( _properties["FileVersion"] == "11.2302.26.0" or _properties["FileVersionMS"] == 723198 ):
+    # 2023-05-15
+    # 如果是 windows 11 且使用 notepad.exe 且版本是 11.2302.26.0、11.2303.40.0
+    # Issue. 182、Win11 裡的 notepad 需為特定版本：11.23* 才會改成強制複製貼上
+    if _properties["FileVersion"] is not None and my.is_string_like(_properties["FileVersion"],"11.23"):
         #debug_print(_properties)
         #debug_print(exec_proc); => notepad.exe
         #debug_print("WTFFFFF win11 notepad need paste");
