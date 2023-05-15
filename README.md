@@ -140,7 +140,7 @@ Windows 顯示語言：中文（台灣）<br>
 <pre>
 	(2023-05-15) v1.56 版：
 	病毒碼提交掃描：1.56
-	
+	https://www.microsoft.com/en-us/wdsi/submission/696cf949-2a3c-42cd-b88a-53a35e3a2460
 	1. 182、Win11 裡的 notepad 需為特定版本：11.23* 才會改成強制複製貼上
 
 
