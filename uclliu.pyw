@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION = "1.56"
+VERSION = "1.57"
 import portalocker
 import os
 import sys
@@ -927,6 +927,7 @@ flag_is_play_capslock_otherkey=False
 flag_is_win_down=False
 flag_is_shift_down=False
 flag_is_ctrl_down=False
+flag_is_alt_down=False
 flag_is_play_otherkey=False
 flag_shift_down_microtime=0
 flag_isCTRLSPACE=False
@@ -2330,7 +2331,8 @@ def OnKeyboardEvent(event):
   global flag_is_shift_down
   global flag_is_capslock_down
   global flag_is_play_capslock_otherkey
-  global flag_is_ctrl_down    
+  global flag_is_ctrl_down
+  global flag_is_alt_down
   global flag_is_play_otherkey
   global play_ucl_label
   global ucl_find_data
@@ -2672,6 +2674,19 @@ def OnKeyboardEvent(event):
       
       #hm.HookMouse()            
       debug_print("Debug event C") 
+    debug_print("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")
+    debug_print("event.MessageName: %s , event.Key = %s" % (event.MessageName, event.Key))
+    # alt is Lmenu and Rmenu
+    if (event.MessageName == "key down" or event.MessageName == "key sys down") and (event.Key == "Lmenu" or event.Key == "Rmenu"):
+      # Issue 183、按 Ctrl + Alt + Del 後，如果在肥模式，回到視窗沒按 Ctrl 輸入法會失靈
+      flag_is_alt_down=True
+      debug_print("Debug event Alt A 1")
+    if event.MessageName == "key up" and (event.Key == "Lmenu" or event.Key == "Rmenu"):
+      # Issue 183、按 Ctrl + Alt + Del 後，如果在肥模式，回到視窗沒按 Ctrl 輸入法會失靈
+      flag_is_alt_down=False
+      debug_print("Debug event Alt A 2")
+      # when key up need return
+      return True
     if event.MessageName == "key down" and (event.Key == "Lcontrol" or event.Key == "Rcontrol"):  # and config['DEFAULT']['CTRL_SP'] == "1"
       #2019-10-22 如果按著 shift 還用 滑鼠，不會切換 英/肥
       #2021-03-22 修正英/全時，複製、貼上，按著 Ctrl + 任意鍵 有問題
@@ -2699,7 +2714,7 @@ def OnKeyboardEvent(event):
         # 強制改回 Release Win Key
         debug_print("Issue 175 Force Release Win Key")
         flag_is_win_down = False
-        return False
+        return False      
       debug_print("Debug event F")
       #debug_print("is ucl??")    
       #debug_print(is_ucl())    
@@ -2711,7 +2726,19 @@ def OnKeyboardEvent(event):
       #debug_print("flag_is_win_down:"+str(flag_is_win_down))
       #debug_print("flag_is_play_otherkey:"+str(flag_is_play_otherkey))
       #debug_print("flag_isCTRLSPACE:"+str(flag_isCTRLSPACE))        
-      
+    if event.MessageName == "key up":
+      # Issue 183、按 Ctrl + Alt + Del 後，如果在肥模式，回到視窗沒按 Ctrl 輸入法會失靈      
+      #debug_print("Debug event FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")
+      #debug_print("Debug event.Key = %s" % (event.Key)) # Delete or Decimal or End
+      if flag_is_ctrl_down == True and flag_is_alt_down == True and ( event.Key == "Delete" or event.Key == "Decimal" or event.Key == "End"):
+        # Release after key finish
+        flag_is_ctrl_down = False
+        flag_is_alt_down = False
+        debug_print("Issue 183 Force Release ctrl alt key")
+        # 利用偷按一下 ctrl 修正嗎@@?
+        # 羽山發現這樣可以耶，笑死
+        SendKeysCtypes.SendKeys("^",pause=0)
+        return False
     if event.MessageName == "key up" and event.Key == "Capital":
       flag_is_capslock_down=False
       flag_is_play_capslock_otherkey=False
@@ -2719,7 +2746,7 @@ def OnKeyboardEvent(event):
     if event.MessageName == "key down" and (event.Key != "Lshift" and event.Key != "Rshift") and config['DEFAULT']['CTRL_SP'] == "0":
       debug_print("Debug event D")
       flag_is_play_otherkey=True   
-    
+    debug_print("Debug event F1")
     if flag_is_capslock_down == True and flag_is_play_capslock_otherkey == True:
       # 2019-03-06 增加，如果是 肥 模式，且輸入字是 backspace 且框有字根，就跳過這個 True
       if event.Key == "Back" and is_ucl()==True and len(play_ucl_label) >= 1:
@@ -2729,7 +2756,7 @@ def OnKeyboardEvent(event):
         return True
     if event.MessageName == "key up" and (event.Key == "Lshift" or event.Key == "Rshift"):
       flag_is_shift_down=False
-               
+    debug_print("Debug event F2")           
     if event.MessageName == "key up" and (event.Key == "Lshift" or event.Key == "Rshift") and config['DEFAULT']['CTRL_SP'] == "0":
       debug_print("Debug event G")
       debug_print("event.MessageName:"+event.MessageName)
@@ -2787,11 +2814,12 @@ def OnKeyboardEvent(event):
         #flag_is_shift_down=False    
         debug_print("Debug13")
         return False         
-        
-      
+    debug_print("Debug event F3")    
+    debug_print("Debug event is_ucl: %s" % is_ucl())  
     if is_ucl():
       #debug_print("is ucl")    
       if event.MessageName == "key down" and flag_is_win_down == True : # win key
+        debug_print("Debug event F4")    
         return True
       #2018-05-05要考慮右邊數字鍵的 .
       #2021-08-31這裡是正常送字的部分
@@ -2826,6 +2854,7 @@ def OnKeyboardEvent(event):
           return False
       # 2021-08-31 orin 0~9        
       # 是、非注音模式時   
+      debug_print("Debug event F5")
       if event.MessageName == "key down" and ( event.Ascii>=48 and event.Ascii <=57) or (event.Key=="Decimal" and event.Ascii==46) : #0~9 .
       
         LAST_CODE = "";
@@ -2898,9 +2927,41 @@ def OnKeyboardEvent(event):
               return False
             else:  
               return True 
-               
-      if is_need_use_phone == False and event.MessageName == "key down" and ( (event.Ascii>=65 and event.Ascii <=90) or (event.Ascii>=97 and event.Ascii <=122) or event.Ascii==44 or event.Ascii==46 or event.Ascii==39 or event.Ascii==91 or event.Ascii==93):
-        # 這裡應該是同時按著SHIFT的部分
+      debug_print("Debug event F6")         
+      debug_print("F61 is_need_use_phone: %s" % (is_need_use_phone))
+      debug_print("F61 event.Ascii: %s" % (event.Ascii))
+      debug_print("F61 event.KeyID: %s" % (event.KeyID))
+      debug_print("F61 event.Key: %s" % (event.Key))
+      debug_print(('MessageName: %s' % (event.MessageName)))
+      debug_print(('Message: %s' % (event.Message)))
+      debug_print(('Time: %s' % (event.Time)))
+      debug_print(('Window: %s' % (event.Window)))
+      debug_print(('WindowName: %s' % (event.WindowName)))
+      debug_print(('Ascii: %s, %s' % (event.Ascii, chr(event.Ascii))))
+      debug_print(('Key: %s' % (event.Key)))
+      debug_print(('KeyID: %s' % (event.KeyID)))
+      debug_print(('ScanCode: %s' % (event.ScanCode)))
+      debug_print(('Extended: %s' % (event.Extended)))
+      debug_print(('Injected: %s' % (event.Injected)))
+      debug_print(('Alt: %s' % (event.Alt)))
+      debug_print(('Transition: %s' % (event.Transition)))      
+      '''
+        F61 is_need_use_phone: False
+        F61 event.Ascii: 0 # 這裡有 bug 參考：https://stackoverflow.com/questions/41652232/pyhook-giving-wrong-ascii-values
+        用 KeyID 取代 Ascii 似乎較好!?
+        F61 event.KeyID: 65
+        F61 event.Key: A
+            ASCII keyID
+        a      97    65
+        z     122    90
+        A      65    65
+        Z      90    90
+      '''
+      # issue 183、按 Ctrl + Alt + Del 後，如果在肥模式，回到視窗沒按 Ctrl 輸入法會失靈
+      # 羽山發現當按下 Ctrl+ Alt + Del 後，回到畫面，event.Ascii 會變成 0
+      if is_need_use_phone == False and event.MessageName == "key down" and ( (event.Ascii>=65 and event.Ascii <=90) or (event.Ascii>=97 and event.Ascii <=122) or event.Ascii==44 or event.Ascii==46 or event.Ascii==39 or event.Ascii==91 or event.Ascii==93):      
+        # 這裡是肥米吃到地的地方
+        debug_print("Debug event F61")
         flag_is_play_otherkey=True
         if flag_is_shift_down==True:
           if len(event.Key) == 1 and is_hf(None)==False:
@@ -2925,7 +2986,8 @@ def OnKeyboardEvent(event):
           debug_print("Debug7")
           return False          
       # 2021-08-31
-      # normal and phone           
+      # normal and phone
+      debug_print("Debug event F7")
       if pinyi_version == "0.01" and is_need_use_phone == True and event.MessageName == "key down" and ( (event.Ascii>=65 and event.Ascii <=90) or (event.Ascii>=97 and event.Ascii <=122) or (event.Ascii>=48 and event.Ascii <=57) or event.Ascii==44 or event.Ascii==46 or event.Ascii==47 or event.Ascii==59 or event.Ascii==45):
         # 這裡應該是同時按著SHIFT的部分
         flag_is_play_otherkey=True
@@ -2950,11 +3012,13 @@ def OnKeyboardEvent(event):
           #debug_print(thekey)          
           play_ucl(chr(event.Ascii))
           debug_print("Debug7 phone")
-          return False          
+          return False
+      debug_print("Debug event F8")
       if event.MessageName == "key down" and event.Key=="Space" and config['DEFAULT']['CTRL_SP']=="1": # check ctrl + space
           if flag_is_ctrl_down == True:
             toggle_ucl()
             return False
+      debug_print("Debug event F9")
       if event.MessageName == "key down" and event.Key=="Space": #空白
         # Space                          
         if len(ucl_find_data)>=1:        
@@ -3031,6 +3095,7 @@ def OnKeyboardEvent(event):
           else:
             return True
       elif event.MessageName == "key down" and ( event.Ascii==58 or event.Ascii==59 or event.Ascii==123 or event.Ascii==125 or event.Ascii==40 or event.Ascii==41 or event.Ascii==43 or event.Ascii==126 or event.Ascii==33 or event.Ascii==64 or event.Ascii==35 or event.Ascii==36 or event.Ascii==37 or event.Ascii==94 or event.Ascii==38 or event.Ascii==42 or event.Ascii==95 or event.Ascii==60 or event.Ascii==62 or event.Ascii==63 or event.Ascii==34 or event.Ascii==124 or event.Ascii==47 or event.Ascii==45) : # : ;｛｝（）＋～！＠＃＄％＾＆＊＿＜＞？＂｜／－
+        debug_print("Debug event F12")
         #debug_print("Debug for '; ")
         #debug_print("event.Ascii")
         #debug_print(event.Ascii)
@@ -3051,10 +3116,15 @@ def OnKeyboardEvent(event):
             return False
           debug_print("Debug22OK")
           return True     
-      else:                  
+      else:
+        debug_print("Debug event F11")
+        debug_print("Debug event F11 flag_is_ctrl_down: %s" % (flag_is_ctrl_down))
+        debug_print("Debug event F11 flag_is_alt_down: %s" % (flag_is_alt_down))
+        debug_print("Debug event F11 flag_is_shift_down: %s" % (flag_is_shift_down))
+        debug_print("Debug event F11 flag_is_play_otherkey: %s" % (flag_is_play_otherkey))
         return True            
-        
-    else:
+      debug_print("Debug event F10")  
+    else: # not is_ucl()
       debug_print("DDDDDDDDD: event.Key: " + event.Key + "\nDDDDDDDDD: event.KeyID: " + str(event.KeyID) + "\nDDDDDDDDD: event.MessageName: " +  event.MessageName )
       debug_print("flag_is_shift_down:"+str(flag_is_shift_down))
       debug_print("flag_is_ctrl_down:"+str(flag_is_ctrl_down))
