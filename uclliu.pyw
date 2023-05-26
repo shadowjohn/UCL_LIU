@@ -2726,7 +2726,7 @@ def OnKeyboardEvent(event):
       #debug_print("flag_is_win_down:"+str(flag_is_win_down))
       #debug_print("flag_is_play_otherkey:"+str(flag_is_play_otherkey))
       #debug_print("flag_isCTRLSPACE:"+str(flag_isCTRLSPACE))        
-    if event.MessageName == "key up":
+    if event.MessageName == "key down":
       # Issue 183、按 Ctrl + Alt + Del 後，如果在肥模式，回到視窗沒按 Ctrl 輸入法會失靈      
       #debug_print("Debug event FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")
       #debug_print("Debug event.Key = %s" % (event.Key)) # Delete or Decimal or End
@@ -2738,6 +2738,8 @@ def OnKeyboardEvent(event):
         # 利用偷按一下 ctrl 修正嗎@@?
         # 羽山發現這樣可以耶，笑死
         SendKeysCtypes.SendKeys("^",pause=0)
+        flag_is_ctrl_down = False
+        flag_is_alt_down = False
         return False
     if event.MessageName == "key up" and event.Key == "Capital":
       flag_is_capslock_down=False
@@ -2960,7 +2962,7 @@ def OnKeyboardEvent(event):
       # issue 183、按 Ctrl + Alt + Del 後，如果在肥模式，回到視窗沒按 Ctrl 輸入法會失靈
       # 羽山發現當按下 Ctrl+ Alt + Del 後，回到畫面，event.Ascii 會變成 0
       if is_need_use_phone == False and event.MessageName == "key down" and ( (event.Ascii>=65 and event.Ascii <=90) or (event.Ascii>=97 and event.Ascii <=122) or event.Ascii==44 or event.Ascii==46 or event.Ascii==39 or event.Ascii==91 or event.Ascii==93):      
-        # 這裡是肥米吃到地的地方
+        # 這裡是肥米吃到字的地方
         debug_print("Debug event F61")
         flag_is_play_otherkey=True
         if flag_is_shift_down==True:
