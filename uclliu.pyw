@@ -2737,7 +2737,11 @@ def OnKeyboardEvent(event):
         debug_print("Issue 183 Force Release ctrl alt key")
         # 利用偷按一下 ctrl 修正嗎@@?
         # 羽山發現這樣可以耶，笑死
-        SendKeysCtypes.SendKeys("^",pause=0)
+        
+        SendKeysCtypes.SendKeys("^",pause=0) # 左邊的 ctrl 按一下
+        # From : https://github.com/vsajip/pywinauto/blob/master/pywinauto/SendKeysCtypes.py
+        SendKeysCtypes.SendKeys("{VK_RCONTROL}",pause=0); # 右邊的 ctrl 也按一下
+
         flag_is_ctrl_down = False
         flag_is_alt_down = False
         return False
