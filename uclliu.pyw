@@ -37,6 +37,7 @@ my = php.kit()
 PWD = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 import clip
+
 #if "a" in []:
 #	#print("TEST")
 #sys.exit(0)
@@ -202,6 +203,12 @@ import win32con
 
 #2023-03-29 判斷作業系統版本
 # Issue 177、Win11 裡的 notepad 如果不改字型為 MingLiu 無法正常出字，改成強制複製貼上修正
+#debug_print(platform.version());
+#sys.exit(0)
+
+import platform
+os_version = platform.release()
+
 def isWin11():
   # From : https://stackoverflow.com/questions/68899983/get-current-windows-11-release-in-python
   # From : https://www.digitalocean.com/community/tutorials/python-system-command-os-subprocess-call
@@ -209,8 +216,24 @@ def isWin11():
   #if sys.getwindowsversion().build > 20000:
   # 失敗
   data = ""
+  wmic_cmd = "C:\\Windows\\System32\\wbem\\WMIC.exe"
+  if my.is_file(wmic_cmd) == False:
+    # windows 11 沙箱，沒有 WMIC 這個指令
+    # issue 184、windows 沙箱在 1.55 版以後無法使用，發現是沙箱缺少 wmic.exe 指令
+    version = platform.version()
+    if 'Windows 7' in version:
+        return False
+    elif 'Windows 8' in version:
+        return False
+    elif 'Windows 10' in version:
+        return False
+    elif 'Windows 8.1' in version:
+        return False
+    else:
+        # python 2.7 platform 讀不到版號!?
+        return True
   try:
-    data = my.system("C:\\Windows\\System32\\wbem\\WMIC.exe os get name");
+    data = my.system("%s os get name" % (wmic_cmd));
   except e:
     debug_print(e)
   #debug_print("GGG %s" % (data))
@@ -218,8 +241,6 @@ def isWin11():
     return True
   else:
     return False
-import platform
-os_version = platform.release()
 
 if isWin11():
   os_version = "11"
