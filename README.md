@@ -140,7 +140,7 @@ Windows 顯示語言：中文（台灣）<br>
 <pre>
 	(2023-05-15) v1.57 版：
 	病毒碼提交掃描：1.57
-	
+	https://www.microsoft.com/en-us/wdsi/submission/b2a916e9-c421-448f-8afa-683c126b3423	
 	1. 183、按 Ctrl + Alt + Del 後，如果在肥模式，回到視窗沒按 Ctrl 輸入法會失靈 (感謝 Benson9954029 回報問題)
     2. 184、windows 沙箱在 1.55 版以後無法使用，發現是沙箱缺少 wmic.exe 指令 (感謝 Benson9954029 回報問題)
 
