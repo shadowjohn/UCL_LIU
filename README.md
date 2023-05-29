@@ -21,9 +21,9 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2023-05-15 09:22
+<h3>最後更新日期：</h3>2023-05-26 18:50
 <br>
-<h3>版本：</h3>V 1.56<br>
+<h3>版本：</h3>V 1.57<br>
 <br>
 <h3>版權：</h3>
 　完全免費的 MIT-License
@@ -32,8 +32,8 @@
 </center>
 <h3>下載位置：</h3>
 <h3>～～提醒：如果遇到無法使用肥米的視窗，請關閉肥米輸入法，按右鍵，改用「系統管理員身分執行肥米輸入法」，應該就可以克服!!～～</h3>
-　　1.主程式(1.56 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
-　　2.主程式(1.55 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.55/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.55/uclliu.exe</a><br>
+　　1.主程式(1.57 beta版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
+　　2.主程式(1.56 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.56/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.56/uclliu.exe</a><br>
 　　3.歷年版本：<a target="_blank" href="https://github.com/shadowjohn/UCL_LIU/tree/master/RELEASE">歷代版本</a><br>
 　　4.同音字庫：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt</a><br>
 　　5.打字聲音：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip</a> 下載後解開，0~9.wav 與 uclliu.exe 放一起
@@ -138,6 +138,12 @@ Windows 顯示語言：中文（台灣）<br>
 	</kbd>
 <br>
 <pre>
+	(2023-05-15) v1.57 版：
+	病毒碼提交掃描：1.57
+	https://www.microsoft.com/en-us/wdsi/submission/b2a916e9-c421-448f-8afa-683c126b3423	
+	1. 183、按 Ctrl + Alt + Del 後，如果在肥模式，回到視窗沒按 Ctrl 輸入法會失靈 (感謝 Benson9954029 回報問題)
+    2. 184、windows 沙箱在 1.55 版以後無法使用，發現是沙箱缺少 wmic.exe 指令 (感謝 Benson9954029 回報問題)
+
 	(2023-05-15) v1.56 版：
 	病毒碼提交掃描：1.56
 	https://www.microsoft.com/en-us/wdsi/submission/696cf949-2a3c-42cd-b88a-53a35e3a2460
@@ -761,5 +767,7 @@ Ans：<br>
   <li>(Done 2023-03-31)180、關掉 ,,,x、,,,z 複製貼上等內容，有點不穩定</li>  
   <li>(Done 2023-04-06)181、Win11 裡的 notepad 需為特定版本：11.2302.26.0 才會改成強制複製貼上</li>
   <li>(Done 2023-05-15)182、Win11 裡的 notepad 需為特定版本：11.23* 才會改成強制複製貼上</li>
+  <li>(Done 2023-05-26)183、按 Ctrl + Alt + Del 後，如果在肥模式，回到視窗沒按 Ctrl 輸入法會失靈 (感謝 Benson9954029 回報問題)</li>
+  <li>(Done 2023-05-26)184、windows 沙箱在 1.55 版以後無法使用，發現是沙箱缺少 wmic.exe 指令 (感謝 Benson9954029 回報問題)</li>
 </ul>
 <br>
