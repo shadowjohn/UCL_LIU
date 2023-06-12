@@ -3048,7 +3048,8 @@ def OnKeyboardEvent(event):
       debug_print("Debug event F9")
       if event.MessageName == "key down" and event.Key=="Space": #空白
         # Space                          
-        if len(ucl_find_data)>=1:        
+        #表裡面有字才會出
+        if len(ucl_find_data)>=1 and len(word_label.get_text())>0:        
           #丟出第一個字                
           text = ucl_find_data[0]
           if same_sound_last_word=="":
