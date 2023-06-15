@@ -146,6 +146,7 @@ Windows 顯示語言：中文（台灣）<br>
 	(2023-06-12) v1.58 版：
 	病毒碼提交掃描：1.58
 	https://www.microsoft.com/en-us/wdsi/submission/c5afc19a-8f2a-4c32-83f7-89325e5a9a20
+	https://www.microsoft.com/en-us/wdsi/submission/246a2f67-ca34-43b0-851d-aab755124e48 (Debug)
 	1. 185、按 a 再按 Backspace 再按 Space 預期應該出現空白 但會出現 "對" (感謝 Benson9954029 回報、修正問題)
 
 
