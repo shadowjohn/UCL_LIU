@@ -1,14 +1,24 @@
 # -*- coding: utf-8 -*-
-VERSION = "1.58"
-import portalocker
+VERSION = "1.59"
 import os
+#os.environ['PYTHONIOENCODING'] = 'utf-8'
+#os.environ['PYTHONUTF8'] = '1'
+import portalocker
+# Force 950 fix utf8-beta cp65001
+# should fix before import configparser
+#chcp_cmd = "C:\\Windows\\System32\\chcp.com"
+#if my.is_file(chcp_cmd) == True:
+#  my.system(chcp_cmd + " 950");
 import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 import gtk
 from gtk import gdk 
     
 import gobject
 import hashlib
 import php
+my = php.kit()
 # trad to simp or simp to trad
 import stts 
 import re
@@ -16,6 +26,8 @@ import win32api
 # 2022-08-09 參考 https://stackoverflow.com/questions/4357258/how-to-get-the-height-of-windows-taskbar-using-python-pyqt-win32
 # 可以取得工作列高度
 from win32api import GetMonitorInfo, MonitorFromPoint
+
+
 import configparser
 #,,,z ,,,x 用thread去輸出字
 import thread
@@ -33,10 +45,12 @@ paudio_player = None
 #2021-10-28 同時間只能一個執行緒播放
 is_sound_playing = False
 sound_playing_s = ""
-my = php.kit()
+
 PWD = os.path.dirname(os.path.realpath(sys.argv[0]))
 
 import clip
+
+
 
 #if "a" in []:
 #	#print("TEST")
@@ -93,8 +107,6 @@ DEFAULT_OUTPUT_TYPE = "DEFAULT"
 # 2021-08-08 將簡、繁轉換抽離成獨立 class
 mystts = stts.kit()
 
-reload(sys)
-sys.setdefaultencoding('UTF-8')
 
 #2022-09-02 改用 opencc 簡繁轉換
 # 嘗試修正 ,,,z 在轉 簡字回字碼，有些語句如 「小当家->小當傢，天后->天後」這種問題
@@ -346,7 +358,7 @@ config['DEFAULT'] = {
                     };
 if my.is_file(INI_CONFIG_FILE):
   _config = configparser.ConfigParser()
-  _config.read(INI_CONFIG_FILE)    
+  _config.read(INI_CONFIG_FILE, encoding='utf-8')    
   for k in _config['DEFAULT'].keys(): # ['X','Y','ALPHA','ZOOM','SHORT_MODE','SEND_KIND_1_PASTE','SEND_KIND_2_BIG5'] 
     if k in config['DEFAULT'].keys():
       config['DEFAULT'][k]=_config['DEFAULT'][k]
@@ -2132,7 +2144,7 @@ def senddata(data):
     k = my.strtolower(k)  
 	
     # 2021-08-08 term.ptt.cc (批踢踢實業坊 - Google Chrome) 改成，強制 paste
-    if my.is_string_like(exec_proc,k) or DEFAULT_OUTPUT_TYPE == "PASTE" or program_title == my.utf8tobig5(u"批踢踢實業坊") or program_title == my.utf8tobig5(u"批踢踢實業坊 - Google Chrome") or program_title == my.utf8tobig5(u"批踢踢實業坊 - Brave") or program_title == my.utf8tobig5(u"批踢踢實業坊 - 個人 - Microsoft? Edge") or program_title == my.utf8tobig5(u"批踢踢實業坊 — Mozilla Firefox") or program_title == my.utf8tobig5(u"批踢踢實業坊 - Opera"):  
+    if my.is_string_like(exec_proc,k) or DEFAULT_OUTPUT_TYPE == "PASTE" or program_title == my.utf8tobig5(u"批踢踢實業坊") or program_title == my.utf8tobig5(u"批踢踢實業坊 - Google Chrome") or program_title == my.utf8tobig5(u"批踢踢實業坊 - Brave") or program_title == my.utf8tobig5(u"批踢踢實業坊 - 個人 - Microsoft? Edge") or program_title == my.utf8tobig5(u"批踢踢實業坊 — Mozilla Firefox") or program_title == my.utf8tobig5(u"批踢踢實業坊 - Opera") or program_title == u"批踢踢實業坊" or program_title == u"批踢踢實業坊 - Google Chrome" or program_title == u"批踢踢實業坊 - Brave" or program_title == u"批踢踢實業坊 - 個人 - Microsoft? Edge" or program_title == u"批踢踢實業坊 — Mozilla Firefox" or program_title == u"批踢踢實業坊 - Opera":  
       check_kind="1"            
       #win32clipboard.OpenClipboard()
       orin_clip=""

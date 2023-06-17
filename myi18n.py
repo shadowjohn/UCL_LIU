@@ -15,12 +15,12 @@ import locale
 class kit:           
     LOCALE_ENCODING = ''
     def __init__(self):
-        self.LOCALE_ENCODING = locale.getpreferredencoding() 
+        self.LOCALE_ENCODING = locale.getpreferredencoding()         
         #print "myi18n __init__"
         #print self.LOCALE_ENCODING # 這裡正常是 cp950
         pass
     def auto(self,s):
-        if self.LOCALE_ENCODING == "cp950":
+        if self.LOCALE_ENCODING == "cp950" or self.LOCALE_ENCODING == "950":
             return s
         if self.data.has_key(s):
             return self.data[s]

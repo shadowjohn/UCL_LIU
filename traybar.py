@@ -51,7 +51,11 @@ class SysTrayIcon(object):
         window_class_name = window_class_name or ("SysTrayIconPy-%s" % (str(uuid.uuid4())))
 
         self._default_menu_index = (default_menu_index or 0)
+        #print("window_class_name: %s" % (window_class_name))
         self._window_class_name = encode_for_locale(window_class_name)
+        #self._window_class_name = window_class_name
+        #print("self._window_class_name: %s" % (self._window_class_name))
+        
         self._message_dict = {RegisterWindowMessage("TaskbarCreated"): self._restart,
                               WM_DESTROY: self._destroy,
                               WM_CLOSE: self._destroy,
