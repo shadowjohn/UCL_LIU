@@ -82,13 +82,16 @@ elif ctypes.sizeof(ctypes.c_longlong) == ctypes.sizeof(ctypes.c_void_p):
 
 SZTIP_MAX_LENGTH = 128
 LOCALE_ENCODING = locale.getpreferredencoding()
-
+if LOCALE_ENCODING == "cp65001":
+  LOCALE_ENCODING = "950"
 
 def encode_for_locale(s):        
     #return s.encode('big5');
     #"""
     #Encode text items for system locale. If encoding fails, fall back to ASCII.    
     try:
+        #print("LOCALE_ENCODING: %s" % (LOCALE_ENCODING))
+        #if LOCALE_ENCODING == cp65001 will failure... should utf-8
         return s.encode(LOCALE_ENCODING, 'ignore')
     except (AttributeError, UnicodeDecodeError):
         return s.decode('ascii', 'ignore').encode(LOCALE_ENCODING)
