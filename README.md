@@ -32,14 +32,12 @@
 </center>
 <h3>下載位置：</h3>
 <h3>～～提醒：如果遇到無法使用肥米的視窗，請關閉肥米輸入法，按右鍵，改用「系統管理員身分執行肥米輸入法」，應該就可以克服!!～～</h3>
-　　1.主程式(1.59 beta 版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>
-	2.主程式(1.59 beta Debug 版 )：<a download="uclliu_debug.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu_debug.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu_debug.exe</a><br>
-　　3.主程式(1.58 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.58/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.58/uclliu.exe</a><br>
-　　4.主程式(1.58 穩定 Debug 版)：<a download="uclliu_debug.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.58/uclliu_debug.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.58/uclliu_debug.exe</a><br>
-　　5.歷年版本：<a target="_blank" href="https://github.com/shadowjohn/UCL_LIU/tree/master/RELEASE">歷代版本</a><br>
-　　6.同音字庫：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt</a><br>
-　　7.打字聲音：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip</a> 下載後解開，0~9.wav 與 uclliu.exe 放一起
-　　8.字根檔(liu-uni.tab、liu.cin、liu.json) 因版權問題無法提供  
+　　1.主程式(1.59 beta 版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>	
+　　2.主程式(1.58 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.58/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.58/uclliu.exe</a><br>
+　　3.歷年版本：<a target="_blank" href="https://github.com/shadowjohn/UCL_LIU/tree/master/RELEASE">歷代版本</a><br>
+　　4.同音字庫：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt</a><br>
+　　5.打字聲音：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip</a> 下載後解開，0~9.wav 與 uclliu.exe 放一起
+　　6.字根檔(liu-uni.tab、liu.cin、liu.json) 因版權問題無法提供  
 <br>
 <h3>目前肥米輸入法支援的字碼表如下：</h3>
 　　1、官方 7.0.4 liu-uni.tab<br>
@@ -146,7 +144,7 @@ Windows 顯示語言：中文（台灣）<br>
 <pre>
 	(2023-06-12) v1.59 版：
 	病毒碼提交掃描：1.59
-	https://www.microsoft.com/en-us/wdsi/submission/a7c1aed3-dba9-4f12-b6a7-bff1fc8cdb5a
+	https://www.microsoft.com/en-us/wdsi/submission/89ab64f1-0878-423a-ad36-2c9b6b9e67a7
 	1. 186、當「控制台-地區」使用「Beta: 使用 Unicode UTF-8 提供全球語言支援」會發生 Failed to execute script uclliu 問題 (感謝 robert820 回報問題)
 	不過若勾選 「Beta: 使用 Unicode UTF-8 提供全球語言支援」，右下角選單會改成英文選單，中文發生亂碼，尚無法解決
 	
