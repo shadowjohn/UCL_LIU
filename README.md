@@ -145,7 +145,8 @@ Windows 顯示語言：中文（台灣）<br>
 <br>
 <pre>
 	(2023-06-12) v1.59 版：
-	病毒碼提交掃描：1.59	
+	病毒碼提交掃描：1.59
+	https://www.microsoft.com/en-us/wdsi/submission/a7c1aed3-dba9-4f12-b6a7-bff1fc8cdb5a
 	1. 186、當「控制台-地區」使用「Beta: 使用 Unicode UTF-8 提供全球語言支援」會發生 Failed to execute script uclliu 問題 (感謝 robert820 回報問題)
 	不過若勾選 「Beta: 使用 Unicode UTF-8 提供全球語言支援」，右下角選單會改成英文選單，中文發生亂碼，尚無法解決
 	
