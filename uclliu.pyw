@@ -354,7 +354,8 @@ config['DEFAULT'] = {
                       "SHOW_PHONE_CODE": "0", #顯示注音讀音
                       "CTRL_SP": "0", #使用CTRL+SPACE換肥米
                       "PLAY_SOUND_ENABLE": "0", #打字音
-                      "STARTUP_DEFAULT_UCL": "1" #啟動時，預設為 肥，改為 0 則為 英
+                      "STARTUP_DEFAULT_UCL": "1", #啟動時，預設為 肥，改為 0 則為 英
+                      "ENABLE_HALF_FULL": "1" #允許切換 全形半形
                     };
 if my.is_file(INI_CONFIG_FILE):
   _config = configparser.ConfigParser()
@@ -377,6 +378,7 @@ config['DEFAULT']['SHOW_PHONE_CODE'] = str(int(config['DEFAULT']['SHOW_PHONE_COD
 config['DEFAULT']['CTRL_SP'] = str(int(config['DEFAULT']['CTRL_SP']));
 config['DEFAULT']['PLAY_SOUND_ENABLE'] = str(int(config['DEFAULT']['PLAY_SOUND_ENABLE']));
 config['DEFAULT']['STARTUP_DEFAULT_UCL'] = str(int(config['DEFAULT']['STARTUP_DEFAULT_UCL']));
+config['DEFAULT']['ENABLE_HALF_FULL'] = str(int(config['DEFAULT']['ENABLE_HALF_FULL']));
 
 # merge f_arr and f_big5_arr
 config['DEFAULT']['SEND_KIND_1_PASTE'] = my.trim(config['DEFAULT']['SEND_KIND_1_PASTE'])
@@ -454,6 +456,11 @@ if int(config['DEFAULT']['STARTUP_DEFAULT_UCL'])<=0:
   config['DEFAULT']['STARTUP_DEFAULT_UCL']="0"  
 else:
   config['DEFAULT']['STARTUP_DEFAULT_UCL']="1"    
+
+if int(config['DEFAULT']['ENABLE_HALF_FULL'])<=0:
+  config['DEFAULT']['ENABLE_HALF_FULL']="0"  
+else:
+  config['DEFAULT']['ENABLE_HALF_FULL']="1"    
 
 # GUI Font
 GLOBAL_FONT_FAMILY = "Mingliu,Serif,Malgun Gothic,roman" #roman
@@ -2827,32 +2834,33 @@ def OnKeyboardEvent(event):
       # Press shift and space
       # switch 半/全
       # 2021-07-05 如果有下一頁， shift + space 改成換下頁哦
-      if my.is_string_like(word_label.get_label(),"...") == True:
-        debug_print("FFFFFFFIND WORDS...")
-        debug_print("ucl_find_data_orin_arr")
-        #debug_print(ucl_find_data_orin_arr)        
-        debug_print("ucl_find_data")
-        #debug_print(ucl_find_data)
-        debug_print("same_sound_index")
-        #debug_print(same_sound_index)        
-        same_sound_index = same_sound_index+same_sound_max_word
-        if same_sound_index > len(ucl_find_data_orin_arr)-1:
-          same_sound_index = 0  
-        maxword = same_sound_index + same_sound_max_word
-        if maxword > len(ucl_find_data_orin_arr)-1:
-           maxword = len(ucl_find_data_orin_arr)           
-        ucl_find_data = ucl_find_data_orin_arr[same_sound_index:maxword]  
-        debug_print("after ucl_find_data")
-        #debug_print(ucl_find_data)                               
-        word_label_set_text()        
-        return False                     
-      else:
-        hf_btn_click(hf_btn)
-        flag_is_play_otherkey=True
-        #2021-08-08 修正 shift+space shift 按著，空白連按，無法連續切換
-        #flag_is_shift_down=False    
-        debug_print("Debug13")
-        return False         
+      if int(config['DEFAULT']['ENABLE_HALF_FULL']) == 1:
+          if my.is_string_like(word_label.get_label(),"...") == True:
+            debug_print("FFFFFFFIND WORDS...")
+            debug_print("ucl_find_data_orin_arr")
+            #debug_print(ucl_find_data_orin_arr)        
+            debug_print("ucl_find_data")
+            #debug_print(ucl_find_data)
+            debug_print("same_sound_index")
+            #debug_print(same_sound_index)        
+            same_sound_index = same_sound_index+same_sound_max_word
+            if same_sound_index > len(ucl_find_data_orin_arr)-1:
+              same_sound_index = 0  
+            maxword = same_sound_index + same_sound_max_word
+            if maxword > len(ucl_find_data_orin_arr)-1:
+               maxword = len(ucl_find_data_orin_arr)           
+            ucl_find_data = ucl_find_data_orin_arr[same_sound_index:maxword]  
+            debug_print("after ucl_find_data")
+            #debug_print(ucl_find_data)                               
+            word_label_set_text()        
+            return False                     
+          else:
+            hf_btn_click(hf_btn)
+            flag_is_play_otherkey=True
+            #2021-08-08 修正 shift+space shift 按著，空白連按，無法連續切換
+            #flag_is_shift_down=False    
+            debug_print("Debug13")
+            return False         
     debug_print("Debug event F3")    
     debug_print("Debug event is_ucl: %s" % is_ucl())  
     if is_ucl():
@@ -3549,7 +3557,16 @@ class TrayIcon():
           (my18.auto("9.【　】啟動預設為「肥」模式"), None, [self.m_sdu_switch] ),          
         ))        
         
-      menu_options = menu_options + ((my18.auto("10. 離開(Quit)"), None, [self.m_quit]),)
+      if config['DEFAULT']['ENABLE_HALF_FULL'] == "1":
+        menu_options = menu_options + ((
+          (my18.auto("10.【●】啟動全形/半形切換模式"), None, [self.m_halffull_switch] ),          
+        ))
+      else:
+        menu_options = menu_options + ((
+          (my18.auto("10.【　】啟動全形/半形切換模式"), None, [self.m_halffull_switch] ),          
+        ))
+        
+      menu_options = menu_options + ((my18.auto("11. 離開(Quit)"), None, [self.m_quit]),)
       if self.systray=="":
         #ICON_PATH
         #UCL_PIC_BASE64
@@ -3565,6 +3582,16 @@ class TrayIcon():
          config['DEFAULT']['STARTUP_DEFAULT_UCL'] = "1"
       else:
          config['DEFAULT']['STARTUP_DEFAULT_UCL'] = "0"
+      #切換後，都要存設定
+      saveConfig()    
+      self.reload_tray()        
+    def m_halffull_switch(self,event,data=None):
+      #啟動時，預設為允許切換全半形
+      global config      
+      if config['DEFAULT']['ENABLE_HALF_FULL'] == "0":
+         config['DEFAULT']['ENABLE_HALF_FULL'] = "1"
+      else:
+         config['DEFAULT']['ENABLE_HALF_FULL'] = "0"
       #切換後，都要存設定
       saveConfig()    
       self.reload_tray()        
