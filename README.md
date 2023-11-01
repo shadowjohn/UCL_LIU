@@ -145,6 +145,7 @@ Windows 顯示語言：中文（台灣）<br>
 <pre>
 	(2023-11-01) v1.60 版：
 	病毒碼提交掃描：1.60
+    https://www.microsoft.com/en-us/wdsi/submission/360b0383-d01c-4670-9df7-70f86b8886b5
     1. 187、在使用特殊鍵盤時，有時希望停用 Shift+Space 切換全形、半形字方便使用，增加選單開關 (感謝 Benson9954029 回報、修正問題) 
        Issue: <a href='https://github.com/shadowjohn/UCL_LIU/issues/48'>#49</a>
 
