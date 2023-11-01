@@ -95,8 +95,8 @@
 　　　　x = 1239 # 肥米輸入法最後在螢幕 x 軸位置<br>
 　　　　SP = 0 # 是否顯示短根， 0 或 1<br>
 　　　　play_sound_enable = 0 # 是否有打字音， 0 或 1<br>
-　　　　startup_default_ucl = 1 # 程式啟動時為「肥模式」，0 = 英模式，1 = 肥模式 
-　　　　enable_half_full = 1 # 允許使用(Shift+Space) 切換 全形/半形
+　　　　startup_default_ucl = 1 # 程式啟動時為「肥模式」，0 = 英模式，1 = 肥模式<br>
+　　　　enable_half_full = 1 # 允許使用(Shift+Space) 切換 全形/半形<br>
 　　17、環境設定(強列建議)：<br>
 <kbd>
 <img src="screenshot/install/1.png"><br>
