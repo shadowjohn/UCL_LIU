@@ -21,9 +21,9 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2023-06-17 13:06
+<h3>最後更新日期：</h3>2023-11-01 13:26
 <br>
-<h3>版本：</h3>V 1.59<br>
+<h3>版本：</h3>V 1.60<br>
 <br>
 <h3>版權：</h3>
 　完全免費的 MIT-License
@@ -32,8 +32,8 @@
 </center>
 <h3>下載位置：</h3>
 <h3>～～提醒：如果遇到無法使用肥米的視窗，請關閉肥米輸入法，按右鍵，改用「系統管理員身分執行肥米輸入法」，應該就可以克服!!～～</h3>
-　　1.主程式(1.59 beta 版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>	
-　　2.主程式(1.58 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.58/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.58/uclliu.exe</a><br>
+　　1.主程式(1.60 beta 版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>	
+　　2.主程式(1.59 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.59/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.59/uclliu.exe</a><br>
 　　3.歷年版本：<a target="_blank" href="https://github.com/shadowjohn/UCL_LIU/tree/master/RELEASE">歷代版本</a><br>
 　　4.同音字庫：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt</a><br>
 　　5.打字聲音：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip</a> 下載後解開，0~9.wav 與 uclliu.exe 放一起
@@ -96,6 +96,7 @@
 　　　　SP = 0 # 是否顯示短根， 0 或 1<br>
 　　　　play_sound_enable = 0 # 是否有打字音， 0 或 1<br>
 　　　　startup_default_ucl = 1 # 程式啟動時為「肥模式」，0 = 英模式，1 = 肥模式 
+　　　　enable_half_full = 1 # 允許使用(Shift+Space) 切換 全形/半形
 　　17、環境設定(強列建議)：<br>
 <kbd>
 <img src="screenshot/install/1.png"><br>
@@ -142,6 +143,11 @@ Windows 顯示語言：中文（台灣）<br>
 	</kbd>
 <br>
 <pre>
+	(2023-11-01) v1.60 版：
+	病毒碼提交掃描：1.60
+    1. 187、在使用特殊鍵盤時，有時希望停用 Shift+Space 切換全形、半形字方便使用，增加選單開關 (感謝 Benson9954029 回報、修正問題) 
+       Issue: <a href='https://github.com/shadowjohn/UCL_LIU/issues/48'>#49</a>
+
 	(2023-06-12) v1.59 版：
 	病毒碼提交掃描：1.59
 	https://www.microsoft.com/en-us/wdsi/submission/89ab64f1-0878-423a-ad36-2c9b6b9e67a7
@@ -788,5 +794,6 @@ Ans：<br>
   <li>(Done 2023-05-26)184、windows 沙箱在 1.55 版以後無法使用，發現是沙箱缺少 wmic.exe 指令 (感謝 Benson9954029 回報問題)</li>
   <li>(Done 2023-06-12)185、按 a 再按 Backspace 再按 Space 預期應該出現空白 但會出現 "對" (感謝 Benson9954029 回報、修正問題)</li>
   <li>(Done 2023-06-17)186、當「控制台-地區」使用「Beta: 使用 Unicode UTF-8 提供全球語言支援」會發生 Failed to execute script uclliu 問題 (感謝 robert820 回報問題)</li>
+  <li>(Done 2023-11-01)187、在使用特殊鍵盤時，有時希望停用 Shift+Space 切換全形、半形字方便使用，增加選單開關 (感謝 Benson9954029 回報、修正問題)</li>
 </ul>
 <br>

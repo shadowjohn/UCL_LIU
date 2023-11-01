@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION = "1.59"
+VERSION = "1.60"
 import os
 #os.environ['PYTHONIOENCODING'] = 'utf-8'
 #os.environ['PYTHONUTF8'] = '1'
@@ -3559,11 +3559,11 @@ class TrayIcon():
         
       if config['DEFAULT']['ENABLE_HALF_FULL'] == "1":
         menu_options = menu_options + ((
-          (my18.auto("10.【●】啟動全形/半形切換模式"), None, [self.m_halffull_switch] ),          
+          (my18.auto("10.【●】允許(Shift+Space)切換 全形/半形"), None, [self.m_halffull_switch] ),          
         ))
       else:
         menu_options = menu_options + ((
-          (my18.auto("10.【　】啟動全形/半形切換模式"), None, [self.m_halffull_switch] ),          
+          (my18.auto("10.【　】允許(Shift+Space)切換 全形/半形"), None, [self.m_halffull_switch] ),          
         ))
         
       menu_options = menu_options + ((my18.auto("11. 離開(Quit)"), None, [self.m_quit]),)

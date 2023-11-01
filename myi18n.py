@@ -56,7 +56,7 @@ class kit:
         "肥米輸入法：":"UCLLIU Input Method: ",
         "9.【●】啟動預設為「肥」模式":"9. [ o ] Boot default to \"UCL\" mode",
         "9.【　】啟動預設為「肥」模式":"9. [   ] Boot default to \"UCL\" mode",
-        "10.【●】啟動全形/半形切換模式":"10. [ o ] Enable Half/Full mode",
-        "10.【　】啟動全形/半形切換模式":"10. [   ] Disable Half/Full mode",
+        "10.【●】允許(Shift+Space)切換 全形/半形":"10. [ o ] Enable (Shift_Space) Switch Half/Full mode",
+        "10.【　】允許(Shift+Space)切換 全形/半形":"10. [   ] Enable (Shift_Space) Switch Half/Full mode",
         "11. 離開(Quit)":"11. Quit"
     }
