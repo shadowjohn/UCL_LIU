@@ -2916,7 +2916,7 @@ def OnKeyboardEvent(event):
             if _s[i] in LAST_CODE:
               _is_sound_kick = True 
          
-        if is_need_use_phone == False and len(ucl_find_data)>=1 and int(chr(event.Ascii)) < len(ucl_find_data):
+        if is_need_use_phone == False and len(ucl_find_data)>=1 and int(chr(event.Ascii)) < len(ucl_find_data) and len(word_label.get_text())>0:
           # send data        
           data = ucl_find_data[int(chr(event.Ascii))]
           #debug_print(ucl_find_data)
