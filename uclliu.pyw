@@ -1354,6 +1354,8 @@ def show_sp_to_label(data,isForce=None):
   global config
   global play_ucl_label
   global _vrsfw_arr
+  global uclcode_rr
+  
   if config['DEFAULT']['SP']=="0" and isForce is None:
     return
   # 2022-09-02 如果末字是數字，可調整為 VRSFW
@@ -1362,13 +1364,26 @@ def show_sp_to_label(data,isForce=None):
   
   _sp_data = my.strtoupper(word_to_sp(data))
   
-  #debug_print("_sp_data[:-1]: "+_sp_data[:-1]);
-  #debug_print("_sp_data[-1]: "+_sp_data[-1]);
+  # H1 时
+  #debug_print("_sp_data[:-1]: "+_sp_data[:-1]); # H
+  #debug_print("_sp_data[-1]: "+_sp_data[-1]); # 1
+  # Issue : 189、时(h1 提示根有 hv、h1) ，但 hv 實際是另一個字根「惟」(感謝 Benson9954029 回報)
   if len(_sp_data) > 0 and unicode(_sp_data[-1]).isnumeric() and int(_sp_data[-1])>=1 and int(_sp_data[-1])<=5:
     # 如果預選字，如 「GQD 動 舅 娚」的 kk 在 1 或 2 (舅、娚)，就會變 GQD1 GQD2     
     # 如為數字，加上 反 VRSFW 功能
     _tmp_sp_data = _sp_data[:-1] + my.strtoupper(_vrsfw_arr[int(_sp_data[-1])-1]) 
-    _sp_data = _tmp_sp_data + "或" + _sp_data 
+    # debug_print("_tmp_sp_data: %s + %s" % (_sp_data[:-1] , my.strtoupper(_vrsfw_arr[int(_sp_data[-1])-1])) ) # H + V
+    # 為修正 Issue : 189 字根表 HV 如果沒有「时」，就不顯示
+    #debug_print("uclcode_rr[\"hv\"]: %s" % (uclcode_to_chinese("hv"))); # 惟    
+    #debug_print("data: %s" % (unicode(data)));
+    #debug_print("uclcode_rr[\"pns\"]: %s" % (uclcode_rr["pns"])); # 你
+    #debug_print("_sp_data: %s" % (_sp_data)); #H1
+    #debug_print("_tmp_sp_data: %s" % (_tmp_sp_data)); # HV
+    if my.strtolower(_tmp_sp_data) not in uclcode_rr:
+      _sp_data = _tmp_sp_data + "或" + _sp_data
+    else:
+      pass
+    #elif my.strtoupper(_sp_data[:-1] + my.strtoupper(_vrsfw_arr[int(_sp_data[-1])-1])) in uclcode_rr and  :
   sp = "簡:" + _sp_data 
   #word_label.set_label(sp)
   #word_label.modify_font(pango.FontDescription(GUI_FONT_18))
