@@ -22,9 +22,9 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2023-11-01 13:26
+<h3>最後更新日期：</h3>2023-11-14 21:51
 <br>
-<h3>版本：</h3>V 1.60<br>
+<h3>版本：</h3>V 1.61<br>
 <br>
 <h3>版權：</h3>
 　完全免費的 MIT-License
@@ -146,6 +146,13 @@ Windows 顯示語言：中文（台灣）<br>
 	</kbd>
 <br>
 <pre>
+	(2023-11-01) v1.61 版：
+	病毒碼提交掃描：1.61
+    1. 在 uclliu.pyw 加入作者 Benson9954029
+    2. 188、當輸入 h backspace 1 仍會出現 时，輸入 v backspace 0 仍出現 0 (感謝 Benson9954029 回報、修正問題)
+       Issue: <a href='https://github.com/shadowjohn/UCL_LIU/issues/50'>#50</a>
+    3. 189、时(h1 提示根有 hv、h1) ，但 hv 實際是另一個字根「惟」(感謝 Benson9954029 回報)
+
 	(2023-11-01) v1.60 版：
 	病毒碼提交掃描：1.60
     https://www.microsoft.com/en-us/wdsi/submission/360b0383-d01c-4670-9df7-70f86b8886b5
@@ -799,5 +806,7 @@ Ans：<br>
   <li>(Done 2023-06-12)185、按 a 再按 Backspace 再按 Space 預期應該出現空白 但會出現 "對" (感謝 Benson9954029 回報、修正問題)</li>
   <li>(Done 2023-06-17)186、當「控制台-地區」使用「Beta: 使用 Unicode UTF-8 提供全球語言支援」會發生 Failed to execute script uclliu 問題 (感謝 robert820 回報問題)</li>
   <li>(Done 2023-11-01)187、在使用特殊鍵盤時，有時希望停用 Shift+Space 切換全形、半形字方便使用，增加選單開關 (感謝 Benson9954029 回報、修正問題)</li>
+  <li>(Done 2023-11-14)188、當輸入 h backspace 1 仍會出現 时，輸入 v backspace 0 仍出現 0 (感謝 Benson9954029 回報、修正問題)</li>
+  <li>189、时(h1 提示根有 hv、h1) ，但 hv 實際是另一個字根「惟」(感謝 Benson9954029 回報)</li>
 </ul>
 <br>

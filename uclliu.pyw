@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION = "1.60"
+VERSION = "1.61"
 import os
 #os.environ['PYTHONIOENCODING'] = 'utf-8'
 #os.environ['PYTHONUTF8'] = '1'
@@ -118,10 +118,10 @@ myopencc = OpenCC('s2t')
 # Debug 模式
 is_DEBUG_mode = False
 
-message = ("\nUCLLIU 肥米輸入法\nBy 羽山秋人(https://3wa.tw)\nVersion: %s\n\n若要使用 Debug 模式：uclliu.exe -d\n" % (VERSION));
+message = ("\nUCLLIU 肥米輸入法\nBy 羽山秋人(https://3wa.tw)\nBy Benson9954029 (https://github.com/Benson9954029)\nVersion: %s\n\n若要使用 Debug 模式：uclliu.exe -d\n" % (VERSION));
 
 def about_uclliu():
-  _msg_text = ("肥米輸入法\n\n作者：羽山秋人 (https://3wa.tw)\n版本：%s" % VERSION)
+  _msg_text = ("肥米輸入法\n\n作者：羽山秋人 (https://3wa.tw)\n作者：Benson9954029 (https://github.com/Benson9954029)\n版本：%s" % VERSION)
   _msg_text += "\n\n熱鍵提示：\n\n"
   _msg_text += "「,,,VERSION」目前版本\n"
   _msg_text += "「'ucl」同音字查詢\n"
@@ -2916,7 +2916,13 @@ def OnKeyboardEvent(event):
             if _s[i] in LAST_CODE:
               _is_sound_kick = True 
          
-        if is_need_use_phone == False and len(ucl_find_data)>=1 and int(chr(event.Ascii)) < len(ucl_find_data) and len(word_label.get_text())>0:
+        # Fix by Benson9954029
+        # Issue 51
+        # 如 h backspace v 出現 要
+        # 如 v backspace 0 出現 要
+        #debug_print("Test v backspace 0 Start")
+        if is_need_use_phone == False and len(ucl_find_data)>=1 and int(chr(event.Ascii)) < len(ucl_find_data) and len(word_label.get_text()) > 0:
+          #debug_print("Test v backspace 0 End")
           # send data        
           data = ucl_find_data[int(chr(event.Ascii))]
           #debug_print(ucl_find_data)
