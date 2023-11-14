@@ -1,10 +1,10 @@
-# -*- mode: python -*-
+# -*- mode: python ; coding: utf-8 -*-
 
 block_cipher = None
 
 
 a = Analysis(['uclliu_debug.py'],
-             pathex=['F:\\GD\\UCL_LIU'],
+             pathex=['C:\\Users\\John-Home\\Desktop\\UCL_LIU'],
              binaries=[],
              datas=[],
              hiddenimports=[],
@@ -28,5 +28,6 @@ exe = EXE(pyz,
           bootloader_ignore_signals=False,
           strip=False,
           upx=True,
+          upx_exclude=[],
           runtime_tmpdir=None,
           console=True , version='metadata.txt', icon='pic\\uclliu_logo.ico')
