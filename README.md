@@ -808,5 +808,6 @@ Ans：<br>
   <li>(Done 2023-11-01)187、在使用特殊鍵盤時，有時希望停用 Shift+Space 切換全形、半形字方便使用，增加選單開關 (感謝 Benson9954029 回報、修正問題)</li>
   <li>(Done 2023-11-14)188、當輸入 h backspace 1 仍會出現 时，輸入 v backspace 0 仍出現 0 (感謝 Benson9954029 回報、修正問題)</li>
   <li>(Done 2023-11-14)189、时(h1 提示根有 hv、h1) ，但 hv 實際是另一個字根「惟」(感謝 Benson9954029 回報)</li>
+  <li>190、輸入簡體字時，注音提示沒顯示 https://github.com/shadowjohn/UCL_LIU/issues/52</li>
 </ul>
 <br>
