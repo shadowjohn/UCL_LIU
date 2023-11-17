@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION = "1.60"
+VERSION = "1.61"
 import os
 #os.environ['PYTHONIOENCODING'] = 'utf-8'
 #os.environ['PYTHONUTF8'] = '1'
@@ -118,10 +118,10 @@ myopencc = OpenCC('s2t')
 # Debug 模式
 is_DEBUG_mode = False
 
-message = ("\nUCLLIU 肥米輸入法\nBy 羽山秋人(https://3wa.tw)\nVersion: %s\n\n若要使用 Debug 模式：uclliu.exe -d\n" % (VERSION));
+message = ("\nUCLLIU 肥米輸入法\nBy 羽山秋人(https://3wa.tw)\nBy Benson9954029 (https://github.com/Benson9954029)\nVersion: %s\n\n若要使用 Debug 模式：uclliu.exe -d\n" % (VERSION));
 
 def about_uclliu():
-  _msg_text = ("肥米輸入法\n\n作者：羽山秋人 (https://3wa.tw)\n版本：%s" % VERSION)
+  _msg_text = ("肥米輸入法\n\n作者：羽山秋人 (https://3wa.tw)\n作者：Benson9954029 (https://github.com/Benson9954029)\n版本：%s" % VERSION)
   _msg_text += "\n\n熱鍵提示：\n\n"
   _msg_text += "「,,,VERSION」目前版本\n"
   _msg_text += "「'ucl」同音字查詢\n"
@@ -1155,11 +1155,23 @@ uclcode_rr = {}
 #然後把 chardefs 的字碼，變成對照字根，可以加速 ,,,z、,,,x 反查的速度
 #only short key
 _vrsfw_arr = ['v','r','s','f','w','l','c','b','k','j','je','jr','js','jf','jw','jl','jc','jb','jk','rj','re','rr']
-for k in uclcode["chardefs"]:
+
+# 192、韓語字根在 liu.json 裡有些 key 是大寫，載入時改全小寫再使用，如：녕 sUd.
+# UCL key 強制轉小寫，有大寫的都移除
+keys_to_delete = []
+for k, v in uclcode["chardefs"].items():
+    lower_k = k.lower()
+    if k != lower_k:
+        uclcode["chardefs"][lower_k] = v
+        keys_to_delete.append(k)
+for k in keys_to_delete:
+    del uclcode["chardefs"][k]
+    
+for k in uclcode["chardefs"]:         
    #2022-09-01 感謝 Benson9954029 提出修正
    for kk in range(0,len(uclcode["chardefs"][k])):
      _word = uclcode["chardefs"][k][kk]
-     temp_k = k
+     temp_k = k     
      if kk > 0: # and kk-1 < len(_vrsfw_arr):       
        # 如 娚-> gqd2
        #debug_print("str(kk) : "+str(kk));
@@ -1354,6 +1366,8 @@ def show_sp_to_label(data,isForce=None):
   global config
   global play_ucl_label
   global _vrsfw_arr
+  global uclcode_rr
+  
   if config['DEFAULT']['SP']=="0" and isForce is None:
     return
   # 2022-09-02 如果末字是數字，可調整為 VRSFW
@@ -1362,13 +1376,26 @@ def show_sp_to_label(data,isForce=None):
   
   _sp_data = my.strtoupper(word_to_sp(data))
   
-  #debug_print("_sp_data[:-1]: "+_sp_data[:-1]);
-  #debug_print("_sp_data[-1]: "+_sp_data[-1]);
+  # H1 时
+  #debug_print("_sp_data[:-1]: "+_sp_data[:-1]); # H
+  #debug_print("_sp_data[-1]: "+_sp_data[-1]); # 1
+  # Issue : 189、时(h1 提示根有 hv、h1) ，但 hv 實際是另一個字根「惟」(感謝 Benson9954029 回報)
   if len(_sp_data) > 0 and unicode(_sp_data[-1]).isnumeric() and int(_sp_data[-1])>=1 and int(_sp_data[-1])<=5:
     # 如果預選字，如 「GQD 動 舅 娚」的 kk 在 1 或 2 (舅、娚)，就會變 GQD1 GQD2     
     # 如為數字，加上 反 VRSFW 功能
     _tmp_sp_data = _sp_data[:-1] + my.strtoupper(_vrsfw_arr[int(_sp_data[-1])-1]) 
-    _sp_data = _tmp_sp_data + "或" + _sp_data 
+    # debug_print("_tmp_sp_data: %s + %s" % (_sp_data[:-1] , my.strtoupper(_vrsfw_arr[int(_sp_data[-1])-1])) ) # H + V
+    # 為修正 Issue : 189 字根表 HV 如果沒有「时」，就不顯示
+    #debug_print("uclcode_rr[\"hv\"]: %s" % (uclcode_to_chinese("hv"))); # 惟    
+    #debug_print("data: %s" % (unicode(data)));
+    #debug_print("uclcode_rr[\"pns\"]: %s" % (uclcode_rr["pns"])); # 你
+    #debug_print("_sp_data: %s" % (_sp_data)); #H1
+    #debug_print("_tmp_sp_data: %s" % (_tmp_sp_data)); # HV
+    if my.strtolower(_tmp_sp_data) not in uclcode_rr:
+      _sp_data = _tmp_sp_data + "或" + _sp_data
+    else:
+      pass
+    #elif my.strtoupper(_sp_data[:-1] + my.strtoupper(_vrsfw_arr[int(_sp_data[-1])-1])) in uclcode_rr and  :
   sp = "簡:" + _sp_data 
   #word_label.set_label(sp)
   #word_label.modify_font(pango.FontDescription(GUI_FONT_18))
@@ -2090,6 +2117,21 @@ def senddata(data):
   #debug_print("Send step: 4")
   # 這是貼上模式
   
+  # 2023-11-17 Win11 特產 微軟 VBA
+  debug_print("XXXXXXXXXXXXXXXD program_title: %s" % (program_title));
+  if my.is_string_like(program_title, "Microsoft Visual Basic"):
+      debug_print(u"微軟VBA 還在 big5嗎...");
+      # 貼上模式，且要貼 big5 ?
+      win32clipboard.OpenClipboard() 
+      win32clipboard.EmptyClipboard()#這一行特別重要，經過實驗如果不加這一行的話會做動不正常      
+      win32clipboard.SetClipboardData(win32con.CF_TEXT, my.utf8tobig5(data))
+      win32clipboard.CloseClipboard()
+      SendKeysCtypes.SendKeys("^v",pause=0)
+      #也許要設delay...
+      #time.sleep(0.05)
+      #SendKeysCtypes.SendKeys( data.encode('big5'),pause=0)
+      return    
+  
   # 2023-03-29 Win11 特產
   # 如果是 windows 11 且使用 notepad.exe 且版本是 11.2302.26.0
   # 如果 notepad 裡使用的字型是 MingLiU 或 MingLiU_HKSCS 就可以正常出字，反之只能用複製貼上出字才能正常@@?
@@ -2149,9 +2191,10 @@ def senddata(data):
     #debug_print("check_kind==f_arr")
     #break;
     k = my.strtolower(k)  
-	
+	            
     # 2021-08-08 term.ptt.cc (批踢踢實業坊 - Google Chrome) 改成，強制 paste
-    if my.is_string_like(exec_proc,k) or DEFAULT_OUTPUT_TYPE == "PASTE" or program_title == my.utf8tobig5(u"批踢踢實業坊") or program_title == my.utf8tobig5(u"批踢踢實業坊 - Google Chrome") or program_title == my.utf8tobig5(u"批踢踢實業坊 - Brave") or program_title == my.utf8tobig5(u"批踢踢實業坊 - 個人 - Microsoft? Edge") or program_title == my.utf8tobig5(u"批踢踢實業坊 — Mozilla Firefox") or program_title == my.utf8tobig5(u"批踢踢實業坊 - Opera") or program_title == u"批踢踢實業坊" or program_title == u"批踢踢實業坊 - Google Chrome" or program_title == u"批踢踢實業坊 - Brave" or program_title == u"批踢踢實業坊 - 個人 - Microsoft? Edge" or program_title == u"批踢踢實業坊 — Mozilla Firefox" or program_title == u"批踢踢實業坊 - Opera":  
+    # 2023-11-17 Microsoft VBA (Microsoft Visual Basic for Applications) 上字要改，太舊了
+    if my.is_string_like(exec_proc,k) or DEFAULT_OUTPUT_TYPE == "PASTE" or program_title == my.utf8tobig5(u"批踢踢實業坊") or program_title == my.utf8tobig5(u"批踢踢實業坊 - Google Chrome") or program_title == my.utf8tobig5(u"批踢踢實業坊 - Brave") or program_title == my.utf8tobig5(u"批踢踢實業坊 - 個人 - Microsoft? Edge") or program_title == my.utf8tobig5(u"批踢踢實業坊 — Mozilla Firefox") or program_title == my.utf8tobig5(u"批踢踢實業坊 - Opera") or program_title == u"批踢踢實業坊" or program_title == u"批踢踢實業坊 - Google Chrome" or program_title == u"批踢踢實業坊 - Brave" or program_title == u"批踢踢實業坊 - 個人 - Microsoft? Edge" or program_title == u"批踢踢實業坊 — Mozilla Firefox" or program_title == u"批踢踢實業坊 - Opera":
       check_kind="1"            
       #win32clipboard.OpenClipboard()
       orin_clip=""
@@ -2916,7 +2959,13 @@ def OnKeyboardEvent(event):
             if _s[i] in LAST_CODE:
               _is_sound_kick = True 
          
-        if is_need_use_phone == False and len(ucl_find_data)>=1 and int(chr(event.Ascii)) < len(ucl_find_data) and len(word_label.get_text())>0:
+        # Fix by Benson9954029
+        # Issue 51
+        # 如 h backspace v 出現 要
+        # 如 v backspace 0 出現 要
+        #debug_print("Test v backspace 0 Start")
+        if is_need_use_phone == False and len(ucl_find_data)>=1 and int(chr(event.Ascii)) < len(ucl_find_data) and len(word_label.get_text()) > 0:
+          #debug_print("Test v backspace 0 End")
           # send data        
           data = ucl_find_data[int(chr(event.Ascii))]
           #debug_print(ucl_find_data)

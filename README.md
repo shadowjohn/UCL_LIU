@@ -22,9 +22,9 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2023-11-01 13:26
+<h3>最後更新日期：</h3>2023-11-14 22:56
 <br>
-<h3>版本：</h3>V 1.60<br>
+<h3>版本：</h3>V 1.61<br>
 <br>
 <h3>版權：</h3>
 　完全免費的 MIT-License
@@ -33,10 +33,10 @@
 </center>
 <h3>下載位置：</h3>
 <h3>～～提醒：如果遇到無法使用肥米的視窗，請關閉肥米輸入法，按右鍵，改用「系統管理員身分執行肥米輸入法」，應該就可以克服!!～～</h3>
-　　1.主程式(1.60 beta 版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>	
-　　2.主程式(1.60 beta 版 zip 版)：<a download="uclliu.zip" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.zip</a><br>	
-　　3.主程式(1.59 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.59/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.59/uclliu.exe</a><br>
-　　4.主程式(1.59 穩定版 zip 版)：<a download="uclliu.zip" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.59/uclliu.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.59/uclliu.zip</a><br>
+　　1.主程式(1.61 beta 版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>	
+　　2.主程式(1.61 beta 版 zip 版)：<a download="uclliu.zip" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.zip</a><br>	
+　　3.主程式(1.60 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.60/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.60/uclliu.exe</a><br>
+　　4.主程式(1.60 穩定版 zip 版)：<a download="uclliu.zip" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.60/uclliu.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.60/uclliu.zip</a><br>
 　　5.歷年版本：<a target="_blank" href="https://github.com/shadowjohn/UCL_LIU/tree/master/RELEASE">歷代版本</a><br>
 　　6.同音字庫：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt</a><br>
 　　7.打字聲音：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip</a> 下載後解開，0~9.wav 與 uclliu.exe 放一起
@@ -146,6 +146,17 @@ Windows 顯示語言：中文（台灣）<br>
 	</kbd>
 <br>
 <pre>
+	(2023-11-01) v1.61 版：
+	病毒碼提交掃描：1.61
+	https://www.microsoft.com/en-us/wdsi/submission/a6dbc4b2-48a8-4a79-b873-e3756ee21a76
+    1. 在 uclliu.pyw 加入作者 Benson9954029
+    2. 188、當輸入 h backspace 1 仍會出現 时，輸入 v backspace 0 仍出現 0 (感謝 Benson9954029 回報、修正問題)
+       Issue: <a href='https://github.com/shadowjohn/UCL_LIU/issues/50'>#50</a>
+    3. 189、时(h1 提示根有 hv、h1) ，但 hv 實際是另一個字根「惟」(感謝 Benson9954029 回報)
+	4. 190、輸入簡體字時，注音提示沒顯示 https://github.com/shadowjohn/UCL_LIU/issues/52
+	5. 191、Excel 裡開發者模式，Microsoft Visual Basic for Applications 上字用 big5 貼上模式(感謝 Gstar 回報)
+	6. 192、韓語字根在 liu.json 裡有些 key 是大寫，載入時改全小寫再使用，如：녕 sUd.	
+
 	(2023-11-01) v1.60 版：
 	病毒碼提交掃描：1.60
     https://www.microsoft.com/en-us/wdsi/submission/360b0383-d01c-4670-9df7-70f86b8886b5
@@ -799,5 +810,10 @@ Ans：<br>
   <li>(Done 2023-06-12)185、按 a 再按 Backspace 再按 Space 預期應該出現空白 但會出現 "對" (感謝 Benson9954029 回報、修正問題)</li>
   <li>(Done 2023-06-17)186、當「控制台-地區」使用「Beta: 使用 Unicode UTF-8 提供全球語言支援」會發生 Failed to execute script uclliu 問題 (感謝 robert820 回報問題)</li>
   <li>(Done 2023-11-01)187、在使用特殊鍵盤時，有時希望停用 Shift+Space 切換全形、半形字方便使用，增加選單開關 (感謝 Benson9954029 回報、修正問題)</li>
+  <li>(Done 2023-11-14)188、當輸入 h backspace 1 仍會出現 时，輸入 v backspace 0 仍出現 0 (感謝 Benson9954029 回報、修正問題)</li>
+  <li>(Done 2023-11-14)189、时(h1 提示根有 hv、h1) ，但 hv 實際是另一個字根「惟」(感謝 Benson9954029 回報)</li>
+  <li>(Done 2023-11-17)190、輸入簡體字時，注音提示沒顯示 https://github.com/shadowjohn/UCL_LIU/issues/52</li>
+  <li>(Done 2023-11-17)191、Excel 裡開發者模式，Microsoft Visual Basic for Applications 上字用 big5 貼上模式</li>
+  <li>(Done 2023-11-17)192、韓語字根在 liu.json 裡有些 key 是大寫，載入時改全小寫再使用，如：녕 sUd.</li>
 </ul>
 <br>
