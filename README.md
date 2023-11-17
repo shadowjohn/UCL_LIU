@@ -811,5 +811,6 @@ Ans：<br>
   <li>(Done 2023-11-14)189、时(h1 提示根有 hv、h1) ，但 hv 實際是另一個字根「惟」(感謝 Benson9954029 回報)</li>
   <li>190、輸入簡體字時，注音提示沒顯示 https://github.com/shadowjohn/UCL_LIU/issues/52</li>
   <li>(Done 2023-11-17)191、Excel 裡開發者模式，Microsoft Visual Basic for Applications 上字用 big5 貼上模式</li>
+  <li>(Done 2023-11-17)192、韓語字根在 liu.json 裡有些 key 是大寫，載入時改全小寫再使用，如：녕 sUd.</li>
 </ul>
 <br>

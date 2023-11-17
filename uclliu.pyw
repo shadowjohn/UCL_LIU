@@ -1155,11 +1155,23 @@ uclcode_rr = {}
 #然後把 chardefs 的字碼，變成對照字根，可以加速 ,,,z、,,,x 反查的速度
 #only short key
 _vrsfw_arr = ['v','r','s','f','w','l','c','b','k','j','je','jr','js','jf','jw','jl','jc','jb','jk','rj','re','rr']
-for k in uclcode["chardefs"]:
+
+# 192、韓語字根在 liu.json 裡有些 key 是大寫，載入時改全小寫再使用，如：녕 sUd.
+# UCL key 強制轉小寫，有大寫的都移除
+keys_to_delete = []
+for k, v in uclcode["chardefs"].items():
+    lower_k = k.lower()
+    if k != lower_k:
+        uclcode["chardefs"][lower_k] = v
+        keys_to_delete.append(k)
+for k in keys_to_delete:
+    del uclcode["chardefs"][k]
+    
+for k in uclcode["chardefs"]:         
    #2022-09-01 感謝 Benson9954029 提出修正
    for kk in range(0,len(uclcode["chardefs"][k])):
      _word = uclcode["chardefs"][k][kk]
-     temp_k = k
+     temp_k = k     
      if kk > 0: # and kk-1 < len(_vrsfw_arr):       
        # 如 娚-> gqd2
        #debug_print("str(kk) : "+str(kk));
