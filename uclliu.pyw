@@ -2105,6 +2105,21 @@ def senddata(data):
   #debug_print("Send step: 4")
   # 這是貼上模式
   
+  # 2023-11-17 Win11 特產 微軟 VBA
+  debug_print("XXXXXXXXXXXXXXXD program_title: %s" % (program_title));
+  if my.is_string_like(program_title, "Microsoft Visual Basic for Applications"):
+      debug_print(u"微軟VBA 還在 big5嗎...");
+      # 貼上模式，且要貼 big5 ?
+      win32clipboard.OpenClipboard() 
+      win32clipboard.EmptyClipboard()#這一行特別重要，經過實驗如果不加這一行的話會做動不正常      
+      win32clipboard.SetClipboardData(win32con.CF_TEXT, my.utf8tobig5(data))
+      win32clipboard.CloseClipboard()
+      SendKeysCtypes.SendKeys("^v",pause=0)
+      #也許要設delay...
+      #time.sleep(0.05)
+      #SendKeysCtypes.SendKeys( data.encode('big5'),pause=0)
+      return    
+  
   # 2023-03-29 Win11 特產
   # 如果是 windows 11 且使用 notepad.exe 且版本是 11.2302.26.0
   # 如果 notepad 裡使用的字型是 MingLiU 或 MingLiU_HKSCS 就可以正常出字，反之只能用複製貼上出字才能正常@@?
@@ -2164,9 +2179,10 @@ def senddata(data):
     #debug_print("check_kind==f_arr")
     #break;
     k = my.strtolower(k)  
-	
+	            
     # 2021-08-08 term.ptt.cc (批踢踢實業坊 - Google Chrome) 改成，強制 paste
-    if my.is_string_like(exec_proc,k) or DEFAULT_OUTPUT_TYPE == "PASTE" or program_title == my.utf8tobig5(u"批踢踢實業坊") or program_title == my.utf8tobig5(u"批踢踢實業坊 - Google Chrome") or program_title == my.utf8tobig5(u"批踢踢實業坊 - Brave") or program_title == my.utf8tobig5(u"批踢踢實業坊 - 個人 - Microsoft? Edge") or program_title == my.utf8tobig5(u"批踢踢實業坊 — Mozilla Firefox") or program_title == my.utf8tobig5(u"批踢踢實業坊 - Opera") or program_title == u"批踢踢實業坊" or program_title == u"批踢踢實業坊 - Google Chrome" or program_title == u"批踢踢實業坊 - Brave" or program_title == u"批踢踢實業坊 - 個人 - Microsoft? Edge" or program_title == u"批踢踢實業坊 — Mozilla Firefox" or program_title == u"批踢踢實業坊 - Opera":  
+    # 2023-11-17 Microsoft VBA (Microsoft Visual Basic for Applications) 上字要改，太舊了
+    if my.is_string_like(exec_proc,k) or DEFAULT_OUTPUT_TYPE == "PASTE" or program_title == my.utf8tobig5(u"批踢踢實業坊") or program_title == my.utf8tobig5(u"批踢踢實業坊 - Google Chrome") or program_title == my.utf8tobig5(u"批踢踢實業坊 - Brave") or program_title == my.utf8tobig5(u"批踢踢實業坊 - 個人 - Microsoft? Edge") or program_title == my.utf8tobig5(u"批踢踢實業坊 — Mozilla Firefox") or program_title == my.utf8tobig5(u"批踢踢實業坊 - Opera") or program_title == u"批踢踢實業坊" or program_title == u"批踢踢實業坊 - Google Chrome" or program_title == u"批踢踢實業坊 - Brave" or program_title == u"批踢踢實業坊 - 個人 - Microsoft? Edge" or program_title == u"批踢踢實業坊 — Mozilla Firefox" or program_title == u"批踢踢實業坊 - Opera":
       check_kind="1"            
       #win32clipboard.OpenClipboard()
       orin_clip=""

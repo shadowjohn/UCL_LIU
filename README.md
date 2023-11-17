@@ -152,6 +152,7 @@ Windows 顯示語言：中文（台灣）<br>
     2. 188、當輸入 h backspace 1 仍會出現 时，輸入 v backspace 0 仍出現 0 (感謝 Benson9954029 回報、修正問題)
        Issue: <a href='https://github.com/shadowjohn/UCL_LIU/issues/50'>#50</a>
     3. 189、时(h1 提示根有 hv、h1) ，但 hv 實際是另一個字根「惟」(感謝 Benson9954029 回報)
+	4. 191、Excel 裡開發者模式，Microsoft Visual Basic for Applications 上字用 big5 貼上模式(感謝 Gstar 回報)
 
 	(2023-11-01) v1.60 版：
 	病毒碼提交掃描：1.60
@@ -809,5 +810,6 @@ Ans：<br>
   <li>(Done 2023-11-14)188、當輸入 h backspace 1 仍會出現 时，輸入 v backspace 0 仍出現 0 (感謝 Benson9954029 回報、修正問題)</li>
   <li>(Done 2023-11-14)189、时(h1 提示根有 hv、h1) ，但 hv 實際是另一個字根「惟」(感謝 Benson9954029 回報)</li>
   <li>190、輸入簡體字時，注音提示沒顯示 https://github.com/shadowjohn/UCL_LIU/issues/52</li>
+  <li>(Done 2023-11-17)191、Excel 裡開發者模式，Microsoft Visual Basic for Applications 上字用 big5 貼上模式</li>
 </ul>
 <br>
