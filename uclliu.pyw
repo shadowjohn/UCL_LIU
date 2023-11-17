@@ -2107,7 +2107,7 @@ def senddata(data):
   
   # 2023-11-17 Win11 特產 微軟 VBA
   debug_print("XXXXXXXXXXXXXXXD program_title: %s" % (program_title));
-  if my.is_string_like(program_title, "Microsoft Visual Basic for Applications"):
+  if my.is_string_like(program_title, "Microsoft Visual Basic"):
       debug_print(u"微軟VBA 還在 big5嗎...");
       # 貼上模式，且要貼 big5 ?
       win32clipboard.OpenClipboard() 
