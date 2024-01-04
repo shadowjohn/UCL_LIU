@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION = "1.61"
+VERSION = "1.62"
 import os
 #os.environ['PYTHONIOENCODING'] = 'utf-8'
 #os.environ['PYTHONUTF8'] = '1'
@@ -89,7 +89,9 @@ f_big5_arr = [ "zip32w","daqkingcon.exe","EWinner.exe" ]
 # 不使用肥米的 app
 # 2021-03-19 2077 也不能使用肥米
 # 2021-07-03 vncviewer.exe 不需要肥米
-f_pass_app = [ "mstsc.exe","cyberpunk2077.exe","vncviewer.exe" ]
+# 2024-01-04 同事希望 mstsc.exe 要可以用肥米
+# Issue 193、同事希望使用遠端桌面也可以直接用肥米，不要強制關
+f_pass_app = [ "cyberpunk2077.exe","vncviewer.exe" ]
 
 # 2019-10-20 增加出字模式
 # 這是右下角 肥 的 icon

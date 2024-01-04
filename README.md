@@ -22,9 +22,9 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2023-11-14 22:56
+<h3>最後更新日期：</h3>2024-01-04 14:27
 <br>
-<h3>版本：</h3>V 1.61<br>
+<h3>版本：</h3>V 1.62<br>
 <br>
 <h3>版權：</h3>
 　完全免費的 MIT-License
@@ -33,10 +33,10 @@
 </center>
 <h3>下載位置：</h3>
 <h3>～～提醒：如果遇到無法使用肥米的視窗，請關閉肥米輸入法，按右鍵，改用「系統管理員身分執行肥米輸入法」，應該就可以克服!!～～</h3>
-　　1.主程式(1.61 beta 版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>	
-　　2.主程式(1.61 beta 版 zip 版)：<a download="uclliu.zip" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.zip</a><br>	
-　　3.主程式(1.60 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.60/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.60/uclliu.exe</a><br>
-　　4.主程式(1.60 穩定版 zip 版)：<a download="uclliu.zip" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.60/uclliu.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.60/uclliu.zip</a><br>
+　　1.主程式(1.62 beta 版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>	
+　　2.主程式(1.62 beta 版 zip 版)：<a download="uclliu.zip" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.zip</a><br>	
+　　3.主程式(1.61 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.61/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.61/uclliu.exe</a><br>
+　　4.主程式(1.61 穩定版 zip 版)：<a download="uclliu.zip" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.61/uclliu.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.61/uclliu.zip</a><br>
 　　5.歷年版本：<a target="_blank" href="https://github.com/shadowjohn/UCL_LIU/tree/master/RELEASE">歷代版本</a><br>
 　　6.同音字庫：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt</a><br>
 　　7.打字聲音：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip</a> 下載後解開，0~9.wav 與 uclliu.exe 放一起
@@ -146,6 +146,10 @@ Windows 顯示語言：中文（台灣）<br>
 	</kbd>
 <br>
 <pre>
+	(2024-01-04) v1.62 版：
+	病毒碼提交掃描：1.62
+	193、同事希望使用遠端桌面也可以直接用肥米，不要強制關(非全螢幕時可打字)，全螢幕時會綁定不到事件，無法出字
+	
 	(2023-11-01) v1.61 版：
 	病毒碼提交掃描：1.61
 	https://www.microsoft.com/en-us/wdsi/submission/a6dbc4b2-48a8-4a79-b873-e3756ee21a76
@@ -815,5 +819,6 @@ Ans：<br>
   <li>(Done 2023-11-17)190、輸入簡體字時，注音提示沒顯示 https://github.com/shadowjohn/UCL_LIU/issues/52</li>
   <li>(Done 2023-11-17)191、Excel 裡開發者模式，Microsoft Visual Basic for Applications 上字用 big5 貼上模式</li>
   <li>(Done 2023-11-17)192、韓語字根在 liu.json 裡有些 key 是大寫，載入時改全小寫再使用，如：녕 sUd.</li>
+  <li>(Done 2024-01-04)193、同事希望使用遠端桌面也可以直接用肥米，不要強制關(非全螢幕時可打字)</li>
 </ul>
 <br>
