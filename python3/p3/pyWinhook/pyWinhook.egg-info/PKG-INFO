@@ -1,0 +1,24 @@
+Metadata-Version: 2.1
+Name: pyWinhook
+Version: 1.6.2
+Summary: A pyHook module fork from Peter P. with some updates.
+Home-page: https://github.com/Tungsteno74/pyWinhook
+Download-URL: https://codeload.github.com/Tungsteno74/pyWinhook/zip/1.6.2
+Author: Tungsteno
+Author-email: contacts00-pywinhook@yahoo.it
+License: http://www.opensource.org/licenses/mit-license.php
+Keywords: hook win32 win64 keyboard input user control
+Platform: Win32
+Platform: Win-amd64
+Platform: Win-ia64
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python
+Classifier: Topic :: System :: Monitoring
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Operating System :: Microsoft :: Windows
+License-File: LICENSE.txt
+Requires-Dist: pywin32
+
+Python wrapper for out-of-context input hooks in Windows. The pyWinhook package provides callbacks for global mouse and keyboard events in Windows. Python applications register event handlers for user input events such as left mouse down, left mouse up, key down, etc. and set the keyboard and/or mouse hook. The underlying C library reports information like the time of the event, the name of the window in which the event occurred, the value of the event, any keyboard modifiers, etc. pyHook, original project download url: http://www.sourceforge.net/projects/pyhook 

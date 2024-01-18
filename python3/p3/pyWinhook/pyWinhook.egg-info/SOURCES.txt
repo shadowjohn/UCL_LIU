@@ -1,0 +1,16 @@
+CHANGELOG.txt
+LICENSE.txt
+README.txt
+setup.py
+pyWinhook/HookManager.py
+pyWinhook/__init__.py
+pyWinhook/aa hook.py
+pyWinhook/cpyHook.i
+pyWinhook/cpyHook.py
+pyWinhook/doc.py
+pyWinhook/example.py
+pyWinhook.egg-info/PKG-INFO
+pyWinhook.egg-info/SOURCES.txt
+pyWinhook.egg-info/dependency_links.txt
+pyWinhook.egg-info/requires.txt
+pyWinhook.egg-info/top_level.txt

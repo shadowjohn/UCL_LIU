@@ -1,0 +1,1 @@
+c:\python312\python.exe uclliu.pyw -d &
