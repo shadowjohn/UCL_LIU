@@ -1,7 +1,7 @@
 
 Require:
 	python-3.12.1.exe 【p3 目錄裡有，來自：https://www.python.org/ftp/python/3.12.1/python-3.12.1.exe 】
-	無法使用 amd64，似乎無法正確出字
+	無法使用 amd64，似乎無法正確出字，且用 amd64 編出的 exe 會被 windows defender 擋掉，x86 版可正常運作
 	
 	python.exe -m pip install --upgrade pip
 	pip install pypiwin32==223
