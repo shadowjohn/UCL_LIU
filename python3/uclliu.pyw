@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 VERSION = "3.01"
+
+# Debug 模式
+is_DEBUG_mode = True
 import os
 #os.environ['PYTHONIOENCODING'] = 'utf-8'
 #os.environ['PYTHONUTF8'] = '1'
@@ -117,8 +120,7 @@ myopencc = OpenCC('s2t')
 
 
 
-# Debug 模式
-is_DEBUG_mode = False
+
 
 message = ("\nUCLLIU 肥米輸入法\nBy 羽山秋人(https://3wa.tw)\nBy Benson9954029 (https://github.com/Benson9954029)\nVersion: %s\n\n若要使用 Debug 模式：uclliu.exe -d\n" % (VERSION));
 
@@ -176,28 +178,45 @@ def md5_file(fileName):
 #debug_print(PWD)
 #sys.exit(0)
 
+
+app = wx.App(False)
+#win.set_modal(True)
+#win.set_resizable(False)
+win = wx.Frame(None, wx.ID_ANY, "Hello, UCL_LIU!")
+# 將窗口設置爲自動佈局(自動展開)
+win.SetAutoLayout(True)
+
 #此是防止重覆執行
 #if os.path.isdir("C:\\temp") == False:
 #  os.mkdir("C:\\temp")
+import ctypes
+
+
 check_file_run = open(PWD + '\\UCLLIU.lock', "a+")
 try:  
   portalocker.lock(check_file_run, portalocker.LOCK_EX | portalocker.LOCK_NB)
 except:
-  md = gtk.MessageDialog(None, 
-          gtk.DIALOG_DESTROY_WITH_PARENT, 
-          gtk.MESSAGE_QUESTION, 
-          gtk.BUTTONS_OK, "【肥米輸入法】已執行...")          
-  md.set_position(gtk.WIN_POS_CENTER)
-  response = md.run()            
-  if response == gtk.RESPONSE_OK or response == gtk.RESPONSE_DELETE_EVENT:
-    md.destroy()
+  #md = gtk.MessageDialog(None, 
+  #        gtk.DIALOG_DESTROY_WITH_PARENT, 
+  #        gtk.MESSAGE_QUESTION, 
+  #        gtk.BUTTONS_OK, "【肥米輸入法】已執行...")          
+  #md.set_position(gtk.WIN_POS_CENTER)
+  dlg = wx.MessageDialog(win, "【肥米輸入法】已執行...", "肥米輸入法", wx.OK)
+  result = dlg.ShowModal()
+  #dlg.Destroy()
+  #response = md.run()            
+  #if response == gtk.RESPONSE_OK or response == gtk.RESPONSE_DELETE_EVENT:
+  if result == wx.ID_OK:
+    print("OK button pressed")
+    #md.destroy()
+    dlg.Destroy()
     ctypes.windll.user32.PostQuitMessage(0)
     #FlagStopUpdateGUI = True
     #atexit.register(cleanup)
     #os.killpg(0, signal.SIGKILL)
     sys.exit(0)
          
-import ctypes
+
 import pythoncom, pyWinhook
 from pyWinhook import HookManager
 from pyWinhook.HookManager import HookConstants 
@@ -1716,6 +1735,7 @@ def type_label_set_text(last_word_label_txt="",showOnly=False):
         show_search("phone")
     else:
       show_search(None)
+      word_label.SetForegroundColour(wx.Colour(0, 0, 0))
     pass
   else:
     if is_need_use_phone == True:
@@ -1726,8 +1746,11 @@ def type_label_set_text(last_word_label_txt="",showOnly=False):
       #word_label.modify_fg(gtk.STATE_NORMAL, gtk.gdk.Color("#007fff"))
       word_label.SetForegroundColour(wx.Colour(0, 127, 255))
       # 注音輸入模式時，輸入區長度固定為 130
-      if config["DEFAULT"]["SHORT_MODE"]=="0":        
-        word_label.SetMinSize((int(float(config['DEFAULT']['ZOOM'])*130) ,int(float(config['DEFAULT']['ZOOM'])*40 ))) 
+      if config["DEFAULT"]["SHORT_MODE"]=="0":
+        if config["DEFAULT"]["SHORT_MODE"]=="0":
+            word_label.SetMinSize((int(float(config['DEFAULT']['ZOOM'])*350) ,int(float(config['DEFAULT']['ZOOM'])*40 ))) 
+        else:
+            word_label.SetMinSize((int(float(config['DEFAULT']['ZOOM'])*100) ,int(float(config['DEFAULT']['ZOOM'])*40 ))) 
       word_label.SetLabel("注:")
     else:    
       # 非注音時，是黑色
@@ -1762,7 +1785,10 @@ def type_label_set_text(last_word_label_txt="",showOnly=False):
       type_label.Show(False)
     else:
       type_label.Show(True)    
-    type_label.SetMinSize((int(float(config['DEFAULT']['ZOOM'])*18*_len_tape_label) ,int(float(config['DEFAULT']['ZOOM'])*40 ))) 
+    #type_label.SetMinSize((int(float(config['DEFAULT']['ZOOM'])*28*_len_tape_label) ,(int(float(config['DEFAULT']['ZOOM'])*40 )))) 
+    
+    # 根據文字大小計算適當的控件大小
+    type_label.SetMinSize(type_label.GetSizeFromTextSize(type_label.GetTextExtent(_tape_label))) 
     
     _word_label = word_label.GetLabel()
     _len_word_label = len(_word_label)
@@ -1771,8 +1797,9 @@ def type_label_set_text(last_word_label_txt="",showOnly=False):
       word_label.Show(False)
     else:
       word_label.Show(True)    
-    word_label.SetMinSize((int(float(config['DEFAULT']['ZOOM'])*15*_len_word_label) ,int(float(config['DEFAULT']['ZOOM'])*40 ))) 
-    
+    #word_label.SetMinSize((int(float(config['DEFAULT']['ZOOM'])*25*_len_word_label) ,int(float(config['DEFAULT']['ZOOM'])*40 ))) 
+    # 根據文字大小計算適當的控件大小
+    word_label.SetMinSize(word_label.GetSizeFromTextSize(word_label.GetTextExtent(_word_label)))
   return True
 def word_label_set_text():
   global word_label
@@ -1813,11 +1840,13 @@ def word_label_set_text():
       else:
         word_label.Show(True)
       if is_has_more_page==False:        
-        word_label.SetMinSize((int(float(config['DEFAULT']['ZOOM'])*12*_len_word_label) ,int(float(config['DEFAULT']['ZOOM'])*40 ))) 
+        #word_label.SetMinSize((int(float(config['DEFAULT']['ZOOM'])*12*_len_word_label) ,int(float(config['DEFAULT']['ZOOM'])*40 ))) 
+        word_label.SetMinSize(word_label.GetSizeFromTextSize(word_label.GetTextExtent(_word_label)))
       else:
         #有額外的分頁，加了...
         debug_print("More page...")        
-        word_label.SetMinSize((int(float(config['DEFAULT']['ZOOM'])*13*_len_word_label) ,int(float(config['DEFAULT']['ZOOM'])*40 ))) 
+        #word_label.SetMinSize((int(float(config['DEFAULT']['ZOOM'])*13*_len_word_label) ,int(float(config['DEFAULT']['ZOOM'])*40 ))) 
+        word_label.SetMinSize(word_label.GetSizeFromTextSize(word_label.GetTextExtent(_word_label)))
     return True
   except:
     play_ucl_label=""
@@ -2563,8 +2592,8 @@ def OnKeyboardEvent(event):
         simple_btn.SetMinSize((int(float(config['DEFAULT']['ZOOM'])*40) ,int(float(config['DEFAULT']['ZOOM'])*40 )))         
         simple_btn.SetLabel("簡")
         simple_btn.Show(True)        
-        simple_label.SetFont(wx.Font(int(GUI_FONT_16["FONT_SIZE"]), wx.DEFAULT, wx.NORMAL, GUI_FONT_16["FONT_WEIGHT"],False,GUI_FONT_16["FONT_NAME"]))
-        #simple_label.set_justify(gtk.JUSTIFY_CENTER)
+        simple_btn.SetFont(wx.Font(int(GUI_FONT_16["FONT_SIZE"]), wx.DEFAULT, wx.NORMAL, GUI_FONT_16["FONT_WEIGHT"],False,GUI_FONT_16["FONT_NAME"]))  
+        #simple_btn.set_justify(gtk.JUSTIFY_CENTER)
       if my.strtolower(last_key[-4:])==",,,t":
         play_ucl_label=""
         ucl_find_data=[]
@@ -2576,7 +2605,7 @@ def OnKeyboardEvent(event):
         simple_btn.SetMinSize((0,int(float(config['DEFAULT']['ZOOM'])*40 )))                 
         simple_btn.SetLabel("")
         simple_btn.Show(False)
-        simple_label.SetFont(wx.Font(int(GUI_FONT_16["FONT_SIZE"]), wx.DEFAULT, wx.NORMAL, GUI_FONT_16["FONT_WEIGHT"],False,GUI_FONT_16["FONT_NAME"]))
+        simple_btn.SetFont(wx.Font(int(GUI_FONT_16["FONT_SIZE"]), wx.DEFAULT, wx.NORMAL, GUI_FONT_16["FONT_WEIGHT"],False,GUI_FONT_16["FONT_NAME"]))  
       if my.strtolower(last_key[-7:])==",,,lock":
         last_key = ""
         if gamemode_btn.GetLabel()=="正常模式":
@@ -3342,52 +3371,52 @@ hm.HookKeyboard()
 # 改成按到 shift 才 hook
 #hm.HookMouse()
 
-        
-#win=gtk.Window(type=gtk.WINDOW_POPUP)
-#win=gtk.Window(type=gtk.WINDOW_POPUP)
-app = wx.App(False)
-#win.set_modal(True)
-#win.set_resizable(False)
-win = wx.Frame(None, wx.ID_ANY, "Hello, UCL_LIU!")
-# 將窗口設置爲自動佈局(自動展開)
-win.SetAutoLayout(True)
+
 
 # 將窗口設置爲可拖動
-
-def on_left_down_type_label(event):
+is_drag = False
+def on_left_down_move(event):
     global win
+    global is_drag
     #win.CaptureMouse()
     win.start_pos = event.GetPosition()
     #print(win.start_pos)
     #event.Skip()
+    is_drag = False
     
-def on_left_up_type_label(event):
+def on_left_up_move(event):
     global win
+    global is_drag    
+    if is_drag==True:
+        if win.HasCapture():
+            win.ReleaseMouse()
+    else:
+        # trigger click
+        #debug_print(event.GetId())
+        #debug_print(dir(event))
+        # 獲取觸發事件的按鈕物件
+        button = event.GetEventObject()
+        btnName = button.GetName()
+        debug_print(btnName)
+        if btnName == "肥英按鈕":
+            uclen_btn_click(uclen_btn)
+        elif btnName == "半全按鈕":
+            hf_btn_click(hf_btn)    
+        elif btnName == "正常遊戲按鈕":
+            gamemode_btn_click(gamemode_btn)
+        elif btnName == "Ｘ按鈕":
+            x_btn_click(x_btn)     
     if win.HasCapture():
         win.ReleaseMouse()
-    pass
-def on_mouse_motion_type_label(event):
+def on_mouse_motion_move(event):
     global win
+    global is_drag
     if event.Dragging() and event.LeftIsDown():            
         delta = event.GetPosition() - win.start_pos
         win.Move(win.GetPosition() + delta)
+        is_drag = True
     pass
-    
-def on_left_down_word_label(event):
-    global win
-    #win.CaptureMouse()
-    win.start_pos = event.GetPosition()    
-    
-def on_left_up_word_label(event):
-    global win
-    if win.HasCapture():
-        win.ReleaseMouse()
-
-def on_mouse_motion_word_label(event):
-    global win
-    if event.Dragging() and event.LeftIsDown():            
-        delta = event.GetPosition() - win.start_pos
-        win.Move(win.GetPosition() + delta)
+ 
 
 #win.SetSize((int(float(config['DEFAULT']['ZOOM'])*840) , int(float(config['DEFAULT']['ZOOM'])*40 )))
 
@@ -3420,75 +3449,105 @@ vbox = wx.BoxSizer(wx.VERTICAL)
 #hbox=gtk.HBox()
 hbox = wx.BoxSizer(wx.HORIZONTAL)
 #vbox.pack_start(hbox, False)
-vbox.Add(hbox, proportion=0, flag=wx.EXPAND)
+vbox.Add(hbox, proportion=0, flag=wx.EXPAND )
 
-uclen_btn=wx.Button(win, label="肥")
+uclen_btn=wx.Button(win, label="肥",name="肥英按鈕")
 uclen_btn.SetFont(wx.Font(int(GUI_FONT_22["FONT_SIZE"]), wx.DEFAULT, wx.NORMAL, GUI_FONT_22["FONT_WEIGHT"],False,GUI_FONT_22["FONT_NAME"]))
 #uclen_btn.SetLabelVerticalAlignment(wx.VERTICAL_ALIGNMENT_CENTER)
 #uclen_btn.connect("clicked",uclen_btn_click)
 # 肥的點擊事件
-uclen_btn.Bind(wx.EVT_BUTTON, uclen_btn_click)
-uclen_btn.SetMinSize((int(float(config['DEFAULT']['ZOOM'])*40) ,int(float(config['DEFAULT']['ZOOM'])*40 ))) 
-hbox.Add(uclen_btn, 0, wx.LEFT | wx.ALIGN_CENTER_VERTICAL, 5)
 
-hf_btn=wx.Button(win, label="半")
+uclen_btn.SetMinSize((int(float(config['DEFAULT']['ZOOM'])*40) ,int(float(config['DEFAULT']['ZOOM'])*40 ))) 
+hbox.Add(uclen_btn, 0, wx.LEFT | wx.ALIGN_CENTER_VERTICAL)
+
+uclen_btn.Bind(wx.EVT_LEFT_DOWN, on_left_down_move)
+uclen_btn.Bind(wx.EVT_LEFT_UP, on_left_up_move)
+uclen_btn.Bind(wx.EVT_MOTION, on_mouse_motion_move)
+#uclen_btn.Bind(wx.EVT_BUTTON, uclen_btn_click)
+
+hf_btn=wx.Button(win, label="半",name="半全按鈕")
 hf_btn.SetFont(wx.Font(int(GUI_FONT_22["FONT_SIZE"]), wx.DEFAULT, wx.NORMAL, GUI_FONT_22["FONT_WEIGHT"],False,GUI_FONT_22["FONT_NAME"]))
 #hf_btn.SetLabelVerticalAlignment(wx.VERTICAL_ALIGNMENT_CENTER)
-hf_btn.Bind(wx.EVT_BUTTON, hf_btn_click)
-hf_btn.SetMinSize((int(float(config['DEFAULT']['ZOOM'])*40) ,int(float(config['DEFAULT']['ZOOM'])*40 ))) 
-hbox.Add(hf_btn, 0, wx.LEFT | wx.ALIGN_CENTER_VERTICAL, 5)
+#hf_btn.Bind(wx.EVT_BUTTON, hf_btn_click)
 
-type_label = wx.StaticText(win, label="xxxx")
+hf_btn.Bind(wx.EVT_LEFT_DOWN, on_left_down_move)
+hf_btn.Bind(wx.EVT_LEFT_UP, on_left_up_move)
+hf_btn.Bind(wx.EVT_MOTION, on_mouse_motion_move)
+
+hf_btn.SetMinSize((int(float(config['DEFAULT']['ZOOM'])*40) ,int(float(config['DEFAULT']['ZOOM'])*40 ))) 
+hbox.Add(hf_btn, 0, wx.LEFT | wx.ALIGN_CENTER_VERTICAL)
+
+type_label = wx.TextCtrl(win, value="",style=wx.TE_READONLY)
 type_label.SetFont(wx.Font(int(GUI_FONT_22["FONT_SIZE"]), wx.DEFAULT, wx.NORMAL, GUI_FONT_22["FONT_WEIGHT"],False,GUI_FONT_22["FONT_NAME"]))
 #type_label.SetLabelVerticalAlignment(wx.VERTICAL_ALIGNMENT_CENTER)
 #type_label.modify_bg(gtk.STATE_NORMAL, gtk.gdk.Color(6400, 6400, 6440))
+type_label.SetWindowVariant(wx.WINDOW_VARIANT_NORMAL)
 type_label.SetBackgroundColour(wx.Colour(222, 222, 222))
 type_label.SetMinSize((int(float(config['DEFAULT']['ZOOM'])*100) ,int(float(config['DEFAULT']['ZOOM'])*40 ))) 
 #type_label.set_alignment(xalign=0.1, yalign=0.5) 
+#sizer = wx.BoxSizer()
+#sizer.Add(type_label, 0, wx.ALIGN_CENTER_VERTICAL)
+#type_label_vbox = wx.BoxSizer(wx.VERTICAL)
+#type_label_vbox.Add(type_label, flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL , border=10)
+hbox.Add(type_label, 50, wx.RIGHT | wx.ALIGN_BOTTOM)
+#hbox.Add(sizer, 0 , wx.LEFT | wx.ALIGN_BOTTOM )
 
-hbox.Add(type_label, 0, wx.LEFT | wx.ALIGN_CENTER_VERTICAL, 5)
-
-type_label.Bind(wx.EVT_LEFT_DOWN, on_left_down_type_label)
-type_label.Bind(wx.EVT_LEFT_UP, on_left_up_type_label)
-type_label.Bind(wx.EVT_MOTION, on_mouse_motion_type_label)
+type_label.Bind(wx.EVT_LEFT_DOWN, on_left_down_move)
+type_label.Bind(wx.EVT_LEFT_UP, on_left_up_move)
+type_label.Bind(wx.EVT_MOTION, on_mouse_motion_move)
 
 
-word_label=wx.StaticText(win, label="GGGGGGGG")
+word_label=wx.TextCtrl(win, value="",style=wx.TE_READONLY)
 word_label.SetFont(wx.Font(int(GUI_FONT_20["FONT_SIZE"]), wx.DEFAULT, wx.NORMAL, GUI_FONT_20["FONT_WEIGHT"],False,GUI_FONT_20["FONT_NAME"]))
 word_label.SetBackgroundColour(wx.Colour(222, 222, 222))
+word_label.SetWindowVariant(wx.WINDOW_VARIANT_NORMAL)
 word_label.SetMinSize((int(float(config['DEFAULT']['ZOOM'])*350) ,int(float(config['DEFAULT']['ZOOM'])*40 ))) 
 #word_label.SetLabelVerticalAlignment(wx.VERTICAL_ALIGNMENT_CENTER)
 #word_label.set_alignment(xalign=0.05, yalign=0.5)
-hbox.Add(word_label, 0, wx.LEFT | wx.ALIGN_CENTER_VERTICAL, 5)
+hbox.Add(word_label, 0, wx.LEFT | wx.ALIGN_CENTER_VERTICAL)
 
-word_label.Bind(wx.EVT_LEFT_DOWN, on_left_down_word_label)
-word_label.Bind(wx.EVT_LEFT_UP, on_left_up_word_label)
-word_label.Bind(wx.EVT_MOTION, on_mouse_motion_word_label)
+word_label.Bind(wx.EVT_LEFT_DOWN, on_left_down_move)
+word_label.Bind(wx.EVT_LEFT_UP, on_left_up_move)
+word_label.Bind(wx.EVT_MOTION, on_mouse_motion_move)
 
 # 加一個簡繁互換的
-simple_btn=wx.Button(win, label="")
+simple_btn=wx.Button(win, label="",name="簡繁按鈕")
 simple_btn.SetMinSize((0 ,int(float(config['DEFAULT']['ZOOM'])*40 ))) 
 simple_btn.SetFont(wx.Font(int(GUI_FONT_16["FONT_SIZE"]), wx.DEFAULT, wx.NORMAL, GUI_FONT_16["FONT_WEIGHT"],False,GUI_FONT_16["FONT_NAME"]))
 #simple_btn.SetLabelVerticalAlignment(wx.VERTICAL_ALIGNMENT_CENTER)
+simple_btn.Bind(wx.EVT_LEFT_DOWN, on_left_down_move)
+simple_btn.Bind(wx.EVT_LEFT_UP, on_left_up_move)
+simple_btn.Bind(wx.EVT_MOTION, on_mouse_motion_move)
+
+
 
 #simple_label.set_justify(gtk.JUSTIFY_CENTER)
 #simple_label.set_alignment(xalign=0.05, yalign=0.5)
-hbox.Add(simple_btn, 0, wx.LEFT | wx.ALIGN_CENTER_VERTICAL, 5)
+hbox.Add(simple_btn, 0, wx.LEFT | wx.ALIGN_CENTER_VERTICAL)
 
 
-gamemode_btn=wx.Button(win, label="正常模式")
+gamemode_btn=wx.Button(win, label="正常模式",name="正常遊戲按鈕")
 gamemode_btn.SetFont(wx.Font(int(GUI_FONT_12["FONT_SIZE"]), wx.DEFAULT, wx.NORMAL, GUI_FONT_12["FONT_WEIGHT"],False,GUI_FONT_12["FONT_NAME"]))
-gamemode_btn.Bind(wx.EVT_BUTTON, gamemode_btn_click)
+#gamemode_btn.Bind(wx.EVT_BUTTON, gamemode_btn_click)
+
+gamemode_btn.Bind(wx.EVT_LEFT_DOWN, on_left_down_move)
+gamemode_btn.Bind(wx.EVT_LEFT_UP, on_left_up_move)
+gamemode_btn.Bind(wx.EVT_MOTION, on_mouse_motion_move)
+
 gamemode_btn.SetMinSize((int(float(config['DEFAULT']['ZOOM'])*80) ,int(float(config['DEFAULT']['ZOOM'])*40 ))) 
 #gamemode_btn.SetLabelVerticalAlignment(wx.VERTICAL_ALIGNMENT_CENTER)
-hbox.Add(gamemode_btn, 0, wx.LEFT | wx.ALIGN_CENTER_VERTICAL, 5)
+hbox.Add(gamemode_btn, 0, wx.LEFT | wx.ALIGN_CENTER_VERTICAL)
 
-x_btn=wx.Button(win, label="╳")
+x_btn=wx.Button(win, label="╳",name="Ｘ按鈕")
 x_btn.SetFont(wx.Font(int(GUI_FONT_14["FONT_SIZE"]), wx.DEFAULT, wx.NORMAL, GUI_FONT_14["FONT_WEIGHT"],False,GUI_FONT_14["FONT_NAME"]))
 x_btn.SetMinSize((int(float(config['DEFAULT']['ZOOM'])*40) ,int(float(config['DEFAULT']['ZOOM'])*40 ))) 
 #x_btn.SetLabelVerticalAlignment(wx.VERTICAL_ALIGNMENT_CENTER)
-x_btn.Bind(wx.EVT_BUTTON, x_btn_click)
-hbox.Add(x_btn, 0, wx.LEFT | wx.ALIGN_CENTER_VERTICAL, 5)
+#x_btn.Bind(wx.EVT_BUTTON, x_btn_click)
+x_btn.Bind(wx.EVT_LEFT_DOWN, on_left_down_move)
+x_btn.Bind(wx.EVT_LEFT_UP, on_left_up_move)
+x_btn.Bind(wx.EVT_MOTION, on_mouse_motion_move)
+
+hbox.Add(x_btn, 0, wx.LEFT | wx.ALIGN_CENTER_VERTICAL)
 
 
 win.SetSizer(vbox)
