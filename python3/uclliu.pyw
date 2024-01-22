@@ -1180,7 +1180,7 @@ _vrsfw_arr = ['v','r','s','f','w','l','c','b','k','j','je','jr','js','jf','jw','
 # 192、韓語字根在 liu.json 裡有些 key 是大寫，載入時改全小寫再使用，如：녕 sUd.
 # UCL key 強制轉小寫，有大寫的都移除
 keys_to_delete = []
-for k, v in uclcode["chardefs"].items():
+for k, v in dict(uclcode["chardefs"]).items():
     lower_k = k.lower()
     if k != lower_k:
         uclcode["chardefs"][lower_k] = v
