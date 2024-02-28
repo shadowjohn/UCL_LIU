@@ -15,7 +15,7 @@ class CinToJson(object):
   def run(self,outputfile_mainname,source_file,donothing):
     output = {}
     output["chardefs"] = {}
-    data = open(source_file).read()
+    data = open(source_file,'r',encoding='utf-8').read()
     char_default_data = self._find_between(data,"%chardef begin","%chardef end")
     char_default_data = str(char_default_data).strip()
     m = char_default_data.split("\n")
@@ -24,7 +24,7 @@ class CinToJson(object):
       if value =="":
         continue
       d = value.split(" ")
-      # 2019-04-13 ¬Y¨Ç cin ¸Ì¬O²Ä¤@­Ó¦r¬OÃöÁä¡A¦ı³sµÛ2¡B3¡B4¡B5¦r¤@°_¡A©Ò¥H³o³¡¤À¤w¤£¬O¤£µ¥©ó2´N¸õ¹L
+      # 2019-04-13 æŸäº› cin è£¡æ˜¯ç¬¬ä¸€å€‹å­—æ˜¯é—œéµï¼Œä½†é€£è‘—2ã€3ã€4ã€5å­—ä¸€èµ·ï¼Œæ‰€ä»¥é€™éƒ¨åˆ†å·²ä¸æ˜¯ä¸ç­‰æ–¼2å°±è·³é
       if len(d) < 2:
         continue
       d[0] = d[0].strip()
@@ -32,7 +32,7 @@ class CinToJson(object):
         #print(d)      
         #print(d[0])        
         d[1] = d[kk].strip()             
-        if output["chardefs"].has_key(d[0])==False:      
+        if d[0] not in output["chardefs"]:      
           output["chardefs"][d[0]] = []
         output["chardefs"][d[0]].append(d[1])
       #sys.exit()
@@ -40,5 +40,5 @@ class CinToJson(object):
     #print(data)
     #sys.exit()
     #write file       
-    f = open(outputfile_mainname+".json", 'wb')
+    f = open(outputfile_mainname+".json", 'w', encoding='utf-8')
     f.write(data)
