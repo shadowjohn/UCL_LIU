@@ -1,1 +1,1 @@
-c:\python312\python.exe uclliu.pyw -d &
+c:\python312-32\python.exe uclliu.pyw -d &
