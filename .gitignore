@@ -44,3 +44,4 @@ wuxiami.txt
 *.mp3
 /*.wav
 /.vs
+/tools/output.txt
