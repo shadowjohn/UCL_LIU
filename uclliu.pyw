@@ -595,9 +595,9 @@ def run_short():
   type_label.set_visible(False)
   gamemode_btn.set_visible(False)
   config["DEFAULT"]["SHORT_MODE"]="1"
-  
-  
   saveConfig()
+  tray.reload_tray()
+  
 def run_long():
   global config
   global word_label
@@ -620,6 +620,7 @@ def run_long():
   
   config["DEFAULT"]["SHORT_MODE"]="0"
   saveConfig()
+  tray.reload_tray()
 
 saveConfig()    
 #check if exists tab cin json
