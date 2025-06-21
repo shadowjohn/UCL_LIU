@@ -1,0 +1,33 @@
+
+由於 python2.7 32bit 官方 pip 已無維護
+
+安裝相關的 exe，
+	python-2.7.13.msi
+	pygtk-all-in-one-2.24.1.win32-py2.7.msi
+	pyHook-1.5.1.win32-py2.7.exe
+	
+沒有 pip 安裝 whl 的方法
+1. 如 PyAudio-0.2.11-cp27-cp27m-win32.whl
+   改成 PyAudio-0.2.11-cp27-cp27m-win32.zip 解壓縮
+   將解壓的 PyAudio-0.2.11.dist-info、_portaudio.pyd、pyaudio.py 拷貝到 C:\Python27\Lib\site-packages\
+   或是直接把 whl 拷貝到 C:\Python27\Lib\site-packages\ 用 7z 直接右鍵解壓縮至此
+   
+需手動解到 C:\Python27\Lib\site-packages\ 的為
+  PyAudio-0.2.11-cp27-cp27m-win32.whl
+  configparser-4.0.2-py2.py3-none-any.whl
+  psutil-6.1.1-cp27-none-win32.whl
+  setuptools-44.1.1-py2.py3-none-any.whl
+  pywin32_ctypes-0.2.0-py2.py3-none-any.whl
+  dis3-0.1.3-py2-none-any.whl
+  altgraph-0.17.4-py2.py3-none-any.whl
+  macholib-1.16.3-py2.py3-none-any.whl
+  future-0.18.0-cp27-none-any.whl
+  
+需手動編譯的為
+  p27\pefile-2017.8.1
+    C:\Python27\python.exe setup.py build
+	C:\Python27\python.exe setup.py install
+	
+  p27\PyInstaller-3.4.tar\dist\PyInstaller-3.4
+	C:\Python27\python.exe setup.py build
+	C:\Python27\python.exe setup.py install

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION = "1.61"
+VERSION = "1.62"
 import os
 #os.environ['PYTHONIOENCODING'] = 'utf-8'
 #os.environ['PYTHONUTF8'] = '1'
@@ -246,8 +246,9 @@ def isWin11():
         return True
   try:
     data = my.system("%s os get name" % (wmic_cmd));
-  except e:
-    debug_print(e)
+  except:
+    pass 
+    #debug_print(e)
   #debug_print("GGG %s" % (data))
   if my.is_string_like(data,"Windows 11"):
     return True
