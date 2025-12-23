@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION = "1.65"
+VERSION = "1.66"
 import __main__  # 取得自己
 #from doctest import debug
 import os
@@ -2315,7 +2315,8 @@ def senddata(data):
 	            
     # 2021-08-08 term.ptt.cc (批踢踢實業坊 - Google Chrome) 改成，強制 paste
     # 2023-11-17 Microsoft VBA (Microsoft Visual Basic for Applications) 上字要改，太舊了
-    if my.is_string_like(exec_proc,k) or DEFAULT_OUTPUT_TYPE == "PASTE" or program_title == my.utf8tobig5(u"批踢踢實業坊") or program_title == my.utf8tobig5(u"批踢踢實業坊 - Google Chrome") or program_title == my.utf8tobig5(u"批踢踢實業坊 - Brave") or program_title == my.utf8tobig5(u"批踢踢實業坊 - 個人 - Microsoft? Edge") or program_title == my.utf8tobig5(u"批踢踢實業坊 — Mozilla Firefox") or program_title == my.utf8tobig5(u"批踢踢實業坊 - Opera") or program_title == u"批踢踢實業坊" or program_title == u"批踢踢實業坊 - Google Chrome" or program_title == u"批踢踢實業坊 - Brave" or program_title == u"批踢踢實業坊 - 個人 - Microsoft? Edge" or program_title == u"批踢踢實業坊 — Mozilla Firefox" or program_title == u"批踢踢實業坊 - Opera":
+    # 2025-12-23 Issue. 205、chrome 瀏覽 term.ptt.cc 有時標題會變成 ws.ptt.cc，導致出字失敗
+    if my.is_string_like(exec_proc,k) or DEFAULT_OUTPUT_TYPE == "PASTE" or my.is_string_like(program_title ,"ws.ptt.cc") or my.is_string_like(program_title,my.utf8tobig5(u"批踢踢實業坊")) or program_title == my.utf8tobig5(u"批踢踢實業坊") or program_title == my.utf8tobig5(u"批踢踢實業坊 - Google Chrome") or program_title == my.utf8tobig5(u"批踢踢實業坊 - Brave") or program_title == my.utf8tobig5(u"批踢踢實業坊 - 個人 - Microsoft? Edge") or program_title == my.utf8tobig5(u"批踢踢實業坊 — Mozilla Firefox") or program_title == my.utf8tobig5(u"批踢踢實業坊 - Opera") or program_title == u"批踢踢實業坊" or program_title == u"批踢踢實業坊 - Google Chrome" or program_title == u"批踢踢實業坊 - Brave" or program_title == u"批踢踢實業坊 - 個人 - Microsoft? Edge" or program_title == u"批踢踢實業坊 — Mozilla Firefox" or program_title == u"批踢踢實業坊 - Opera":
       check_kind="1"            
       #win32clipboard.OpenClipboard()
       orin_clip=""
