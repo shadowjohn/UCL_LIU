@@ -151,7 +151,7 @@ Windows 顯示語言：中文（台灣）<br>
 <pre>
 (2025-12-23) v1.66 版：
 病毒碼提交掃描：1.66
-https://www.microsoft.com/en-us/wdsi/submission/5d1580dd-adfa-40c1-b0c6-daaf7fca920f
+https://www.microsoft.com/en-us/wdsi/submission/4fe236ae-c9de-4433-8124-620704f41ab4
 1. 205、chrome 瀏覽 term.ptt.cc 有時標題會變成 ws.ptt.cc，導致出字失敗
 
 (2025-10-30) v1.65 版：
