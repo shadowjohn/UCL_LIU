@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['uclliu.pyw'],
-             pathex=['D:\\GD\\UCL_LIU'],
+             pathex=['D:\\mytools\\UCL_LIU'],
              binaries=[],
              datas=[],
              hiddenimports=[],
