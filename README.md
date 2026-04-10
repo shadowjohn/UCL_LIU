@@ -115,16 +115,21 @@
 </kbd>
 <kbd>
 <img src="screenshot/install/3.png"><br>
-  <h3>
+  
 一、國家與地區，要選「台灣」<br>
 二、新增語言：找到「English (United States)」加入，但【中文(台灣)要設為預設值】<br>
 三、平常打字時，就選「ENG」打起來就會很順手。<br>
 四、Windows更新後，新版的畫面稍有不同，建議可以參考此圖<br>
 <img src="screenshot/l_setting_1.png"></br>
 Windows 顯示語言：中文（台灣）<br>
-在新增完 English (Unitied States) 後，將 English 的順位上移到第一位，才不會一直被注音煩<br>
-  </h3>
+在新增完 English (Unitied States) 後，將 English 的順位上移到第一位，才不會一直被注音煩<br>  
+  <img src="screenshot/remove_chinese.png"><br>
+  更極端一點，Win11 新版後，已可以允許直接刪除繁體中文台灣，羽山更習慣直接移除注音模式<br>
+  這樣完全不會被「，」的底線光標煩人…如果要打注音，就切到「肥模式」再打「';」就可以打注音了
+  <h3>
+
   </kbd>
+  
   <br>
     18、出字模式選擇：<br>
 	<kbd>
