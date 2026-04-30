@@ -45,6 +45,13 @@ wuxiami.txt
 /*.wav
 /.vs
 /tools/output.txt
+/tsf_bridge/UclTsfBridge/UclTsfBridge/
+/tsf_bridge/UclTsfBridge/x64/Release/*.exp
+/tsf_bridge/UclTsfBridge/x64/Release/*.lib
+/tsf_bridge/UclTsfBridge/x64/Release/*.pdb
+/tsf_bridge/UclTsfBridge/x64/Release/*.iobj
+/tsf_bridge/UclTsfBridge/x64/Release/*.ipdb
+/tsf_bridge/UclTsfBridge/x64/Release/*.tlog/
 /p27/PyInstaller-3.4.tar/dist/PyInstaller-3.4/dist/PyInstaller-3.4-py2.7.egg
 /p27/PyInstaller-3.4.tar/dist/PyInstaller-3.4/PyInstaller.egg-info/entry_points.txt
 /p27/PyInstaller-3.4.tar/dist/PyInstaller-3.4/PyInstaller.egg-info/PKG-INFO

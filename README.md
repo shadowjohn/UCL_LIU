@@ -22,9 +22,9 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2025-12-23 23:12
+<h3>最後更新日期：</h3>2026-05-01 00:00
 <br>
-<h3>版本：</h3>V 1.66<br>
+<h3>版本：</h3>V 1.67<br>
 <br>
 <h3>版權：</h3>
 　完全免費的 MIT-License
@@ -33,8 +33,8 @@
 </center>
 <h3>下載位置：</h3>
 <h3>～～提醒：如果遇到無法使用肥米的視窗，請關閉肥米輸入法，按右鍵，改用「系統管理員身分執行肥米輸入法」，應該就可以克服!!～～</h3>
-　　1.主程式(1.66 beta 版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>	
-　　2.主程式(1.66 beta 版 zip 版)：<a download="uclliu.zip" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.zip</a><br>	
+　　1.主程式(1.67 beta 版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>	
+　　2.主程式(1.67 beta 版 zip 版)：<a download="uclliu.zip" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.zip</a><br>	
 　　3.主程式(1.65 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.65/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.65/uclliu.exe</a><br>
 　　4.主程式(1.65 穩定版 zip 版)：<a download="uclliu.zip" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.65/uclliu.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.65/uclliu.zip</a><br>
 　　5.歷年版本：<a target="_blank" href="https://github.com/shadowjohn/UCL_LIU/tree/master/RELEASE">歷代版本</a><br>
@@ -100,6 +100,9 @@
 　　　　play_sound_enable = 0 # 是否有打字音， 0 或 1<br>
 　　　　startup_default_ucl = 1 # 程式啟動時為「肥模式」，0 = 英模式，1 = 肥模式<br>
 　　　　enable_half_full = 1 # 允許使用(Shift+Space) 切換 全形/半形<br>
+　　　　tsf_bridge_enable = 0 # 是否啟用 TSF Bridge 出字實驗功能，0 或 1<br>
+　　　　tsf_bridge_auto_register = 1 # 啟動時是否協助註冊 TSF Bridge，0 或 1<br>
+　　　　tsf_bridge_timeout_ms = 80 # TSF Bridge 出字逾時毫秒，失敗會回到原本出字方式<br>
 　　17、環境設定(強列建議)：<br>
 <kbd>
 <img src="screenshot/install/1.png"><br>
@@ -149,11 +152,26 @@ Windows 顯示語言：中文（台灣）<br>
 		<a target="_blank" href="screenshot/win11逗號反光問題.mp4">win11逗號反光問題.mp4</a><br>
 		修正方式，主要還是跟「17」的修正方式一樣，增加「英文(United States)」語系，並上移到最優先，打字時使用 ENG 模式即可
 	</kbd>
+	<br>
+	21、TSF Bridge 出字模式：<br>
+	<kbd>
+		<h3>1.67 版加入實驗性 TSF Bridge 出字模式。右下角選單「選擇出字模式」可切換「TSF出字模式」，肥米會先嘗試透過 Windows TSF commit 出字，失敗時自動回到原本出字流程。</h3>
+		<h3>第一次使用若偵測到 TSF Bridge 尚未註冊，會詢問是否註冊；若之後不想使用，可在右下角選單「TSF Bridge 管理」解除註冊。</h3>
+		<h3>一般使用者不需要自行編譯 TSF Bridge，只要使用 release 內附的 dist\tsf_bridge\UclTsfBridge.dll 即可。</h3>
+		<h3>若要自行編譯 TSF Bridge，請安裝 Microsoft Visual Studio 2022 Build Tools 或 Visual Studio Community，安裝時勾選「使用 C++ 的桌面開發」工作負載，並包含 MSBuild、MSVC C++ x64/x86 build tools、Windows 10/11 SDK。</h3>
+		<h3>安裝完成後，在專案根目錄執行 build_tsf.bat，會編譯 Release x64 並複製 UclTsfBridge.dll、register_tsf_bridge.bat、unregister_tsf_bridge.bat 到 dist\tsf_bridge。</h3>
+	</kbd>
 <br>
 
 <h3>更新記錄：</h3>
 
 <pre>
+(2026-05-01) v1.67 版：
+病毒碼提交掃描：1.67
+1. 206、加入實驗性 TSF Bridge 出字模式，可在右下角選單切換「TSF出字模式」
+2. 207、啟動時協助檢查 TSF Bridge DLL 與註冊狀態，出字失敗會自動 fallback 原本 senddata 流程
+3. 208、右下角選單加入「TSF Bridge 管理」，可解除註冊 TSF Bridge
+
 (2025-12-23) v1.66 版：
 病毒碼提交掃描：1.66
 https://www.microsoft.com/en-us/wdsi/submission/4fe236ae-c9de-4433-8124-620704f41ab4

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION = "1.66"
+VERSION = "1.67"
 import __main__  # 取得自己
 #from doctest import debug
 import os
@@ -40,6 +40,7 @@ import random
 import pyaudio
 import audioop
 import wave
+import json
 
 #2021-08-08 新版右下角 traybar
 from traybar import SysTrayIcon
@@ -130,6 +131,15 @@ from opencc import OpenCC
 myopencc = OpenCC('s2t')
 import ctypes
 
+TSF_BRIDGE_CLSID = "{77B90778-7368-4F68-B022-C50005EBBE72}"
+TSF_BRIDGE_PIPE = r"\\.\pipe\uclliu_tsf_bridge"
+TSF_BRIDGE_PIPE_PREFIX = r"\\.\pipe\uclliu_tsf_bridge_"
+TSF_BRIDGE_DLL_CANDIDATES = [
+  PWD + "\\tsf_bridge\\UclTsfBridge\\x64\\Release\\UclTsfBridge.dll",
+  PWD + "\\tsf_bridge\\UclTsfBridge.dll",
+  PWD + "\\UclTsfBridge.dll"
+]
+
 
 # Debug 模式
 is_DEBUG_mode = False
@@ -171,6 +181,273 @@ def debug_print(data):
 #debug_print("sys.argv[1]: ")
 #debug_print(sys.argv[1])
 #my.exit()
+
+def tsf_bridge_get_dll_path():
+  for dll_path in TSF_BRIDGE_DLL_CANDIDATES:
+    if my.is_file(dll_path):
+      return dll_path
+  return ""
+
+def tsf_bridge_get_regsvr32_path():
+  # Python 2.7 目前多半是 32-bit，需透過 Sysnative 明確呼叫 64-bit regsvr32。
+  windir = os.environ.get("WINDIR", "C:\\Windows")
+  candidates = [
+    windir + "\\Sysnative\\regsvr32.exe",
+    windir + "\\System32\\regsvr32.exe",
+    "regsvr32.exe"
+  ]
+  for path in candidates:
+    if path == "regsvr32.exe" or my.is_file(path):
+      return path
+  return "regsvr32.exe"
+
+def tsf_bridge_is_registered():
+  try:
+    import _winreg
+    key_path = "Software\\Classes\\CLSID\\%s\\InProcServer32" % TSF_BRIDGE_CLSID
+    access_list = [_winreg.KEY_READ]
+    if hasattr(_winreg, "KEY_WOW64_64KEY"):
+      # TSF Bridge 是 x64 DLL；32-bit Python 要明確查 64-bit registry view。
+      access_list.insert(0, _winreg.KEY_READ | _winreg.KEY_WOW64_64KEY)
+    for access in access_list:
+      key = None
+      try:
+        key = _winreg.OpenKey(_winreg.HKEY_CURRENT_USER, key_path, 0, access)
+        value, _ = _winreg.QueryValueEx(key, None)
+        if value != "":
+          return True
+      except:
+        pass
+      finally:
+        try:
+          if key is not None:
+            _winreg.CloseKey(key)
+        except:
+          pass
+    return False
+  except:
+    return False
+
+def tsf_bridge_run_register(dll_path):
+  try:
+    params = u'/s "%s"' % unicode(dll_path)
+    result = ctypes.windll.shell32.ShellExecuteW(
+      None,
+      None,
+      unicode(tsf_bridge_get_regsvr32_path()),
+      params,
+      None,
+      0
+    )
+    return result > 32
+  except Exception as e:
+    debug_print("TSF bridge register failed: %s" % e)
+    return False
+
+def tsf_bridge_run_unregister(dll_path):
+  try:
+    params = u'/u /s "%s"' % unicode(dll_path)
+    result = ctypes.windll.shell32.ShellExecuteW(
+      None,
+      None,
+      unicode(tsf_bridge_get_regsvr32_path()),
+      params,
+      None,
+      0
+    )
+    return result > 32
+  except Exception as e:
+    debug_print("TSF bridge unregister failed: %s" % e)
+    return False
+
+def tsf_bridge_confirm_unregister():
+  md = gtk.MessageDialog(
+    None,
+    gtk.DIALOG_DESTROY_WITH_PARENT,
+    gtk.MESSAGE_QUESTION,
+    gtk.BUTTONS_YES_NO,
+    "是否解除註冊 UCLLIU TSF Bridge？\n\n解除後會回到原本出字方式。"
+  )
+  md.set_position(gtk.WIN_POS_CENTER)
+  response = md.run()
+  md.destroy()
+  return response == gtk.RESPONSE_YES
+
+def tsf_bridge_confirm_enable():
+  md = gtk.MessageDialog(
+    None,
+    gtk.DIALOG_DESTROY_WITH_PARENT,
+    gtk.MESSAGE_QUESTION,
+    gtk.BUTTONS_YES_NO,
+    "是否啟用實驗性 TSF 出字？\n\n啟用後會先嘗試用 TSF commit 出字，失敗會自動回到原本出字方式。"
+  )
+  md.set_position(gtk.WIN_POS_CENTER)
+  response = md.run()
+  md.destroy()
+  return response == gtk.RESPONSE_YES
+
+def tsf_bridge_confirm_register():
+  md = gtk.MessageDialog(
+    None,
+    gtk.DIALOG_DESTROY_WITH_PARENT,
+    gtk.MESSAGE_QUESTION,
+    gtk.BUTTONS_YES_NO,
+    "UCLLIU TSF Bridge 尚未註冊，是否現在註冊？\n\n註冊失敗不會影響原本肥米出字。"
+  )
+  md.set_position(gtk.WIN_POS_CENTER)
+  response = md.run()
+  md.destroy()
+  return response == gtk.RESPONSE_YES
+
+def tsf_bridge_get_foreground_pid():
+  try:
+    hwnd = win32gui.GetForegroundWindow()
+    if hwnd == 0:
+      return 0
+    pid_info = win32process.GetWindowThreadProcessId(hwnd)
+    if pid_info and len(pid_info) >= 2:
+      return int(pid_info[1])
+  except:
+    pass
+  return 0
+
+def tsf_bridge_get_pipe_candidates():
+  candidates = []
+  pid = tsf_bridge_get_foreground_pid()
+  if pid > 0:
+    candidates.append("%s%d" % (TSF_BRIDGE_PIPE_PREFIX, pid))
+  candidates.append(TSF_BRIDGE_PIPE)
+  return candidates
+
+def tsf_bridge_request_on_pipe(pipe_name, cmd, data=None, timeout_ms=80):
+  handle = None
+  try:
+    import win32file
+    import win32pipe
+    win32pipe.WaitNamedPipe(pipe_name, int(timeout_ms))
+    handle = win32file.CreateFile(
+      pipe_name,
+      win32con.GENERIC_READ | win32con.GENERIC_WRITE,
+      0,
+      None,
+      win32con.OPEN_EXISTING,
+      0,
+      None
+    )
+    request = {"cmd": cmd}
+    if data is not None:
+      request.update(data)
+    payload = json.dumps(request, ensure_ascii=False)
+    if isinstance(payload, unicode):
+      payload = payload.encode("utf-8")
+    if not payload.endswith("\n"):
+      payload += "\n"
+    win32file.WriteFile(handle, payload)
+    _, response = win32file.ReadFile(handle, 8192)
+    if isinstance(response, unicode) == False:
+      response = response.decode("utf-8", "ignore")
+    return json.loads(response)
+  except Exception as e:
+    return {"ok": False, "error": "PIPE_ERROR", "detail": str(e)}
+  finally:
+    try:
+      if handle is not None:
+        handle.Close()
+    except:
+      pass
+
+def tsf_bridge_request(cmd, data=None, timeout_ms=80):
+  last_response = {"ok": False, "error": "PIPE_ERROR"}
+  for pipe_name in tsf_bridge_get_pipe_candidates():
+    response = tsf_bridge_request_on_pipe(pipe_name, cmd, data, timeout_ms)
+    if response.get("ok", False) == True:
+      return response
+    if response.get("error", "") != "PIPE_ERROR":
+      return response
+    last_response = response
+  return last_response
+
+def tsf_bridge_commit_text(text):
+  global config
+  if config["DEFAULT"].get("TSF_BRIDGE_ENABLE", "0") != "1":
+    return False
+  if text is None or text == "":
+    return False
+  timeout_ms = 80
+  try:
+    timeout_ms = int(config["DEFAULT"].get("TSF_BRIDGE_TIMEOUT_MS", "80"))
+  except:
+    timeout_ms = 80
+  response = tsf_bridge_request("commit_text", {"text": unicode(text)}, timeout_ms)
+  if response.get("ok", False) == True:
+    debug_print("TSF bridge commit ok")
+    return True
+  debug_print("TSF bridge commit fallback: %s" % response)
+  return False
+
+def tsf_bridge_startup_check():
+  global config
+  dll_path = tsf_bridge_get_dll_path()
+  if dll_path == "":
+    debug_print("TSF bridge missing")
+    return
+  if config["DEFAULT"].get("TSF_BRIDGE_ENABLE", "0") != "1" and config["DEFAULT"].get("TSF_BRIDGE_PROMPTED_ENABLE", "0") != "1":
+    config["DEFAULT"]["TSF_BRIDGE_PROMPTED_ENABLE"] = "1"
+    if tsf_bridge_confirm_enable():
+      config["DEFAULT"]["TSF_BRIDGE_ENABLE"] = "1"
+    saveConfig()
+
+  if config["DEFAULT"].get("TSF_BRIDGE_ENABLE", "0") != "1":
+    debug_print("TSF bridge disabled")
+    return
+  if tsf_bridge_is_registered():
+    status = tsf_bridge_request("status", None, 30)
+    debug_print("TSF bridge status: %s" % status)
+    return
+  if config["DEFAULT"].get("TSF_BRIDGE_AUTO_REGISTER", "0") != "1":
+    debug_print("TSF bridge not registered; auto register disabled")
+    return
+  if config["DEFAULT"].get("TSF_BRIDGE_PROMPTED_REGISTER", "0") == "1":
+    debug_print("TSF bridge not registered; already prompted")
+    return
+
+  config["DEFAULT"]["TSF_BRIDGE_PROMPTED_REGISTER"] = "1"
+  saveConfig()
+  if tsf_bridge_confirm_register():
+    tsf_bridge_run_register(dll_path)
+
+def tsf_bridge_enable_from_menu():
+  global config
+  dll_path = tsf_bridge_get_dll_path()
+  if dll_path == "":
+    md = gtk.MessageDialog(
+      None,
+      gtk.DIALOG_DESTROY_WITH_PARENT,
+      gtk.MESSAGE_ERROR,
+      gtk.BUTTONS_OK,
+      "找不到 UCLLIU TSF Bridge DLL。\n\n請確認 dist\\tsf_bridge\\UclTsfBridge.dll 或 tsf_bridge 目錄存在。"
+    )
+    md.set_position(gtk.WIN_POS_CENTER)
+    md.run()
+    md.destroy()
+    return False
+
+  if tsf_bridge_confirm_enable() == False:
+    config["DEFAULT"]["TSF_BRIDGE_ENABLE"] = "0"
+    config["DEFAULT"]["TSF_BRIDGE_PROMPTED_ENABLE"] = "1"
+    saveConfig()
+    return False
+
+  config["DEFAULT"]["TSF_BRIDGE_ENABLE"] = "1"
+  config["DEFAULT"]["TSF_BRIDGE_PROMPTED_ENABLE"] = "1"
+  saveConfig()
+
+  if tsf_bridge_is_registered() == False and config["DEFAULT"].get("TSF_BRIDGE_AUTO_REGISTER", "0") == "1":
+    if tsf_bridge_confirm_register():
+      tsf_bridge_run_register(dll_path)
+      config["DEFAULT"]["TSF_BRIDGE_PROMPTED_REGISTER"] = "1"
+      saveConfig()
+  return True
     
 def md5_file(fileName):
     """Compute md5 hash of the specified file"""
@@ -373,7 +650,12 @@ config['DEFAULT'] = {
                       "CTRL_SP": "0", #使用CTRL+SPACE換肥米
                       "PLAY_SOUND_ENABLE": "0", #打字音
                       "STARTUP_DEFAULT_UCL": "1", #啟動時，預設為 肥，改為 0 則為 英
-                      "ENABLE_HALF_FULL": "1" #允許切換 全形半形
+                      "ENABLE_HALF_FULL": "1", #允許切換 全形半形
+                      "TSF_BRIDGE_ENABLE": "0", #TSF Bridge 出字實驗功能，預設關閉避免影響既有使用者
+                      "TSF_BRIDGE_PROMPTED_ENABLE": "0", #第一次偵測到 TSF Bridge 時詢問是否啟用
+                      "TSF_BRIDGE_AUTO_REGISTER": "1", #啟動時協助檢查與註冊 TSF Bridge
+                      "TSF_BRIDGE_TIMEOUT_MS": "80", #TSF Bridge pipe 等待時間，過久會影響打字手感
+                      "TSF_BRIDGE_PROMPTED_REGISTER": "0" #避免每次啟動重複詢問註冊
                     };
 if my.is_file(INI_CONFIG_FILE):
   _config = configparser.ConfigParser()
@@ -397,6 +679,11 @@ config['DEFAULT']['CTRL_SP'] = str(int(config['DEFAULT']['CTRL_SP']));
 config['DEFAULT']['PLAY_SOUND_ENABLE'] = str(int(config['DEFAULT']['PLAY_SOUND_ENABLE']));
 config['DEFAULT']['STARTUP_DEFAULT_UCL'] = str(int(config['DEFAULT']['STARTUP_DEFAULT_UCL']));
 config['DEFAULT']['ENABLE_HALF_FULL'] = str(int(config['DEFAULT']['ENABLE_HALF_FULL']));
+config['DEFAULT']['TSF_BRIDGE_ENABLE'] = str(int(config['DEFAULT']['TSF_BRIDGE_ENABLE']));
+config['DEFAULT']['TSF_BRIDGE_PROMPTED_ENABLE'] = str(int(config['DEFAULT']['TSF_BRIDGE_PROMPTED_ENABLE']));
+config['DEFAULT']['TSF_BRIDGE_AUTO_REGISTER'] = str(int(config['DEFAULT']['TSF_BRIDGE_AUTO_REGISTER']));
+config['DEFAULT']['TSF_BRIDGE_TIMEOUT_MS'] = str(int(config['DEFAULT']['TSF_BRIDGE_TIMEOUT_MS']));
+config['DEFAULT']['TSF_BRIDGE_PROMPTED_REGISTER'] = str(int(config['DEFAULT']['TSF_BRIDGE_PROMPTED_REGISTER']));
 
 # merge f_arr and f_big5_arr
 config['DEFAULT']['SEND_KIND_1_PASTE'] = my.trim(config['DEFAULT']['SEND_KIND_1_PASTE'])
@@ -480,6 +767,31 @@ if int(config['DEFAULT']['ENABLE_HALF_FULL'])<=0:
 else:
   config['DEFAULT']['ENABLE_HALF_FULL']="1"    
 
+if int(config['DEFAULT']['TSF_BRIDGE_ENABLE'])<=0:
+  config['DEFAULT']['TSF_BRIDGE_ENABLE']="0"
+else:
+  config['DEFAULT']['TSF_BRIDGE_ENABLE']="1"
+
+if int(config['DEFAULT']['TSF_BRIDGE_PROMPTED_ENABLE'])<=0:
+  config['DEFAULT']['TSF_BRIDGE_PROMPTED_ENABLE']="0"
+else:
+  config['DEFAULT']['TSF_BRIDGE_PROMPTED_ENABLE']="1"
+
+if int(config['DEFAULT']['TSF_BRIDGE_AUTO_REGISTER'])<=0:
+  config['DEFAULT']['TSF_BRIDGE_AUTO_REGISTER']="0"
+else:
+  config['DEFAULT']['TSF_BRIDGE_AUTO_REGISTER']="1"
+
+if int(config['DEFAULT']['TSF_BRIDGE_TIMEOUT_MS'])<10:
+  config['DEFAULT']['TSF_BRIDGE_TIMEOUT_MS']="10"
+if int(config['DEFAULT']['TSF_BRIDGE_TIMEOUT_MS'])>1000:
+  config['DEFAULT']['TSF_BRIDGE_TIMEOUT_MS']="1000"
+
+if int(config['DEFAULT']['TSF_BRIDGE_PROMPTED_REGISTER'])<=0:
+  config['DEFAULT']['TSF_BRIDGE_PROMPTED_REGISTER']="0"
+else:
+  config['DEFAULT']['TSF_BRIDGE_PROMPTED_REGISTER']="1"
+
 # GUI Font
 # Issue 198、自定詞庫字體顯示支援「🅅 U+1F145」、「☒ U+2612」
 # GLOBAL_FONT_FAMILY = "Mingliu,Serif,Malgun Gothic,roman,Mingliu-ExtB" #roman
@@ -504,12 +816,22 @@ debug_print("SEND_KIND_1_PASTE:%s" % (config["DEFAULT"]["SEND_KIND_1_PASTE"]))
 debug_print("SEND_KIND_2_BIG5:%s" % (config["DEFAULT"]["SEND_KIND_2_BIG5"]))
 debug_print("SP:%s" % (config["DEFAULT"]["SP"]))
 debug_print("SHOW_PHONE_CODE:%s" % (config["DEFAULT"]["SHOW_PHONE_CODE"]))
+debug_print("TSF_BRIDGE_ENABLE:%s" % (config["DEFAULT"]["TSF_BRIDGE_ENABLE"]))
+debug_print("TSF_BRIDGE_PROMPTED_ENABLE:%s" % (config["DEFAULT"]["TSF_BRIDGE_PROMPTED_ENABLE"]))
+debug_print("TSF_BRIDGE_AUTO_REGISTER:%s" % (config["DEFAULT"]["TSF_BRIDGE_AUTO_REGISTER"]))
+debug_print("TSF_BRIDGE_TIMEOUT_MS:%s" % (config["DEFAULT"]["TSF_BRIDGE_TIMEOUT_MS"]))
 
 def saveConfig():
   global config
   global INI_CONFIG_FILE
   with open(INI_CONFIG_FILE, 'w') as configfile:
     config.write(configfile)
+
+tsf_bridge_startup_check()
+if config["DEFAULT"].get("TSF_BRIDGE_ENABLE", "0") == "1":
+  # TSF Bridge 已啟用時，啟動後直接走 TSF 出字；否則只會註冊但仍停在舊出字模式。
+  DEFAULT_OUTPUT_TYPE = "TSF"
+
 def run_big_small(kind):
   global config
   global GLOBAL_FONT_FAMILY
@@ -2183,6 +2505,7 @@ def senddata(data):
   global DEFAULT_OUTPUT_TYPE
   debug_print("senddata")
   debug_print(unicode(data))
+  debug_print("senddata DEFAULT_OUTPUT_TYPE: %s" % DEFAULT_OUTPUT_TYPE)
   #debug_print(data)
   #for i in range(0,len(mTC_TDATA)):
   #  debug_print(mTC_TDATA[i]);
@@ -2198,6 +2521,12 @@ def senddata(data):
   play_ucl_label=""
   ucl_find_data=[]  
   type_label_set_text()  
+
+  # TSF Bridge 是實驗性出字通道；只有選單明確切到 TSF 模式才嘗試。
+  if DEFAULT_OUTPUT_TYPE == "TSF":
+    if tsf_bridge_commit_text(data):
+      return
+    debug_print("TSF bridge commit failed; fallback to legacy output")
   
   
   
@@ -3649,6 +3978,12 @@ class TrayIcon():
       
       ucl_send_kind_list = ()
       is_o = ""
+      if DEFAULT_OUTPUT_TYPE=="TSF":
+        is_o = my18.auto("●")
+      else:
+        is_o = my18.auto("　")
+      ucl_send_kind_list = ucl_send_kind_list + (('%s%s%s %s' % (my18.auto("【"),is_o,my18.auto("】"),my18.auto("TSF出字模式")) , None, [self.m_output_type,"TSF"] ),)
+
       if DEFAULT_OUTPUT_TYPE=="DEFAULT":
         is_o = my18.auto("●")
       else:
@@ -3670,6 +4005,10 @@ class TrayIcon():
       
         
       menu_options = menu_options + (((my18.auto("3.選擇出字模式"), None, ucl_send_kind_list),))       
+
+      _menu_tsf_bridge_arr = ()
+      _menu_tsf_bridge_arr = _menu_tsf_bridge_arr + ((my18.auto("解除註冊 TSF Bridge"), None, [self.m_tsf_bridge_unregister]),)
+      menu_options = menu_options + (((my18.auto("TSF Bridge 管理"), None, _menu_tsf_bridge_arr),))
             
       #2021-12-01 加入畫面操作相關
       _menu_ui_arr = ()
@@ -3828,9 +4167,37 @@ class TrayIcon():
       self.reload_tray()        
     def m_output_type(self,event,kind="DEFAULT"):
       global DEFAULT_OUTPUT_TYPE
+      global config
       #debug_print(kind)
       DEFAULT_OUTPUT_TYPE = kind[0]
+      if DEFAULT_OUTPUT_TYPE == "TSF":
+        if tsf_bridge_enable_from_menu() == False:
+          DEFAULT_OUTPUT_TYPE = "DEFAULT"
       self.reload_tray() 
+    def m_tsf_bridge_unregister(self,event,data=None):
+      global DEFAULT_OUTPUT_TYPE
+      global config
+      dll_path = tsf_bridge_get_dll_path()
+      if dll_path == "":
+        md = gtk.MessageDialog(
+          None,
+          gtk.DIALOG_DESTROY_WITH_PARENT,
+          gtk.MESSAGE_ERROR,
+          gtk.BUTTONS_OK,
+          "找不到 UCLLIU TSF Bridge DLL，無法解除註冊。"
+        )
+        md.set_position(gtk.WIN_POS_CENTER)
+        md.run()
+        md.destroy()
+        return
+      if tsf_bridge_confirm_unregister():
+        tsf_bridge_run_unregister(dll_path)
+        config["DEFAULT"]["TSF_BRIDGE_ENABLE"] = "0"
+        config["DEFAULT"]["TSF_BRIDGE_PROMPTED_REGISTER"] = "0"
+        saveConfig()
+        if DEFAULT_OUTPUT_TYPE == "TSF":
+          DEFAULT_OUTPUT_TYPE = "DEFAULT"
+        self.reload_tray()
     def m_sp_switch(self,event,data=None):
       global config
       if config['DEFAULT']['SP'] == "0":        
