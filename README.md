@@ -172,22 +172,14 @@
 - (Third party) liu_unitab2cin.py, cintojson.py
 
 ### 完整歷史更新記錄：
-<pre>
-(2026-05-01) v1.67 版：
-1. 206、加入實驗性 TSF Bridge 出字模式
-2. 207、啟動時協助檢查 TSF Bridge DLL 與註冊狀態
-3. 208、右下角選單加入「TSF Bridge 管理」
-4. 209、以系統管理員身分重新啟動功能
-
-... (此處包含 2017 年至今的所有記錄)
-</pre>
+詳細的版本演進記錄請參閱 [CHANGELOG.md](./CHANGELOG.md)。
 
 ### ToDo List：
 - [x] (Done) 送出字元方法優化
 - [x] (Done) 遊戲模式
 - [x] (Done) 同音字查詢
 - [ ] (137) 相關字詞推薦功能
-- [ ] (174) 符號快選選單
+- [ ] (174) 表情、符號快選選單
 </details>
 
 ---
