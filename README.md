@@ -134,6 +134,7 @@
 - **自動診斷**：啟動時自動檢查 DLL 狀態，失敗自動 Fallback。
 - **管理功能**：新增 TSF 管理選單，可隨時註冊或解除註冊。
 - **權限導引**：新增「以管理員身分重啟」選單功能。
+- **病毒掃描**: https://www.microsoft.com/en-us/wdsi/submission/464890a2-68c0-4cd7-83ae-5205ed0ecea4
 
 <details>
 <summary><b>查看完整歷史更新記錄</b></summary>
