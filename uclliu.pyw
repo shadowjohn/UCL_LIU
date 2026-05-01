@@ -135,6 +135,8 @@ TSF_BRIDGE_CLSID = "{77B90778-7368-4F68-B022-C50005EBBE72}"
 TSF_BRIDGE_PIPE = r"\\.\pipe\uclliu_tsf_bridge"
 TSF_BRIDGE_PIPE_PREFIX = r"\\.\pipe\uclliu_tsf_bridge_"
 TSF_BRIDGE_DLL_CANDIDATES = [
+  PWD + "\\dist\\tsf_bridge\\x64\\UclTsfBridge.dll",
+  PWD + "\\tsf_bridge\\x64\\UclTsfBridge.dll",
   PWD + "\\tsf_bridge\\UclTsfBridge\\x64\\Release\\UclTsfBridge.dll",
   PWD + "\\tsf_bridge\\UclTsfBridge.dll",
   PWD + "\\UclTsfBridge.dll"
@@ -156,6 +158,7 @@ def about_uclliu():
   _msg_text += "「,,,LOCK」進入遊戲模式\n"
   _msg_text += "「,,,C」簡體模式\n"
   _msg_text += "「,,,T」繁體模式\n"
+
   _msg_text += "「,,,S」UI變窄\n"
   _msg_text += "「,,,L」UI變寬\n"
   _msg_text += "「,,,+」UI變大\n"
@@ -163,6 +166,9 @@ def about_uclliu():
   _msg_text += "「,,,X」框字的字根轉回文字\n"
   _msg_text += "「,,,Z」框字的文字變成字根\n"
   _msg_text += "「,,,BOX」自定詞庫\n"
+  _msg_text += "\nTSF 模式說明：\n"
+  _msg_text += "1. 選單切換「TSF 出字模式」，初次使用需管理員權限註冊輸入法功能\n"
+  _msg_text += "2. Windows 右下角切換為「UCLLIU TSF Bridge」\n"
   return _msg_text  
 
 if len(sys.argv)!=2:
@@ -178,9 +184,16 @@ def debug_print(data):
     except:
       pass
 
+def is_admin():
+  try:
+    return ctypes.windll.shell32.IsUserAnAdmin()
+  except:
+    return False
+
 #debug_print("sys.argv[1]: ")
 #debug_print(sys.argv[1])
 #my.exit()
+
 
 def tsf_bridge_get_dll_path():
   for dll_path in TSF_BRIDGE_DLL_CANDIDATES:
@@ -209,31 +222,38 @@ def tsf_bridge_is_registered():
     if hasattr(_winreg, "KEY_WOW64_64KEY"):
       # TSF Bridge 是 x64 DLL；32-bit Python 要明確查 64-bit registry view。
       access_list.insert(0, _winreg.KEY_READ | _winreg.KEY_WOW64_64KEY)
-    for access in access_list:
-      key = None
-      try:
-        key = _winreg.OpenKey(_winreg.HKEY_CURRENT_USER, key_path, 0, access)
-        value, _ = _winreg.QueryValueEx(key, None)
-        if value != "":
-          return True
-      except:
-        pass
-      finally:
+    
+    # 檢查 HKCU 與 HKLM，因為註冊可能在任一處 (regsvr32 預設在 HKLM)。
+    for root in [_winreg.HKEY_CURRENT_USER, _winreg.HKEY_LOCAL_MACHINE]:
+      for access in access_list:
+        key = None
         try:
-          if key is not None:
-            _winreg.CloseKey(key)
+          key = _winreg.OpenKey(root, key_path, 0, access)
+          value, _ = _winreg.QueryValueEx(key, None)
+          if value != "":
+            return True
         except:
           pass
+        finally:
+          try:
+            if key is not None:
+              _winreg.CloseKey(key)
+          except:
+            pass
     return False
   except:
     return False
 
 def tsf_bridge_run_register(dll_path):
+  if not is_admin():
+    # 雖然 ShellExecuteW runas 會嘗試提權，但依據需求，我們在此先擋住。
+    return False
   try:
     params = u'/s "%s"' % unicode(dll_path)
+    # 使用 runas 確保有管理員權限進行註冊。
     result = ctypes.windll.shell32.ShellExecuteW(
       None,
-      None,
+      u"runas",
       unicode(tsf_bridge_get_regsvr32_path()),
       params,
       None,
@@ -247,9 +267,10 @@ def tsf_bridge_run_register(dll_path):
 def tsf_bridge_run_unregister(dll_path):
   try:
     params = u'/u /s "%s"' % unicode(dll_path)
+    # 使用 runas 確保有管理員權限解除註冊。
     result = ctypes.windll.shell32.ShellExecuteW(
       None,
-      None,
+      u"runas",
       unicode(tsf_bridge_get_regsvr32_path()),
       params,
       None,
@@ -418,6 +439,18 @@ def tsf_bridge_startup_check():
 
 def tsf_bridge_enable_from_menu():
   global config
+  if not is_admin():
+    md = gtk.MessageDialog(
+      None,
+      gtk.DIALOG_DESTROY_WITH_PARENT,
+      gtk.MESSAGE_WARNING,
+      gtk.BUTTONS_OK,
+      "「TSF 出字模式」需要系統管理員權限才能啟用與設定。\n\n請以「系統管理員身分執行」肥米輸入法。"
+    )
+    md.set_position(gtk.WIN_POS_CENTER)
+    md.run()
+    md.destroy()
+    return False
   dll_path = tsf_bridge_get_dll_path()
   if dll_path == "":
     md = gtk.MessageDialog(
@@ -442,11 +475,32 @@ def tsf_bridge_enable_from_menu():
   config["DEFAULT"]["TSF_BRIDGE_PROMPTED_ENABLE"] = "1"
   saveConfig()
 
-  if tsf_bridge_is_registered() == False and config["DEFAULT"].get("TSF_BRIDGE_AUTO_REGISTER", "0") == "1":
+  if tsf_bridge_is_registered() == False:
+    # 從選單手動啟用時，無視 TSF_BRIDGE_AUTO_REGISTER 設定，直接詢問註冊。
     if tsf_bridge_confirm_register():
       tsf_bridge_run_register(dll_path)
       config["DEFAULT"]["TSF_BRIDGE_PROMPTED_REGISTER"] = "1"
       saveConfig()
+  
+  # 提醒使用者切換輸入法
+  md = gtk.MessageDialog(
+    None,
+    gtk.DIALOG_DESTROY_WITH_PARENT,
+    gtk.MESSAGE_INFO,
+    gtk.BUTTONS_OK,
+    "「TSF 出字模式」已啟用！\n\n重要提醒：\n請將 Windows 右下角的輸入法切換為「UCLLIU TSF Bridge」才能正常出字。\n(如果您有看到提示，也可以按一下 Win+Space 切換)"
+  )
+  md.set_position(gtk.WIN_POS_CENTER)
+  md.run()
+  md.destroy()
+  
+  # 嘗試自動切換 (如果技術上可行，這裡可以加入更多嘗試)
+  try:
+    # 這裡可以透過 ITfInputProcessorProfiles 嘗試啟動，但目前先以提示為主
+    pass
+  except:
+    pass
+
   return True
     
 def md5_file(fileName):
@@ -3965,6 +4019,10 @@ class TrayIcon():
       menu_options = (
           (my18.auto("1.關於肥米輸入法"), None, [m_about] ),          
         )
+      if not is_admin():
+        menu_options = menu_options + ((
+          (my18.auto("★以系統管理員身分執行肥米"), None, [self.m_run_as_admin] ),
+        ))
       if gamemode_btn.get_label()=="正常模式":
         menu_options = menu_options + ((
           (my18.auto("2.切換至「遊戲模式」"), None, [self.m_game_switch] ),          
@@ -4177,6 +4235,18 @@ class TrayIcon():
     def m_tsf_bridge_unregister(self,event,data=None):
       global DEFAULT_OUTPUT_TYPE
       global config
+      if not is_admin():
+        md = gtk.MessageDialog(
+          None,
+          gtk.DIALOG_DESTROY_WITH_PARENT,
+          gtk.MESSAGE_WARNING,
+          gtk.BUTTONS_OK,
+          "解除註冊 TSF Bridge 需要系統管理員權限。\n\n請以「系統管理員身分執行」肥米輸入法。"
+        )
+        md.set_position(gtk.WIN_POS_CENTER)
+        md.run()
+        md.destroy()
+        return
       dll_path = tsf_bridge_get_dll_path()
       if dll_path == "":
         md = gtk.MessageDialog(
@@ -4257,6 +4327,27 @@ class TrayIcon():
       #self.systray.shutdown()      
       x_btn_click(self) 
       #self.reload_tray()  
+    def m_run_as_admin(self,event,data=None):
+      try:
+        global check_file_run
+        path = sys.executable
+        if not path.lower().endswith(".exe"):
+          path = sys.argv[0]
+        params = u""
+        if len(sys.argv) > 1:
+          params = u" ".join([u'"%s"' % unicode(arg) for arg in sys.argv[1:]])
+        
+        # 關閉 lock 檔案，避免重啟後的實例偵測到重複執行
+        try:
+          portalocker.unlock(check_file_run)
+          check_file_run.close()
+        except:
+          pass
+
+        ctypes.windll.shell32.ShellExecuteW(None, u"runas", unicode(path), params, None, 1)
+        sys.exit(0)
+      except:
+        pass
     def m_none(self,data=None):
       return False
     def m_run_long(self,event,data=None):

@@ -2,7 +2,8 @@
 setlocal
 
 set "PROJECT=tsf_bridge\UclTsfBridge\UclTsfBridge.vcxproj"
-set "OUT_DLL=tsf_bridge\UclTsfBridge\x64\Release\UclTsfBridge.dll"
+set "OUT_DLL_X64=tsf_bridge\UclTsfBridge\x64\Release\UclTsfBridge.dll"
+set "OUT_DLL_X86=tsf_bridge\UclTsfBridge\Win32\Release\UclTsfBridge.dll"
 set "DIST_DIR=dist\tsf_bridge"
 set "MSBUILD="
 
@@ -28,34 +29,38 @@ if not exist "%PROJECT%" (
 )
 
 echo [INFO] MSBuild: %MSBUILD%
+
 echo [INFO] Build TSF Bridge Release x64...
 "%MSBUILD%" "%PROJECT%" /p:Configuration=Release /p:Platform=x64
 if errorlevel 1 (
-  echo [ERROR] TSF Bridge build failed.
+  echo [ERROR] TSF Bridge x64 build failed.
   exit /b 1
 )
 
-if not exist "%OUT_DLL%" (
-  echo [ERROR] Output DLL not found: %OUT_DLL%
-  exit /b 1
-)
-
-if not exist "%DIST_DIR%" mkdir "%DIST_DIR%"
-copy /Y "%OUT_DLL%" "%DIST_DIR%\UclTsfBridge.dll"
+echo [INFO] Build TSF Bridge Release Win32...
+"%MSBUILD%" "%PROJECT%" /p:Configuration=Release /p:Platform=Win32
 if errorlevel 1 (
-  echo [ERROR] Copy UclTsfBridge.dll failed. Close UCL_LIU or unregister/unload TSF Bridge, then retry.
+  echo [ERROR] TSF Bridge Win32 build failed.
   exit /b 1
 )
+
+if not exist "%OUT_DLL_X64%" (
+  echo [ERROR] Output DLL x64 not found: %OUT_DLL_X64%
+  exit /b 1
+)
+if not exist "%OUT_DLL_X86%" (
+  echo [ERROR] Output DLL x86 not found: %OUT_DLL_X86%
+  exit /b 1
+)
+
+if not exist "%DIST_DIR%\x64" mkdir "%DIST_DIR%\x64"
+if not exist "%DIST_DIR%\x86" mkdir "%DIST_DIR%\x86"
+
+copy /Y "%OUT_DLL_X64%" "%DIST_DIR%\x64\UclTsfBridge.dll"
+copy /Y "%OUT_DLL_X86%" "%DIST_DIR%\x86\UclTsfBridge.dll"
+
 copy /Y "tsf_bridge\register_tsf_bridge.bat" "%DIST_DIR%\register_tsf_bridge.bat"
-if errorlevel 1 (
-  echo [ERROR] Copy register_tsf_bridge.bat failed.
-  exit /b 1
-)
 copy /Y "tsf_bridge\unregister_tsf_bridge.bat" "%DIST_DIR%\unregister_tsf_bridge.bat"
-if errorlevel 1 (
-  echo [ERROR] Copy unregister_tsf_bridge.bat failed.
-  exit /b 1
-)
 
-echo [OK] TSF Bridge copied to %DIST_DIR%
+echo [OK] TSF Bridge (x64/x86) copied to %DIST_DIR%
 endlocal

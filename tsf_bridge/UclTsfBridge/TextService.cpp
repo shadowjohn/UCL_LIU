@@ -3,6 +3,14 @@
 #include <cstdio>
 #include <new>
 #include <vector>
+#include <mutex>
+
+#define WM_UCL_COMMIT (WM_USER + 100)
+
+static std::atomic<UclTextService*> g_pActiveService{ nullptr };
+static std::mutex g_pipeMutex;
+static HANDLE g_hPipeThread = nullptr;
+static HANDLE g_hPipeStopEvent = nullptr;
 
 static std::wstring GetPipeNameForProcess(DWORD processId)
 {
@@ -229,6 +237,27 @@ STDMETHODIMP_(ULONG) UclTextService::Release()
     return count;
 }
 
+LRESULT CALLBACK UclTextService::WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
+{
+    if (msg == WM_UCL_COMMIT)
+    {
+        auto* self = reinterpret_cast<UclTextService*>(GetWindowLongPtrW(hwnd, GWLP_USERDATA));
+        if (self)
+        {
+            auto* pText = reinterpret_cast<std::wstring*>(lp);
+            HRESULT hr = self->CommitText(*pText);
+            return static_cast<LRESULT>(hr);
+        }
+        return E_FAIL;
+    }
+    if (msg == WM_NCCREATE)
+    {
+        auto* cs = reinterpret_cast<CREATESTRUCTW*>(lp);
+        SetWindowLongPtrW(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(cs->lpCreateParams));
+    }
+    return DefWindowProcW(hwnd, msg, wp, lp);
+}
+
 STDMETHODIMP UclTextService::Activate(ITfThreadMgr* threadMgr, TfClientId clientId)
 {
     if (!threadMgr)
@@ -238,6 +267,16 @@ STDMETHODIMP UclTextService::Activate(ITfThreadMgr* threadMgr, TfClientId client
     _threadMgr = threadMgr;
     _threadMgr->AddRef();
     _clientId = clientId;
+
+    // 建立隱藏視窗以利跨執行緒呼叫 (Marshalling)
+    WNDCLASSEXW wc = { sizeof(WNDCLASSEXW) };
+    wc.lpfnWndProc = WndProc;
+    wc.hInstance = g_hInst;
+    wc.lpszClassName = L"UclTsfBridgeMsgWnd";
+    RegisterClassExW(&wc);
+    _msgHwnd = CreateWindowExW(0, wc.lpszClassName, nullptr, 0, 0, 0, 0, 0, HWND_MESSAGE, nullptr, g_hInst, this);
+
+    g_pActiveService = this;
     AdviseSinks();
     ITfDocumentMgr* docMgr = nullptr;
     if (SUCCEEDED(_threadMgr->GetFocus(&docMgr)) && docMgr)
@@ -252,8 +291,18 @@ STDMETHODIMP UclTextService::Activate(ITfThreadMgr* threadMgr, TfClientId client
 
 STDMETHODIMP UclTextService::Deactivate()
 {
-    StopPipeServer();
     UnadviseSinks();
+
+    if (g_pActiveService == this)
+    {
+        g_pActiveService = nullptr;
+    }
+
+    if (_msgHwnd)
+    {
+        DestroyWindow(_msgHwnd);
+        _msgHwnd = nullptr;
+    }
 
     std::lock_guard<std::mutex> lock(_contextMutex);
     if (_focusContext)
@@ -360,7 +409,14 @@ void UclTextService::SetFocusContext(ITfContext* context)
     }
 }
 
-STDMETHODIMP UclTextService::OnSetFocus(BOOL) { return S_OK; }
+STDMETHODIMP UclTextService::OnSetFocus(BOOL foreground)
+{
+    if (foreground)
+    {
+        g_pActiveService = this;
+    }
+    return S_OK;
+}
 STDMETHODIMP UclTextService::OnTestKeyDown(ITfContext* context, WPARAM, LPARAM, BOOL* eaten) { SetFocusContext(context); if (eaten) *eaten = FALSE; return S_OK; }
 STDMETHODIMP UclTextService::OnKeyDown(ITfContext* context, WPARAM, LPARAM, BOOL* eaten) { SetFocusContext(context); if (eaten) *eaten = FALSE; return S_OK; }
 STDMETHODIMP UclTextService::OnTestKeyUp(ITfContext* context, WPARAM, LPARAM, BOOL* eaten) { SetFocusContext(context); if (eaten) *eaten = FALSE; return S_OK; }
@@ -375,32 +431,52 @@ bool UclTextService::HasContext()
 
 HRESULT UclTextService::CommitText(const std::wstring& text)
 {
-    ITfContext* context = nullptr;
+    if (!_threadMgr) return E_FAIL;
+    
+    ITfDocumentMgr* docMgr = nullptr;
+    if (FAILED(_threadMgr->GetFocus(&docMgr)) || !docMgr)
     {
-        std::lock_guard<std::mutex> lock(_contextMutex);
-        context = _focusContext;
-        if (context)
-        {
-            context->AddRef();
-        }
+        return E_FAIL;
     }
 
-    if (!context)
+    ITfContext* context = nullptr;
+    if (FAILED(docMgr->GetTop(&context)) || !context)
     {
-        return HRESULT_FROM_WIN32(ERROR_INVALID_STATE);
+        docMgr->Release();
+        return E_FAIL;
+    }
+    docMgr->Release();
+
+    TfClientId clientId = _clientId;
+    if (clientId == TF_CLIENTID_NULL)
+    {
+        context->Release();
+        return E_ABORT;
     }
 
     auto* session = new (std::nothrow) UclEditSession(this, context, text);
-    context->Release();
     if (!session)
     {
+        context->Release();
         return E_OUTOFMEMORY;
     }
 
     HRESULT sessionResult = E_FAIL;
-    // 這裡要同步完成，否則 pipe 會先回覆成功/失敗，實際 commit 卻還沒跑完。
-    HRESULT hr = context->RequestEditSession(_clientId, session, TF_ES_READWRITE | TF_ES_SYNC, &sessionResult);
+    HRESULT hr = context->RequestEditSession(clientId, session, TF_ES_READWRITE | TF_ES_SYNC, &sessionResult);
+    
+    if (FAILED(hr))
+    {
+        HRESULT hrAsync = context->RequestEditSession(clientId, session, TF_ES_READWRITE, &sessionResult);
+        if (SUCCEEDED(hrAsync))
+        {
+            hr = S_OK;
+            sessionResult = S_OK; 
+        }
+    }
+    
     session->Release();
+    context->Release();
+    
     return SUCCEEDED(hr) ? sessionResult : hr;
 }
 
@@ -411,69 +487,69 @@ HRESULT UclTextService::InsertText(ITfContext* context, TfEditCookie ec, const s
         return E_INVALIDARG;
     }
 
-    ITfInsertAtSelection* insertAtSelection = nullptr;
-    HRESULT hr = context->QueryInterface(IID_ITfInsertAtSelection, reinterpret_cast<void**>(&insertAtSelection));
-    if (FAILED(hr))
+    // 嘗試方法 A: 使用標準 GetSelection -> SetText
+    TF_SELECTION sel = {};
+    ULONG fetched = 0;
+    HRESULT hrA = context->GetSelection(ec, TF_DEFAULT_SELECTION, 1, &sel, &fetched);
+    if (SUCCEEDED(hrA) && fetched > 0)
     {
-        return hr;
+        HRESULT hrSet = sel.range->SetText(ec, 0, text.c_str(), static_cast<LONG>(text.size()));
+        if (SUCCEEDED(hrSet))
+        {
+            sel.range->Collapse(ec, TF_ANCHOR_END);
+            context->SetSelection(ec, 1, &sel);
+            sel.range->Release();
+            return S_OK;
+        }
+        sel.range->Release();
     }
 
-    hr = insertAtSelection->InsertTextAtSelection(
-        ec,
-        TF_IAS_NOQUERY,
-        text.c_str(),
-        static_cast<LONG>(text.size()),
-        nullptr);
-    insertAtSelection->Release();
-    return hr;
+    // 嘗試方法 B: 使用 ITfInsertAtSelection
+    ITfInsertAtSelection* insertAtSelection = nullptr;
+    if (SUCCEEDED(context->QueryInterface(IID_ITfInsertAtSelection, reinterpret_cast<void**>(&insertAtSelection))))
+    {
+        HRESULT hrB = insertAtSelection->InsertTextAtSelection(
+            ec,
+            TF_IAS_NOQUERY,
+            text.c_str(),
+            static_cast<LONG>(text.size()),
+            nullptr);
+        insertAtSelection->Release();
+        if (SUCCEEDED(hrB)) return S_OK;
+    }
+
+    return E_FAIL;
 }
 
 void UclTextService::StartPipeServer()
 {
-    if (_pipeThread)
-    {
-        return;
-    }
-    _pipeStopEvent = CreateEventW(nullptr, TRUE, FALSE, nullptr);
-    if (!_pipeStopEvent)
-    {
-        return;
-    }
-    _pipeThread = CreateThread(nullptr, 0, PipeThreadProc, this, 0, nullptr);
+    std::lock_guard<std::mutex> lock(g_pipeMutex);
+    if (g_hPipeThread) return;
+
+    g_hPipeStopEvent = CreateEventW(nullptr, TRUE, FALSE, nullptr);
+    if (!g_hPipeStopEvent) return;
+
+    g_hPipeThread = CreateThread(nullptr, 0, PipeThreadProc, this, 0, nullptr);
 }
 
 void UclTextService::StopPipeServer()
 {
-    if (_pipeStopEvent)
-    {
-        SetEvent(_pipeStopEvent);
-    }
-    if (_pipeThread)
-    {
-        WaitForSingleObject(_pipeThread, 1000);
-        CloseHandle(_pipeThread);
-        _pipeThread = nullptr;
-    }
-    if (_pipeStopEvent)
-    {
-        CloseHandle(_pipeStopEvent);
-        _pipeStopEvent = nullptr;
-    }
+    // 全域 Pipe Server 只有在 DLL 卸載時才需要停止，這裡可以留空或做基本清理。
 }
 
 void UclTextService::PipeLoop()
 {
     CoInitializeEx(nullptr, COINIT_MULTITHREADED);
     DWORD processId = GetCurrentProcessId();
-    // 每個前景程序各自使用獨立 pipe，避免 Python 連到別的 TSF instance。
     std::wstring pipeName = GetPipeNameForProcess(processId);
-    while (_pipeStopEvent && WaitForSingleObject(_pipeStopEvent, 0) == WAIT_TIMEOUT)
+
+    while (g_hPipeStopEvent && WaitForSingleObject(g_hPipeStopEvent, 0) == WAIT_TIMEOUT)
     {
         HANDLE pipe = CreateNamedPipeW(
             pipeName.c_str(),
             PIPE_ACCESS_DUPLEX,
             PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE | PIPE_WAIT,
-            1,
+            PIPE_UNLIMITED_INSTANCES, // 允許多個連線
             8192,
             8192,
             100,
@@ -531,7 +607,19 @@ std::string UclTextService::HandlePipeRequest(const std::string& request)
             return "{\"ok\":false,\"error\":\"NO_TEXT\"}\n";
         }
 
-        HRESULT hr = CommitText(Utf8ToWide(textUtf8));
+        HRESULT hr = E_FAIL;
+        UclTextService* active = g_pActiveService.load();
+        if (active && active->_msgHwnd)
+        {
+            // 透過最後取得焦點的實例之隱藏視窗來執行 CommitText
+            std::wstring text = Utf8ToWide(textUtf8);
+            hr = static_cast<HRESULT>(SendMessageW(active->_msgHwnd, WM_UCL_COMMIT, 0, reinterpret_cast<LPARAM>(&text)));
+        }
+        else
+        {
+            hr = E_ABORT; // 沒有活躍的服務
+        }
+
         if (SUCCEEDED(hr))
         {
             return "{\"ok\":true}\n";

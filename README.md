@@ -10,6 +10,9 @@
   https://youtu.be/ClSbkHDqkOs
   <br>
   加入鍵盤打字聲
+  <br><br>
+  <img src="screenshot/tsf_switch.png"><br>
+  使用 TSF 出字模式時，記得切換 Windows 輸入法為「UCLLIU TSF Bridge」
 </center>
 <br>
 <h3>開發動機：</h3>
@@ -22,7 +25,7 @@
   <a target="_blank" href="mailto:uclliu.3wa@gmail.com">uclliu.3wa@gmail.com</a><br>
 <br>
 <h3>最初開發日期：</h3>2017-06-16 11:24<br>
-<h3>最後更新日期：</h3>2026-05-01 00:00
+<h3>最後更新日期：</h3>2026-05-01 09:52
 <br>
 <h3>版本：</h3>V 1.67<br>
 <br>
@@ -35,8 +38,8 @@
 <h3>～～提醒：如果遇到無法使用肥米的視窗，請關閉肥米輸入法，按右鍵，改用「系統管理員身分執行肥米輸入法」，應該就可以克服!!～～</h3>
 　　1.主程式(1.67 beta 版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe</a><br>	
 　　2.主程式(1.67 beta 版 zip 版)：<a download="uclliu.zip" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.zip</a><br>	
-　　3.主程式(1.65 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.65/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.65/uclliu.exe</a><br>
-　　4.主程式(1.65 穩定版 zip 版)：<a download="uclliu.zip" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.65/uclliu.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.65/uclliu.zip</a><br>
+　　3.主程式(1.66 穩定版)：<a download="uclliu.exe" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.66/uclliu.exe">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.66/uclliu.exe</a><br>
+　　4.主程式(1.66 穩定版 zip 版)：<a download="uclliu.zip" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.66/uclliu.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.66/uclliu.zip</a><br>
 　　5.歷年版本：<a target="_blank" href="https://github.com/shadowjohn/UCL_LIU/tree/master/RELEASE">歷代版本</a><br>
 　　6.同音字庫：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt</a><br>
 　　7.打字聲音：<a download="pinyi.txt" target="_blank" href="https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip">https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip</a> 下載後解開，0~9.wav 與 uclliu.exe 放一起
@@ -57,6 +60,14 @@
         <img src="screenshot/koera.png"><br>
 　　12、字根順手推薦：官方 liu-uni.tab > Rime liur_Trad.dict.yaml > bluebat 版 fcitx >= 官方 fcitx，其他版的字根沒試過，同學們可以自行比較看看，常用字、標點符號、特殊符號、日文有平假名、片假名才是好字根
 <br>      
+　　18、TSF 出字模式 (實驗性)<br>
+　　　　這是為了解決一些現代應用程式 (如 Chrome, Edge, VS Code) 在「正常模式」下上字不穩定的問題。<br>
+　　　　**使用方式：**<br>
+　　　　1. 在肥米選單切換為「TSF 出字模式」。<br>
+　　　　2. 在 Windows 右下角將輸入法切換為「UCLLIU TSF Bridge」。<br>
+　　　　3. 這樣就能享受更穩定的 TSF 上字體驗。<br>
+　　　　*註：初次使用需以管理員身分執行肥米並完成註冊。*<br>
+<br>
 <h3>字碼表說明：</h3>
 　　　　由於字碼表的版權問題爭議，就不放 liu.json 了，liu.json 的格式同PIME的架構。<br>
 　　要好的字碼表的話，請買正版，將 tab->cin->json <br>
@@ -171,6 +182,7 @@ Windows 顯示語言：中文（台灣）<br>
 1. 206、加入實驗性 TSF Bridge 出字模式，可在右下角選單切換「TSF出字模式」
 2. 207、啟動時協助檢查 TSF Bridge DLL 與註冊狀態，出字失敗會自動 fallback 原本 senddata 流程
 3. 208、右下角選單加入「TSF Bridge 管理」，可解除註冊 TSF Bridge
+4. 209、若為非系統管理員模式，右下角選單加入「以系統管理員身分執行肥米」，點擊後以系統管理員身分重新啟動 
 
 (2025-12-23) v1.66 版：
 病毒碼提交掃描：1.66
@@ -892,6 +904,9 @@ Ans：<br>
   <li>(Done 2025-10-30)203、避免重複開 關於肥米說明 視窗</li>
   <li>(Done 2025-10-30)204、如果是肥米的「自定詞庫編輯器」，強制使用複製貼上出字</li>
   <li>(Done 2025-12-23)205、chrome 瀏覽 term.ptt.cc 有時標題會變成 ws.ptt.cc，導致出字失敗</li>
-  <li>206、仿 Rime Enter 混英出字功能</li>
+  <li>(Done 2025-12-23)206、仿 Rime Enter 混英出字功能</li>
+  <li>(Done 2026-04-30)207、系統管理員模式下，啟動時協助檢查 TSF Bridge DLL 與註冊狀態，出字失敗會自動 fallback 原本 senddata 流程</li>
+  <li>(Done 2026-04-30)208、右下角選單加入「TSF Bridge 管理」，可解除註冊 TSF Bridge</li>
+  <li>(Done 2026-05-01)209、若為非系統管理員模式，右下角選單加入「以系統管理員身分執行肥米」，點擊後以系統管理員身分重新啟動 </li>
 </ul>
 <br>

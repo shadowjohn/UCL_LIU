@@ -67,17 +67,21 @@ private:
     void StopPipeServer();
     std::string HandlePipeRequest(const std::string& request);
 
+    static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp);
+    void OnMessageCommit(const std::wstring& text);
+
+private:
     std::atomic<long> _refCount{ 1 };
     ITfThreadMgr* _threadMgr = nullptr;
     TfClientId _clientId = TF_CLIENTID_NULL;
     DWORD _threadMgrSinkCookie = TF_INVALID_COOKIE;
     bool _keySinkAdvised = false;
-
-    std::mutex _contextMutex;
     ITfContext* _focusContext = nullptr;
+    std::mutex _contextMutex;
 
     HANDLE _pipeThread = nullptr;
     HANDLE _pipeStopEvent = nullptr;
+    HWND _msgHwnd = nullptr;
 };
 
 class UclClassFactory final : public IClassFactory
