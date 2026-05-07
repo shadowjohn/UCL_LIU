@@ -11,6 +11,8 @@ static std::atomic<UclTextService*> g_pActiveService{ nullptr };
 static std::mutex g_pipeMutex;
 static HANDLE g_hPipeThread = nullptr;
 static HANDLE g_hPipeStopEvent = nullptr;
+static DWORD g_pipeThreadId = 0;
+static std::atomic<UclTextService*> g_pPipeService{ nullptr };
 
 static std::wstring GetPipeNameForProcess(DWORD processId)
 {
@@ -107,9 +109,10 @@ static bool ExtractJsonString(const std::string& request, const std::string& key
 
 static DWORD WINAPI PipeThreadProc(void* param)
 {
-    static_cast<UclTextService*>(param)->AddRef();
-    static_cast<UclTextService*>(param)->PipeLoop();
-    static_cast<UclTextService*>(param)->Release();
+    auto* service = static_cast<UclTextService*>(param);
+    service->AddRef();
+    service->PipeLoop();
+    service->Release();
     return 0;
 }
 
@@ -242,9 +245,9 @@ LRESULT CALLBACK UclTextService::WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM 
     if (msg == WM_UCL_COMMIT)
     {
         auto* self = reinterpret_cast<UclTextService*>(GetWindowLongPtrW(hwnd, GWLP_USERDATA));
-        if (self)
+        auto* pText = reinterpret_cast<std::wstring*>(lp);
+        if (self && pText)
         {
-            auto* pText = reinterpret_cast<std::wstring*>(lp);
             HRESULT hr = self->CommitText(*pText);
             return static_cast<LRESULT>(hr);
         }
@@ -303,6 +306,8 @@ STDMETHODIMP UclTextService::Deactivate()
         DestroyWindow(_msgHwnd);
         _msgHwnd = nullptr;
     }
+
+    StopPipeServer();
 
     std::lock_guard<std::mutex> lock(_contextMutex);
     if (_focusContext)
@@ -529,12 +534,68 @@ void UclTextService::StartPipeServer()
     g_hPipeStopEvent = CreateEventW(nullptr, TRUE, FALSE, nullptr);
     if (!g_hPipeStopEvent) return;
 
-    g_hPipeThread = CreateThread(nullptr, 0, PipeThreadProc, this, 0, nullptr);
+    g_pPipeService = this;
+    g_hPipeThread = CreateThread(nullptr, 0, PipeThreadProc, this, 0, &g_pipeThreadId);
+    if (!g_hPipeThread)
+    {
+        CloseHandle(g_hPipeStopEvent);
+        g_hPipeStopEvent = nullptr;
+        g_pipeThreadId = 0;
+        g_pPipeService = nullptr;
+    }
 }
 
 void UclTextService::StopPipeServer()
 {
-    // 全域 Pipe Server 只有在 DLL 卸載時才需要停止，這裡可以留空或做基本清理。
+    HANDLE thread = nullptr;
+    HANDLE stopEvent = nullptr;
+    DWORD threadId = 0;
+    {
+        std::lock_guard<std::mutex> lock(g_pipeMutex);
+        if (g_pPipeService.load() != this || !g_hPipeThread || !g_hPipeStopEvent)
+        {
+            return;
+        }
+        thread = g_hPipeThread;
+        stopEvent = g_hPipeStopEvent;
+        threadId = g_pipeThreadId;
+        SetEvent(stopEvent);
+    }
+
+    // Wake ConnectNamedPipe so the server can observe the stop event promptly.
+    HANDLE pipe = CreateFileW(
+        GetPipeNameForProcess(GetCurrentProcessId()).c_str(),
+        GENERIC_READ | GENERIC_WRITE,
+        0,
+        nullptr,
+        OPEN_EXISTING,
+        0,
+        nullptr);
+    if (pipe != INVALID_HANDLE_VALUE)
+    {
+        CloseHandle(pipe);
+    }
+
+    if (thread && GetCurrentThreadId() != threadId)
+    {
+        DWORD waitResult = WaitForSingleObject(thread, 1500);
+        if (waitResult == WAIT_OBJECT_0)
+        {
+            std::lock_guard<std::mutex> lock(g_pipeMutex);
+            if (thread == g_hPipeThread)
+            {
+                CloseHandle(g_hPipeThread);
+                g_hPipeThread = nullptr;
+            }
+            if (stopEvent == g_hPipeStopEvent)
+            {
+                CloseHandle(g_hPipeStopEvent);
+                g_hPipeStopEvent = nullptr;
+            }
+            g_pipeThreadId = 0;
+            g_pPipeService = nullptr;
+        }
+    }
 }
 
 void UclTextService::PipeLoop()
@@ -608,12 +669,12 @@ std::string UclTextService::HandlePipeRequest(const std::string& request)
         }
 
         HRESULT hr = E_FAIL;
-        UclTextService* active = g_pActiveService.load();
-        if (active && active->_msgHwnd)
+        HWND hwnd = _msgHwnd;
+        if (g_pActiveService.load() == this && hwnd)
         {
-            // 透過最後取得焦點的實例之隱藏視窗來執行 CommitText
+            // 透過本服務的隱藏視窗回到 TSF thread 執行 CommitText。
             std::wstring text = Utf8ToWide(textUtf8);
-            hr = static_cast<HRESULT>(SendMessageW(active->_msgHwnd, WM_UCL_COMMIT, 0, reinterpret_cast<LPARAM>(&text)));
+            hr = static_cast<HRESULT>(SendMessageW(hwnd, WM_UCL_COMMIT, 0, reinterpret_cast<LPARAM>(&text)));
         }
         else
         {

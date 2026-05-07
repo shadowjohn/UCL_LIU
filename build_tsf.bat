@@ -57,10 +57,26 @@ if not exist "%DIST_DIR%\x64" mkdir "%DIST_DIR%\x64"
 if not exist "%DIST_DIR%\x86" mkdir "%DIST_DIR%\x86"
 
 copy /Y "%OUT_DLL_X64%" "%DIST_DIR%\x64\UclTsfBridge.dll"
+if errorlevel 1 (
+  echo [ERROR] Failed to copy x64 DLL. It may be loaded by Explorer or another process.
+  exit /b 1
+)
 copy /Y "%OUT_DLL_X86%" "%DIST_DIR%\x86\UclTsfBridge.dll"
+if errorlevel 1 (
+  echo [ERROR] Failed to copy x86 DLL. It may be loaded by another process.
+  exit /b 1
+)
 
 copy /Y "tsf_bridge\register_tsf_bridge.bat" "%DIST_DIR%\register_tsf_bridge.bat"
+if errorlevel 1 (
+  echo [ERROR] Failed to copy register_tsf_bridge.bat.
+  exit /b 1
+)
 copy /Y "tsf_bridge\unregister_tsf_bridge.bat" "%DIST_DIR%\unregister_tsf_bridge.bat"
+if errorlevel 1 (
+  echo [ERROR] Failed to copy unregister_tsf_bridge.bat.
+  exit /b 1
+)
 
 echo [OK] TSF Bridge (x64/x86) copied to %DIST_DIR%
 endlocal
