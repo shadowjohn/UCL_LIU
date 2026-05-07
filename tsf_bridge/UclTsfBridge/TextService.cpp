@@ -55,6 +55,143 @@ static std::string JsonEscape(const std::string& text)
     return out;
 }
 
+static bool WideEqualsIgnoreCase(const wchar_t* lhs, const wchar_t* rhs)
+{
+    return CompareStringOrdinal(lhs, -1, rhs, -1, TRUE) == CSTR_EQUAL;
+}
+
+static const wchar_t* FileNameFromPath(const wchar_t* path)
+{
+    const wchar_t* fileName = path;
+    for (const wchar_t* p = path; p && *p; ++p)
+    {
+        if (*p == L'\\' || *p == L'/')
+        {
+            fileName = p + 1;
+        }
+    }
+    return fileName;
+}
+
+static bool IsBadHostProcess()
+{
+    wchar_t modulePath[MAX_PATH] = {};
+    DWORD length = GetModuleFileNameW(nullptr, modulePath, ARRAYSIZE(modulePath));
+    if (length == 0 || length >= ARRAYSIZE(modulePath))
+    {
+        return false;
+    }
+
+    const wchar_t* processName = FileNameFromPath(modulePath);
+    static constexpr const wchar_t* kBadHosts[] = {
+        L"explorer.exe",
+        L"OpenWith.exe",
+        L"PickerHost.exe",
+        L"FilePicker.exe",
+        L"FileOpenPicker.exe",
+        L"SearchHost.exe",
+        L"ShellExperienceHost.exe",
+        L"StartMenuExperienceHost.exe",
+        L"LINE.exe",
+        L"msedgewebview2.exe",
+    };
+
+    for (const wchar_t* badHost : kBadHosts)
+    {
+        if (WideEqualsIgnoreCase(processName, badHost))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+static bool WindowClassEquals(HWND hwnd, const wchar_t* className)
+{
+    wchar_t actualClassName[128] = {};
+    if (!hwnd || !GetClassNameW(hwnd, actualClassName, ARRAYSIZE(actualClassName)))
+    {
+        return false;
+    }
+    return WideEqualsIgnoreCase(actualClassName, className);
+}
+
+static bool HasDescendantWindowClass(HWND hwnd, const wchar_t* className, int depth = 0)
+{
+    if (!hwnd || depth > 10)
+    {
+        return false;
+    }
+
+    for (HWND child = GetWindow(hwnd, GW_CHILD); child; child = GetWindow(child, GW_HWNDNEXT))
+    {
+        if (WindowClassEquals(child, className) || HasDescendantWindowClass(child, className, depth + 1))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+static bool IsShellFileDialogWindow(HWND hwnd)
+{
+    if (WindowClassEquals(hwnd, L"CabinetWClass") || WindowClassEquals(hwnd, L"ExploreWClass"))
+    {
+        return true;
+    }
+
+    if (!WindowClassEquals(hwnd, L"#32770"))
+    {
+        return false;
+    }
+
+    if (HasDescendantWindowClass(hwnd, L"SHELLDLL_DefView") ||
+        HasDescendantWindowClass(hwnd, L"NamespaceTreeControl"))
+    {
+        return true;
+    }
+
+    return HasDescendantWindowClass(hwnd, L"DirectUIHWND") &&
+        HasDescendantWindowClass(hwnd, L"Breadcrumb Parent");
+}
+
+static bool IsForegroundInputSafeForCommit()
+{
+    HWND foreground = GetForegroundWindow();
+    if (!foreground || IsShellFileDialogWindow(foreground))
+    {
+        return false;
+    }
+
+    DWORD foregroundProcessId = 0;
+    DWORD foregroundThreadId = GetWindowThreadProcessId(foreground, &foregroundProcessId);
+    if (foregroundThreadId == 0 || foregroundProcessId != GetCurrentProcessId())
+    {
+        return false;
+    }
+
+    GUITHREADINFO guiThreadInfo = { sizeof(GUITHREADINFO) };
+    if (!GetGUIThreadInfo(foregroundThreadId, &guiThreadInfo))
+    {
+        return true;
+    }
+
+    HWND inputWindow = guiThreadInfo.hwndFocus ? guiThreadInfo.hwndFocus : guiThreadInfo.hwndCaret;
+    if (!inputWindow)
+    {
+        return false;
+    }
+
+    DWORD inputProcessId = 0;
+    if (!GetWindowThreadProcessId(inputWindow, &inputProcessId) || inputProcessId != foregroundProcessId)
+    {
+        return false;
+    }
+
+    HWND inputRoot = GetAncestor(inputWindow, GA_ROOT);
+    return !IsShellFileDialogWindow(inputRoot ? inputRoot : foreground);
+}
+
 static bool ExtractJsonString(const std::string& request, const std::string& key, std::string& value)
 {
     const std::string marker = "\"" + key + "\"";
@@ -172,7 +309,14 @@ STDMETHODIMP_(ULONG) UclEditSession::Release()
 
 STDMETHODIMP UclEditSession::DoEditSession(TfEditCookie ec)
 {
-    return _owner ? _owner->InsertText(_context, ec, _text) : E_FAIL;
+    __try
+    {
+        return _owner ? _owner->InsertText(_context, ec, _text) : E_FAIL;
+    }
+    __except(EXCEPTION_EXECUTE_HANDLER)
+    {
+        return E_FAIL;
+    }
 }
 
 UclTextService::UclTextService()
@@ -242,23 +386,45 @@ STDMETHODIMP_(ULONG) UclTextService::Release()
 
 LRESULT CALLBACK UclTextService::WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 {
-    if (msg == WM_UCL_COMMIT)
+    __try
     {
-        auto* self = reinterpret_cast<UclTextService*>(GetWindowLongPtrW(hwnd, GWLP_USERDATA));
-        auto* pText = reinterpret_cast<std::wstring*>(lp);
-        if (self && pText)
+        if (msg == WM_UCL_COMMIT)
         {
-            HRESULT hr = self->CommitText(*pText);
-            return static_cast<LRESULT>(hr);
+            auto* self = reinterpret_cast<UclTextService*>(GetWindowLongPtrW(hwnd, GWLP_USERDATA));
+            auto* pText = reinterpret_cast<std::wstring*>(lp);
+            if (pText)
+            {
+                __try
+                {
+                    if (self)
+                    {
+                        self->OnMessageCommit(*pText);
+                    }
+                }
+                __finally
+                {
+                    delete pText;
+                }
+                return S_OK;
+            }
+            return E_FAIL;
         }
-        return E_FAIL;
+        if (msg == WM_NCCREATE)
+        {
+            auto* cs = reinterpret_cast<CREATESTRUCTW*>(lp);
+            SetWindowLongPtrW(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(cs->lpCreateParams));
+        }
+        return DefWindowProcW(hwnd, msg, wp, lp);
     }
-    if (msg == WM_NCCREATE)
+    __except(EXCEPTION_EXECUTE_HANDLER)
     {
-        auto* cs = reinterpret_cast<CREATESTRUCTW*>(lp);
-        SetWindowLongPtrW(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(cs->lpCreateParams));
+        return 0;
     }
-    return DefWindowProcW(hwnd, msg, wp, lp);
+}
+
+void UclTextService::OnMessageCommit(const std::wstring& text)
+{
+    CommitText(text);
 }
 
 STDMETHODIMP UclTextService::Activate(ITfThreadMgr* threadMgr, TfClientId clientId)
@@ -270,6 +436,11 @@ STDMETHODIMP UclTextService::Activate(ITfThreadMgr* threadMgr, TfClientId client
     _threadMgr = threadMgr;
     _threadMgr->AddRef();
     _clientId = clientId;
+
+    if (IsBadHostProcess())
+    {
+        return S_OK;
+    }
 
     // 建立隱藏視窗以利跨執行緒呼叫 (Marshalling)
     WNDCLASSEXW wc = { sizeof(WNDCLASSEXW) };
@@ -301,13 +472,13 @@ STDMETHODIMP UclTextService::Deactivate()
         g_pActiveService = nullptr;
     }
 
+    StopPipeServer();
+
     if (_msgHwnd)
     {
         DestroyWindow(_msgHwnd);
         _msgHwnd = nullptr;
     }
-
-    StopPipeServer();
 
     std::lock_guard<std::mutex> lock(_contextMutex);
     if (_focusContext)
@@ -365,23 +536,53 @@ STDMETHODIMP UclTextService::OnUninitDocumentMgr(ITfDocumentMgr*) { return S_OK;
 
 STDMETHODIMP UclTextService::OnSetFocus(ITfDocumentMgr* docMgrFocus, ITfDocumentMgr*)
 {
-    UpdateFocusContext(docMgrFocus);
+    __try
+    {
+        if (!IsBadHostProcess())
+        {
+            UpdateFocusContext(docMgrFocus);
+        }
+    }
+    __except(EXCEPTION_EXECUTE_HANDLER)
+    {
+        return E_FAIL;
+    }
     return S_OK;
 }
 
 STDMETHODIMP UclTextService::OnPushContext(ITfContext* context)
 {
-    SetFocusContext(context);
+    __try
+    {
+        if (!IsBadHostProcess())
+        {
+            SetFocusContext(context);
+        }
+    }
+    __except(EXCEPTION_EXECUTE_HANDLER)
+    {
+        return E_FAIL;
+    }
     return S_OK;
 }
 
 STDMETHODIMP UclTextService::OnPopContext(ITfContext*)
 {
-    ITfDocumentMgr* docMgr = nullptr;
-    if (_threadMgr && SUCCEEDED(_threadMgr->GetFocus(&docMgr)))
+    __try
     {
-        UpdateFocusContext(docMgr);
-        docMgr->Release();
+        if (!IsBadHostProcess())
+        {
+            ITfDocumentMgr* docMgr = nullptr;
+            if (_threadMgr && SUCCEEDED(_threadMgr->GetFocus(&docMgr)))
+            {
+                UpdateFocusContext(docMgr);
+                docMgr->Release();
+            }
+        }
+    }
+    __except(EXCEPTION_EXECUTE_HANDLER)
+    {
+        return E_FAIL;
     }
     return S_OK;
 }
@@ -416,17 +617,93 @@ void UclTextService::SetFocusContext(ITfContext* context)
 
 STDMETHODIMP UclTextService::OnSetFocus(BOOL foreground)
 {
-    if (foreground)
+    __try
     {
-        g_pActiveService = this;
+        if (foreground && !IsBadHostProcess())
+        {
+            g_pActiveService = this;
+        }
+    }
+    __except(EXCEPTION_EXECUTE_HANDLER)
+    {
+        return E_FAIL;
     }
     return S_OK;
 }
-STDMETHODIMP UclTextService::OnTestKeyDown(ITfContext* context, WPARAM, LPARAM, BOOL* eaten) { SetFocusContext(context); if (eaten) *eaten = FALSE; return S_OK; }
-STDMETHODIMP UclTextService::OnKeyDown(ITfContext* context, WPARAM, LPARAM, BOOL* eaten) { SetFocusContext(context); if (eaten) *eaten = FALSE; return S_OK; }
-STDMETHODIMP UclTextService::OnTestKeyUp(ITfContext* context, WPARAM, LPARAM, BOOL* eaten) { SetFocusContext(context); if (eaten) *eaten = FALSE; return S_OK; }
-STDMETHODIMP UclTextService::OnKeyUp(ITfContext* context, WPARAM, LPARAM, BOOL* eaten) { SetFocusContext(context); if (eaten) *eaten = FALSE; return S_OK; }
-STDMETHODIMP UclTextService::OnPreservedKey(ITfContext*, REFGUID, BOOL* eaten) { if (eaten) *eaten = FALSE; return S_OK; }
+
+STDMETHODIMP UclTextService::OnTestKeyDown(ITfContext* context, WPARAM, LPARAM, BOOL* eaten)
+{
+    __try
+    {
+        if (!IsBadHostProcess())
+        {
+            SetFocusContext(context);
+        }
+        if (eaten) *eaten = FALSE;
+    }
+    __except(EXCEPTION_EXECUTE_HANDLER)
+    {
+        return E_FAIL;
+    }
+    return S_OK;
+}
+
+STDMETHODIMP UclTextService::OnKeyDown(ITfContext* context, WPARAM, LPARAM, BOOL* eaten)
+{
+    __try
+    {
+        if (!IsBadHostProcess())
+        {
+            SetFocusContext(context);
+        }
+        if (eaten) *eaten = FALSE;
+    }
+    __except(EXCEPTION_EXECUTE_HANDLER)
+    {
+        return E_FAIL;
+    }
+    return S_OK;
+}
+
+STDMETHODIMP UclTextService::OnTestKeyUp(ITfContext* context, WPARAM, LPARAM, BOOL* eaten)
+{
+    __try
+    {
+        if (!IsBadHostProcess())
+        {
+            SetFocusContext(context);
+        }
+        if (eaten) *eaten = FALSE;
+    }
+    __except(EXCEPTION_EXECUTE_HANDLER)
+    {
+        return E_FAIL;
+    }
+    return S_OK;
+}
+
+STDMETHODIMP UclTextService::OnKeyUp(ITfContext* context, WPARAM, LPARAM, BOOL* eaten)
+{
+    __try
+    {
+        if (!IsBadHostProcess())
+        {
+            SetFocusContext(context);
+        }
+        if (eaten) *eaten = FALSE;
+    }
+    __except(EXCEPTION_EXECUTE_HANDLER)
+    {
+        return E_FAIL;
+    }
+    return S_OK;
+}
+
+STDMETHODIMP UclTextService::OnPreservedKey(ITfContext*, REFGUID, BOOL* eaten)
+{
+    if (eaten) *eaten = FALSE;
+    return S_OK;
+}
 
 bool UclTextService::HasContext()
 {
@@ -436,6 +713,11 @@ bool UclTextService::HasContext()
 
 HRESULT UclTextService::CommitText(const std::wstring& text)
 {
+    if (!IsForegroundInputSafeForCommit())
+    {
+        return E_ABORT;
+    }
+
     if (!_threadMgr) return E_FAIL;
     
     ITfDocumentMgr* docMgr = nullptr;
@@ -473,10 +755,7 @@ HRESULT UclTextService::CommitText(const std::wstring& text)
     {
         HRESULT hrAsync = context->RequestEditSession(clientId, session, TF_ES_READWRITE, &sessionResult);
         if (SUCCEEDED(hrAsync))
-        {
             hr = S_OK;
-            sessionResult = S_OK; 
-        }
     }
     
     session->Release();
@@ -528,6 +807,11 @@ HRESULT UclTextService::InsertText(ITfContext* context, TfEditCookie ec, const s
 
 void UclTextService::StartPipeServer()
 {
+    if (IsBadHostProcess())
+    {
+        return;
+    }
+
     std::lock_guard<std::mutex> lock(g_pipeMutex);
     if (g_hPipeThread) return;
 
@@ -578,8 +862,29 @@ void UclTextService::StopPipeServer()
 
     if (thread && GetCurrentThreadId() != threadId)
     {
-        DWORD waitResult = WaitForSingleObject(thread, 1500);
-        if (waitResult == WAIT_OBJECT_0)
+        // Keep this thread responsive while TSF/COM teardown is in progress.
+        bool signaled = false;
+        DWORD deadline = GetTickCount() + 1500;
+        while (true)
+        {
+            DWORD now = GetTickCount();
+            DWORD remaining = (now < deadline) ? (deadline - now) : 0;
+            DWORD r = MsgWaitForMultipleObjects(1, &thread, FALSE, remaining, QS_SENDMESSAGE);
+            if (r == WAIT_OBJECT_0)
+            {
+                signaled = true;
+                break;
+            }
+            if (r == WAIT_OBJECT_0 + 1)
+            {
+                MSG msg;
+                PeekMessageW(&msg, nullptr, 0, 0, PM_NOREMOVE);
+                continue;
+            }
+            break; // WAIT_TIMEOUT or error
+        }
+
+        if (signaled)
         {
             std::lock_guard<std::mutex> lock(g_pipeMutex);
             if (thread == g_hPipeThread)
@@ -672,9 +977,27 @@ std::string UclTextService::HandlePipeRequest(const std::string& request)
         HWND hwnd = _msgHwnd;
         if (g_pActiveService.load() == this && hwnd)
         {
-            // 透過本服務的隱藏視窗回到 TSF thread 執行 CommitText。
-            std::wstring text = Utf8ToWide(textUtf8);
-            hr = static_cast<HRESULT>(SendMessageW(hwnd, WM_UCL_COMMIT, 0, reinterpret_cast<LPARAM>(&text)));
+            if (!IsForegroundInputSafeForCommit())
+            {
+                hr = E_ABORT;
+            }
+            else
+            {
+                auto* text = new (std::nothrow) std::wstring(Utf8ToWide(textUtf8));
+                if (!text)
+                {
+                    hr = E_OUTOFMEMORY;
+                }
+                else if (PostMessageW(hwnd, WM_UCL_COMMIT, 0, reinterpret_cast<LPARAM>(text)))
+                {
+                    return "{\"ok\":true,\"queued\":true}\n";
+                }
+                else
+                {
+                    hr = HRESULT_FROM_WIN32(GetLastError());
+                    delete text;
+                }
+            }
         }
         else
         {

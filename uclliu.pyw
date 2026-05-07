@@ -3,6 +3,7 @@ VERSION = "1.67"
 import __main__  # 取得自己
 #from doctest import debug
 import os
+import subprocess
 #os.environ['PYTHONIOENCODING'] = 'utf-8'
 #os.environ['PYTHONUTF8'] = '1'
 import portalocker
@@ -136,10 +137,16 @@ TSF_BRIDGE_PIPE = r"\\.\pipe\uclliu_tsf_bridge"
 TSF_BRIDGE_PIPE_PREFIX = r"\\.\pipe\uclliu_tsf_bridge_"
 TSF_BRIDGE_DLL_CANDIDATES = [
   PWD + "\\dist\\tsf_bridge\\x64\\UclTsfBridge.dll",
+  PWD + "\\dist\\tsf_bridge\\x86\\UclTsfBridge.dll",
   PWD + "\\tsf_bridge\\x64\\UclTsfBridge.dll",
   PWD + "\\tsf_bridge\\UclTsfBridge\\x64\\Release\\UclTsfBridge.dll",
+  PWD + "\\tsf_bridge\\UclTsfBridge\\Win32\\Release\\UclTsfBridge.dll",
   PWD + "\\tsf_bridge\\UclTsfBridge.dll",
   PWD + "\\UclTsfBridge.dll"
+]
+TSF_BRIDGE_UNLOCK_HELPER_CANDIDATES = [
+  PWD + "\\dist\\tsf_bridge\\unlock_tsf_bridge.ps1",
+  PWD + "\\tsf_bridge\\unlock_tsf_bridge.ps1"
 ]
 
 
@@ -197,8 +204,24 @@ def is_admin():
 
 def tsf_bridge_get_dll_path():
   for dll_path in TSF_BRIDGE_DLL_CANDIDATES:
+    lower_path = dll_path.lower()
+    if "\\x86\\" in lower_path or "\\win32\\" in lower_path:
+      continue
     if my.is_file(dll_path):
       return dll_path
+  return ""
+
+def tsf_bridge_get_existing_dll_paths():
+  dll_paths = []
+  for dll_path in TSF_BRIDGE_DLL_CANDIDATES:
+    if my.is_file(dll_path) and dll_path not in dll_paths:
+      dll_paths.append(dll_path)
+  return dll_paths
+
+def tsf_bridge_get_unlock_helper_path():
+  for helper_path in TSF_BRIDGE_UNLOCK_HELPER_CANDIDATES:
+    if my.is_file(helper_path):
+      return helper_path
   return ""
 
 def tsf_bridge_get_regsvr32_path():
@@ -213,6 +236,19 @@ def tsf_bridge_get_regsvr32_path():
     if path == "regsvr32.exe" or my.is_file(path):
       return path
   return "regsvr32.exe"
+
+def tsf_bridge_get_powershell_path():
+  windir = os.environ.get("WINDIR", "C:\\Windows")
+  candidates = [
+    windir + "\\Sysnative\\WindowsPowerShell\\v1.0\\powershell.exe",
+    windir + "\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+    "pwsh.exe",
+    "powershell.exe"
+  ]
+  for path in candidates:
+    if path == "pwsh.exe" or path == "powershell.exe" or my.is_file(path):
+      return path
+  return "powershell.exe"
 
 def tsf_bridge_is_registered():
   try:
@@ -266,19 +302,41 @@ def tsf_bridge_run_register(dll_path):
 
 def tsf_bridge_run_unregister(dll_path):
   try:
-    params = u'/u /s "%s"' % unicode(dll_path)
-    # 使用 runas 確保有管理員權限解除註冊。
+    cmd = [
+      unicode(tsf_bridge_get_regsvr32_path()),
+      u"/u",
+      u"/s",
+      unicode(dll_path)
+    ]
+    return subprocess.call(cmd) == 0
+  except Exception as e:
+    debug_print("TSF bridge unregister failed: %s" % e)
+    return False
+
+def tsf_bridge_run_unlock_helper(dll_paths):
+  try:
+    helper_path = tsf_bridge_get_unlock_helper_path()
+    if helper_path == "":
+      debug_print("TSF bridge unlock helper missing")
+      return False
+
+    params = u'-NoLogo -NoProfile -ExecutionPolicy Bypass -File "%s" -PauseOnExit' % unicode(helper_path)
+    if len(dll_paths) > 0:
+      params += u' -DllPath'
+      for dll_path in dll_paths:
+        params += u' "%s"' % unicode(dll_path)
+
     result = ctypes.windll.shell32.ShellExecuteW(
       None,
-      u"runas",
-      unicode(tsf_bridge_get_regsvr32_path()),
+      u"open",
+      unicode(tsf_bridge_get_powershell_path()),
       params,
       None,
-      0
+      1
     )
     return result > 32
   except Exception as e:
-    debug_print("TSF bridge unregister failed: %s" % e)
+    debug_print("TSF bridge unlock helper failed: %s" % e)
     return False
 
 def tsf_bridge_confirm_unregister():
@@ -4261,7 +4319,19 @@ class TrayIcon():
         md.destroy()
         return
       if tsf_bridge_confirm_unregister():
-        tsf_bridge_run_unregister(dll_path)
+        if not tsf_bridge_run_unregister(dll_path):
+          md = gtk.MessageDialog(
+            None,
+            gtk.DIALOG_DESTROY_WITH_PARENT,
+            gtk.MESSAGE_ERROR,
+            gtk.BUTTONS_OK,
+            "解除註冊 TSF Bridge 失敗。\n\n請確認目前是以系統管理員身分執行。"
+          )
+          md.set_position(gtk.WIN_POS_CENTER)
+          md.run()
+          md.destroy()
+          return
+        tsf_bridge_run_unlock_helper(tsf_bridge_get_existing_dll_paths())
         config["DEFAULT"]["TSF_BRIDGE_ENABLE"] = "0"
         config["DEFAULT"]["TSF_BRIDGE_PROMPTED_REGISTER"] = "0"
         saveConfig()
