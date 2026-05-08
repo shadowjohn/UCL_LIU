@@ -6,23 +6,40 @@ set "OUT_DLL_X64=tsf_bridge\UclTsfBridge\x64\Release\UclTsfBridge.dll"
 set "OUT_DLL_X86=tsf_bridge\UclTsfBridge\Win32\Release\UclTsfBridge.dll"
 set "DIST_DIR=dist\tsf_bridge"
 set "MSBUILD="
-set "PLATFORM_TOOLSET=v143"
+set "PLATFORM_TOOLSET="
 set "UNLOCK_SCRIPT=tsf_bridge\unlock_tsf_bridge.ps1"
 set "PS_EXE=%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe"
 if exist "%SystemRoot%\Sysnative\WindowsPowerShell\v1.0\powershell.exe" set "PS_EXE=%SystemRoot%\Sysnative\WindowsPowerShell\v1.0\powershell.exe"
 if not exist "%PS_EXE%" set "PS_EXE=powershell.exe"
 
 rem Keep this file ASCII-only because cmd.exe may break UTF-8 batch files on user machines.
-if "%MSBUILD%"=="" if exist "%ProgramFiles%\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\MSBuild.exe" set "MSBUILD=%ProgramFiles%\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\MSBuild.exe"
-if "%MSBUILD%"=="" if exist "%ProgramFiles%\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\amd64\MSBuild.exe" set "MSBUILD=%ProgramFiles%\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\amd64\MSBuild.exe"
-if "%MSBUILD%"=="" if exist "%ProgramFiles%\Microsoft Visual Studio\2022\Professional\MSBuild\Current\Bin\amd64\MSBuild.exe" set "MSBUILD=%ProgramFiles%\Microsoft Visual Studio\2022\Professional\MSBuild\Current\Bin\amd64\MSBuild.exe"
-if "%MSBUILD%"=="" if exist "%ProgramFiles%\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\amd64\MSBuild.exe" set "MSBUILD=%ProgramFiles%\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\amd64\MSBuild.exe"
-if "%MSBUILD%"=="" if exist "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\amd64\MSBuild.exe" set "MSBUILD=%ProgramFiles(x86)%\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\amd64\MSBuild.exe"
-if "%MSBUILD%"=="" if exist "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\amd64\MSBuild.exe" set "MSBUILD=%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\amd64\MSBuild.exe"
+if "%MSBUILD%"=="" call :UseMSBuild "%ProgramFiles%\Microsoft Visual Studio\18\Community\MSBuild\Current\Bin\amd64\MSBuild.exe" v145
+if "%MSBUILD%"=="" call :UseMSBuild "%ProgramFiles%\Microsoft Visual Studio\18\BuildTools\MSBuild\Current\Bin\amd64\MSBuild.exe" v145
+if "%MSBUILD%"=="" call :UseMSBuild "%ProgramFiles%\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\amd64\MSBuild.exe" v145
+if "%MSBUILD%"=="" call :UseMSBuild "%ProgramFiles%\Microsoft Visual Studio\18\Enterprise\MSBuild\Current\Bin\amd64\MSBuild.exe" v145
+if "%MSBUILD%"=="" call :UseMSBuild "%ProgramFiles%\Microsoft Visual Studio\2026\Community\MSBuild\Current\Bin\amd64\MSBuild.exe" v145
+if "%MSBUILD%"=="" call :UseMSBuild "%ProgramFiles%\Microsoft Visual Studio\2026\BuildTools\MSBuild\Current\Bin\amd64\MSBuild.exe" v145
+if "%MSBUILD%"=="" call :UseMSBuild "%ProgramFiles%\Microsoft Visual Studio\2026\Professional\MSBuild\Current\Bin\amd64\MSBuild.exe" v145
+if "%MSBUILD%"=="" call :UseMSBuild "%ProgramFiles%\Microsoft Visual Studio\2026\Enterprise\MSBuild\Current\Bin\amd64\MSBuild.exe" v145
+
+if "%MSBUILD%"=="" if exist "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" (
+  for /f "usebackq tokens=*" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -version "[18.0,19.0)" -products * -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\amd64\MSBuild.exe`) do (
+    set "MSBUILD=%%i"
+    set "PLATFORM_TOOLSET=v145"
+  )
+)
+
+if "%MSBUILD%"=="" call :UseMSBuild "%ProgramFiles%\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\MSBuild.exe" v143
+if "%MSBUILD%"=="" call :UseMSBuild "%ProgramFiles%\Microsoft Visual Studio\2022\BuildTools\MSBuild\Current\Bin\amd64\MSBuild.exe" v143
+if "%MSBUILD%"=="" call :UseMSBuild "%ProgramFiles%\Microsoft Visual Studio\2022\Professional\MSBuild\Current\Bin\amd64\MSBuild.exe" v143
+if "%MSBUILD%"=="" call :UseMSBuild "%ProgramFiles%\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\amd64\MSBuild.exe" v143
+if "%MSBUILD%"=="" call :UseMSBuild "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\amd64\MSBuild.exe" v143
+if "%MSBUILD%"=="" call :UseMSBuild "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\amd64\MSBuild.exe" v143
 
 if "%MSBUILD%"=="" if exist "%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" (
   for /f "usebackq tokens=*" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -version "[16.0,18.0)" -products * -requires Microsoft.Component.MSBuild -find MSBuild\**\Bin\amd64\MSBuild.exe`) do (
     set "MSBUILD=%%i"
+    set "PLATFORM_TOOLSET=v143"
   )
 )
 
@@ -95,6 +112,13 @@ if errorlevel 1 (
 
 echo [OK] TSF Bridge (x64/x86) copied to %DIST_DIR%
 endlocal
+exit /b 0
+
+:UseMSBuild
+if exist "%~1" (
+  set "MSBUILD=%~1"
+  set "PLATFORM_TOOLSET=%~2"
+)
 exit /b 0
 
 :CopyWithUnlock
