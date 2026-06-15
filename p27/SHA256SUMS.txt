@@ -1,0 +1,16 @@
+# SHA256 manifest for GitHub Actions release-build dependencies.
+# Format: <sha256><two spaces><file name relative to this directory>
+44ea95356365195b18a5058796285789b0bfc94da1ee2ec1cb8e0a1c2ff6017a  python-2.7.13.msi
+db7668807a6b13d42996af079099de590307165813e68af5dab230b8e067edc8  pygtk-all-in-one-2.24.1.win32-py2.7.msi
+db5891307c325c643f863321b61a6a3e8d8afe84ba65e65dcefe8ab6bf762183  pywin32-221.win32-py2.7.exe
+3db9fa9adc45703589b93df05aab77bdabe985a17565b465a9e550585f85322a  pyHook-1.5.1.win32-py2.7.exe
+122fcd82deac1153c1699f29815bfab3f876e5bbe018cc2df1297f9802572a97  pip-20.3b1-py2.py3-none-any.whl
+642743b4750de17e655e6711601b077bc6598dbfa3ba5fa2b2a35ce12b508dff  altgraph-0.17.4-py2.py3-none-any.whl
+0e315d7583d38b8c77e815b1ecbdbf504a8258d8b3e17b61165c6feb60d18f2c  macholib-1.16.3-py2.py3-none-any.whl
+254c1d9c79f60c45dfde850850883d5aaa7f19a23f13561243a050d5a7c3fe4c  configparser-4.0.2-py2.py3-none-any.whl
+2bc7f66fcde8d42e956143fadda385bd022d81940adf3be2085cdbd5fc42d833  future-0.18.0-cp27-none-any.whl
+6d4281f5bbca041e2292be3380ec56a9413b790579b8e593b1784499d0005dac  psutil-6.1.1-cp27-none-win32.whl
+f78d543a98b730e64621ebf7f3e2868a79ade0a373882ef51c0293455ffa8e6e  PyAudio-0.2.11-cp27-cp27m-win32.whl
+9dc2d991b3479cc2df15930958b674a48a227d5361d413827a4cfd0b5876fc98  pywin32_ctypes-0.2.0-py2.py3-none-any.whl
+cf914a82f5ee5e73cc2cd2ad5602b2b78dd45589c04ca4fe31516dfd9436c96c  pefile-2017.8.1.zip
+a5a6e04a66abfcf8761e89a2ebad937919c6be33a7b8963e1a961b55cb35986b  PyInstaller-3.4.tar.gz
