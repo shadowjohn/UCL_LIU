@@ -146,3 +146,20 @@
   - `PyInstaller-3.2.zip`、`dis3-0.1.3-py2-none-any.whl`、`psutil-5.8.0-cp27-none-win32.whl`、`setuptools-44.1.1-py2.py3-none-any.whl` 對上 PyPI digest。
   - `VCForPython27.msi` Authenticode 簽章有效（Microsoft Corporation）。
 - 判斷：原本收集的主要檔案來源可信度足夠；但未簽章的 legacy MSI/EXE 仍須維持固定 SHA256 gate，不應在 CI 內任意更新或改抓 latest。
+
+## 2026-06-15（修正 GitHub Actions pyHook runtime 缺 DLL）
+
+- Draft PR `#69` 觸發 GitHub Actions run `27525522152`。
+- 已確認 checkout、`p27\verify_sha256.ps1`、MSBuild setup、Python 2.7 MSI、PyGTK MSI 都通過；新的 fail-fast 機制生效。
+- 失敗點在 `Install pywin32 & pyHook` 的 import 驗證：7-Zip 解包 `pywin32` 與 `pyHook` 都成功，但 `python -c "import win32api, win32gui, pythoncom, pyHook"` 回報 `ImportError: DLL load failed: The specified module could not be found.`
+- 本機以 `dumpbin /DEPENDENTS` 檢查 `p27\pyHook-1.5.1\build\lib.win32-2.7\pyHook\_cpyHook.pyd`，依賴：
+  - `USER32.dll`
+  - `python27.dll`
+  - `MSVCR120.dll`
+  - `KERNEL32.dll`
+- 根因：GitHub `windows-2022` runner 沒有預裝 VS2013 x86 runtime 的 `MSVCR120.dll`，導致 `pyHook._cpyHook.pyd` 載入失敗。
+- 已更新 workflow：
+  - 在 PyGTK 後、pywin32/pyHook import 前，下載 Microsoft 官方 VS2013 x86 runtime `https://aka.ms/highdpimfc2013x86enu`。
+  - 驗證 SHA256 `53b605d1100ab0a88b867447bbf9274b5938125024ba01f5105a9e178a3dcdbd` 與 Authenticode 簽章後才安裝。
+  - 安裝後確認 `C:\Windows\SysWOW64\msvcr120.dll` 存在。
+  - 將 `win32api`、`win32gui`、`pythoncom`、`pyHook` 改成逐一 import 驗證，之後失敗會更容易定位。

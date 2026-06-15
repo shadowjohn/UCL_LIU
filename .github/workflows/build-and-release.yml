@@ -66,6 +66,34 @@ jobs:
             throw "PyGTK MSI install failed with exit code $($proc.ExitCode)."
           }
           & C:\Python27\python.exe -c "import gtk, gobject, pango; print('PyGTK import OK')"
+
+      - name: Install VC++ 2013 x86 runtime
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $redistUrl = "https://aka.ms/highdpimfc2013x86enu"
+          $expectedHash = "53b605d1100ab0a88b867447bbf9274b5938125024ba01f5105a9e178a3dcdbd"
+          $redistPath = Join-Path $env:RUNNER_TEMP "vcredist2013-x86.exe"
+
+          Invoke-WebRequest -Uri $redistUrl -OutFile $redistPath
+          $actualHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $redistPath).Hash.ToLowerInvariant()
+          if ($actualHash -ne $expectedHash) {
+            throw "VC++ 2013 redist SHA256 mismatch. Expected $expectedHash, got $actualHash."
+          }
+
+          $signature = Get-AuthenticodeSignature -LiteralPath $redistPath
+          if ($signature.Status -ne "Valid") {
+            throw "VC++ 2013 redist signature is not valid: $($signature.Status)."
+          }
+
+          $proc = Start-Process -FilePath $redistPath -ArgumentList "/install /quiet /norestart" -Wait -PassThru
+          if ($proc.ExitCode -ne 0 -and $proc.ExitCode -ne 3010) {
+            throw "VC++ 2013 redist install failed with exit code $($proc.ExitCode)."
+          }
+          if (-not (Test-Path "C:\Windows\SysWOW64\msvcr120.dll")) {
+            throw "VC++ 2013 redist completed but C:\Windows\SysWOW64\msvcr120.dll was not found."
+          }
+          Get-Item "C:\Windows\SysWOW64\msvcr120.dll" | Select-Object FullName, Length, VersionInfo
  
       - name: Install pywin32 & pyHook
         shell: pwsh
@@ -81,7 +109,12 @@ jobs:
           7z x p27\pyHook-1.5.1.win32-py2.7.exe -opyhook_tmp
           if ($LASTEXITCODE -ne 0) { throw "Failed to extract pyHook." }
           Copy-Item -Path pyhook_tmp\PLATLIB\* -Destination C:\Python27\Lib\site-packages\ -Recurse -Force
-          & C:\Python27\python.exe -c "import win32api, win32gui, pythoncom, pyHook; print('pywin32/pyHook import OK')"
+          foreach ($module in @("win32api", "win32gui", "pythoncom", "pyHook")) {
+            & C:\Python27\python.exe -c "import $module; print('$module import OK')"
+            if ($LASTEXITCODE -ne 0) {
+              throw "$module import failed."
+            }
+          }
  
       - name: Bootstrap pip and install dependencies
         shell: pwsh

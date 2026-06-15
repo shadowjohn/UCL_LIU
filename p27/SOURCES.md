@@ -35,6 +35,16 @@ and enforced by `SHA256SUMS.txt`.
 | `pefile-2017.8.1.zip` | PyPI `pefile` 2017.8.1 source archive | Extracted with 7-Zip, then installed with `python setup.py install`. | Python setup install |
 | `PyInstaller-3.4.tar.gz` | PyPI `PyInstaller` 3.4 source archive | Extracted with tar, then installed with `python setup.py install`. | Python setup install |
 
+## CI-Downloaded Runtime
+
+The workflow downloads this Microsoft runtime at build time instead of vendoring
+it in `p27`. The workflow pins the expected SHA256 before running the installer
+and also verifies the Authenticode signature.
+
+| File | Expected source | SHA256 | Workflow use |
+| --- | --- | --- | --- |
+| `vcredist2013-x86.exe` | `https://aka.ms/highdpimfc2013x86enu` | `53b605d1100ab0a88b867447bbf9274b5938125024ba01f5105a9e178a3dcdbd` | Installs the VC++ 2013 x86 runtime required by `pyHook._cpyHook.pyd` (`MSVCR120.dll`). |
+
 ## Not Part Of The Release Build Gate
 
 The workflow does not currently use these files, so they are intentionally not
