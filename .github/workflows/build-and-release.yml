@@ -21,6 +21,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Verify vendored Python dependencies
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          pwsh -NoLogo -NoProfile -ExecutionPolicy Bypass -File p27\verify_sha256.ps1
  
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
@@ -28,60 +34,116 @@ jobs:
       - name: Install Python 2.7
         shell: pwsh
         run: |
+          $ErrorActionPreference = "Stop"
           echo "[INFO] Installing Python 2.7.13 MSI..."
-          Start-Process msiexec.exe -ArgumentList "/i p27\python-2.7.13.msi /qn ALLUSERS=1 ADDLOCAL=ALL LIMITUI=1" -Wait
+          $pythonMsi = Resolve-Path "p27\python-2.7.13.msi"
+          $args = "/i `"$pythonMsi`" /qn ALLUSERS=1 ADDLOCAL=ALL LIMITUI=1"
+          $proc = Start-Process msiexec.exe -ArgumentList $args -Wait -PassThru
+          if ($proc.ExitCode -ne 0) {
+            throw "Python 2.7 MSI install failed with exit code $($proc.ExitCode)."
+          }
+          if (-not (Test-Path "C:\Python27\python.exe")) {
+            throw "Python 2.7 install completed but C:\Python27\python.exe was not found."
+          }
+          & C:\Python27\python.exe --version
           echo "C:\Python27" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           echo "C:\Python27\Scripts" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
  
       - name: Install PyGTK
         shell: pwsh
         run: |
+          $ErrorActionPreference = "Stop"
           echo "[INFO] Installing PyGTK MSI..."
-          Start-Process msiexec.exe -ArgumentList "/i p27\pygtk-all-in-one-2.24.1.win32-py2.7.msi /qn" -Wait
+          $pygtkMsi = Resolve-Path "p27\pygtk-all-in-one-2.24.1.win32-py2.7.msi"
+          $pygtkLog = Join-Path $env:RUNNER_TEMP "pygtk-install.log"
+          # PyGTK all-in-one skips Python auto-detection in quiet mode, so TARGETDIR is required.
+          $args = "/i `"$pygtkMsi`" /qn ALLUSERS=1 TARGETDIR=C:\Python27 /L*V `"$pygtkLog`""
+          $proc = Start-Process msiexec.exe -ArgumentList $args -Wait -PassThru
+          if ($proc.ExitCode -ne 0) {
+            if (Test-Path $pygtkLog) {
+              Get-Content $pygtkLog -Tail 80
+            }
+            throw "PyGTK MSI install failed with exit code $($proc.ExitCode)."
+          }
+          & C:\Python27\python.exe -c "import gtk, gobject, pango; print('PyGTK import OK')"
  
       - name: Install pywin32 & pyHook
         shell: pwsh
         run: |
+          $ErrorActionPreference = "Stop"
           echo "[INFO] Extracting pywin32..."
           7z x p27\pywin32-221.win32-py2.7.exe -opywin32_tmp
+          if ($LASTEXITCODE -ne 0) { throw "Failed to extract pywin32." }
           Copy-Item -Path pywin32_tmp\PLATLIB\* -Destination C:\Python27\Lib\site-packages\ -Recurse -Force
           Copy-Item -Path pywin32_tmp\SCRIPTS\* -Destination C:\Python27\Scripts\ -Recurse -Force
  
           echo "[INFO] Extracting pyHook..."
           7z x p27\pyHook-1.5.1.win32-py2.7.exe -opyhook_tmp
+          if ($LASTEXITCODE -ne 0) { throw "Failed to extract pyHook." }
           Copy-Item -Path pyhook_tmp\PLATLIB\* -Destination C:\Python27\Lib\site-packages\ -Recurse -Force
+          & C:\Python27\python.exe -c "import win32api, win32gui, pythoncom, pyHook; print('pywin32/pyHook import OK')"
  
       - name: Bootstrap pip and install dependencies
         shell: pwsh
         run: |
-          python p27\get-pip.py
+          $ErrorActionPreference = "Stop"
+          python -m ensurepip --default-pip
+          if ($LASTEXITCODE -ne 0) { throw "ensurepip failed." }
+          python -m pip install --no-index p27\pip-20.3b1-py2.py3-none-any.whl
+          if ($LASTEXITCODE -ne 0) { throw "pip upgrade failed." }
           
           # Install whl packages
-          pip install p27\altgraph-0.17.4-py2.py3-none-any.whl
-          pip install p27\macholib-1.16.3-py2.py3-none-any.whl
-          pip install p27\configparser-4.0.2-py2.py3-none-any.whl
-          pip install p27\future-0.18.0-cp27-none-any.whl
-          pip install p27\psutil-6.1.1-cp27-none-win32.whl
-          pip install p27\PyAudio-0.2.11-cp27-cp27m-win32.whl
-          pip install p27\pywin32_ctypes-0.2.0-py2.py3-none-any.whl
+          python -m pip install --no-index p27\altgraph-0.17.4-py2.py3-none-any.whl
+          python -m pip install --no-index p27\macholib-1.16.3-py2.py3-none-any.whl
+          python -m pip install --no-index p27\configparser-4.0.2-py2.py3-none-any.whl
+          python -m pip install --no-index p27\future-0.18.0-cp27-none-any.whl
+          python -m pip install --no-index p27\psutil-6.1.1-cp27-none-win32.whl
+          python -m pip install --no-index p27\PyAudio-0.2.11-cp27-cp27m-win32.whl
+          python -m pip install --no-index p27\pywin32_ctypes-0.2.0-py2.py3-none-any.whl
           
           # Install pefile
           7z x p27\pefile-2017.8.1.zip -opefile_tmp
+          if ($LASTEXITCODE -ne 0) { throw "Failed to extract pefile." }
           pushd pefile_tmp\pefile-2017.8.1
           python setup.py install
+          if ($LASTEXITCODE -ne 0) { throw "pefile install failed." }
           popd
  
           # Install PyInstaller 3.4
           tar -xzf p27\PyInstaller-3.4.tar.gz
+          if ($LASTEXITCODE -ne 0) { throw "Failed to extract PyInstaller." }
           pushd PyInstaller-3.4
           python setup.py install
+          if ($LASTEXITCODE -ne 0) { throw "PyInstaller install failed." }
           popd
+          python -c "import gtk, gobject, pango, win32api, pythoncom, pyHook, pyaudio, psutil; print('Build imports OK')"
  
       - name: Build UCL_LIU
         shell: cmd
         run: |
           build.bat
  
+      - name: Verify packaged executable contents
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $exe = "dist\uclliu.exe"
+          if (-not (Test-Path $exe)) {
+            throw "Packaged executable not found: $exe"
+          }
+          $bytes = [System.IO.File]::ReadAllBytes($exe)
+          $text = [System.Text.Encoding]::GetEncoding(28591).GetString($bytes)
+          foreach ($needle in @("gtk", "gobject", "pango", "pyHook", "win32api", "pythoncom")) {
+            if (-not $text.Contains($needle)) {
+              throw "Packaged executable is missing expected PyInstaller entry: $needle"
+            }
+          }
+          Get-Item $exe | Select-Object FullName, Length, LastWriteTime
+          if (Test-Path "build\uclliu\warn-uclliu.txt") {
+            echo "[INFO] PyInstaller warnings:"
+            Get-Content "build\uclliu\warn-uclliu.txt"
+          }
+
       - name: Package Release Assets
         shell: pwsh
         run: |
