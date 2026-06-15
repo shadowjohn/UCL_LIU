@@ -174,3 +174,8 @@
   - `SCRIPTS\pywin32_postinstall.py`
 - 根因：workflow 只用 7-Zip 解包並 copy `PLATLIB` / `SCRIPTS`，但沒有執行 `pywin32_postinstall.py -install`；因此 `pywintypes27.dll` / `pythoncom27.dll` 沒被放到 Windows DLL 搜尋路徑，`win32api.pyd` 載入失敗。
 - 已更新 workflow：copy `pywin32` 後執行 `C:\Python27\python.exe C:\Python27\Scripts\pywin32_postinstall.py -install`，失敗時立即中止。
+- GitHub Actions run `27525931068` 已通過：
+  - SHA256 gate、Python 2.7、PyGTK、VS2013 x86 runtime、pywin32/pyHook、pip dependencies、`build.bat`、packaged executable content check、artifact upload 全部成功。
+  - `Publish GitHub Release` 在 PR run 中正確 skipped。
+  - 下載 artifact 後確認 `uclliu.exe` 含 `gtk/gobject/pango/pyHook/win32api/pythoncom` 字串。
+  - artifact 內 `uclliu.exe` SHA256：`D04D600555183F81B9ED0FF5D21501D40E3703BC6C57EB6466A1D0FDC1A660E7`。
