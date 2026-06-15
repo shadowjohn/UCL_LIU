@@ -7,6 +7,7 @@
 - **211、SHA256 依賴檢查**：CI 使用 `p27/SHA256SUMS.txt` 先驗證 vendored Python 2.7 依賴。
 - **212、PyGTK / pywin32 安裝驗證**：CI 會驗證 `gtk/gobject/pango/win32api/pythoncom/pyHook` 可匯入。
 - **213、打包內容檢查**：發布前確認 exe 內含必要 PyInstaller entry，避免壞包被上傳。
+- **病毒碼掃描**：https://www.microsoft.com/en-us/wdsi/submission/221a3846-6674-4f40-a41f-62a2512ed377
 
 ## [v1.67] - 2026-05-01
 - **206、實驗性 TSF Bridge**：解決 Chrome/Edge/VS Code 等程式上字不穩問題。
