@@ -187,3 +187,14 @@
 - 已更新 `metadata.txt` 的 `filevers`、`prodvers`、`FileVersion`、`ProductVersion` 為 `1.68`。
 - 已更新 `README.md` 與 `CHANGELOG.md` 的 v1.68 release 說明。
 - README 主下載連結改指向 `releases/download/v1.68` 的 Actions release asset，避免指到 `master/dist` 舊包。
+
+## 2026-06-15（v1.68 正式發布驗證）
+
+- 已在 `2c6bac3` 建立並推送 lightweight tag `v1.68`。
+- GitHub Actions release run `27526644707` 成功，`Publish GitHub Release` 已執行成功。
+- Release URL：https://github.com/shadowjohn/UCL_LIU/releases/tag/v1.68
+- Release asset：
+  - `uclliu.exe`：11,779,260 bytes，SHA256 `5902887347CF502DD1571D0D1EFB4E4DAFC9B3474BD26DF197C0E155D3E374F8`
+  - `uclliu-v1.68.zip`：11,920,668 bytes，SHA256 `9573372FF364AC3F1BA0E4BA1483150CB5A88AE6F69E3121946184C2FEF3BF7C`
+- 已下載 release asset 複驗：`uclliu.exe` 的 `FileVersion` / `ProductVersion` 均為 `1.68`。
+- 已確認 release exe 內含 `gtk/gobject/pango/pyHook/win32api/pythoncom`，zip 內含 `tsf_bridge/`、`pinyi.txt`、`README.md`、`uclliu.exe`。
