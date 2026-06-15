@@ -179,3 +179,11 @@
   - `Publish GitHub Release` 在 PR run 中正確 skipped。
   - 下載 artifact 後確認 `uclliu.exe` 含 `gtk/gobject/pango/pyHook/win32api/pythoncom` 字串。
   - artifact 內 `uclliu.exe` SHA256：`D04D600555183F81B9ED0FF5D21501D40E3703BC6C57EB6466A1D0FDC1A660E7`。
+
+## 2026-06-15（v1.68 發布前版本資訊更新）
+
+- 使用者提醒正式發布 `v1.68` 前，程式碼版本 meta 也要同步更新。
+- 已更新 `uclliu.pyw` 的 `VERSION` 為 `1.68`。
+- 已更新 `metadata.txt` 的 `filevers`、`prodvers`、`FileVersion`、`ProductVersion` 為 `1.68`。
+- 已更新 `README.md` 與 `CHANGELOG.md` 的 v1.68 release 說明。
+- README 主下載連結改指向 `releases/download/v1.68` 的 Actions release asset，避免指到 `master/dist` 舊包。

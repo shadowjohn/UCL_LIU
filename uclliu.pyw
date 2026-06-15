@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-VERSION = "1.67"
+VERSION = "1.68"
 import __main__  # 取得自己
 #from doctest import debug
 import os

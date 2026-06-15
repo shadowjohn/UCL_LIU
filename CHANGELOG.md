@@ -2,6 +2,12 @@
 
 ---
 
+## [v1.68] - 2026-06-15
+- **210、Release build 修正**：修正 GitHub Actions 產出的 exe 缺 PyGTK/pywin32 runtime 而無法啟動。
+- **211、SHA256 依賴檢查**：CI 使用 `p27/SHA256SUMS.txt` 先驗證 vendored Python 2.7 依賴。
+- **212、PyGTK / pywin32 安裝驗證**：CI 會驗證 `gtk/gobject/pango/win32api/pythoncom/pyHook` 可匯入。
+- **213、打包內容檢查**：發布前確認 exe 內含必要 PyInstaller entry，避免壞包被上傳。
+
 ## [v1.67] - 2026-05-01
 - **206、實驗性 TSF Bridge**：解決 Chrome/Edge/VS Code 等程式上字不穩問題。
 - **207、自動診斷**：啟動時自動檢查 DLL 狀態，失敗自動 Fallback。
@@ -17,6 +23,12 @@
 ## 📅 完整歷史記錄 (由近到遠)
 
 <pre>
+(2026-06-15) v1.68 版：
+1. 210、修正 GitHub Actions release exe 缺 PyGTK/pywin32 runtime 而無法啟動
+2. 211、加入 p27 vendored dependency SHA256 gate
+3. 212、CI 安裝 PyGTK、pywin32、pyHook 後逐一驗證 import
+4. 213、發布前檢查 exe 內含 gtk/gobject/pango/pyHook/win32api/pythoncom
+
 (2026-05-01) v1.67 版：
 病毒碼提交掃描：1.67
 1. 206、加入實驗性 TSF Bridge 出字模式，可在右下角選單切換「TSF出字模式」

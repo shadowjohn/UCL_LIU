@@ -1,6 +1,6 @@
 # 🍙 UCL_LIU (肥米輸入法)
 
-[![Version](https://img.shields.io/badge/version-v1.67-orange.svg)](https://github.com/shadowjohn/UCL_LIU/releases)
+[![Version](https://img.shields.io/badge/version-v1.68-orange.svg)](https://github.com/shadowjohn/UCL_LIU/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](./MIT-License)
 [![Platform](https://img.shields.io/badge/platform-Windows-lightgrey.svg)](https://github.com/shadowjohn/UCL_LIU)
 
@@ -32,8 +32,8 @@
 
 | 檔案名稱 | 下載連結 | 說明 |
 | :--- | :--- | :--- |
-| **uclliu.exe** | [立即下載](https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.exe) | v1.67 Beta 主程式 (建議使用) |
-| **uclliu.zip** | [立即下載](https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/uclliu.zip) | v1.67 Beta 壓縮版 |
+| **uclliu.exe** | [立即下載](https://github.com/shadowjohn/UCL_LIU/releases/download/v1.68/uclliu.exe) | v1.68 Beta 主程式 (建議使用) |
+| **uclliu.zip** | [立即下載](https://github.com/shadowjohn/UCL_LIU/releases/download/v1.68/uclliu-v1.68.zip) | v1.68 Beta 壓縮版 |
 | **穩定版 (v1.66)** | [exe](https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.66/uclliu.exe) / [zip](https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/RELEASE/1.66/uclliu.zip) | 穩定版備份 |
 | **同音字庫** | [pinyi.txt](https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/dist/pinyi.txt) | 放在 exe 旁即可啟用同音字查詢 |
 | **打字音效** | [wavs.zip](https://raw.githubusercontent.com/shadowjohn/UCL_LIU/master/wavs/wavs.zip) | 解壓後將 `0~9.wav` 與 exe 放一起 |
@@ -140,12 +140,11 @@
 
 ## 📜 更新記錄與計畫
 
-### 最近更新 (v1.67)
-- **實驗性 TSF Bridge**：解決 Chrome/Edge/VS Code 等程式上字不穩問題。
-- **自動診斷**：啟動時自動檢查 DLL 狀態，失敗自動 Fallback。
-- **管理功能**：新增 TSF 管理選單，可隨時註冊或解除註冊。
-- **權限導引**：新增「以管理員身分重啟」選單功能。
-- **病毒掃描**: https://www.microsoft.com/en-us/wdsi/submission/464890a2-68c0-4cd7-83ae-5205ed0ecea4
+### 最近更新 (v1.68)
+- **Release build 修正**：修正 GitHub Actions 產出的 exe 缺 PyGTK/pywin32 runtime 而無法啟動。
+- **SHA256 依賴檢查**：CI 使用 `p27/SHA256SUMS.txt` 先驗證 vendored Python 2.7 依賴。
+- **PyGTK / pywin32 安裝驗證**：CI 會驗證 `gtk/gobject/pango/win32api/pythoncom/pyHook` 可匯入。
+- **打包內容檢查**：發布前確認 exe 內含必要 PyInstaller entry，避免壞包被上傳。
 
 <details>
 <summary><b>查看完整歷史更新記錄</b></summary>
