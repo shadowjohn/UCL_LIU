@@ -125,6 +125,17 @@
 4. 執行 `build.bat` 產出 `dist/uclliu.exe`。
 5. TSF Bridge 編譯：執行 `build_tsf.bat` (需 VS 2022 C++ 環境)。
 
+### 🤖 GitHub Actions 自動化編譯與發布
+本專案已整合 GitHub Actions。當您推送 Tag（如 `v1.68`）或手動觸發工作流時，GitHub CI 平台會自動：
+1. 使用 `windows-2022` 執行器。
+2. 靜態安裝 `p27/` 目錄下的 Python 2.7 與 PyGTK MSI 安裝套件。
+3. 解壓並配置 `pywin32` 與 `pyHook` 至 `site-packages`。
+4. 安裝本地的 `.whl` 與 PyInstaller 3.4。
+5. 編譯 TSF Bridge (x64/x86) DLL 並呼叫 `build.bat` 打包為 `uclliu.exe`。
+6. 自動打包成 ZIP 並建立 GitHub Release 上傳發布。
+
+詳細配置請參閱 [.github/workflows/build-and-release.yml](.github/workflows/build-and-release.yml)。
+
 ---
 
 ## 📜 更新記錄與計畫

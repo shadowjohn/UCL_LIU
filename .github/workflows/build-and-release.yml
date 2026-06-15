@@ -1,0 +1,124 @@
+name: Build and Release
+ 
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - "v*"
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+ 
+permissions:
+  contents: write
+ 
+jobs:
+  build:
+    runs-on: windows-2022
+ 
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+ 
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+ 
+      - name: Install Python 2.7
+        shell: pwsh
+        run: |
+          echo "[INFO] Installing Python 2.7.13 MSI..."
+          Start-Process msiexec.exe -ArgumentList "/i p27\python-2.7.13.msi /qn ALLUSERS=1 ADDLOCAL=ALL LIMITUI=1" -Wait
+          echo "C:\Python27" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          echo "C:\Python27\Scripts" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+ 
+      - name: Install PyGTK
+        shell: pwsh
+        run: |
+          echo "[INFO] Installing PyGTK MSI..."
+          Start-Process msiexec.exe -ArgumentList "/i p27\pygtk-all-in-one-2.24.1.win32-py2.7.msi /qn" -Wait
+ 
+      - name: Install pywin32 & pyHook
+        shell: pwsh
+        run: |
+          echo "[INFO] Extracting pywin32..."
+          7z x p27\pywin32-221.win32-py2.7.exe -opywin32_tmp
+          Copy-Item -Path pywin32_tmp\PLATLIB\* -Destination C:\Python27\Lib\site-packages\ -Recurse -Force
+          Copy-Item -Path pywin32_tmp\SCRIPTS\* -Destination C:\Python27\Scripts\ -Recurse -Force
+ 
+          echo "[INFO] Extracting pyHook..."
+          7z x p27\pyHook-1.5.1.win32-py2.7.exe -opyhook_tmp
+          Copy-Item -Path pyhook_tmp\PLATLIB\* -Destination C:\Python27\Lib\site-packages\ -Recurse -Force
+ 
+      - name: Bootstrap pip and install dependencies
+        shell: pwsh
+        run: |
+          python p27\get-pip.py
+          
+          # Install whl packages
+          pip install p27\altgraph-0.17.4-py2.py3-none-any.whl
+          pip install p27\macholib-1.16.3-py2.py3-none-any.whl
+          pip install p27\configparser-4.0.2-py2.py3-none-any.whl
+          pip install p27\future-0.18.0-cp27-none-any.whl
+          pip install p27\psutil-6.1.1-cp27-none-win32.whl
+          pip install p27\PyAudio-0.2.11-cp27-cp27m-win32.whl
+          pip install p27\pywin32_ctypes-0.2.0-py2.py3-none-any.whl
+          
+          # Install pefile
+          7z x p27\pefile-2017.8.1.zip -opefile_tmp
+          pushd pefile_tmp\pefile-2017.8.1
+          python setup.py install
+          popd
+ 
+          # Install PyInstaller 3.4
+          tar -xzf p27\PyInstaller-3.4.tar.gz
+          pushd PyInstaller-3.4
+          python setup.py install
+          popd
+ 
+      - name: Build UCL_LIU
+        shell: cmd
+        run: |
+          build.bat
+ 
+      - name: Package Release Assets
+        shell: pwsh
+        run: |
+          $tag = if ($env:GITHUB_REF_TYPE -eq "tag") { $env:GITHUB_REF_NAME } else { "ci-$env:GITHUB_SHA".Substring(0, 10) }
+          $zipName = "uclliu-" + $tag + ".zip"
+          
+          New-Item -ItemType Directory -Force -Path .\dist_release\tsf_bridge
+          Copy-Item -Path .\dist\uclliu.exe -Destination .\dist_release\uclliu.exe
+          Copy-Item -Path .\dist\tsf_bridge\* -Destination .\dist_release\tsf_bridge\ -Recurse
+          if (Test-Path "pinyi.txt") { Copy-Item -Path pinyi.txt -Destination .\dist_release\pinyi.txt }
+          if (Test-Path "README.md") { Copy-Item -Path README.md -Destination .\dist_release\README.md }
+ 
+          Compress-Archive -Path .\dist_release\* -DestinationPath ".\dist\$zipName"
+          echo "[OK] Packed release as dist/$zipName"
+ 
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: uclliu-python-build-${{ github.run_number }}
+          path: |
+            dist/uclliu-*.zip
+            dist/uclliu.exe
+          if-no-files-found: error
+ 
+      - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $tag = $env:GITHUB_REF_NAME
+          $zip = Get-Item "dist/uclliu-$tag.zip"
+          $exe = Get-Item "dist/uclliu.exe"
+ 
+          gh release view $tag *> $null
+          if ($LASTEXITCODE -eq 0) {
+            gh release upload $tag $zip.FullName $exe.FullName --clobber
+          } else {
+            gh release create $tag $zip.FullName $exe.FullName --title "UCL_LIU $tag" --notes "自動打包發布的 Python 版肥米輸入法 ($tag)"
+          }
