@@ -198,3 +198,4 @@
   - `uclliu-v1.68.zip`：11,920,668 bytes，SHA256 `9573372FF364AC3F1BA0E4BA1483150CB5A88AE6F69E3121946184C2FEF3BF7C`
 - 已下載 release asset 複驗：`uclliu.exe` 的 `FileVersion` / `ProductVersion` 均為 `1.68`。
 - 已確認 release exe 內含 `gtk/gobject/pango/pyHook/win32api/pythoncom`，zip 內含 `tsf_bridge/`、`pinyi.txt`、`README.md`、`uclliu.exe`。
+- 使用者已實機試用 `v1.68`，確認可以正常使用。
