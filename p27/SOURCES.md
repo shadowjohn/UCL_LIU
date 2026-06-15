@@ -22,7 +22,7 @@ and enforced by `SHA256SUMS.txt`.
 | --- | --- | --- | --- |
 | `python-2.7.13.msi` | `https://www.python.org/ftp/python/2.7.13/python-2.7.13.msi` | Installs Python 2.7 x86 to `C:\Python27`. | Yes, MSI |
 | `pygtk-all-in-one-2.24.1.win32-py2.7.msi` | `https://download.gnome.org/binaries/win32/pygtk/2.24/pygtk-all-in-one-2.24.1.win32-py2.7.msi` | Installs GTK/PyGTK/PyGObject/PyCairo into `C:\Python27`. | Yes, MSI |
-| `pywin32-221.win32-py2.7.exe` | `https://sourceforge.net/projects/pywin32/files/pywin32/Build%20221/pywin32-221.win32-py2.7.exe/download` | Extracted with 7-Zip; `PLATLIB` and `SCRIPTS` are copied into `C:\Python27`. | No installer execution |
+| `pywin32-221.win32-py2.7.exe` | `https://sourceforge.net/projects/pywin32/files/pywin32/Build%20221/pywin32-221.win32-py2.7.exe/download` | Extracted with 7-Zip; `PLATLIB` and `SCRIPTS` are copied into `C:\Python27`, then `pywin32_postinstall.py -install` is run. | Python postinstall |
 | `pyHook-1.5.1.win32-py2.7.exe` | `https://sourceforge.net/projects/pyhook/files/pyhook/1.5.1/pyHook-1.5.1.win32-py2.7.exe/download` | Extracted with 7-Zip; `PLATLIB` is copied into `C:\Python27`. | No installer execution |
 | `pip-20.3b1-py2.py3-none-any.whl` | PyPI `pip` 20.3 beta 1 | Installed with `python -m pip install --no-index`. | Python package install |
 | `altgraph-0.17.4-py2.py3-none-any.whl` | PyPI `altgraph` 0.17.4 | Installed with `python -m pip install --no-index`. | Python package install |

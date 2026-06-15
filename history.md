@@ -163,3 +163,14 @@
   - 驗證 SHA256 `53b605d1100ab0a88b867447bbf9274b5938125024ba01f5105a9e178a3dcdbd` 與 Authenticode 簽章後才安裝。
   - 安裝後確認 `C:\Windows\SysWOW64\msvcr120.dll` 存在。
   - 將 `win32api`、`win32gui`、`pythoncom`、`pyHook` 改成逐一 import 驗證，之後失敗會更容易定位。
+
+## 2026-06-15（修正 pywin32 postinstall 缺漏）
+
+- GitHub Actions run `27525782043` 顯示 VS2013 runtime 安裝成功，但仍在 `Install pywin32 & pyHook` 失敗。
+- 逐一 import 驗證指出第一個失敗的是 `win32api`，錯誤仍是 `ImportError: DLL load failed: The specified module could not be found.`
+- 讀取 `pywin32-221.win32-py2.7.exe` 內部檔案後確認：
+  - `PLATLIB\pywin32_system32\pywintypes27.dll`
+  - `PLATLIB\pywin32_system32\pythoncom27.dll`
+  - `SCRIPTS\pywin32_postinstall.py`
+- 根因：workflow 只用 7-Zip 解包並 copy `PLATLIB` / `SCRIPTS`，但沒有執行 `pywin32_postinstall.py -install`；因此 `pywintypes27.dll` / `pythoncom27.dll` 沒被放到 Windows DLL 搜尋路徑，`win32api.pyd` 載入失敗。
+- 已更新 workflow：copy `pywin32` 後執行 `C:\Python27\python.exe C:\Python27\Scripts\pywin32_postinstall.py -install`，失敗時立即中止。

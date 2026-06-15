@@ -104,6 +104,8 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw "Failed to extract pywin32." }
           Copy-Item -Path pywin32_tmp\PLATLIB\* -Destination C:\Python27\Lib\site-packages\ -Recurse -Force
           Copy-Item -Path pywin32_tmp\SCRIPTS\* -Destination C:\Python27\Scripts\ -Recurse -Force
+          & C:\Python27\python.exe C:\Python27\Scripts\pywin32_postinstall.py -install
+          if ($LASTEXITCODE -ne 0) { throw "pywin32 postinstall failed." }
  
           echo "[INFO] Extracting pyHook..."
           7z x p27\pyHook-1.5.1.win32-py2.7.exe -opyhook_tmp
